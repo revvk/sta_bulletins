@@ -21,6 +21,8 @@ DATA_DIR = Path(__file__).parent.parent / "data" / "hymns"
 
 def _load_songs(service: str = "9am") -> list[dict]:
     """Load songs from YAML file for the given service."""
+    # Normalize: "9 am" -> "9am", "11 am" -> "11am"
+    service = service.replace(" ", "")
     filepath = DATA_DIR / f"songs_{service}.yaml"
     if not filepath.exists():
         return []
