@@ -1,0 +1,348 @@
+# Common prayers and texts from the Book of Common Prayer
+# Used across all seasons in Holy Eucharist Rite II
+
+# ---------------------------------------------------------------------------
+# Collect for Purity (BCP p.355)
+# Used at the beginning of the service (standard order, not Penitential)
+# ---------------------------------------------------------------------------
+
+collect_for_purity: >-
+  Almighty God, to you all hearts are open, all desires known,
+  and from you no secrets are hid: Cleanse the thoughts of our
+  hearts by the inspiration of your Holy Spirit, that we may
+  perfectly love you, and worthily magnify your holy Name;
+  through Christ our Lord. Amen.
+
+# ---------------------------------------------------------------------------
+# Gloria in Excelsis (BCP p.356)
+# ---------------------------------------------------------------------------
+
+gloria:
+  - "Glory to God in the highest,"
+  - "  and peace to his people on earth."
+  - "Lord God, heavenly King,"
+  - "almighty God and Father,"
+  - "   we worship you, we give you thanks,"
+  - "   we praise you for your glory."
+  - "Lord Jesus Christ, only Son of the Father,"
+  - "Lord God, Lamb of God,"
+  - "you take away the sin of the world:"
+  - "  have mercy on us;"
+  - "you are seated at the right hand of the Father:"
+  - "  receive our prayer."
+  - "For you alone are the Holy One,"
+  - "you alone are the Lord,"
+  - "you alone are the Most High,"
+  - "  Jesus Christ,"
+  - "  with the Holy Spirit,"
+  - "  in the glory of God the Father. Amen."
+
+# ---------------------------------------------------------------------------
+# Kyrie (BCP p.356)
+# ---------------------------------------------------------------------------
+
+kyrie:
+  - celebrant: "Lord, have mercy."
+    people: "Lord, have mercy."
+  - celebrant: "Christ, have mercy."
+    people: "Christ, have mercy."
+  - celebrant: "Lord, have mercy."
+    people: "Lord, have mercy."
+
+trisagion:
+  text: >-
+    Holy God, Holy and Mighty, Holy Immortal One,
+    Have mercy upon us.
+
+# ---------------------------------------------------------------------------
+# Collect dialogue (BCP p.357)
+# ---------------------------------------------------------------------------
+
+collect_dialogue:
+  - celebrant: "The Lord be with you."
+    people: "And also with you."
+  - celebrant: "Let us pray."
+
+# ---------------------------------------------------------------------------
+# Lessons responses (BCP p.357)
+# ---------------------------------------------------------------------------
+
+lesson_response:
+  reader: "The Word of the Lord."
+  people: "Thanks be to God."
+
+gospel_announcement:
+  deacon: "The Holy Gospel of our Lord Jesus Christ according to {gospel_book}."
+  people: "Glory to you, Lord Christ."
+
+gospel_response:
+  deacon: "The Gospel of the Lord."
+  people: "Praise to you, Lord Christ."
+
+# ---------------------------------------------------------------------------
+# Nicene Creed (BCP pp.358-359)
+# ---------------------------------------------------------------------------
+
+nicene_creed:
+  - "We believe in one God,"
+  - "  the Father, the Almighty,"
+  - "  maker of heaven and earth,"
+  - "  of all that is, seen and unseen."
+  - ""
+  - "We believe in one Lord, Jesus Christ,"
+  - "  the only Son of God,"
+  - "  eternally begotten of the Father,"
+  - "  God from God, Light from Light,"
+  - "  true God from true God,"
+  - "  begotten, not made,"
+  - "  of one Being with the Father."
+  - "  Through him all things were made."
+  - "  For us and for our salvation"
+  - "    he came down from heaven:"
+  - "  by the power of the Holy Spirit"
+  - "    he became incarnate from the Virgin Mary,"
+  - "    and was made man."
+  - "  For our sake he was crucified under Pontius Pilate;"
+  - "    he suffered death and was buried."
+  - "    On the third day he rose again"
+  - "      in accordance with the Scriptures;"
+  - "    he ascended into heaven"
+  - "      and is seated at the right hand of the Father."
+  - "  He will come again in glory to judge the living and the dead,"
+  - "    and his kingdom will have no end."
+  - ""
+  - "We believe in the Holy Spirit, the Lord, the giver of life,"
+  - "  who proceeds from the Father and the Son."
+  - "  With the Father and the Son he is worshiped and glorified."
+  - "  He has spoken through the Prophets."
+  - "  We believe in one holy catholic and apostolic Church."
+  - "  We acknowledge one baptism for the forgiveness of sins."
+  - "  We look for the resurrection of the dead,"
+  - "    and the life of the world to come. Amen."
+
+# ---------------------------------------------------------------------------
+# Confession and Absolution (BCP pp.359-360)
+# ---------------------------------------------------------------------------
+
+confession_invitation: >-
+  Let us confess our sins against God and our neighbor.
+
+confession:
+  - "Most merciful God,"
+  - "we confess that we have sinned against you"
+  - "in thought, word, and deed,"
+  - "by what we have done,"
+  - "and by what we have left undone."
+  - "We have not loved you with our whole heart;"
+  - "we have not loved our neighbors as ourselves."
+  - "We are truly sorry and we humbly repent."
+  - "For the sake of your Son Jesus Christ,"
+  - "have mercy on us and forgive us;"
+  - "that we may delight in your will,"
+  - "and walk in your ways,"
+  - "to the glory of your Name. Amen."
+
+absolution: >-
+  Almighty God have mercy on you, forgive you all your sins
+  through our Lord Jesus Christ, strengthen you in all
+  goodness, and by the power of the Holy Spirit keep you in
+  eternal life. Amen.
+
+# ---------------------------------------------------------------------------
+# The Peace (BCP p.360)
+# ---------------------------------------------------------------------------
+
+peace:
+  celebrant: "The peace of the Lord be always with you."
+  people: "And also with you."
+
+# ---------------------------------------------------------------------------
+# Sanctus (BCP p.362)
+# ---------------------------------------------------------------------------
+
+sanctus:
+  - "Holy, holy, holy Lord, God of power and might,"
+  - "heaven and earth are full of your glory."
+  - "  Hosanna in the highest."
+  - "Blessed is he who comes in the name of the Lord."
+  - "  Hosanna in the highest."
+
+# ---------------------------------------------------------------------------
+# Lord's Prayer - Contemporary (BCP p.364)
+# ---------------------------------------------------------------------------
+
+lords_prayer_intro:
+  option_1: "And now, as our Savior Christ has taught us, we are bold to say,"
+  option_2: "As our Savior Christ has taught us, we now pray,"
+
+lords_prayer:
+  - "Our Father, who art in heaven,"
+  - "  hallowed be thy Name,"
+  - "  thy kingdom come,"
+  - "  thy will be done,"
+  - "    on earth as it is in heaven."
+  - "Give us this day our daily bread."
+  - "And forgive us our trespasses,"
+  - "  as we forgive those"
+  - "    who trespass against us."
+  - "And lead us not into temptation,"
+  - "  but deliver us from evil."
+  - "For thine is the kingdom,"
+  - "  and the power, and the glory,"
+  - "  for ever and ever. Amen."
+
+# ---------------------------------------------------------------------------
+# Breaking of the Bread (BCP p.364)
+# ---------------------------------------------------------------------------
+
+fraction:
+  with_alleluia:
+    celebrant: "Alleluia. Christ our Passover is sacrificed for us;"
+    people: "Therefore let us keep the feast. Alleluia."
+  without_alleluia:
+    celebrant: "Christ our Passover is sacrificed for us;"
+    people: "Therefore let us keep the feast."
+
+invitation_to_communion: "The Gifts of God for the People of God."
+invitation_addition: >-
+  Take them in remembrance that Christ died for
+  you, and feed on him in your hearts by faith,
+  with thanksgiving.
+
+# ---------------------------------------------------------------------------
+# Post-Communion Prayers (BCP pp.365-366)
+# ---------------------------------------------------------------------------
+
+post_communion_prayer_a:
+  - "Eternal God, heavenly Father,"
+  - "you have graciously accepted us as living members"
+  - "of your Son our Savior Jesus Christ,"
+  - "and you have fed us with spiritual food"
+  - "in the Sacrament of his Body and Blood."
+  - "Send us now into the world in peace,"
+  - "and grant us strength and courage"
+  - "to love and serve you"
+  - "with gladness and singleness of heart;"
+  - "through Christ our Lord. Amen."
+
+post_communion_prayer_b:
+  - "Almighty and everliving God,"
+  - "we thank you for feeding us with the spiritual food"
+  - "of the most precious Body and Blood"
+  - "of your Son our Savior Jesus Christ;"
+  - "and for assuring us in these holy mysteries"
+  - "that we are living members of the Body of your Son,"
+  - "and heirs of your eternal kingdom."
+  - "And now, Father, send us out"
+  - "to do the work you have given us to do,"
+  - "to love and serve you"
+  - "as faithful witnesses of Christ our Lord."
+  - "To him, to you, and to the Holy Spirit,"
+  - "be honor and glory, now and for ever. Amen."
+
+# ---------------------------------------------------------------------------
+# Penitential Order sentences (BCP pp.351-352)
+# Used as "short form" for Lent 2-5 (instead of Decalogue)
+# ---------------------------------------------------------------------------
+
+penitential_sentences:
+  - reference: "Mark 12:29-31"
+    text: >-
+      Jesus said, "The first commandment is this: Hear, O Israel:
+      The Lord our God is the only Lord. Love the Lord your
+      God with all your heart, with all your soul, with all your
+      mind, and with all your strength. The second is this: Love
+      your neighbor as yourself. There is no other commandment
+      greater than these."
+
+  - reference: "1 John 1:8,9"
+    text: >-
+      If we say that we have no sin, we deceive ourselves, and the
+      truth is not in us. But if we confess our sins, God, who is
+      faithful and just, will forgive our sins and cleanse us from all
+      unrighteousness.
+
+  - reference: "Hebrews 4:14, 16"
+    text: >-
+      Since we have a great high priest who has passed through the
+      heavens, Jesus, the Son of God, let us with confidence draw
+      near to the throne of grace, that we may receive mercy and
+      find grace to help in time of need.
+
+# ---------------------------------------------------------------------------
+# Decalogue: Contemporary (BCP p.350)
+# Used for Lent 1 only
+# ---------------------------------------------------------------------------
+
+decalogue_intro: "Hear the commandments of God to his people:"
+
+decalogue:
+  - commandment: "I am the Lord your God who brought you out of bondage. You shall have no other gods but me."
+    response: "Amen. Lord have mercy."
+  - commandment: "You shall not make for yourself any idol."
+    response: "Amen. Lord have mercy."
+  - commandment: "You shall not invoke with malice the Name of the Lord your God."
+    response: "Amen. Lord have mercy."
+  - commandment: "Remember the Sabbath Day and keep it holy."
+    response: "Amen. Lord have mercy."
+  - commandment: "Honor your father and your mother."
+    response: "Amen. Lord have mercy."
+  - commandment: "You shall not commit murder."
+    response: "Amen. Lord have mercy."
+  - commandment: "You shall not commit adultery."
+    response: "Amen. Lord have mercy."
+  - commandment: "You shall not steal."
+    response: "Amen. Lord have mercy."
+  - commandment: "You shall not be a false witness."
+    response: "Amen. Lord have mercy."
+  - commandment: "You shall not covet anything that belongs to your neighbor."
+    response: "Amen. Lord have mercy."
+
+# ---------------------------------------------------------------------------
+# BCP Form VI - Prayers of the People (BCP pp.392-393)
+# Used verbatim when sheet says "(w/ confession)"
+# ---------------------------------------------------------------------------
+
+pop_form_vi:
+  opening: "In peace, we pray to you, Lord God."
+
+  petitions:
+    - leader: "For all people in their daily life and work;"
+      people: "For our families, friends, and neighbors, and for those who are alone."
+    - leader: "For this community, the nation, and the world;"
+      people: "For all who work for justice, freedom, and peace."
+    - leader: "For the just and proper use of your creation;"
+      people: "For the victims of hunger, fear, injustice, and oppression."
+    - leader: "For all who are in danger, sorrow, or any kind of trouble;"
+      people: "For those who minister to the sick, the friendless, and the needy."
+    - leader: "For the peace and unity of the Church of God;"
+      people: "For all who proclaim the Gospel, and all who seek the Truth."
+    - leader: "For {presiding_bishop} our Presiding Bishop, and {bishop} our Bishop; and for all bishops and other ministers;"
+      people: "For all who serve God in his Church."
+
+  special_needs_rubric: "For the special needs and concerns of this congregation."
+  special_needs_response:
+    leader: "Hear us, Lord;"
+    people: "For your mercy is great."
+
+  thanksgiving_rubric: "We thank you, Lord, for all the blessings of this life."
+  thanksgiving_response:
+    leader: "We will exalt you, O God our King;"
+    people: "And praise your Name for ever and ever."
+
+  departed_petition: "We pray for all who have died, that they may have a place in your eternal kingdom."
+  departed_response:
+    leader: "Lord, let your loving-kindness be upon them;"
+    people: "Who put their trust in you."
+
+  confession_intro: "We pray to you also for the forgiveness of our sins."
+
+  confession:
+    - "Have mercy upon us, most merciful Father;"
+    - "in your compassion forgive us our sins,"
+    - "known and unknown,"
+    - "things done and left undone;"
+    - "and so uphold us by your Spirit"
+    - "that we may live and serve you in newness of life,"
+    - "to the honor and glory of your Name;"
+    - "through Jesus Christ our Lord. Amen."

@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Generated output
+output/
+
+# Word temp files
+~$*.docx
+
+# macOS
+.DS_Store
+
+# IDE
+.idea/
+.vscode/
+*.swp
+
+# Large binary source documents (PDFs, .pages, .doc)
+source_documents/*.pdf
+source_documents/*.pages
+source_documents/**/*.doc
+
+# Claude
+.claude/

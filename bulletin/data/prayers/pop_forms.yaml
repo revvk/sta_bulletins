@@ -1,0 +1,1077 @@
+# Prayers of the People - Custom Forms
+# St. Andrew's Episcopal Church, McKinney, TX
+#
+# Extracted from "Prayers of the People.docx"
+# These are the parish's own adaptations of the BCP POP forms.
+#
+# Element types:
+#   leader  - spoken by the leader/intercessor
+#   people  - spoken by the people (bold in bulletin)
+#   rubric  - instructions (italic in bulletin)
+#   both    - leader line immediately followed by people response
+#             (leader_text + people_text on consecutive lines)
+#
+# Placeholder tokens:
+#   {parish_ministries}  - weekly featured ministry
+#   {presiding_bishop}   - Presiding Bishop's first name
+#   {bishop}             - Diocesan Bishop's first name
+#   {clergy_names}       - list of clergy first names
+#   {president}          - President's first name
+#   {governor}           - Governor's first name
+#   {mayor}              - Mayor's first name
+#   {departed}           - names of recently departed (inserted at ✠)
+#   {sick_list}          - names of those who are sick
+#   {community_partner}  - community outreach partner name(s)
+#
+# Note: Form VI "(w/ confession)" is handled separately using BCP text.
+
+# ==========================================================================
+# Form I  (based on BCP Form I, p.383)
+# ==========================================================================
+form_I:
+  title: "Prayers of the People Form I"
+  elements:
+    - type: leader
+      text: >-
+        With all our heart and with all our mind, let us pray to
+        the Lord, saying, "Lord, have mercy."
+
+    - type: leader
+      text: >-
+        For the peace of the world, for the welfare of the holy
+        Church of God, and for the unity of all peoples, let us
+        pray to the Lord. Lord, have mercy.
+
+    - type: leader
+      text: >-
+        For {presiding_bishop} our Presiding Bishop, {bishop} our
+        own Bishop, for our clergy, {clergy_names}, and for all
+        the clergy and people, let us pray to the Lord. Lord, have
+        mercy.
+
+    - type: leader
+      text: >-
+        For the ministries of St. Andrew's, especially the
+        {parish_ministries}, let us pray to the Lord. Lord, have
+        mercy.
+
+    - type: leader
+      text: >-
+        For {president}, our President, for the leaders of the
+        nations, and for all in authority, let us pray to the Lord.
+        Lord, have mercy.
+
+    - type: leader
+      text: >-
+        For this city, for every city and community, and for those
+        who live in them, let us pray to the Lord. Lord, have mercy.
+
+    - type: leader
+      text: >-
+        For the good earth which God has given us, and for the
+        wisdom and will to conserve it, let us pray to the Lord.
+        Lord, have mercy.
+
+    - type: leader
+      text: >-
+        For the aged and infirm, for the widowed and orphans, and
+        for the sick and the suffering, let us pray to the Lord.
+        Lord, have mercy.
+
+    - type: leader
+      text: >-
+        For the poor and the oppressed, for the unemployed and the
+        destitute, for prisoners and captives, and for all who
+        remember and care for them, let us pray to the Lord. Lord,
+        have mercy.
+
+    - type: leader
+      text: >-
+        For the clients of Community Lifeline Center, for the
+        residents of Samaritan Inn, and for all who serve them, let
+        us pray to the Lord. Lord, have mercy.
+
+    - type: leader
+      text: >-
+        For all who have died {departed} in the hope of the
+        resurrection, and for all the departed, let us pray to the
+        Lord. Lord, have mercy.
+
+    - type: leader
+      text: >-
+        For deliverance from all danger, violence, oppression, and
+        degradation, let us pray to the Lord. Lord, have mercy.
+
+    - type: leader
+      text: >-
+        That we may end our lives in faith and hope, without
+        suffering and without reproach, let us pray to the Lord.
+        Lord, have mercy.
+
+    - type: leader
+      text: >-
+        In the communion of Saint Andrew and of all the saints, let
+        us commend ourselves, and one another, and all our life, to
+        Christ our God. To thee, O Lord our God.
+
+# ==========================================================================
+# Form II  (based on BCP Form II, p.385)
+# ==========================================================================
+form_II:
+  title: "Prayers of the People Form II"
+  elements:
+    - type: leader
+      text: >-
+        I ask your prayers for God's people throughout the world;
+        for our Presiding Bishop {presiding_bishop}, our Bishop
+        {bishop}; for our clergy, {clergy_names}; for this
+        gathering; for all ministers and people; and for the
+        ministries of this parish, especially the
+        {parish_ministries}. Pray for the Church.
+    - type: rubric
+      text: "Silence"
+
+    - type: leader
+      text: >-
+        I ask your prayers for peace; for goodwill among nations;
+        and for the well-being of all people. Pray for justice and
+        peace.
+    - type: rubric
+      text: "Silence"
+
+    - type: leader
+      text: >-
+        I ask your prayers for the poor, the sick, the hungry, the
+        oppressed, and those in prison. Pray for those in any need
+        or trouble.
+    - type: rubric
+      text: "Silence"
+
+    - type: leader
+      text: >-
+        I ask your prayers for the refugees being ministered to at
+        Gateway of Grace, and for all refugees. Pray that they may
+        find sanctuary and solace.
+    - type: rubric
+      text: "Silence"
+
+    - type: leader
+      text: >-
+        I ask your prayers for all who seek God, or a deeper
+        knowledge of him. Pray that they may find and be found by
+        him.
+    - type: rubric
+      text: "Silence"
+
+    - type: leader
+      text: >-
+        I ask your prayers for the departed {departed}. Pray for
+        those who have died.
+    - type: rubric
+      text: "Silence"
+
+    - type: leader
+      text: >-
+        Praise God for those in every generation in whom Christ has
+        been honored. Pray that we may have grace to glorify Christ
+        in our own day.
+    - type: rubric
+      text: "Silence"
+
+# ==========================================================================
+# Form III  (based on BCP Form III, p.387)
+# ==========================================================================
+form_III:
+  title: "Prayers of the People Form III"
+  elements:
+    - type: both
+      leader_text: "Father, we pray for your holy catholic Church;"
+      people_text: "That we all may be one."
+
+    - type: both
+      leader_text: >-
+        Grant that every member of the Church may truly and humbly
+        serve you;
+      people_text: "That your Name may be glorified by all people."
+
+    - type: both
+      leader_text: >-
+        Make fruitful the work of St. Andrew's ministries,
+        especially the {parish_ministries};
+      people_text: >-
+        That we may be stewards of your grace to the world.
+
+    - type: both
+      leader_text: >-
+        We pray for all bishops, priests, and deacons;
+      people_text: >-
+        That they may be faithful ministers of your Word and
+        Sacraments.
+
+    - type: both
+      leader_text: >-
+        We pray for all who govern and hold authority in the
+        nations of the world;
+      people_text: >-
+        That there may be justice and peace on the earth.
+
+    - type: both
+      leader_text: >-
+        Give us grace to do your will in all that we undertake;
+      people_text: "That our works may find favor in your sight."
+
+    - type: both
+      leader_text: >-
+        Have compassion on those who suffer from any grief or
+        trouble;
+      people_text: >-
+        That they may be delivered from their distress.
+
+    - type: both
+      leader_text: >-
+        Bless the students, families, and teachers of our partner
+        Schools: Burks Elementary and Christ the King in Belize.
+      people_text: >-
+        That they may grow in true wisdom and knowledge.
+
+    - type: both
+      leader_text: "Give to the departed eternal rest; {departed}"
+      people_text: "Let light perpetual shine upon them."
+
+    - type: both
+      leader_text: >-
+        We praise you for your saints who have entered into joy;
+      people_text: >-
+        May we also come to share in your heavenly kingdom.
+
+    - type: leader
+      text: >-
+        Let us pray for our own needs and those of others.
+    - type: rubric
+      text: "Silence. The People may add their own petitions."
+
+# ==========================================================================
+# Form IV  (based on BCP Form IV, p.388)
+# ==========================================================================
+form_IV:
+  title: "Prayers of the People Form IV"
+  elements:
+    - type: leader
+      text: "Let us pray for the Church and for the world."
+
+    - type: leader
+      text: >-
+        Grant, Almighty God, that all who confess your Name may be
+        united in your truth, live together in your love, and
+        reveal your glory in the world.
+    - type: rubric
+      text: "Silence"
+    - type: people
+      text: "Lord, in your mercy, Hear our prayer."
+
+    - type: leader
+      text: >-
+        Encourage and inspire our ministries, especially the
+        {parish_ministries}, that our labor would bear fruit in our
+        common life and in your eternal kingdom.
+    - type: rubric
+      text: "Silence"
+    - type: people
+      text: "Lord, in your mercy, Hear our prayer."
+
+    - type: leader
+      text: >-
+        Guide the people of this land, and of all the nations, in
+        the ways of justice and peace; that we may honor one
+        another and serve the common good.
+    - type: rubric
+      text: "Silence"
+    - type: people
+      text: "Lord, in your mercy, Hear our prayer."
+
+    - type: leader
+      text: >-
+        Give us all a reverence for the earth as your own creation,
+        that we may use its resources rightly in the service of
+        others and to your honor and glory.
+    - type: rubric
+      text: "Silence"
+    - type: people
+      text: "Lord, in your mercy, Hear our prayer."
+
+    - type: leader
+      text: >-
+        Strengthen, guide, and protect those in our community
+        struggling to put their lives together after deep
+        suffering, especially the women and children at Shiloh
+        Place and the families served by Ragan's Hope, and all
+        those who visit the McKinney Little Free Pantry.
+    - type: rubric
+      text: "Silence"
+    - type: people
+      text: "Lord, in your mercy, Hear our prayer."
+
+    - type: leader
+      text: >-
+        Bless all whose lives are closely linked with ours, and
+        grant that we may serve Christ in them, and love one
+        another as he loves us.
+    - type: rubric
+      text: "Silence"
+    - type: people
+      text: "Lord, in your mercy, Hear our prayer."
+
+    - type: leader
+      text: >-
+        Comfort and heal all those who suffer in body, mind, or
+        spirit; give them courage and hope in their troubles, and
+        bring them the joy of your salvation.
+    - type: rubric
+      text: "Silence"
+    - type: people
+      text: "Lord, in your mercy, Hear our prayer."
+
+    - type: leader
+      text: >-
+        We commend to your mercy all who have died {departed}, that
+        your will for them may be fulfilled; and we pray that we
+        may share with all your saints in your eternal kingdom.
+    - type: rubric
+      text: "Silence"
+    - type: people
+      text: "Lord, in your mercy, Hear our prayer."
+
+# ==========================================================================
+# Form V  (based on BCP Form V, p.389)
+# ==========================================================================
+form_V:
+  title: "Prayers of the People Form V"
+  elements:
+    - type: leader
+      text: >-
+        In peace, let us pray to the Lord, saying, "Lord have
+        mercy"
+
+    - type: leader
+      text: >-
+        For the holy Church of God, that it may be filled with
+        truth and love, and be found without fault at the day of
+        your coming, we pray to you, O Lord. Lord, have mercy.
+
+    - type: leader
+      text: >-
+        For {presiding_bishop} our Presiding Bishop, {bishop} our
+        own Bishop, for all bishops, for {clergy_names}, and other
+        ministers, and for all the holy people of God, we pray to
+        you, O Lord. Lord, have mercy.
+
+    - type: leader
+      text: >-
+        For Christ the King, our partner parish in Belize, that
+        their witness to your love and redemption may be a bright
+        light to their community, we pray to you, O Lord. Lord,
+        have mercy.
+
+    - type: leader
+      text: >-
+        For all who fear God and believe in you, Lord Christ, that
+        our divisions may cease, and that all may be one as you and
+        the Father are one, we pray to you, O Lord. Lord, have
+        mercy.
+
+    - type: leader
+      text: >-
+        For the mission of the Church and the ministries of this
+        parish, especially the {parish_ministries}, that in
+        faithful witness we may preach the Gospel to the ends of
+        the earth, we pray to you, O Lord. Lord, have mercy.
+
+    - type: leader
+      text: >-
+        For the peace of the world, that a spirit of respect and
+        forbearance may grow among nations and peoples, we pray to
+        you, O Lord. Lord, have mercy.
+
+    - type: leader
+      text: >-
+        For those in positions of public trust that they may serve
+        justice, and promote the dignity and freedom of every
+        person, we pray to you, O Lord. Lord, have mercy.
+
+    - type: leader
+      text: >-
+        For all who live and work in this community, we pray to
+        you, O Lord. Lord, have mercy.
+
+    - type: leader
+      text: >-
+        For the teammates, staff and volunteers at Hugs Cafe, and
+        all those with special needs and gifts, we pray to you, O
+        Lord. Lord, have mercy.
+
+    - type: leader
+      text: >-
+        For the poor, the persecuted, the sick, and all who suffer;
+        for refugees, prisoners, and all who are in danger; that
+        they may be relieved and protected, we pray to you, O Lord.
+        Lord, have mercy.
+
+    - type: leader
+      text: >-
+        For this congregation, that we may be delivered from
+        hardness of heart, and show forth your glory in all that we
+        do, we pray to you, O Lord. Lord, have mercy.
+
+    - type: leader
+      text: >-
+        For all who have commended themselves to our prayers; for
+        our families, friends, and neighbors; that being freed from
+        anxiety, they may live in joy, peace, and health, we pray
+        to you, O Lord. Lord, have mercy.
+
+    - type: leader
+      text: >-
+        For all who have died {departed} in the communion of your
+        Church, and those whose faith is known to you alone, that,
+        with all the saints, they may have rest in that place where
+        there is no pain or grief, but life eternal, we pray to
+        you, O Lord. Lord, have mercy.
+
+    - type: leader
+      text: >-
+        Rejoicing in the fellowship of the ever-blessed Virgin
+        Mary, blessed Saint Andrew and all the saints, let us
+        commend ourselves, and one another, and all our life to
+        Christ our God. To you, O Lord our God.
+
+# ==========================================================================
+# Form VI  (custom adaptation; separate from Form VI "w/ confession")
+# ==========================================================================
+form_VI:
+  title: "Prayers of the People Form VI"
+  elements:
+    - type: leader
+      text: "In peace, we pray to you, Lord God."
+    - type: rubric
+      text: "Silence"
+
+    - type: both
+      leader_text: "For all people in their daily life and work;"
+      people_text: >-
+        For our families, friends, and neighbors, and for those who
+        are alone.
+
+    - type: both
+      leader_text: "For this community, the nation, and the world;"
+      people_text: >-
+        For all who work for justice, freedom, and peace.
+
+    - type: both
+      leader_text: "For the just and proper use of your creation;"
+      people_text: >-
+        For the victims of hunger, fear, injustice, and oppression.
+
+    - type: both
+      leader_text: "For our community partners and adopted schools;"
+      people_text: >-
+        For those who find themselves desperate for the aid of
+        others.
+
+    - type: both
+      leader_text: >-
+        For all who are in danger, sorrow, or any kind of trouble;
+      people_text: >-
+        For those who minister to the sick, the friendless, and the
+        needy.
+
+    - type: both
+      leader_text: "For the peace and unity of the Church of God;"
+      people_text: >-
+        For all who proclaim the Gospel, and all who seek the
+        Truth.
+
+    - type: both
+      leader_text: >-
+        For {presiding_bishop} our Presiding Bishop, {bishop} our
+        own Bishop; for our clergy, {clergy_names}, for all bishops
+        and other ministers;
+      people_text: "For all who serve God in his Church."
+
+    - type: both
+      leader_text: "For the {parish_ministries};"
+      people_text: "For all the ministries of this parish."
+
+    - type: leader
+      text: "For the special needs and concerns of this congregation."
+    - type: rubric
+      text: "Silence. The People may add their own petitions."
+
+    - type: both
+      leader_text: "Hear us, Lord;"
+      people_text: "For your mercy is great."
+
+    - type: leader
+      text: >-
+        We thank you, Lord, for all the blessings of this life.
+    - type: rubric
+      text: "Silence. The People may add their own thanksgivings."
+
+    - type: both
+      leader_text: "We will exalt you, O God our King;"
+      people_text: "And praise your Name for ever and ever."
+
+    - type: leader
+      text: >-
+        We pray for all who have died {departed}, that they may
+        have a place in your eternal kingdom.
+    - type: rubric
+      text: "Silence. The People may add their own petitions."
+
+    - type: both
+      leader_text: "Lord, let your loving kindness be upon them;"
+      people_text: "Who put their trust in you."
+
+    - type: rubric
+      text: "Silence may be kept."
+
+# ==========================================================================
+# Advent I  (Advent seasonal form - Hope)
+# ==========================================================================
+advent_I:
+  title: "Prayers of the People - Advent I"
+  season: "advent"
+  theme: "hope"
+  elements:
+    - type: rubric
+      text: >-
+        My brothers and sisters, may God strengthen your hearts in
+        holiness. Trusting in God, let us pray, "O come, o come,
+        Emmanuel; be our hope and salvation."
+
+    - type: leader
+      text: >-
+        God our hope, make us increase and abound in love for one
+        another. Keep your Church on the paths of love and
+        faithfulness.
+    - type: rubric
+      text: "Silence"
+    - type: people
+      text: "O come, o come, Emmanuel; be our hope and salvation."
+
+    - type: leader
+      text: >-
+        God our hope, send your Spirit among the ministries of St.
+        Andrew's, especially the {parish_ministries}. Help us be
+        stewards of your grace to the world.
+    - type: rubric
+      text: "Silence"
+    - type: people
+      text: "O come, o come, Emmanuel; be our hope and salvation."
+
+    - type: leader
+      text: >-
+        God our hope, usher in your reign of justice and
+        righteousness. May all the world know your peace and
+        safety.
+    - type: rubric
+      text: "Silence"
+    - type: people
+      text: "O come, o come, Emmanuel; be our hope and salvation."
+
+    - type: leader
+      text: >-
+        God our hope, you place signs in the sun, the moon, and the
+        stars. Give us eyes to see, the wisdom to prepare, and the
+        faith to trust in you.
+    - type: rubric
+      text: "Silence"
+    - type: people
+      text: "O come, o come, Emmanuel; be our hope and salvation."
+
+    - type: leader
+      text: >-
+        God our hope, under your reign divisions are overcome,
+        unity restored: bring the people of this land together in a
+        spirit of love and respect.
+    - type: rubric
+      text: "Silence. The People may add their own thanksgivings."
+    - type: people
+      text: "O come, o come, Emmanuel; be our hope and salvation."
+
+    - type: leader
+      text: >-
+        God our hope, remember your compassion and love. Heal and
+        restore the sick and the suffering, the anxious and the
+        grieving.
+    - type: rubric
+      text: "Silence. The People may add their own petitions."
+    - type: people
+      text: "O come, o come, Emmanuel; be our hope and salvation."
+
+    - type: leader
+      text: >-
+        God our hope, keep us blameless before you that we may meet
+        the coming of our Lord Jesus with joy. May we, and all who
+        have died {departed}, rise to life immortal with all your
+        saints.
+    - type: rubric
+      text: "Silence"
+    - type: people
+      text: "O come, o come, Emmanuel; be our hope and salvation."
+
+# ==========================================================================
+# Advent II  (Advent seasonal form - Peace)
+# ==========================================================================
+advent_II:
+  title: "Prayers of the People - Advent II"
+  season: "advent"
+  theme: "peace"
+  elements:
+    - type: rubric
+      text: >-
+        My sisters and brothers, may God fill our hearts with
+        peace. Trusting in God, let us pray, "O come, o come,
+        Emmanuel; be our peace and salvation."
+
+    - type: leader
+      text: >-
+        God our peace, make us increase and abound in love for one
+        another. Keep your Church on the straight paths of love and
+        faithfulness.
+    - type: rubric
+      text: "Silence"
+    - type: people
+      text: "O come, o come, Emmanuel; be our peace and salvation."
+
+    - type: leader
+      text: >-
+        God our peace, send your Spirit among the ministries of St.
+        Andrew's, especially the {parish_ministries}. Help us be
+        stewards of your grace to the world.
+    - type: rubric
+      text: "Silence"
+    - type: people
+      text: "O come, o come, Emmanuel; be our peace and salvation."
+
+    - type: leader
+      text: >-
+        God our peace, usher in your reign of justice and
+        righteousness. May guns grow quiet and bombs gather dust.
+    - type: rubric
+      text: "Silence"
+    - type: people
+      text: "O come, o come, Emmanuel; be our peace and salvation."
+
+    - type: leader
+      text: >-
+        God our peace, you have sent messengers to call us to
+        prepare the way of your Son. Give us ears to hear, hearts
+        full of repentance for our sins, and eyes to see the
+        salvation of our God.
+    - type: rubric
+      text: "Silence"
+    - type: people
+      text: "O come, o come, Emmanuel; be our peace and salvation."
+
+    - type: leader
+      text: >-
+        God our peace, under your reign divisions are overcome,
+        unity restored: bring the people of our divided and
+        contentious country together in a spirit of love and
+        respect.
+    - type: rubric
+      text: "Silence"
+    - type: people
+      text: "O come, o come, Emmanuel; be our peace and salvation."
+
+    - type: leader
+      text: >-
+        God our peace, in your tender compassion remember your
+        people and set them free. Heal and restore the sick and the
+        suffering, the anxious and the grieving.
+    - type: rubric
+      text: "Silence"
+    - type: people
+      text: "O come, o come, Emmanuel; be our peace and salvation."
+
+    - type: leader
+      text: >-
+        God our peace, may we, and all who have died {departed},
+        rise to life immortal with all your saints in the joy of
+        your salvation.
+    - type: rubric
+      text: "Silence"
+    - type: people
+      text: "O come, o come, Emmanuel; be our peace and salvation."
+
+# ==========================================================================
+# Advent III  (Advent seasonal form - Joy)
+# ==========================================================================
+advent_III:
+  title: "Prayers of the People - Advent III"
+  season: "advent"
+  theme: "joy"
+  elements:
+    - type: rubric
+      text: >-
+        My brothers and sisters, may God fill our hearts with joy.
+        Trusting in God, let us pray, "O come, o come, Emmanuel;
+        be our joy and salvation."
+
+    - type: leader
+      text: >-
+        God our joy, make your Church increase and abound in love
+        for one another. Restore our fortunes before our eyes, that
+        we may rejoice and exalt with all our heart.
+    - type: rubric
+      text: "Silence"
+    - type: people
+      text: "O come, o come, Emmanuel; be our joy and salvation."
+
+    - type: leader
+      text: >-
+        God our joy, send your Spirit among the ministries of St.
+        Andrew's, especially the {parish_ministries}. Let not our
+        hands grow weak as we do your work.
+    - type: rubric
+      text: "Silence"
+    - type: people
+      text: "O come, o come, Emmanuel; be our joy and salvation."
+
+    - type: leader
+      text: >-
+        God our joy, deal mightily with oppressors, enemies and
+        disasters. Lift up the innocent and the brokenhearted, and
+        remove the world's judgments against the poor, outcast, and
+        needy.
+    - type: rubric
+      text: "Silence"
+    - type: people
+      text: "O come, o come, Emmanuel; be our joy and salvation."
+
+    - type: leader
+      text: >-
+        God our joy, give us grace to bear fruits worthy of
+        repentance in our everyday lives and to know the peace and
+        freedom of your forgiveness.
+    - type: rubric
+      text: "Silence"
+    - type: people
+      text: "O come, o come, Emmanuel; be our joy and salvation."
+
+    - type: leader
+      text: >-
+        God our joy, guard the hearts and minds of the people of
+        this country and guide our leaders, especially our president
+        {president}, our governor {governor}, and our mayor {mayor}.
+    - type: rubric
+      text: "Silence"
+    - type: people
+      text: "O come, o come, Emmanuel; be our joy and salvation."
+
+    - type: leader
+      text: >-
+        God our joy, may we, and all who have died {departed}, rise
+        to life immortal in that kingdom where there is no death,
+        neither sorrow nor crying, but the fullness of joy with all
+        your saints.
+    - type: rubric
+      text: "Silence"
+    - type: people
+      text: "O come, o come, Emmanuel; be our joy and salvation."
+
+# ==========================================================================
+# Advent IV  (Advent seasonal form - Love)
+# ==========================================================================
+advent_IV:
+  title: "Prayers of the People - Advent IV"
+  season: "advent"
+  theme: "love"
+  elements:
+    - type: rubric
+      text: >-
+        My sisters and brothers, may God fill our hearts with love.
+        Trusting in God, let us pray, "O come, o come, Emmanuel;
+        be our love and salvation."
+
+    - type: leader
+      text: >-
+        God of love, may your Church believe that there will be a
+        fulfillment of what you have spoken to your people through
+        the ages, and in remembrance of your mercy, may we magnify
+        your name and rejoice in your salvation.
+    - type: rubric
+      text: "Silence"
+    - type: people
+      text: "O come, o come, Emmanuel; be our love and salvation."
+
+    - type: leader
+      text: >-
+        God of love, may the ministries of St. Andrew's bear
+        witness to the Spirit's presence among us, especially the
+        {parish_ministries}.
+    - type: rubric
+      text: "Silence"
+    - type: people
+      text: "O come, o come, Emmanuel; be our love and salvation."
+
+    - type: leader
+      text: >-
+        God of love, lift up the lowly, fill the hungry with good
+        things, bind up the brokenhearted, and heal the sick, that
+        all your people may live secure to the ends of the earth.
+    - type: rubric
+      text: "Silence"
+    - type: people
+      text: "O come, o come, Emmanuel; be our love and salvation."
+
+    - type: leader
+      text: >-
+        God of love, may those who rule on earth follow the path of
+        your love, rather than giving in to the lusts of the proud,
+        mighty and rich.
+    - type: rubric
+      text: "Silence"
+    - type: people
+      text: "O come, o come, Emmanuel; be our love and salvation."
+
+    - type: leader
+      text: >-
+        God of love, fill our cities and community with the power
+        of your Holy Spirit in this season. May unity triumph over
+        division, hope shatter despair, peace trample anxiety, and
+        love conquer hate.
+    - type: rubric
+      text: "Silence"
+    - type: people
+      text: "O come, o come, Emmanuel; be our love and salvation."
+
+    - type: leader
+      text: >-
+        God of love, bless those who have died in the faith of
+        Christ and those whose faith is known to you alone
+        {departed}. Hold in your strong arms of love those among us
+        who grieve deeply their passing.
+    - type: rubric
+      text: "Silence"
+    - type: people
+      text: "O come, o come, Emmanuel; be our love and salvation."
+
+# ==========================================================================
+# The Second Sunday of Easter
+# ==========================================================================
+easter_II:
+  title: "Prayers of the People - The Second Sunday of Easter"
+  season: "easter"
+  elements:
+    - type: leader
+      text: >-
+        Grace to you and peace from Jesus Christ, the firstborn of
+        the dead. The Lord has acted; let us rejoice and be glad,
+        saying, "You are our God; and we thank you."
+
+    - type: leader
+      text: >-
+        Almighty God, you have given your Church the ministry of
+        reconciliation: grant that all who have been reborn into
+        the fellowship of Christ's Body may show forth in their
+        lives what they profess by their faith.
+    - type: rubric
+      text: "Silence"
+    - type: people
+      text: "You are our God; and we thank you."
+
+    - type: leader
+      text: >-
+        Ruler of the kings of the earth, Lord Jesus, your word is a
+        word of peace: speak forth salvation in a weary world.
+    - type: rubric
+      text: "Silence"
+    - type: people
+      text: "You are our God; and we thank you."
+
+    - type: leader
+      text: >-
+        All you do, O Lord, is marvelous in our eyes: give us a
+        respect for all you have made.
+    - type: rubric
+      text: "The congregation may add their thanksgivings."
+    - type: people
+      text: "You are our God; and we thank you."
+
+    - type: leader
+      text: >-
+        Mighty Savior, raise up faithful witnesses in our
+        community, that our neighbors might come to know that you
+        love them and have freed them from the power of sin.
+    - type: rubric
+      text: "Silence"
+    - type: people
+      text: "You are our God; and we thank you."
+
+    - type: leader
+      text: >-
+        O Lord, you are good; your mercy endures forever: be the
+        strength of the weak and the song of those who mourn.
+    - type: rubric
+      text: "The congregation may add their petitions."
+    - type: people
+      text: "You are our God; and we thank you."
+
+    - type: leader
+      text: >-
+        Alpha and Omega, you do not hand your beloved ones over to
+        death, but promise life eternal {departed} to all those
+        baptized into your Son: to you be the glory and dominion
+        forever.
+    - type: rubric
+      text: "Silence"
+    - type: people
+      text: "You are our God; and we thank you."
+
+# ==========================================================================
+# The Third Sunday of Easter
+# ==========================================================================
+easter_III:
+  title: "Prayers of the People - The Third Sunday of Easter"
+  season: "easter"
+  elements:
+    - type: leader
+      text: >-
+        Brothers and sisters, give thanks to the One who clothes us
+        with joy. The Lord is our helper and restorer; therefore,
+        let us pray, "Hear, O Lord, and have mercy upon us."
+
+    - type: leader
+      text: >-
+        O God, you have chosen your Church to bring your name
+        before all nations: give us hearts to feed your lambs and
+        tend your sheep. Give us hearts to follow Jesus.
+    - type: rubric
+      text: "Silence"
+    - type: people
+      text: "Hear, O Lord, And have mercy upon us."
+
+    - type: leader
+      text: >-
+        Lord Christ, we look for the day when all will live
+        together in peace, when every voice will together sing this
+        hymn: to the one seated on the throne and to the Lamb be
+        blessing and honor and glory and might forever and ever!
+    - type: rubric
+      text: "Silence"
+    - type: people
+      text: "Hear, O Lord, And have mercy upon us."
+
+    - type: leader
+      text: >-
+        Creator of the deep, protect and preserve our lakes,
+        rivers, and oceans, and all creatures who live therein. May
+        we be good stewards of the gift of water.
+    - type: rubric
+      text: "Silence. The congregation may add their thanksgivings"
+    - type: people
+      text: "Hear, O Lord, And have mercy upon us."
+
+    - type: leader
+      text: >-
+        Ancient of Days, we pray for the senior members of our
+        community. Bless with patience and confidence those who
+        rely on others for support, care, and transportation. Bless
+        their caretakers with strength.
+    - type: rubric
+      text: "Silence"
+    - type: people
+      text: "Hear, O Lord, And have mercy upon us."
+
+    - type: leader
+      text: >-
+        O Lord our God, restore to health those who cry out to you.
+        Lift up the lowly. Turn wailing into joyful dancing.
+    - type: rubric
+      text: "Silence. The congregation may add their own petitions."
+    - type: people
+      text: "Hear, O Lord, And have mercy upon us."
+
+    - type: leader
+      text: >-
+        Living God, you restore the life of those in the grave: may
+        we, and all the dead, experience resurrection {departed}
+        and life everlasting.
+    - type: rubric
+      text: "Silence"
+    - type: people
+      text: "Hear, O Lord, And have mercy upon us."
+
+# ==========================================================================
+# Mother's Day
+# ==========================================================================
+mothers_day:
+  title: "Prayers of the People - Mother's Day"
+  season: "special"
+  elements:
+    - type: leader
+      text: >-
+        On this day we give you thanks for those women who have
+        given us life, those who have loved us, those who have
+        sacrificed for us, and those who have taught us. May your
+        blessing be upon the women who gave us birth, and all those
+        women who have nurtured, taught, comforted, challenged, and
+        encouraged us such that without them we would not be who we
+        are.
+    - type: people
+      text: "Lord, in your mercy, hear our prayer."
+
+    - type: leader
+      text: >-
+        We pray for all those who govern and hold power in our
+        nation and the world, they would lead in such a way that
+        their mothers would be proud, not of their power but of
+        their peace, not of their strength but of their justice.
+        May this world ever more reflect the love with which you
+        created it.
+    - type: people
+      text: "Lord, in your mercy, hear our prayer."
+
+    - type: leader
+      text: >-
+        As a mother bandages a child's hurts, so we long for your
+        grace to heal this wounded world. We ask your blessing upon
+        every mother and child whose relationship is strained by
+        distance, anger, or unhealed hurts, and we lift up before
+        you those whose longing to be a parent has thus far gone
+        unfilled.
+    - type: people
+      text: "Lord, in your mercy, hear our prayer."
+
+    - type: leader
+      text: >-
+        We remember before you those mothers who watch their
+        children suffer illness, go hungry, or die of violence. We
+        beg your healing grace for all women and children who are
+        victims of abuse, injustice, or oppression.
+    - type: people
+      text: "Lord, in your mercy, hear our prayer."
+
+    - type: leader
+      text: >-
+        Bless our mother Church, may its members be nurtured in
+        faith and in love, in service and in truth. And may the
+        church reach out with a mother's love and care for those
+        who need to hear the shepherd's voice calling their name.
+    - type: people
+      text: "Lord, in your mercy, hear our prayer."
+
+    - type: leader
+      text: >-
+        We pray for those mothers and children to whom we have said
+        farewell for the final time in this life {departed}, and
+        ask your grace and mercy that we may one day join them
+        eternally in your kingdom.
+    - type: people
+      text: "Lord, in your mercy, hear our prayer."
+
+    - type: rubric
+      text: >-
+        The Celebrant adds a concluding Collect and Blessing of the
+        Women of the Church.

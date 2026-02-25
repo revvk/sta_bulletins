@@ -1,0 +1,70 @@
+# Staff and Vestry listing for the back page of the bulletin.
+# Update this file when staff or vestry changes.
+
+clergy:
+  - name: "The Rev. Andrew Van Kirk"
+    title: "Rector"
+    email: "andrewv@standrewsmckinney.org"
+  - name: "The Rev. Logan Hurst"
+    title: "Vice Rector"
+    email: "loganh@standrewsmckinney.org"
+  - name: "The Rev. Erica Andersen"
+    title: "Curate"
+    email: "ericaa@standrewsmckinney.org"
+  - name: "The Rev. Paulette Magnuson"
+    title: "Priest Associate"
+    email: "pwmagnuson@gmail.com"
+  - name: "The Rev. Mike Klickman"
+    title: "Assisting Priest (Retired)"
+  - name: "The Rev. Gene Zeilfelder"
+    title: "Assisting Priest (Retired)"
+
+staff:
+  - name: "Tim Jenkins"
+    title: "Welcome and Communications Minister"
+    email: "timj@standrewsmckinney.org"
+  - name: "Lisa Ostrowski"
+    title: "Outreach Minister"
+    email: "lisao@standrewsmckinney.org"
+  - name: "Carolyn Nicketta"
+    title: "Office Administrator"
+    email: "carolynn@standrewsmckinney.org"
+  - name: "Laura Bray"
+    title: "Children's and Family Minister and Music Director"
+    email: "laurab@standrewsmckinney.org"
+  - name: "Michele Miller"
+    title: "Children's Ministry Associate"
+    email: "michelem@standrewsmckinney.org"
+  - name: "Stephanie Jenkins"
+    title: "Praise Band Leader"
+    email: "stephaniej@standrewsmckinney.org"
+
+vestry:
+  senior_warden: "Ned Searles"
+  junior_warden: "Paul Miles"
+  members:
+    - "Eric Austin"
+    - "Tracey Glenn"
+    - "Sandi Krummel"
+    - "Paul Miles"
+    - "Diane Monk"
+    - "Chinelo Onubogu"
+    - "Ned Searles"
+    - "Peter Stringer"
+    - "Syd Verinder"
+
+# Names used in liturgy (first names for POP forms, etc.)
+# presiding_bishop and bishop are used in Form VI and other POP forms
+liturgical_names:
+  presiding_bishop: "Sean"
+  bishop: "George"
+  bishop_coadjutor: "Rob"
+  president: "Donald"
+  governor: "Greg"
+  mayor: "George"
+  clergy_first_names:
+    - "Andrew"
+    - "Logan"
+    - "Paulette"
+    - "Mike"
+    - "Gene"

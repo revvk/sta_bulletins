@@ -1,0 +1,134 @@
+# Eucharistic Prayers from the Book of Common Prayer
+# Holy Eucharist Rite II, pp. 361-375
+#
+# The Sursum Corda and Sanctus are the same for all prayers.
+# The Proper Preface is inserted between the opening and the Sanctus transition.
+
+sursum_corda:
+  - celebrant: "The Lord be with you."
+    people: "And also with you."
+  - celebrant: "Lift up your hearts."
+    people: "We lift them to the Lord."
+  - celebrant: "Let us give thanks to the Lord our God."
+    people: "It is right to give him thanks and praise."
+
+# The opening sentence is the same for Prayers A and B
+preface_opening: >-
+  It is right, and a good and joyful thing, always and everywhere
+  to give thanks to you, Father Almighty, Creator of heaven and earth.
+
+# The transition to the Sanctus is the same for Prayers A and B
+sanctus_transition: >-
+  Therefore we praise you, joining our voices with Angels and Archangels
+  and with all the company of heaven, who for ever sing this hymn
+  to proclaim the glory of your Name:
+
+# --- Prayer A (BCP pp. 361-365) ---
+prayer_a:
+  post_sanctus: >-
+    Holy and gracious Father: In your infinite love you made us for yourself;
+    and, when we had fallen into sin and become subject to evil and death,
+    you, in your mercy, sent Jesus Christ, your only and eternal Son,
+    to share our human nature, to live and die as one of us, to reconcile us
+    to you, the God and Father of all.
+
+  institution_1: >-
+    He stretched out his arms upon the cross, and offered himself in obedience
+    to your will, a perfect sacrifice for the whole world.
+
+  institution_bread: >-
+    On the night he was handed over to suffering and death, our Lord Jesus
+    Christ took bread; and when he had given thanks to you, he broke it,
+    and gave it to his disciples, and said, "Take, eat: This is my Body,
+    which is given for you. Do this for the remembrance of me."
+
+  institution_cup: >-
+    After supper he took the cup of wine; and when he had given thanks,
+    he gave it to them, and said, "Drink this, all of you: This is my Blood
+    of the new Covenant, which is shed for you and for many for the
+    forgiveness of sins. Whenever you drink it, do this for the
+    remembrance of me."
+
+  memorial_intro: "Therefore we proclaim the mystery of faith:"
+
+  memorial_acclamation:
+    - "Christ has died."
+    - "Christ is risen."
+    - "Christ will come again."
+
+  epiclesis_1: >-
+    We celebrate the memorial of our redemption, O Father, in this sacrifice
+    of praise and thanksgiving. Recalling his death, resurrection, and ascension,
+    we offer you these gifts.
+
+  epiclesis_2: >-
+    Sanctify them by your Holy Spirit to be for your people the Body and Blood
+    of your Son, the holy food and drink of new and unending life in him.
+    Sanctify us also that we may faithfully receive this holy Sacrament,
+    and serve you in unity, constancy, and peace; and at the last day bring us
+    with all your saints into the joy of your eternal kingdom.
+
+  doxology: >-
+    All this we ask through your Son Jesus Christ. By him, and with him,
+    and in him, in the unity of the Holy Spirit all honor and glory is yours,
+    Almighty Father, now and for ever.
+
+  doxology_response: "AMEN."
+
+# --- Prayer B (BCP pp. 367-369) ---
+prayer_b:
+  post_sanctus: >-
+    We give thanks to you, O God, for the goodness and love which you have
+    made known to us in creation; in the calling of Israel to be your people;
+    in your Word spoken through the prophets; and above all in the Word made
+    flesh, Jesus, your Son. For in these last days you sent him to be incarnate
+    from the Virgin Mary, to be the Savior and Redeemer of the world.
+    In him, you have delivered us from evil, and made us worthy to stand
+    before you. In him, you have brought us out of error into truth,
+    out of sin into righteousness, out of death into life.
+
+  institution_bread: >-
+    On the night before he died for us, our Lord Jesus Christ took bread;
+    and when he had given thanks to you, he broke it, and gave it to his
+    disciples, and said, "Take, eat: This is my Body, which is given for you.
+    Do this for the remembrance of me."
+
+  institution_cup: >-
+    After supper he took the cup of wine; and when he had given thanks,
+    he gave it to them, and said, "Drink this, all of you: This is my Blood
+    of the new Covenant, which is shed for you and for many for the forgiveness
+    of sins. Whenever you drink it, do this for the remembrance of me."
+
+  memorial_intro: "Therefore, according to his command, O Father,"
+
+  memorial_acclamation:
+    - "We remember his death,"
+    - "We proclaim his resurrection,"
+    - "We await his coming in glory;"
+
+  epiclesis: >-
+    And we offer our sacrifice of praise and thanksgiving to you, O Lord of all;
+    presenting to you, from your creation, this bread and this wine.
+
+  epiclesis_2: >-
+    We pray you, gracious God, to send your Holy Spirit upon these gifts that
+    they may be the Sacrament of the Body of Christ and his Blood of the
+    new Covenant. Unite us to your Son in his sacrifice, that we may be
+    acceptable through him, being sanctified by the Holy Spirit. In the fullness
+    of time, put all things in subjection under your Christ, and bring us to
+    that heavenly country where, with Saint Andrew and all your saints, we may
+    enter the everlasting heritage of your sons and daughters; through Jesus
+    Christ our Lord, the firstborn of all creation, the head of the Church,
+    and the author of our salvation.
+
+  doxology: >-
+    By him, and with him, and in him, in the unity of the Holy Spirit
+    all honor and glory is yours, Almighty Father, now and for ever.
+
+  doxology_response: "AMEN."
+
+# --- Prayer C (BCP pp. 369-372) ---
+# Prayer C has a unique responsive structure; included for completeness
+prayer_c:
+  note: "Prayer C is responsive throughout. See BCP pp. 369-372."
+  # Full text to be added when needed
