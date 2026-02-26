@@ -30,9 +30,18 @@ from bulletin.config import (
 def create_document() -> Document:
     """Create a new Document with all bulletin styles and page setup."""
     doc = Document()
+    configure_document(doc)
+    return doc
+
+
+def configure_document(doc: Document):
+    """Set up page layout and register all bulletin styles on *doc*.
+
+    Use this when the Document already exists (e.g. opened from a
+    template) rather than being freshly created.
+    """
     _setup_page(doc)
     _create_styles(doc)
-    return doc
 
 
 def _setup_page(doc: Document):

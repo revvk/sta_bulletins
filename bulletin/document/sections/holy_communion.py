@@ -65,6 +65,7 @@ def add_holy_communion(doc: Document, rules: SeasonalRules, data: dict):
     add_heading(doc, "")
 
     # --- Offertory ---
+    add_spacer(doc)
     add_rubric(doc, "Be seated.")
     add_heading2(doc, "Offertory")
     add_rubric(doc, "Please place your offerings and Connection Cards in the "
@@ -77,6 +78,7 @@ def add_holy_communion(doc: Document, rules: SeasonalRules, data: dict):
     _add_song_smart(doc, data.get("offertory_song"))
 
     # Doxology
+    add_spacer(doc)
     add_introductory_rubric(doc, "Please stand.")
     p = doc.add_paragraph(style="Heading 2")
     p.add_run("Doxology")
@@ -92,6 +94,7 @@ def add_holy_communion(doc: Document, rules: SeasonalRules, data: dict):
         doc.add_paragraph(line, style="Body - Lyrics")
 
     # --- The Great Thanksgiving ---
+    add_spacer(doc)
     add_rubric(doc, "Remain standing.")
     add_heading2(doc, "The Great Thanksgiving")
 
@@ -116,10 +119,11 @@ def add_holy_communion(doc: Document, rules: SeasonalRules, data: dict):
     add_rubric(doc, "Please stand and, as you are comfortable, join hands "
                "with those around you.")
     add_body(doc, prayers["lords_prayer_intro"]["option_1"])
-    text = " ".join(prayers["lords_prayer"])
+    text = " ".join(line.strip() for line in prayers["lords_prayer"])
     doc.add_paragraph(text, style="Body - People Recitation")
 
     # --- Breaking of the Bread ---
+    add_spacer(doc)
     add_heading2(doc, "Breaking of the Bread")
     if rules.use_fraction_anthem:
         # Lent: sung fraction anthem (Agnus Dei)
@@ -141,12 +145,14 @@ def add_holy_communion(doc: Document, rules: SeasonalRules, data: dict):
         add_people_line(doc, "People", rules.fraction_people)
 
     # --- Invitation ---
+    add_spacer(doc)
     add_heading2(doc, "Invitation")
     add_rubric(doc, "Facing the people, the Celebrant says the following Invitation")
     add_body(doc, prayers["invitation_to_communion"] + " " +
              prayers["invitation_addition"])
 
     # --- Holy Communion ---
+    add_spacer(doc)
     add_heading2(doc, "Holy Communion")
     add_rubric(doc, "All baptized Christians are invited to the altar rail to "
                "receive Holy Communion. If you are not going to receive, you "
@@ -154,6 +160,7 @@ def add_holy_communion(doc: Document, rules: SeasonalRules, data: dict):
                "arms over your chest.")
 
     # --- Communion Music ---
+    add_spacer(doc)
     add_heading2(doc, "Communion Music")
     comm_songs = data.get("communion_songs", [])
     for i, song in enumerate(comm_songs):
@@ -162,6 +169,7 @@ def add_holy_communion(doc: Document, rules: SeasonalRules, data: dict):
         _add_song_smart(doc, song)
 
     # --- Closing Prayer ---
+    add_spacer(doc)
     add_heading2(doc, "Closing Prayer")
     p = doc.add_paragraph(style="Body - Celebrant")
     run = p.add_run("Celebrant")
@@ -228,12 +236,14 @@ def add_holy_communion(doc: Document, rules: SeasonalRules, data: dict):
     _add_song_smart(doc, data.get("closing_hymn"))
 
     # --- Dismissal ---
+    add_spacer(doc)
     add_heading2(doc, "Dismissal")
     add_rubric(doc, "The Deacon or a Priest dismisses with these words")
     add_celebrant_line(doc, "", data.get("dismissal_deacon", ""))
     add_people_line(doc, "People", data.get("dismissal_people", ""))
 
     # --- Postlude ---
+    add_spacer(doc)
     add_heading2(doc, "Postlude")
     postlude_songs = data.get("postlude_songs", [])
     for song in postlude_songs:
@@ -290,10 +300,13 @@ def _add_prayer_a_or_b(doc: Document, ep_data: dict, data: dict,
 
     # Memorial acclamation
     add_body(doc, prayer["memorial_intro"])
-    accl_text = "".join(prayer["memorial_acclamation"])
     p = doc.add_paragraph(style="Body")
-    run = p.add_run(accl_text)
-    run.bold = True
+    for i, line in enumerate(prayer["memorial_acclamation"]):
+        if i > 0:
+            run = p.add_run()
+            run.add_break()
+        run = p.add_run(line)
+        run.bold = True
     add_spacer(doc)
 
     # Epiclesis

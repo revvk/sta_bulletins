@@ -68,6 +68,7 @@ def add_word_of_god(doc: Document, rules: SeasonalRules, data: dict):
         _add_standard_opening(doc, rules, data, prayers)
 
     # --- Collect of the Day ---
+    add_spacer(doc)
     add_heading2(doc, "Collect of the Day")
     add_celebrant_line(doc, "Celebrant", "The Lord be with you.")
     add_people_line(doc, "People", "And also with you.")
@@ -76,19 +77,23 @@ def add_word_of_god(doc: Document, rules: SeasonalRules, data: dict):
     _add_body_with_amen(doc, data["collect_text"])
 
     # --- Be seated for readings ---
+    add_spacer(doc)
     add_introductory_rubric(doc, "Be seated.")
 
     # --- Children's Sermon ---
     add_heading2(doc, "Children's Sermon")
 
     # --- First Reading ---
+    add_spacer(doc)
     _add_reading(doc, data["reading_1_ref"], data["reading_1_text"])
 
     # --- Psalm ---
+    add_spacer(doc)
     _add_psalm(doc, data["psalm_ref"], data.get("psalm_rubric", ""),
                data["psalm_text"])
 
     # --- Sequence Hymn ---
+    add_spacer(doc)
     add_introductory_rubric(doc, "Please stand.")
     add_heading2(doc, "Sequence Hymn")
     _add_song_smart(doc, data.get("sequence_hymn"))
@@ -98,6 +103,7 @@ def add_word_of_god(doc: Document, rules: SeasonalRules, data: dict):
                 data["gospel_text"])
 
     # --- Sermon ---
+    add_spacer(doc)
     add_introductory_rubric(doc, "Be seated.")
     add_heading2(doc, "Sermon")
     p = doc.add_paragraph(style="Body")
@@ -105,11 +111,13 @@ def add_word_of_god(doc: Document, rules: SeasonalRules, data: dict):
     run.bold = True
 
     # --- Nicene Creed ---
+    add_spacer(doc)
     add_introductory_rubric(doc, "Please stand.")
     add_heading2(doc, "The Nicene Creed")
     _add_nicene_creed(doc, prayers)
 
     # --- Prayers of the People ---
+    add_spacer(doc)
     add_heading2(doc, "Prayers of the People")
     _add_pop(doc, data.get("pop_elements", []))
     add_rubric(doc, data.get("pop_concluding_rubric",
@@ -117,9 +125,11 @@ def add_word_of_god(doc: Document, rules: SeasonalRules, data: dict):
 
     # --- Confession & Absolution (if not already done in Penitential Order) ---
     if not rules.no_confession_after_pop:
+        add_spacer(doc)
         _add_confession(doc, prayers)
 
     # --- The Peace ---
+    add_spacer(doc)
     p = doc.add_paragraph(style="Body - Introductory Rubric")
     run = p.add_run("Please stand.")
     run.bold = True
@@ -144,6 +154,7 @@ def _add_standard_opening(doc: Document, rules: SeasonalRules,
     _add_song_smart(doc, data.get("processional"))
 
     # Opening Acclamation
+    add_spacer(doc)
     add_introductory_rubric(doc, "Remain standing.")
     add_heading2(doc, "Opening Acclamation")
     cel_text = rules.acclamation_celebrant.replace("{cross}", CROSS_SYMBOL)
@@ -156,6 +167,7 @@ def _add_standard_opening(doc: Document, rules: SeasonalRules,
         _add_body_with_amen(doc, prayers["collect_for_purity"])
 
     # Song of Praise / Kyrie / Advent Wreath
+    add_spacer(doc)
     add_heading2(doc, rules.song_of_praise_label)
     if rules.is_advent:
         _add_advent_wreath(doc, data)
@@ -175,6 +187,7 @@ def _add_penitential_order(doc: Document, rules: SeasonalRules,
     _add_song_smart(doc, data.get("processional"))
 
     # Opening Acclamation
+    add_spacer(doc)
     add_introductory_rubric(doc, "Remain standing.")
     add_heading2(doc, "Opening Acclamation")
     add_celebrant_line(doc, "Celebrant", rules.acclamation_celebrant)
@@ -190,6 +203,7 @@ def _add_penitential_order(doc: Document, rules: SeasonalRules,
             add_body(doc, sentence)
 
     # Confession
+    add_spacer(doc)
     add_introductory_rubric(doc, "Please kneel or remain standing.")
     _add_confession(doc, prayers)
 
@@ -199,6 +213,7 @@ def _add_penitential_order(doc: Document, rules: SeasonalRules,
     add_heading(doc, "")
 
     # Kyrie
+    add_spacer(doc)
     add_introductory_rubric(doc, "Please stand.")
     add_heading2(doc, "Kyrie")
     _add_song_smart(doc, data.get("song_of_praise"))
@@ -295,6 +310,7 @@ def _add_psalm(doc: Document, reference: str, rubric: str, lines):
 
 def _add_gospel(doc: Document, reference: str, book: str, reading):
     """Add the Gospel reading with announcement and response."""
+    add_spacer(doc)
     add_introductory_rubric(doc, "Remain standing.")
     p = doc.add_paragraph(style="Heading 2")
     run = p.add_run(f"The Gospel: {reference}")

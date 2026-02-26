@@ -10,8 +10,8 @@ from pathlib import Path
 from datetime import date, datetime
 
 from bulletin.config import CHURCH_NAME, GIVING_URL
-from bulletin.document.styles import create_document
-from bulletin.document.sections.cover import add_cover
+from bulletin.document.styles import configure_document
+from bulletin.document.templates import load_front_cover
 from bulletin.document.sections.word_of_god import add_word_of_god
 from bulletin.document.sections.holy_communion import add_holy_communion
 from bulletin.document.sections.back_page import add_back_page
@@ -90,16 +90,33 @@ class BulletinBuilder:
 
     def build(self) -> "Document":
         """Build and return the complete document."""
-        doc = create_document()
-
         # Format the date nicely
         date_str = self.target_date.strftime("%B %-d, %Y")
         service_time = "9 am"
 
-        # Cover page
-        add_cover(doc, date_str, service_time,
-                  self.schedule.title,
-                  giving_url=GIVING_URL)
+        # Start from the front-cover template (replaces placeholders)
+        doc = load_front_cover(
+            date_str=date_str,
+            service_time=service_time,
+            liturgical_title=self.schedule.title,
+            subtitle=" ",  # single space to preserve spacing when unused
+        )
+
+        # Apply page setup and register all bulletin styles
+        configure_document(doc)
+
+        # Prelude items (bridge between cover and liturgy)
+        from bulletin.document.formatting import (
+            add_spacer, add_introductory_rubric, add_heading2,
+        )
+        add_introductory_rubric(
+            doc,
+            "Once the Prelude begins, please refrain from further visiting "
+            "and conversation as we prepare our hearts and thoughts for worship."
+        )
+        add_spacer(doc)
+        add_heading2(doc, "Prelude")
+        add_spacer(doc)
 
         # Word of God
         wog_data = self._prepare_word_of_god_data()
@@ -278,7 +295,7 @@ class BulletinBuilder:
             "processional": processional,
             "song_of_praise": song_of_praise,
             "sequence_hymn": sequence,
-            "collect_text": "[Collect of the Day]",  # Collect is read live, not printed
+            "collect_text": self._get_collect_text(),
             "reading_1_ref": reading_1_ref,
             "reading_1_text": reading_1 or reading_1_ref,
             "psalm_ref": psalm_ref,
@@ -353,6 +370,17 @@ class BulletinBuilder:
             return ""
         # "unison" or default
         return "Read in unison."
+
+    def _get_collect_text(self) -> str:
+        """Look up the Collect of the Day from BCP data."""
+        try:
+            from bulletin.sources.collects import get_collect
+            collect = get_collect(self.schedule.title)
+            if collect:
+                return collect
+        except Exception as e:
+            print(f"  Warning: Could not look up collect: {e}")
+        return "[Collect of the Day]"
 
     def _prepare_pop_elements(self) -> list[dict]:
         """Build POP elements from the appropriate form."""
