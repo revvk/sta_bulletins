@@ -49,7 +49,7 @@ def load_front_cover(
 
     replacements = {
         "{{DATE}}": date_str,
-        "{{TIME}}": service_time,
+        "{{SERVICE_TIME}}": service_time,
         "{{TITLE OF DAY}}": liturgical_title,
         "{{SUBTITLE}}": subtitle,
     }

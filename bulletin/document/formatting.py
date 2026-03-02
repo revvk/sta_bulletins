@@ -67,22 +67,21 @@ def add_celebrant_line(doc: Document, label: str, text: str):
         label: Usually 'Celebrant' or 'The Deacon or a Priest'
         text: The words spoken
     """
-    p = doc.add_paragraph(style="Body - Celebrant")
-    label_run = p.add_run(label)
-    label_run.font.size = Pt(12)
-    p.add_run("\t" + text)
+    p = doc.add_paragraph(style="Body - Dialogue")
+    p.add_run(label + "\t" + text)
     return p
 
 
 def add_people_line(doc: Document, label: str, text: str):
-    """Add a People response line (bold).
+    """Add a People response line (bold via character style).
 
     Args:
         label: Usually 'People'
-        text: The response (already bold from style)
+        text: The response
     """
-    p = doc.add_paragraph(style="Body - People")
-    p.add_run(label + "\t" + text)
+    p = doc.add_paragraph(style="Body - Dialogue")
+    run = p.add_run(label + "\t" + text)
+    run.style = doc.styles["People"]
     return p
 
 
@@ -107,6 +106,13 @@ def add_hymn_header(doc: Document, title: str, tune_name: str = None,
                     hymnal_number: str = None, hymnal_name: str = None):
     """Add a hymn title line with optional tune name and hymnal reference.
 
+    The Body style carries a right tab stop at 6" so that the hymnal
+    reference right-aligns to the margin.  Layout:
+
+        Title  tune_name (italic)  →TAB→  #470 (Hymnal 1982) ←right
+
+    When there is no tune name, the tab still right-aligns the reference.
+
     Examples:
         add_hymn_header(doc, "Everlasting God")
         add_hymn_header(doc, "Come, Holy Spirit", "Saint Agnes", "510", "Hymnal 1982")
@@ -114,16 +120,16 @@ def add_hymn_header(doc: Document, title: str, tune_name: str = None,
     p = doc.add_paragraph(style="Body")
     p.add_run(title)
     if tune_name:
-        run = p.add_run("\t" + tune_name)
+        run = p.add_run("  " + tune_name)
         run.italic = True
     if hymnal_number:
-        num_text = f"\t#{hymnal_number}"
+        # Right-align hymnal ref using the Body style's right tab stop
+        ref_text = f"#{hymnal_number}"
         if hymnal_name:
-            num_text += " "
-        p.add_run(num_text)
-        if hymnal_name:
-            run = p.add_run(f"({hymnal_name})")
-            run.italic = True
+            ref_text += f" ({hymnal_name})"
+        p.add_run("\t")
+        run = p.add_run(ref_text)
+        run.italic = True
     return p
 
 

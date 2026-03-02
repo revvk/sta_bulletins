@@ -100,7 +100,7 @@ def add_holy_communion(doc: Document, rules: SeasonalRules, data: dict):
 
     # Sursum Corda
     for exchange in ep_data["sursum_corda"]:
-        p = doc.add_paragraph(style="Body - Celebrant")
+        p = doc.add_paragraph(style="Body - Dialogue")
         run = p.add_run("Celebrant")
         p.add_run("\t")
         run2 = p.add_run(exchange["celebrant"])
@@ -120,7 +120,9 @@ def add_holy_communion(doc: Document, rules: SeasonalRules, data: dict):
                "with those around you.")
     add_body(doc, prayers["lords_prayer_intro"]["option_1"])
     text = " ".join(line.strip() for line in prayers["lords_prayer"])
-    doc.add_paragraph(text, style="Body - People Recitation")
+    p = doc.add_paragraph(style="Body - People Recitation")
+    run = p.add_run(text)
+    run.style = doc.styles["People"]
 
     # --- Breaking of the Bread ---
     add_spacer(doc)
@@ -137,7 +139,7 @@ def add_holy_communion(doc: Document, rules: SeasonalRules, data: dict):
                 "Lamb of God, you take away the sins of the world: have mercy on us.",
                 "Lamb of God, you take away the sins of the world: grant us peace.",
             ]:
-                p = doc.add_paragraph(style="Body - Celebrant")
+                p = doc.add_paragraph(style="Body - Dialogue")
                 run = p.add_run(line)
                 run.bold = True
     else:
@@ -171,7 +173,7 @@ def add_holy_communion(doc: Document, rules: SeasonalRules, data: dict):
     # --- Closing Prayer ---
     add_spacer(doc)
     add_heading2(doc, "Closing Prayer")
-    p = doc.add_paragraph(style="Body - Celebrant")
+    p = doc.add_paragraph(style="Body - Dialogue")
     run = p.add_run("Celebrant")
     p.add_run("\t")
     run2 = p.add_run("Let us pray.")
@@ -182,7 +184,9 @@ def add_holy_communion(doc: Document, rules: SeasonalRules, data: dict):
         text = " ".join(prayers["post_communion_prayer_b"])
     else:
         text = " ".join(prayers["post_communion_prayer_a"])
-    doc.add_paragraph(text, style="Body - People Recitation")
+    p = doc.add_paragraph(style="Body - People Recitation")
+    run = p.add_run(text)
+    run.style = doc.styles["People"]
 
     # --- Prayer for Lay Eucharistic Visitor (optional) ---
     if data.get("include_lev", True):
@@ -191,7 +195,7 @@ def add_holy_communion(doc: Document, rules: SeasonalRules, data: dict):
         p = doc.add_paragraph(style="Body - Rubric")
         run = p.add_run("The Celebrant commissions the Lay Eucharistic Visitor, saying")
         run.italic = True
-        p = doc.add_paragraph(style="Body - Celebrant")
+        p = doc.add_paragraph(style="Body - Dialogue")
         run = p.add_run(
             "In the name of this congregation, I send you forth bearing these "
             "holy gifts that those to whom you go may share with us in the "
@@ -216,12 +220,12 @@ def add_holy_communion(doc: Document, rules: SeasonalRules, data: dict):
     else:
         blessing_text = data.get("blessing_text", "")
         if blessing_text:
-            p = doc.add_paragraph(style="Body - Celebrant")
+            p = doc.add_paragraph(style="Body - Dialogue")
             run = p.add_run("Celebrant")
             p.add_run("\t")
             run2 = p.add_run(blessing_text)
         else:
-            p = doc.add_paragraph(style="Body - Celebrant")
+            p = doc.add_paragraph(style="Body - Dialogue")
             run = p.add_run("Celebrant")
             p.add_run("\t")
             run2 = p.add_run(

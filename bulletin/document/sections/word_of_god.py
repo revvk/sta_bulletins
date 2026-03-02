@@ -134,7 +134,7 @@ def add_word_of_god(doc: Document, rules: SeasonalRules, data: dict):
     run = p.add_run("Please stand.")
     run.bold = True
     add_heading2(doc, "The Peace")
-    p = doc.add_paragraph(style="Body - Celebrant")
+    p = doc.add_paragraph(style="Body - Dialogue")
     run = p.add_run("Celebrant")
     p.add_run("\t")
     run2 = p.add_run("The peace of the Lord be always with you.")
@@ -225,9 +225,11 @@ def _add_confession(doc: Document, prayers: dict):
     add_rubric(doc, "The Deacon or a Priest says")
     add_celebrant_line(doc, "", prayers["confession_invitation"])
 
-    # Confession text (bold, recited by people)
+    # Confession text (bold via People character style, recited by people)
     text = " ".join(prayers["confession"])
-    doc.add_paragraph(text, style="Body - People Recitation")
+    p = doc.add_paragraph(style="Body - People Recitation")
+    run = p.add_run(text)
+    run.style = doc.styles["People"]
     add_spacer(doc)
 
     # Absolution
@@ -249,8 +251,9 @@ def _add_decalogue(doc: Document, prayers: dict):
     add_body(doc, prayers["decalogue_intro"])
     for item in prayers["decalogue"]:
         add_celebrant_line(doc, "", item["commandment"])
-        p = doc.add_paragraph(style="Body - People")
-        p.add_run(item["response"])
+        p = doc.add_paragraph(style="Body - Dialogue")
+        run = p.add_run(item["response"])
+        run.style = doc.styles["People"]
     add_spacer(doc)
 
 
@@ -319,7 +322,7 @@ def _add_gospel(doc: Document, reference: str, book: str, reading):
     add_rubric(doc, "The Deacon or a Priest reads the Gospel, first saying")
 
     # Announcement
-    p = doc.add_paragraph(style="Body - Celebrant")
+    p = doc.add_paragraph(style="Body - Dialogue")
     run = p.add_run(f"The Holy Gospel of our Lord Jesus Christ according to {book}.")
     run.italic = True
     add_people_line(doc, "People", "Glory to you, Lord Christ.")
@@ -355,7 +358,9 @@ def _add_nicene_creed(doc: Document, prayers: dict):
         articles.append(" ".join(current))
 
     for article in articles:
-        doc.add_paragraph(article, style="Body - People Recitation (Creed)")
+        p = doc.add_paragraph(style="Body - People Recitation (Creed)")
+        run = p.add_run(article)
+        run.style = doc.styles["People"]
 
 
 def _add_pop(doc: Document, elements: list[dict]):
@@ -457,7 +462,7 @@ def _add_body_with_amen(doc: Document, text: str):
 
 def _add_celebrant_with_cross(doc: Document, label: str, text: str):
     """Add a celebrant line, rendering {cross} / ✠ as a bold-italic cross symbol."""
-    p = doc.add_paragraph(style="Body - Celebrant")
+    p = doc.add_paragraph(style="Body - Dialogue")
     if label:
         p.add_run(label)
         p.add_run("\t")

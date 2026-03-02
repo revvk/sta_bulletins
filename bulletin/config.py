@@ -47,7 +47,7 @@ MARGIN_INCHES = 0.5
 
 # Font names used in the bulletin
 FONT_BODY = "Adobe Garamond Pro"
-FONT_HEADING = "Gill Sans Nova SemiBold"
+FONT_HEADING = "Gill Sans Nova"
 FONT_HEADING2 = "Gill Sans Nova Medium"
 FONT_LYRICS = "Gill Sans Light"
 FONT_HEADER_FOOTER = "Gill Sans Nova Light"
