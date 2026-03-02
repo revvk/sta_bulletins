@@ -375,7 +375,7 @@ class BulletinBuilder:
         """Look up the Collect of the Day from BCP data."""
         try:
             from bulletin.sources.collects import get_collect
-            collect = get_collect(self.schedule.title)
+            collect = get_collect(self.schedule.title, self.target_date)
             if collect:
                 return collect
         except Exception as e:
