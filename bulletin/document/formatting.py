@@ -27,7 +27,12 @@ def add_spacer(doc: Document):
 
 
 def add_heading(doc: Document, text: str):
-    """Add a major section heading (e.g., 'The Word of God', 'The Holy Communion')."""
+    """Add a major section heading (e.g., 'The Word of God', 'The Holy Communion').
+
+    Prepends two blank spacer lines before the heading for visual separation.
+    """
+    add_spacer(doc)
+    add_spacer(doc)
     doc.add_paragraph(text, style="Heading")
 
 
@@ -158,6 +163,9 @@ def add_lyric_chorus(doc: Document, lines: list[str]):
 def add_song(doc: Document, song_data: dict):
     """Add a complete song (header + all verses/choruses).
 
+    Lyrics are placed in a 1×1 borderless table so that Word keeps the
+    song together on one page whenever possible.
+
     Args:
         song_data: dict with keys:
             - title: str
@@ -175,13 +183,18 @@ def add_song(doc: Document, song_data: dict):
         song_data.get("hymnal_number"),
         song_data.get("hymnal_name"),
     )
-    for i, section in enumerate(song_data["sections"]):
-        if i > 0:
-            add_spacer(doc)
-        if section["type"] == "chorus":
-            add_lyric_chorus(doc, section["lines"])
-        else:
-            add_lyric_verse(doc, section["lines"])
+
+    # Wrap lyrics in a 1x1 borderless table to prevent page splits
+    table = doc.add_table(rows=1, cols=1)
+    table.autofit = True
+    _remove_table_borders(table)
+    _prevent_row_split(table)
+
+    # Remove default cell margins for a seamless look
+    _remove_cell_margins(table)
+
+    cell = table.cell(0, 0)
+    _fill_lyric_cell(cell, song_data["sections"])
 
 
 def add_song_two_column(doc: Document, song_data: dict):
@@ -272,6 +285,23 @@ def _prevent_row_split(table: Table):
     for row in table.rows:
         trPr = row._tr.get_or_add_trPr()
         trPr.append(parse_xml(f'<w:cantSplit {nsdecls("w")}/>'))
+
+
+def _remove_cell_margins(table: Table):
+    """Set table cell margins to zero so content looks like regular paragraphs."""
+    tbl = table._tbl
+    tblPr = tbl.tblPr if tbl.tblPr is not None else parse_xml(
+        f'<w:tblPr {nsdecls("w")}/>'
+    )
+    margins = parse_xml(
+        f'<w:tblCellMar {nsdecls("w")}>'
+        '  <w:top w:w="0" w:type="dxa"/>'
+        '  <w:left w:w="0" w:type="dxa"/>'
+        '  <w:bottom w:w="0" w:type="dxa"/>'
+        '  <w:right w:w="0" w:type="dxa"/>'
+        '</w:tblCellMar>'
+    )
+    tblPr.append(margins)
 
 
 # ---------------------------------------------------------------------------

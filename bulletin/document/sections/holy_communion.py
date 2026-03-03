@@ -78,10 +78,7 @@ def add_holy_communion(doc: Document, rules: SeasonalRules, data: dict):
     # Doxology
     add_spacer(doc)
     add_introductory_rubric(doc, "Please stand.")
-    p = doc.add_paragraph(style="Heading 2")
-    p.add_run("Doxology")
-    run = p.add_run("\tOld 100th")
-    run.italic = True
+    add_heading2(doc, "Doxology")
     _DOXOLOGY = [
         "Praise God, from Whom all blessings flow;",
         "Praise Him, all creatures here below;",
@@ -251,14 +248,19 @@ def _add_prayer_a_or_b(doc: Document, ep_data: dict, data: dict,
     prayer = ep_data[key]
 
     # Preface opening + proper preface + Sanctus transition
-    add_body(doc, ep_data["preface_opening"])
-    add_spacer(doc)
-
-    # Proper preface
+    # The proper preface is joined to the opening as a single paragraph,
+    # e.g. "...creator of heaven and earth, through Jesus Christ our Lord..."
+    preface_opening = ep_data["preface_opening"]
     preface_text = data.get("proper_preface_text", "")
     if preface_text:
-        add_body(doc, preface_text)
-        add_spacer(doc)
+        # Strip trailing period from opening, join with comma
+        opening = preface_opening.rstrip().rstrip(".")
+        # Lowercase the first character of the proper preface
+        joined = preface_text[0].lower() + preface_text[1:]
+        add_body(doc, f"{opening}, {joined}")
+    else:
+        add_body(doc, preface_opening)
+    add_spacer(doc)
 
     add_body(doc, ep_data["sanctus_transition"])
     add_spacer(doc)
@@ -450,13 +452,13 @@ def _add_song_smart(doc: Document, song_data: dict | None):
         add_body(doc, "[Song lyrics not found]")
         return
 
-    verses = [s for s in song_data.get("sections", []) if s["type"] == "verse"]
+    sections = song_data.get("sections", [])
     max_line_len = max(
-        (len(line) for s in song_data.get("sections", []) for line in s["lines"]),
+        (len(line) for s in sections for line in s["lines"]),
         default=0
     )
 
-    if len(verses) >= 3 and max_line_len <= 48:
+    if len(sections) >= 3 and max_line_len <= 52:
         add_song_two_column(doc, song_data)
     else:
         add_song(doc, song_data)

@@ -83,7 +83,7 @@ _STYLE_DEFS = [
     # Major section dividers (centered): "The Word of God", "The Holy Communion"
     # Gill Sans Nova Bold, 14 pt, centered
     ("Heading", FONT_HEADING, 14, True, False,
-     WD_ALIGN_PARAGRAPH.CENTER, 0, 0, 24, 0, 0.9),
+     WD_ALIGN_PARAGRAPH.CENTER, 0, 0, 0, 0, 0.9),
 
     # Section headers: "Processional", "Sermon", "The Peace", etc.
     # Gill Sans Nova Medium, 13 pt, left-aligned

@@ -11,10 +11,12 @@ the replacement on the joined string, puts the result into the first
 run, and clears the rest.
 """
 
+from copy import deepcopy
 from pathlib import Path
 
 from docx import Document
-from docx.oxml.ns import qn
+from docx.oxml.ns import nsdecls, qn
+from docx.oxml import parse_xml
 
 # Resolve templates directory relative to the project root.
 # bulletin/document/templates.py  ->  ../../templates/
@@ -56,6 +58,55 @@ def load_front_cover(
 
     _replace_all_placeholders(doc, replacements)
     return doc
+
+
+def append_back_cover(doc: Document):
+    """Append the back-cover template as a new page section at the end.
+
+    Inserts a section break (next-page) after the existing content, then
+    copies all content and page setup from the back-cover template into
+    the new section.
+    """
+    template_path = _TEMPLATES_DIR / "back_cover.docx"
+    if not template_path.exists():
+        raise FileNotFoundError(f"Back cover template not found: {template_path}")
+
+    back_doc = Document(str(template_path))
+    body = doc.element.body
+    back_body = back_doc.element.body
+
+    # Move the main document's trailing <w:sectPr> (which defines the
+    # current last section's page setup) into the last paragraph's <w:pPr>.
+    # This "closes" the current section and makes room for the back cover's
+    # section to become the new trailing section.
+    main_sect_pr = body.find(qn("w:sectPr"))
+    if main_sect_pr is not None:
+        body.remove(main_sect_pr)
+
+        # Set the break type to "nextPage" so the back cover starts on a
+        # fresh page.
+        sect_type = main_sect_pr.find(qn("w:type"))
+        if sect_type is not None:
+            sect_type.set(qn("w:val"), "nextPage")
+        else:
+            main_sect_pr.insert(
+                0, parse_xml(f'<w:type {nsdecls("w")} w:val="nextPage"/>')
+            )
+
+        # Find the last paragraph and attach the sectPr to its pPr.
+        paragraphs = list(body.iterchildren(qn("w:p")))
+        if paragraphs:
+            last_p = paragraphs[-1]
+            pPr = last_p.find(qn("w:pPr"))
+            if pPr is None:
+                pPr = parse_xml(f'<w:pPr {nsdecls("w")}/>')
+                last_p.insert(0, pPr)
+            pPr.append(main_sect_pr)
+
+    # Append all elements from the back-cover template (paragraphs,
+    # tables, and the trailing sectPr which defines page setup).
+    for element in list(back_body):
+        body.append(deepcopy(element))
 
 
 # ------------------------------------------------------------------

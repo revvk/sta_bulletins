@@ -11,10 +11,9 @@ from datetime import date, datetime
 
 from bulletin.config import CHURCH_NAME, GIVING_URL
 from bulletin.document.styles import configure_document
-from bulletin.document.templates import load_front_cover
+from bulletin.document.templates import load_front_cover, append_back_cover
 from bulletin.document.sections.word_of_god import add_word_of_god
 from bulletin.document.sections.holy_communion import add_holy_communion
-from bulletin.document.sections.back_page import add_back_page
 from bulletin.logic.rules import get_seasonal_rules, get_dismissal_text
 from bulletin.data.loader import (
     load_common_prayers, load_pop_forms, load_blessings,
@@ -126,8 +125,8 @@ class BulletinBuilder:
         hc_data = self._prepare_holy_communion_data()
         add_holy_communion(doc, self.rules, hc_data)
 
-        # Back page
-        add_back_page(doc)
+        # Back cover (template-based, new page section)
+        append_back_cover(doc)
 
         return doc
 

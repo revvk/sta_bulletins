@@ -185,7 +185,8 @@ def _add_penitential_order(doc: Document, rules: SeasonalRules,
     add_spacer(doc)
     add_introductory_rubric(doc, "Remain standing.")
     add_heading2(doc, "Opening Acclamation")
-    add_celebrant_line(doc, "Celebrant", rules.acclamation_celebrant)
+    cel_text = rules.acclamation_celebrant.replace("{cross}", CROSS_SYMBOL)
+    _add_celebrant_with_cross(doc, "Celebrant", cel_text)
     add_people_line(doc, "People", rules.acclamation_people)
     add_spacer(doc)
 
@@ -374,8 +375,13 @@ def _add_pop(doc: Document, elements: list[dict]):
             if next_type == "leader":
                 add_spacer(doc)
         elif etype == "people":
+            # Support split leader/people text on the same line
+            leader_text = elem.get("leader_text", "")
+            people_text = elem.get("people_text", text)
             p = doc.add_paragraph(style="Body")
-            run = p.add_run(text)
+            if leader_text:
+                p.add_run(leader_text + " ")
+            run = p.add_run(people_text)
             run.bold = True
         elif etype == "rubric":
             add_rubric(doc, text)
@@ -385,8 +391,8 @@ def _add_pop(doc: Document, elements: list[dict]):
             run = p.add_run(elem.get("people_text", ""))
             run.bold = True
 
-        # Add spacer between petitions
-        if etype in ("people", "both"):
+        # Add spacer between petitions (but not after the last one)
+        if etype in ("people", "both") and i + 1 < len(elements):
             add_spacer(doc)
 
 
@@ -435,16 +441,14 @@ def _add_song_smart(doc: Document, song_data: dict | None):
         add_body(doc, "[Song lyrics not found]")
         return
 
-    # Count verses (non-chorus sections)
-    verses = [s for s in song_data.get("sections", []) if s["type"] == "verse"]
+    sections = song_data.get("sections", [])
     max_line_len = max(
-        (len(line) for s in song_data.get("sections", []) for line in s["lines"]),
+        (len(line) for s in sections for line in s["lines"]),
         default=0
     )
 
-    # Two-column if 3+ verses and lines aren't too long for half-width
-    # ~42 chars is roughly half of 7" page at 12pt Gill Sans Light
-    if len(verses) >= 3 and max_line_len <= 48:
+    # Two-column if 3+ sections (verses + choruses) and lines fit half-width
+    if len(sections) >= 3 and max_line_len <= 52:
         add_song_two_column(doc, song_data)
     else:
         add_song(doc, song_data)
