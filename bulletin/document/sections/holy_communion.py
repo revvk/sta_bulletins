@@ -60,9 +60,7 @@ def add_holy_communion(doc: Document, rules: SeasonalRules, data: dict):
     ep_data = load_eucharistic_prayers()
 
     # Section heading
-    add_heading(doc, "")
     add_heading(doc, "The Holy Communion")
-    add_heading(doc, "")
 
     # --- Offertory ---
     add_spacer(doc)
@@ -212,20 +210,19 @@ def add_holy_communion(doc: Document, rules: SeasonalRules, data: dict):
             _add_body_with_amen(doc, blessing_text)
     else:
         blessing_text = data.get("blessing_text", "")
-        if blessing_text:
-            p = doc.add_paragraph(style="Body - Dialogue")
-            run = p.add_run("Celebrant")
-            p.add_run("\t")
-            run2 = p.add_run(blessing_text)
-        else:
-            p = doc.add_paragraph(style="Body - Dialogue")
-            run = p.add_run("Celebrant")
-            p.add_run("\t")
-            run2 = p.add_run(
+        if not blessing_text:
+            blessing_text = (
                 "\u2026 and the blessing of God Almighty, "
                 f"{CROSS_SYMBOL} the Father, the Son, and the Holy Spirit, "
                 "be among you, and remain with you always."
             )
+        else:
+            # Insert cross before trinitarian formula
+            blessing_text = blessing_text.replace(
+                "the Father, the Son, and the Holy Spirit",
+                f"{CROSS_SYMBOL} the Father, the Son, and the Holy Spirit",
+            )
+        _add_blessing_line(doc, blessing_text)
 
     # --- Closing Hymn ---
     add_spacer(doc)
@@ -272,8 +269,7 @@ def _add_prayer_a_or_b(doc: Document, ep_data: dict, data: dict,
         _add_song_smart(doc, sanctus_song)
     else:
         # Text version of Sanctus
-        for line in prayers["sanctus"]:
-            doc.add_paragraph(line, style="Body - Lyrics")
+        _add_sanctus_text(doc, prayers["sanctus"])
 
     # Kneeling rubric
     add_spacer(doc)
@@ -352,8 +348,7 @@ def _add_prayer_c(doc: Document, ep_data: dict, data: dict, prayers: dict):
     if sanctus_song:
         _add_song_smart(doc, sanctus_song)
     else:
-        for line in prayers["sanctus"]:
-            doc.add_paragraph(line, style="Body - Lyrics")
+        _add_sanctus_text(doc, prayers["sanctus"])
 
     # Post-Sanctus continuation
     add_spacer(doc)
@@ -371,7 +366,7 @@ def _add_prayer_c(doc: Document, ep_data: dict, data: dict, prayers: dict):
         "On the night he was betrayed he took bread, said the blessing, "
         "broke the bread, and gave it to his friends, and said, "
         '"Take, eat: This is my Body, which is given for you. '
-        'Do this for the remembrance of me."')
+        f'Do this for the remembrance of me." {CROSS_SYMBOL}')
     add_spacer(doc)
 
     # Institution - cup
@@ -379,7 +374,7 @@ def _add_prayer_c(doc: Document, ep_data: dict, data: dict, prayers: dict):
         "After supper, he took the cup of wine, gave thanks, and said, "
         '"Drink this, all of you: This is my Blood of the new Covenant, '
         "which is shed for you and for many for the forgiveness of sins. "
-        'Whenever you drink it, do this for the remembrance of me."')
+        f'Whenever you drink it, do this for the remembrance of me." {CROSS_SYMBOL}')
     add_spacer(doc)
 
     # Memorial acclamation
@@ -419,6 +414,21 @@ def _add_prayer_c(doc: Document, ep_data: dict, data: dict, prayers: dict):
     )
     run = p.add_run("AMEN.")
     run.bold = True
+
+
+def _add_sanctus_text(doc: Document, lines: list[str]):
+    """Add text Sanctus, rendering ✠ as a bold cross."""
+    for line in lines:
+        if CROSS_SYMBOL in line:
+            p = doc.add_paragraph(style="Body - Lyrics")
+            parts = line.split(CROSS_SYMBOL)
+            for i, part in enumerate(parts):
+                if i > 0:
+                    add_cross_symbol(p)
+                if part:
+                    p.add_run(part)
+        else:
+            doc.add_paragraph(line, style="Body - Lyrics")
 
 
 def _add_institution_words(doc: Document, text: str):
@@ -462,3 +472,19 @@ def _add_body_with_amen(doc: Document, text: str):
         run.bold = True
     else:
         add_body(doc, text)
+
+
+def _add_blessing_line(doc: Document, text: str):
+    """Add a Celebrant blessing line, rendering ✠ as a bold cross."""
+    p = doc.add_paragraph(style="Body - Dialogue")
+    p.add_run("Celebrant")
+    p.add_run("\t")
+    if CROSS_SYMBOL in text:
+        parts = text.split(CROSS_SYMBOL)
+        for i, part in enumerate(parts):
+            if i > 0:
+                add_cross_symbol(p)
+            if part:
+                p.add_run(part)
+    else:
+        p.add_run(text)

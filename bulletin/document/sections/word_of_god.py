@@ -28,7 +28,7 @@ from bulletin.document.formatting import (
     add_introductory_rubric, add_body, add_celebrant_line,
     add_people_line, add_dialogue, add_cross_symbol,
     add_hymn_header, add_song, add_song_two_column,
-    add_scripture_text,
+    add_scripture_text, _add_text_runs,
 )
 from bulletin.logic.rules import SeasonalRules
 
@@ -203,9 +203,7 @@ def _add_penitential_order(doc: Document, rules: SeasonalRules,
     _add_confession(doc, prayers)
 
     # Then "The Word of God" section heading
-    add_heading(doc, "")
     add_heading(doc, "The Word of God")
-    add_heading(doc, "")
 
     # Kyrie
     add_spacer(doc)
@@ -296,12 +294,13 @@ def _add_psalm(doc: Document, reference: str, rubric: str, lines):
                     if i > 0:
                         run = p.add_run()
                         run.add_break()
-                    p.add_run(sub)
+                    _add_text_runs(p, sub)
             else:
-                p.add_run(verse_text)
+                _add_text_runs(p, verse_text)
     elif hasattr(lines, "paragraphs"):
         for para in lines.paragraphs:
-            doc.add_paragraph(para, style="Psalm")
+            p = doc.add_paragraph(style="Psalm")
+            _add_text_runs(p, para)
 
 
 def _add_gospel(doc: Document, reference: str, book: str, reading):
@@ -349,18 +348,31 @@ def _add_nicene_creed(doc: Document, prayers: dict):
 
     for article in articles:
         p = doc.add_paragraph(style="Body - People Recitation (Creed)")
-        run = p.add_run(article)
-        run.style = doc.styles["People"]
+        if CROSS_SYMBOL in article:
+            parts = article.split(CROSS_SYMBOL)
+            for i, part in enumerate(parts):
+                if i > 0:
+                    add_cross_symbol(p)
+                if part:
+                    run = p.add_run(part)
+                    run.style = doc.styles["People"]
+        else:
+            run = p.add_run(article)
+            run.style = doc.styles["People"]
 
 
 def _add_pop(doc: Document, elements: list[dict]):
     """Add Prayers of the People elements."""
-    for elem in elements:
+    for i, elem in enumerate(elements):
         etype = elem.get("type", "leader")
         text = elem.get("text", "")
 
         if etype == "leader":
             add_body(doc, text)
+            # Spacer after intro line (leader followed by another leader)
+            next_type = elements[i + 1].get("type") if i + 1 < len(elements) else None
+            if next_type == "leader":
+                add_spacer(doc)
         elif etype == "people":
             p = doc.add_paragraph(style="Body")
             run = p.add_run(text)

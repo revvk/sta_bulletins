@@ -99,9 +99,11 @@ def _parse_oremus_response(soup: BeautifulSoup, reference: str) -> ScriptureRead
                     tokens.append(("verse", num))
                 continue
 
-            # <br/> in poetry = line break
+            # <br/> = line break, but only inside blockquotes (poetry).
+            # Prose <br/> tags are just visual wrapping and should be ignored.
             if desc.name == "br":
-                tokens.append(("poetry_br", None))
+                if desc.find_parent("blockquote"):
+                    tokens.append(("poetry_br", None))
                 continue
 
             # <blockquote> = start of poetry section
@@ -165,7 +167,9 @@ def _parse_oremus_response(soup: BeautifulSoup, reference: str) -> ScriptureRead
                 paragraphs.append(text)
             current = []
         elif ttype == "verse":
-            current.append(f"{tval} ")
+            # Mark verse numbers with \x01 delimiters so the formatter
+            # can reliably detect them without heuristic regex.
+            current.append(f"\x01{tval}\x01 ")
         elif ttype == "text":
             current.append(tval)
         elif ttype == "poetry_br":

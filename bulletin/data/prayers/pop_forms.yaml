@@ -93,7 +93,7 @@ form_I:
 
     - type: leader
       text: >-
-        For all who have died {departed} in the hope of the
+        For all who have died ✠ {departed} in the hope of the
         resurrection, and for all the departed, let us pray to the
         Lord. Lord, have mercy.
 
@@ -165,7 +165,7 @@ form_II:
 
     - type: leader
       text: >-
-        I ask your prayers for the departed {departed}. Pray for
+        I ask your prayers for the departed ✠ {departed}. Pray for
         those who have died.
     - type: rubric
       text: "Silence"
@@ -235,7 +235,7 @@ form_III:
         That they may grow in true wisdom and knowledge.
 
     - type: both
-      leader_text: "Give to the departed eternal rest; {departed}"
+      leader_text: "Give to the departed eternal rest ✠; {departed}"
       people_text: "Let light perpetual shine upon them."
 
     - type: both
@@ -333,7 +333,7 @@ form_IV:
 
     - type: leader
       text: >-
-        We commend to your mercy all who have died {departed}, that
+        We commend to your mercy all who have died ✠ {departed}, that
         your will for them may be fulfilled; and we pray that we
         may share with all your saints in your eternal kingdom.
     - type: rubric
@@ -431,7 +431,7 @@ form_V:
 
     - type: leader
       text: >-
-        For all who have died {departed} in the communion of your
+        For all who have died ✠ {departed} in the communion of your
         Church, and those whose faith is known to you alone, that,
         with all the saints, they may have rest in that place where
         there is no pain or grief, but life eternal, we pray to

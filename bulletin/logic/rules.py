@@ -77,7 +77,7 @@ _ACCLAMATION_STANDARD = (
 )
 
 _ACCLAMATION_LENT = (
-    "Bless the Lord who forgives all our sins.",
+    "Bless the Lord who forgives all our sins. {cross}",
     "His mercy endures forever.",
 )
 

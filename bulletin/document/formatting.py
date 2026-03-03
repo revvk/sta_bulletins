@@ -47,8 +47,17 @@ def add_introductory_rubric(doc: Document, text: str):
 
 
 def add_body(doc: Document, text: str):
-    """Add a body text paragraph."""
-    doc.add_paragraph(text, style="Body")
+    """Add a body text paragraph, rendering ✠ as a bold cross symbol."""
+    if CROSS_SYMBOL in text:
+        p = doc.add_paragraph(style="Body")
+        parts = text.split(CROSS_SYMBOL)
+        for i, part in enumerate(parts):
+            if i > 0:
+                add_cross_symbol(p)
+            if part:
+                p.add_run(part)
+    else:
+        doc.add_paragraph(text, style="Body")
 
 
 def add_body_with_bold_ending(doc: Document, text: str, bold_text: str):
@@ -94,10 +103,9 @@ def add_dialogue(doc: Document, celebrant_text: str, people_text: str,
 
 
 def add_cross_symbol(paragraph, font_name=FONT_BODY):
-    """Add a bold-italic cross symbol (✠) as a run in the given paragraph."""
+    """Add a bold cross symbol (✠) as a run in the given paragraph."""
     run = paragraph.add_run(CROSS_SYMBOL)
     run.bold = True
-    run.italic = True
     run.font.name = font_name
     return run
 
@@ -205,6 +213,7 @@ def add_song_two_column(doc: Document, song_data: dict):
     table = doc.add_table(rows=1, cols=2)
     table.autofit = True
     _remove_table_borders(table)
+    _prevent_row_split(table)
 
     # Set column widths (equal split of available space)
     available_width = Inches(PAGE_WIDTH_INCHES - 2 * MARGIN_INCHES)
@@ -258,6 +267,13 @@ def _remove_table_borders(table: Table):
     tblPr.append(borders)
 
 
+def _prevent_row_split(table: Table):
+    """Prevent table rows from splitting across page breaks."""
+    for row in table.rows:
+        trPr = row._tr.get_or_add_trPr()
+        trPr.append(parse_xml(f'<w:cantSplit {nsdecls("w")}/>'))
+
+
 # ---------------------------------------------------------------------------
 # Scripture text with verse numbers
 # ---------------------------------------------------------------------------
@@ -301,6 +317,10 @@ def add_scripture_text(doc: Document, text: str, style: str = "Reading/Gospel Te
         para_text = para_text.strip()
         if not para_text:
             continue
+        # Collapse single newlines to spaces (HTML formatting artifacts);
+        # only \n\n (already split above) denotes a real paragraph break.
+        para_text = para_text.replace("\n", " ")
+        para_text = re.sub(r"  +", " ", para_text)
 
         p = doc.add_paragraph(style=style)
 
@@ -316,13 +336,26 @@ def add_scripture_text(doc: Document, text: str, style: str = "Reading/Gospel Te
     return p
 
 
+def _add_text_runs(paragraph, text: str):
+    """Add text as runs, rendering 'LORD' as small-caps 'Lord'.
+
+    In the NRSV, 'LORD' (all caps) represents the divine name (YHWH).
+    Liturgical convention renders this as small-caps Lord.
+    """
+    parts = re.split(r'\bLORD\b', text)
+    for i, part in enumerate(parts):
+        if i > 0:
+            run = paragraph.add_run("Lord")
+            run.font.small_caps = True
+        if part:
+            paragraph.add_run(part)
+
+
 def _add_verse_numbered_text(paragraph, text: str):
     """Add text to a paragraph, converting verse numbers to superscript.
 
-    Verse numbers appear as bare integers followed by a space and text:
-      "2 And suddenly from heaven..." or "17 'In the last days..."
-    The space between the verse number and text is consumed by the regex;
-    a non-breaking space is added as part of the superscript run instead.
+    Verse numbers are marked by the scripture parser with \\x01 delimiters:
+      "\\x014\\x01 From Mount Hor..." or "\\x0117\\x01 'In the last days..."
     """
     segments = _split_verse_numbers(text)
 
@@ -332,32 +365,23 @@ def _add_verse_numbered_text(paragraph, text: str):
             run.font.superscript = True
             run.font.size = Pt(9)
         if segment_text:
-            paragraph.add_run(segment_text)
+            _add_text_runs(paragraph, segment_text)
 
 
 def _split_verse_numbers(text: str) -> list[tuple[str | None, str]]:
     """Split scripture text into (verse_number, text) segments.
 
-    Returns a list of tuples where verse_number may be None for text
-    that doesn't start with a verse number.
-
-    Input format (from bible.oremus.org):
-      "4 From Mount Hor they set out... the way. 5 The people spoke..."
-    Verse numbers are 1-3 digits, preceded by start-of-string or whitespace,
-    followed by a space then an uppercase letter, opening quote, or bracket.
+    The scripture parser marks verse numbers with \\x01 delimiters:
+      "\\x014\\x01 From Mount Hor they set out..."
+    This splits on those markers for reliable detection.
     """
-    # The pattern matches: (start or after whitespace) + digits + space + (uppercase/quote/bracket)
-    # The space after the digits is consumed so it doesn't appear in the text segment.
-    pattern = re.compile(
-        r'(?:^|(?<=\s))(\d{1,3})\s(?=[A-Z\u2018\u201C\'\"(\[])'
-    )
+    # Pattern: \x01 + digits + \x01 + optional trailing space
+    pattern = re.compile(r'\x01(\d{1,3})\x01\s?')
     segments = []
     last_end = 0
 
     for match in pattern.finditer(text):
-        # Text from last_end to match.start() belongs to previous segment
         before_text = text[last_end:match.start()]
-
         if before_text:
             if segments:
                 prev_num, prev_text = segments[-1]
@@ -365,12 +389,9 @@ def _split_verse_numbers(text: str) -> list[tuple[str | None, str]]:
             else:
                 segments.append((None, before_text))
 
-        # Start new segment with this verse number
-        num = match.group(1)
-        last_end = match.end()  # Position right before the uppercase letter
-        segments.append((num, ""))
+        segments.append((match.group(1), ""))
+        last_end = match.end()
 
-    # Remaining text after last verse number
     if last_end < len(text):
         remaining = text[last_end:]
         if segments:

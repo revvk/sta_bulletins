@@ -83,7 +83,7 @@ _STYLE_DEFS = [
     # Major section dividers (centered): "The Word of God", "The Holy Communion"
     # Gill Sans Nova Bold, 14 pt, centered
     ("Heading", FONT_HEADING, 14, True, False,
-     WD_ALIGN_PARAGRAPH.CENTER, 0, 0, 0, 0, 0.9),
+     WD_ALIGN_PARAGRAPH.CENTER, 0, 0, 24, 0, 0.9),
 
     # Section headers: "Processional", "Sermon", "The Peace", etc.
     # Gill Sans Nova Medium, 13 pt, left-aligned
@@ -128,11 +128,11 @@ _STYLE_DEFS = [
 
     # People's recitation of long texts: Confession, Lord's Prayer
     ("Body - People Recitation", FONT_BODY, 12, False, False,
-     WD_ALIGN_PARAGRAPH.LEFT, 0.32, 0, 6, 0, 1.1),
+     WD_ALIGN_PARAGRAPH.LEFT, 0.32, 0, 6, 0, 1.0),
 
     # Nicene Creed (slightly different indent for the three articles)
     ("Body - People Recitation (Creed)", FONT_BODY, 12, False, False,
-     WD_ALIGN_PARAGRAPH.LEFT, 0.455, -0.18, 6, 0, 1.1),
+     WD_ALIGN_PARAGRAPH.LEFT, 0.455, -0.18, 6, 0, 1.0),
 
     # Cover page welcome text
     ("Cover Note", FONT_BODY, 11, False, False,

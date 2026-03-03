@@ -201,7 +201,11 @@ class BulletinBuilder:
                 self.advent_wreath_verse = answer.strip().split("\n")
 
     def _resolve_blessing(self):
-        """Look up the seasonal blessing from BOS data."""
+        """Look up the seasonal blessing from BOS data.
+
+        For Lent, selects the specific weekly Prayer over the People.
+        For other seasons, uses form2 (single-sentence short form).
+        """
         blessings = load_blessings()
         season = self.rules.season
 
@@ -217,12 +221,47 @@ class BulletinBuilder:
         }
 
         blessing_key = season_map.get(season)
-        if blessing_key and blessing_key in blessings:
-            blessing = blessings[blessing_key]
-            if isinstance(blessing, dict):
-                self.blessing_text = blessing.get("text", "")
-            else:
-                self.blessing_text = str(blessing)
+        if not blessing_key or blessing_key not in blessings:
+            return
+
+        blessing_data = blessings[blessing_key]
+
+        if blessing_key == "lent":
+            # Lent uses specific weekly Prayer over the People
+            week_key = self._get_lent_week_key(self.schedule.title)
+            if week_key and week_key in blessing_data:
+                week = blessing_data[week_key]
+                self.blessing_text = (
+                    week.get("prayer", "") if isinstance(week, dict)
+                    else str(week)
+                )
+        else:
+            # Non-Lent seasons use form2 (short form)
+            form2 = blessing_data.get("form2", {})
+            sentences = form2.get("sentences", [])
+            if sentences:
+                self.blessing_text = sentences[0].get("celebrant", "")
+
+    @staticmethod
+    def _get_lent_week_key(title: str) -> str:
+        """Determine the Lent week key from the liturgical title."""
+        t = title.lower()
+        if "ash wednesday" in t:
+            return "ash_wednesday"
+        if "palm sunday" in t or "passion" in t or "maundy" in t:
+            return "palm_sunday_through_maundy_thursday"
+        ordinals = {
+            "first": "1", "second": "2", "third": "3",
+            "fourth": "4", "fifth": "5",
+        }
+        for word, num in ordinals.items():
+            if word in t and "lent" in t:
+                return f"lent_{num}"
+        import re
+        m = re.search(r"lent\s*(\d)", t)
+        if m:
+            return f"lent_{m.group(1)}"
+        return ""
 
     def _resolve_songs(self, prompt_fn):
         """Look up all song lyrics from music data."""
