@@ -286,8 +286,12 @@ def add_scripture_text(doc: Document, text: str, style: str = "Reading/Gospel Te
                 Used when the caller iterates paragraphs and knows
                 this is not the first paragraph of the reading.
     """
-    # Remove asterisks (liturgical break markers from oremus.org)
-    text = text.replace("*", "")
+    # Replace asterisks (oremus.org footnote markers) with spaces so that
+    # verse numbers adjacent to footnotes (e.g. "'*7 Do not") are still
+    # separated by whitespace for the superscript regex to detect them.
+    text = text.replace("*", " ")
+    # Collapse any resulting multiple spaces
+    text = re.sub(r"  +", " ", text)
 
     paragraphs = text.strip().split("\n\n")  # Double newline = new paragraph
 

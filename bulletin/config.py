@@ -52,6 +52,17 @@ FONT_HEADING2 = "Gill Sans Nova Medium"
 FONT_LYRICS = "Gill Sans Light"
 FONT_HEADER_FOOTER = "Gill Sans Nova Light"
 
+# Preacher name mapping: short name from the sheet → full title for the bulletin
+PREACHER_NAMES = {
+    "Andrew":   "The Rev. Andrew Van Kirk",
+    "Logan":    "The Rev. Logan Hurst",
+    "Paulette": "The Rev. Paulette Magnuson",
+    "Mike":     "The Rev. Mike Klickman",
+    "Gene":     "The Rev. Gene Zeilfelder",
+    "Rob":      "The Rt. Rev. Robert Price",
+    "Katie":    "The Rev. Deacon Katie Gerber",
+}
+
 # Cross symbol used throughout the liturgy
 CROSS_SYMBOL = "\u2720"  # Maltese cross ✠
 

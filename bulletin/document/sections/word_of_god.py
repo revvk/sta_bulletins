@@ -72,7 +72,7 @@ def add_word_of_god(doc: Document, rules: SeasonalRules, data: dict):
     add_heading2(doc, "Collect of the Day")
     add_celebrant_line(doc, "Celebrant", "The Lord be with you.")
     add_people_line(doc, "People", "And also with you.")
-    add_people_line(doc, "Celebrant", "Let us pray.")
+    add_celebrant_line(doc, "Celebrant", "Let us pray.")
     add_spacer(doc)
     _add_body_with_amen(doc, data["collect_text"])
 
@@ -120,6 +120,7 @@ def add_word_of_god(doc: Document, rules: SeasonalRules, data: dict):
     add_spacer(doc)
     add_heading2(doc, "Prayers of the People")
     _add_pop(doc, data.get("pop_elements", []))
+    add_spacer(doc)
     add_rubric(doc, data.get("pop_concluding_rubric",
                               "The Celebrant concludes with a suitable Collect."))
 
@@ -130,15 +131,9 @@ def add_word_of_god(doc: Document, rules: SeasonalRules, data: dict):
 
     # --- The Peace ---
     add_spacer(doc)
-    p = doc.add_paragraph(style="Body - Introductory Rubric")
-    run = p.add_run("Please stand.")
-    run.bold = True
+    add_introductory_rubric(doc, "Please stand.")
     add_heading2(doc, "The Peace")
-    p = doc.add_paragraph(style="Body - Dialogue")
-    run = p.add_run("Celebrant")
-    p.add_run("\t")
-    run2 = p.add_run("The peace of the Lord be always with you.")
-    run2.bold = True
+    add_celebrant_line(doc, "Celebrant", "The peace of the Lord be always with you.")
     add_people_line(doc, "People", "And also with you.")
 
 
@@ -287,9 +282,7 @@ def _add_psalm(doc: Document, reference: str, rubric: str, lines):
     line breaks (not new paragraphs) within a verse so the hanging
     indent applies to the second-half lines.
     """
-    p = doc.add_paragraph(style="Heading 2")
-    run = p.add_run(reference)
-    run.italic = True
+    add_heading2(doc, reference)
 
     if rubric:
         add_rubric(doc, rubric)
@@ -315,16 +308,13 @@ def _add_gospel(doc: Document, reference: str, book: str, reading):
     """Add the Gospel reading with announcement and response."""
     add_spacer(doc)
     add_introductory_rubric(doc, "Remain standing.")
-    p = doc.add_paragraph(style="Heading 2")
-    run = p.add_run(f"The Gospel: {reference}")
-    run.italic = True
+    add_heading2(doc, f"The Gospel: {reference}")
 
     add_rubric(doc, "The Deacon or a Priest reads the Gospel, first saying")
 
     # Announcement
-    p = doc.add_paragraph(style="Body - Dialogue")
-    run = p.add_run(f"The Holy Gospel of our Lord Jesus Christ according to {book}.")
-    run.italic = True
+    add_celebrant_line(doc, "",
+                       f"The Holy Gospel of our Lord Jesus Christ according to {book}.")
     add_people_line(doc, "People", "Glory to you, Lord Christ.")
     add_spacer(doc)
 

@@ -66,7 +66,7 @@ def add_holy_communion(doc: Document, rules: SeasonalRules, data: dict):
 
     # --- Offertory ---
     add_spacer(doc)
-    add_rubric(doc, "Be seated.")
+    add_introductory_rubric(doc, "Be seated.")
     add_heading2(doc, "Offertory")
     add_rubric(doc, "Please place your offerings and Connection Cards in the "
                "offering plates as they are passed. You can also easily give "
@@ -95,16 +95,12 @@ def add_holy_communion(doc: Document, rules: SeasonalRules, data: dict):
 
     # --- The Great Thanksgiving ---
     add_spacer(doc)
-    add_rubric(doc, "Remain standing.")
+    add_introductory_rubric(doc, "Remain standing.")
     add_heading2(doc, "The Great Thanksgiving")
 
     # Sursum Corda
     for exchange in ep_data["sursum_corda"]:
-        p = doc.add_paragraph(style="Body - Dialogue")
-        run = p.add_run("Celebrant")
-        p.add_run("\t")
-        run2 = p.add_run(exchange["celebrant"])
-        run2.bold = True
+        add_celebrant_line(doc, "Celebrant", exchange["celebrant"])
         add_people_line(doc, "People", exchange["people"])
     add_spacer(doc)
 
@@ -116,6 +112,7 @@ def add_holy_communion(doc: Document, rules: SeasonalRules, data: dict):
         _add_prayer_a_or_b(doc, ep_data, data, prayers, prayer_key)
 
     # --- Lord's Prayer ---
+    add_spacer(doc)
     add_rubric(doc, "Please stand and, as you are comfortable, join hands "
                "with those around you.")
     add_body(doc, prayers["lords_prayer_intro"]["option_1"])
@@ -173,11 +170,7 @@ def add_holy_communion(doc: Document, rules: SeasonalRules, data: dict):
     # --- Closing Prayer ---
     add_spacer(doc)
     add_heading2(doc, "Closing Prayer")
-    p = doc.add_paragraph(style="Body - Dialogue")
-    run = p.add_run("Celebrant")
-    p.add_run("\t")
-    run2 = p.add_run("Let us pray.")
-    run2.bold = True
+    add_celebrant_line(doc, "Celebrant", "Let us pray.")
 
     prayer_choice = data.get("post_communion_prayer", "a")
     if prayer_choice == "b":
@@ -195,11 +188,11 @@ def add_holy_communion(doc: Document, rules: SeasonalRules, data: dict):
         p = doc.add_paragraph(style="Body - Rubric")
         run = p.add_run("The Celebrant commissions the Lay Eucharistic Visitor, saying")
         run.italic = True
-        p = doc.add_paragraph(style="Body - Dialogue")
-        run = p.add_run(
+        add_celebrant_line(
+            doc, "",
             "In the name of this congregation, I send you forth bearing these "
             "holy gifts that those to whom you go may share with us in the "
-            "communion of Christ's body and blood."
+            "communion of Christ's body and blood.",
         )
         add_people_line(doc, "People",
                         "We who are many are one body because we all share "
@@ -283,6 +276,7 @@ def _add_prayer_a_or_b(doc: Document, ep_data: dict, data: dict,
             doc.add_paragraph(line, style="Body - Lyrics")
 
     # Kneeling rubric
+    add_spacer(doc)
     add_rubric(doc, "Please kneel or remain standing. The Celebrant continues")
 
     # Post-Sanctus
@@ -362,6 +356,7 @@ def _add_prayer_c(doc: Document, ep_data: dict, data: dict, prayers: dict):
             doc.add_paragraph(line, style="Body - Lyrics")
 
     # Post-Sanctus continuation
+    add_spacer(doc)
     add_rubric(doc, "Please kneel or remain standing. The Celebrant continues")
 
     pc2 = [
@@ -427,19 +422,8 @@ def _add_prayer_c(doc: Document, ep_data: dict, data: dict, prayers: dict):
 
 
 def _add_institution_words(doc: Document, text: str):
-    """Add institution narrative with bold-italic formatting for the actual words of institution."""
-    # The words of institution (inside quotes) are formatted specially
-    p = doc.add_paragraph(style="Body")
-    # Find the quote marks
-    if '"' in text:
-        before_quote = text[:text.index('"')]
-        from_quote = text[text.index('"'):]
-        p.add_run(before_quote)
-        run = p.add_run(from_quote)
-        run.bold = True
-        run.italic = True
-    else:
-        p.add_run(text)
+    """Add institution narrative as plain body text."""
+    add_body(doc, text)
 
 
 def _add_doxology_amen(doc: Document, prayer: dict):

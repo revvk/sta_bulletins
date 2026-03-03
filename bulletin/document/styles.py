@@ -88,19 +88,19 @@ _STYLE_DEFS = [
     # Section headers: "Processional", "Sermon", "The Peace", etc.
     # Gill Sans Nova Medium, 13 pt, left-aligned
     ("Heading 2", FONT_HEADING2, 13, False, False,
-     WD_ALIGN_PARAGRAPH.LEFT, 0, 0, 0, 5, None),
+     WD_ALIGN_PARAGRAPH.LEFT, 0, 0, 0, 0, 1.0),
 
     # Main body text (prayers, collect text, general content)
     # Tab stops: left at 1.5", right at 6"
     ("Body", FONT_BODY, 12, False, False,
-     WD_ALIGN_PARAGRAPH.LEFT, 0.32, 0, 3, 0, 1.0),
+     WD_ALIGN_PARAGRAPH.LEFT, 0.32, 0, 0, 0, 1.0),
 
     # Celebrant/People dialogue lines with hanging indent:
     #   "Celebrant  [tab]  The Lord be with you."
     #   "People     [tab]  And also with you."   (with People char style)
     # Hanging indent ensures wrapped text aligns at the 1.5" tab stop.
     ("Body - Dialogue", FONT_BODY, 12, False, False,
-     WD_ALIGN_PARAGRAPH.LEFT, 1.5, -1.18, 3, 0, 1.0),
+     WD_ALIGN_PARAGRAPH.LEFT, 1.5, -1.18, 0, 0, 1.0),
 
     # Rubrics within the service: "After the reading, the Reader will say"
     ("Body - Rubric", FONT_BODY, 10, False, True,
@@ -152,7 +152,7 @@ _STYLE_DEFS = [
 
     # Staff listing - email (centered)
     ("Staff - Email", FONT_BODY, 9, False, False,
-     WD_ALIGN_PARAGRAPH.CENTER, 0, 0, 0, 8, 1.0),
+     WD_ALIGN_PARAGRAPH.CENTER, 0, 0, 0, 0, 1.0),
 
     # Header & Footer text
     ("Header & Footer", FONT_HEADER_FOOTER, 9, False, False,

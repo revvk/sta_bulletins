@@ -283,10 +283,12 @@ class BulletinBuilder:
         # Extract gospel book name from reference
         gospel_book = gospel_ref.split()[0] if gospel_ref else ""
 
-        # Preacher from clergy rota
-        preacher = ""
+        # Preacher from clergy rota — expand short name to full title
+        from bulletin.config import PREACHER_NAMES
+        preacher_short = ""
         if self.clergy:
-            preacher = self.clergy.preacher_9am or ""
+            preacher_short = self.clergy.preacher_9am or ""
+        preacher = PREACHER_NAMES.get(preacher_short.strip(), preacher_short)
 
         # POP elements
         pop_elements = self._prepare_pop_elements()
