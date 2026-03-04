@@ -18,7 +18,7 @@ from docx.oxml.ns import qn, nsdecls
 from docx.oxml import parse_xml
 import re
 
-from bulletin.config import CROSS_SYMBOL, FONT_BODY, FONT_LYRICS
+from bulletin.config import CROSS_SYMBOL, FONT_BODY, FONT_BODY_BOLD, FONT_LYRICS
 
 
 def add_spacer(doc: Document):
@@ -71,6 +71,7 @@ def add_body_with_bold_ending(doc: Document, text: str, bold_text: str):
     p.add_run(text)
     run = p.add_run(bold_text)
     run.bold = True
+    run.font.name = FONT_BODY_BOLD
     return p
 
 
@@ -107,7 +108,7 @@ def add_dialogue(doc: Document, celebrant_text: str, people_text: str,
     add_people_line(doc, people_label, people_text)
 
 
-def add_cross_symbol(paragraph, font_name=FONT_BODY):
+def add_cross_symbol(paragraph, font_name=FONT_BODY_BOLD):
     """Add a bold cross symbol (✠) as a run in the given paragraph."""
     run = paragraph.add_run(CROSS_SYMBOL)
     run.bold = True
@@ -240,10 +241,12 @@ def add_song_two_column(doc: Document, song_data: dict):
     right_sections = sections[mid:]
 
     _fill_lyric_cell(table.cell(0, 0), left_sections)
-    _fill_lyric_cell(table.cell(0, 1), right_sections)
+    _fill_lyric_cell(table.cell(0, 1), right_sections,
+                     lyric_style="Body - Lyrics Right")
 
 
-def _fill_lyric_cell(cell, sections: list[dict]):
+def _fill_lyric_cell(cell, sections: list[dict],
+                     lyric_style: str = "Body - Lyrics"):
     """Fill a table cell with song sections (verses/choruses)."""
     # Remove the default empty paragraph
     for p in cell.paragraphs:
@@ -255,7 +258,7 @@ def _fill_lyric_cell(cell, sections: list[dict]):
             sp = cell.add_paragraph("", style="Spacer - Small")
 
         for line_text in section["lines"]:
-            p = cell.add_paragraph(style="Body - Lyrics")
+            p = cell.add_paragraph(style=lyric_style)
             run = p.add_run(line_text)
             if section["type"] == "chorus":
                 run.italic = True

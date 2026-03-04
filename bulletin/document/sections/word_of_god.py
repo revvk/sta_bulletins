@@ -21,7 +21,7 @@ Covers everything from the processional hymn through The Peace:
 
 from docx import Document
 
-from bulletin.config import CROSS_SYMBOL
+from bulletin.config import CROSS_SYMBOL, FONT_BODY_BOLD
 from bulletin.data.loader import load_common_prayers
 from bulletin.document.formatting import (
     add_spacer, add_heading, add_heading2, add_rubric,
@@ -106,9 +106,7 @@ def add_word_of_god(doc: Document, rules: SeasonalRules, data: dict):
     add_spacer(doc)
     add_introductory_rubric(doc, "Be seated.")
     add_heading2(doc, "Sermon")
-    p = doc.add_paragraph(style="Body")
-    run = p.add_run(data.get("preacher", ""))
-    run.bold = True
+    add_body(doc, data.get("preacher", ""))
 
     # --- Nicene Creed ---
     add_spacer(doc)
@@ -196,7 +194,12 @@ def _add_penitential_order(doc: Document, rules: SeasonalRules,
     else:
         sentence = data.get("penitential_sentence", "")
         if sentence:
-            add_body(doc, sentence)
+            sentence_ref = data.get("penitential_sentence_ref", "")
+            p = doc.add_paragraph(style="Body")
+            p.add_run(sentence)
+            if sentence_ref:
+                run = p.add_run(f" ({sentence_ref})")
+                run.italic = True
 
     # Confession
     add_spacer(doc)
@@ -383,6 +386,7 @@ def _add_pop(doc: Document, elements: list[dict]):
                 p.add_run(leader_text + " ")
             run = p.add_run(people_text)
             run.bold = True
+            run.font.name = FONT_BODY_BOLD
         elif etype == "rubric":
             add_rubric(doc, text)
         elif etype == "both":
@@ -390,6 +394,7 @@ def _add_pop(doc: Document, elements: list[dict]):
             p = doc.add_paragraph(style="Body")
             run = p.add_run(elem.get("people_text", ""))
             run.bold = True
+            run.font.name = FONT_BODY_BOLD
 
         # Add spacer between petitions (but not after the last one)
         if etype in ("people", "both") and i + 1 < len(elements):
@@ -462,6 +467,7 @@ def _add_body_with_amen(doc: Document, text: str):
         p.add_run(body)
         run = p.add_run("Amen.")
         run.bold = True
+        run.font.name = FONT_BODY_BOLD
     else:
         add_body(doc, text)
 

@@ -24,6 +24,7 @@ from docx.oxml import parse_xml
 
 from bulletin.config import (
     FONT_BODY,
+    FONT_BODY_BOLD,
     FONT_HEADING,
     FONT_HEADING2,
     FONT_LYRICS,
@@ -114,6 +115,11 @@ _STYLE_DEFS = [
     ("Body - Lyrics", FONT_LYRICS, 12, False, False,
      WD_ALIGN_PARAGRAPH.LEFT, 0.5, -0.18, 0, 0, 1.0),
 
+    # Right-column lyrics in two-column layouts — larger hanging indent
+    # because the narrower column needs more wrap room
+    ("Body - Lyrics Right", FONT_LYRICS, 12, False, False,
+     WD_ALIGN_PARAGRAPH.LEFT, 0.5, -0.38, 0, 0, 1.0),
+
     # Scripture reading prose text
     ("Reading/Gospel Text", FONT_BODY, 11, False, False,
      WD_ALIGN_PARAGRAPH.LEFT, 0.32, 0, 0, 0, 1.0),
@@ -178,8 +184,12 @@ def _create_styles(doc: Document):
         except KeyError:
             style = doc.styles.add_style(name, 1)  # 1 = WD_STYLE_TYPE.PARAGRAPH
 
-        # Font
-        style.font.name = font_name
+        # Font — use the Bold weight font name for bold styles so Word
+        # picks the real bold weight instead of applying synthetic faux-bold.
+        if bold and font_name == FONT_BODY:
+            style.font.name = FONT_BODY_BOLD
+        else:
+            style.font.name = font_name
         style.font.size = Pt(size_pt)
         style.font.bold = bold
         style.font.italic = italic
@@ -253,9 +263,13 @@ def _add_tab_stops(pf):
 def _create_character_styles(doc: Document):
     """Create character styles (applied to runs, not paragraphs)."""
     # "People" character style — bold text for congregational responses.
+    # We explicitly set the font name so that Word uses the proper bold
+    # weight ("Adobe Garamond Pro Bold") rather than applying a synthetic
+    # faux-bold to the Regular weight.
     try:
         people = doc.styles["People"]
     except KeyError:
         people = doc.styles.add_style("People", 2)  # 2 = WD_STYLE_TYPE.CHARACTER
     people.font.bold = True
+    people.font.name = FONT_BODY_BOLD
     people.font.color.rgb = RGBColor(0, 0, 0)

@@ -147,6 +147,12 @@ def main():
         title_slug = schedule.title
         output_path = output_dir / f"{date_str} - {title_slug} - 9 am - Bulletin.docx"
 
+    # Remove the old file first so macOS extended attributes (like
+    # com.apple.quarantine set by Word) don't persist and cause Word
+    # to open the regenerated file in Protected View / read-only mode.
+    if output_path.exists():
+        output_path.unlink()
+
     doc.save(str(output_path))
     print(f"\nBulletin saved to: {output_path}")
 

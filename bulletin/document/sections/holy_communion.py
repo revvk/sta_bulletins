@@ -21,7 +21,10 @@ Covers everything from the Offertory through the Dismissal:
 
 from docx import Document
 
-from bulletin.config import CROSS_SYMBOL
+from bulletin.config import (
+    CROSS_SYMBOL, FONT_BODY_BOLD, FONT_HEADER_FOOTER,
+    GIVING_URL, CONNECT_URL,
+)
 from bulletin.data.loader import (
     load_common_prayers, load_eucharistic_prayers, load_blessings,
     get_proper_preface_text,
@@ -66,9 +69,7 @@ def add_holy_communion(doc: Document, rules: SeasonalRules, data: dict):
     add_spacer(doc)
     add_introductory_rubric(doc, "Be seated.")
     add_heading2(doc, "Offertory")
-    add_rubric(doc, "Please place your offerings and Connection Cards in the "
-               "offering plates as they are passed. You can also easily give "
-               "online at standrewsmckinney.org/give.")
+    _add_offertory_rubric(doc)
     add_spacer(doc)
 
     # Offering Music
@@ -134,6 +135,7 @@ def add_holy_communion(doc: Document, rules: SeasonalRules, data: dict):
                 p = doc.add_paragraph(style="Body - Dialogue")
                 run = p.add_run(line)
                 run.bold = True
+                run.font.name = FONT_BODY_BOLD
     else:
         add_celebrant_line(doc, "Celebrant", rules.fraction_celebrant)
         add_people_line(doc, "People", rules.fraction_people)
@@ -164,6 +166,7 @@ def add_holy_communion(doc: Document, rules: SeasonalRules, data: dict):
 
     # --- Closing Prayer ---
     add_spacer(doc)
+    add_introductory_rubric(doc, "Please stand.")
     add_heading2(doc, "Closing Prayer")
     add_celebrant_line(doc, "Celebrant", "Let us pray.")
 
@@ -229,7 +232,7 @@ def add_holy_communion(doc: Document, rules: SeasonalRules, data: dict):
     # --- Dismissal ---
     add_spacer(doc)
     add_heading2(doc, "Dismissal")
-    add_rubric(doc, "The Deacon or a Priest dismisses with these words")
+    add_rubric(doc, "The Deacon or a Priest dismisses the people with these words")
     add_celebrant_line(doc, "", data.get("dismissal_deacon", ""))
     add_people_line(doc, "People", data.get("dismissal_people", ""))
 
@@ -248,16 +251,25 @@ def _add_prayer_a_or_b(doc: Document, ep_data: dict, data: dict,
     prayer = ep_data[key]
 
     # Preface opening + proper preface + Sanctus transition
-    # The proper preface is joined to the opening as a single paragraph,
-    # e.g. "...creator of heaven and earth, through Jesus Christ our Lord..."
+    # The proper preface is joined to the opening as a single paragraph.
+    # Most prefaces start with connecting words ("Through", "For", "Because")
+    # and join with a comma: "...Creator of heaven and earth, through..."
+    # Some prefaces (e.g. Lent's "Paschal preparation") start a new sentence:
+    # "...Creator of heaven and earth. You bid..."
     preface_opening = ep_data["preface_opening"]
     preface_text = data.get("proper_preface_text", "")
     if preface_text:
-        # Strip trailing period from opening, join with comma
-        opening = preface_opening.rstrip().rstrip(".")
-        # Lowercase the first character of the proper preface
-        joined = preface_text[0].lower() + preface_text[1:]
-        add_body(doc, f"{opening}, {joined}")
+        # Connecting words that join naturally with a comma + lowercase
+        _CONNECTING_WORDS = {"through", "for", "because", "but", "who"}
+        first_word = preface_text.split()[0].lower()
+        if first_word in _CONNECTING_WORDS:
+            # Strip trailing period, join with comma, lowercase first char
+            opening = preface_opening.rstrip().rstrip(".")
+            joined = preface_text[0].lower() + preface_text[1:]
+            add_body(doc, f"{opening}, {joined}")
+        else:
+            # New sentence: keep the period, keep original capitalization
+            add_body(doc, f"{preface_opening.rstrip()} {preface_text}")
     else:
         add_body(doc, preface_opening)
     add_spacer(doc)
@@ -303,6 +315,7 @@ def _add_prayer_a_or_b(doc: Document, ep_data: dict, data: dict,
             run.add_break()
         run = p.add_run(line)
         run.bold = True
+        run.font.name = FONT_BODY_BOLD
     add_spacer(doc)
 
     # Epiclesis
@@ -343,6 +356,7 @@ def _add_prayer_c(doc: Document, ep_data: dict, data: dict, prayers: dict):
             p = doc.add_paragraph(style="Body")
             run = p.add_run(text)
             run.bold = True
+            run.font.name = FONT_BODY_BOLD
         add_spacer(doc)
 
     # Sanctus
@@ -391,6 +405,7 @@ def _add_prayer_c(doc: Document, ep_data: dict, data: dict, prayers: dict):
             p = doc.add_paragraph(style="Body")
             run = p.add_run(text)
             run.bold = True
+            run.font.name = FONT_BODY_BOLD
     add_spacer(doc)
 
     # Epiclesis
@@ -405,6 +420,7 @@ def _add_prayer_c(doc: Document, ep_data: dict, data: dict, prayers: dict):
             p = doc.add_paragraph(style="Body")
             run = p.add_run(text)
             run.bold = True
+            run.font.name = FONT_BODY_BOLD
     add_spacer(doc)
 
     # Doxology
@@ -416,6 +432,7 @@ def _add_prayer_c(doc: Document, ep_data: dict, data: dict, prayers: dict):
     )
     run = p.add_run("AMEN.")
     run.bold = True
+    run.font.name = FONT_BODY_BOLD
 
 
 def _add_sanctus_text(doc: Document, lines: list[str]):
@@ -444,6 +461,7 @@ def _add_doxology_amen(doc: Document, prayer: dict):
     p.add_run(prayer["doxology"] + " ")
     run = p.add_run(prayer["doxology_response"])
     run.bold = True
+    run.font.name = FONT_BODY_BOLD
 
 
 def _add_song_smart(doc: Document, song_data: dict | None):
@@ -472,8 +490,153 @@ def _add_body_with_amen(doc: Document, text: str):
         p.add_run(body)
         run = p.add_run("Amen.")
         run.bold = True
+        run.font.name = FONT_BODY_BOLD
     else:
         add_body(doc, text)
+
+
+def _add_offertory_rubric(doc: Document):
+    """Add the offertory rubric with mixed font styling and QR code.
+
+    The rubric text uses the standard rubric font (italic Adobe Garamond Pro)
+    but URLs are rendered in Gill Sans Nova Light.  A QR code image (from the
+    front-cover template) is anchored at the right edge of the text area.
+    """
+    from docx.shared import Pt, Inches, Emu
+    from docx.oxml.ns import qn, nsdecls
+    from docx.oxml import parse_xml
+
+    p = doc.add_paragraph(style="Body - Rubric")
+
+    # --- Rubric text with mixed styling ---
+    # Part 1: plain rubric text
+    run1 = p.add_run(
+        "Please place your offerings and Connection Cards in the "
+        "offering plates as they are passed. You can also easily give "
+        "online at "
+    )
+
+    # Part 2: URL in Gill Sans Nova Light
+    run_url1 = p.add_run(GIVING_URL)
+    run_url1.font.name = FONT_HEADER_FOOTER
+    run_url1.italic = False
+
+    # Part 3: connecting text
+    run3 = p.add_run(
+        " or by scanning the QR code. If you are online with us, "
+        "please also fill out a digital Connection Card at "
+    )
+
+    # Part 4: second URL in Gill Sans Nova Light
+    run_url2 = p.add_run(CONNECT_URL)
+    run_url2.font.name = FONT_HEADER_FOOTER
+    run_url2.italic = False
+
+    # Part 5: closing period
+    p.add_run(".")
+
+    # --- QR code image (anchored, floating) ---
+    _add_qr_code(doc, p)
+
+
+def _add_qr_code(doc: Document, paragraph):
+    """Add the QR code as a floating image anchored to *paragraph*.
+
+    The QR code is extracted from the front-cover template (which is the
+    document's base).  It is positioned 5.75" from the left edge of the
+    page with tight text wrapping, sized at 0.75" × 0.75".
+    """
+    from pathlib import Path
+    from docx.shared import Emu
+    from docx.oxml.ns import qn, nsdecls
+    from docx.oxml import parse_xml
+
+    # Find the QR code image (EMF) already in the document from the front cover
+    part = doc.part
+    qr_rId = None
+    for rId, rel in list(part.rels.items()):
+        if (rel.reltype ==
+                "http://schemas.openxmlformats.org/officeDocument/2006/relationships/image"
+                and hasattr(rel, "target_part")
+                and str(rel.target_part.partname).endswith(".emf")):
+            qr_rId = rId
+            break
+
+    if not qr_rId:
+        # If the EMF isn't found (shouldn't happen), skip silently
+        return
+
+    # Dimensions
+    cx = cy = int(0.75 * 914400)      # 0.75" in EMUs = 685,800
+    pos_h = int(5.75 * 914400)        # 5.75" from left edge of page
+
+    # Namespace declarations needed for the anchor element
+    WP = "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing"
+    A = "http://schemas.openxmlformats.org/drawingml/2006/main"
+    PIC = "http://schemas.openxmlformats.org/drawingml/2006/picture"
+    R = "http://schemas.openxmlformats.org/officeDocument/2006/relationships"
+
+    anchor_xml = (
+        f'<wp:anchor xmlns:wp="{WP}" xmlns:a="{A}" xmlns:pic="{PIC}" xmlns:r="{R}"'
+        f'  distT="0" distB="0" distL="114300" distR="114300"'
+        f'  simplePos="0" relativeHeight="251658240" behindDoc="0"'
+        f'  locked="0" layoutInCell="1" allowOverlap="1">'
+        f'  <wp:simplePos x="0" y="0"/>'
+        f'  <wp:positionH relativeFrom="page">'
+        f'    <wp:posOffset>{pos_h}</wp:posOffset>'
+        f'  </wp:positionH>'
+        f'  <wp:positionV relativeFrom="paragraph">'
+        f'    <wp:posOffset>0</wp:posOffset>'
+        f'  </wp:positionV>'
+        f'  <wp:extent cx="{cx}" cy="{cy}"/>'
+        f'  <wp:effectExtent l="0" t="0" r="0" b="0"/>'
+        f'  <wp:wrapTight wrapText="bothSides">'
+        f'    <wp:wrapPolygon edited="0">'
+        f'      <wp:start x="0" y="0"/>'
+        f'      <wp:lineTo x="0" y="21600"/>'
+        f'      <wp:lineTo x="21600" y="21600"/>'
+        f'      <wp:lineTo x="21600" y="0"/>'
+        f'      <wp:lineTo x="0" y="0"/>'
+        f'    </wp:wrapPolygon>'
+        f'  </wp:wrapTight>'
+        f'  <wp:docPr id="100" name="QR Code"/>'
+        f'  <wp:cNvGraphicFramePr>'
+        f'    <a:graphicFrameLocks noChangeAspect="1"/>'
+        f'  </wp:cNvGraphicFramePr>'
+        f'  <a:graphic>'
+        f'    <a:graphicData uri="http://schemas.openxmlformats.org/drawingml/2006/picture">'
+        f'      <pic:pic>'
+        f'        <pic:nvPicPr>'
+        f'          <pic:cNvPr id="0" name="QR Code"/>'
+        f'          <pic:cNvPicPr/>'
+        f'        </pic:nvPicPr>'
+        f'        <pic:blipFill>'
+        f'          <a:blip r:embed="{qr_rId}"/>'
+        f'          <a:stretch><a:fillRect/></a:stretch>'
+        f'        </pic:blipFill>'
+        f'        <pic:spPr>'
+        f'          <a:xfrm>'
+        f'            <a:off x="0" y="0"/>'
+        f'            <a:ext cx="{cx}" cy="{cy}"/>'
+        f'          </a:xfrm>'
+        f'          <a:prstGeom prst="rect"><a:avLst/></a:prstGeom>'
+        f'        </pic:spPr>'
+        f'      </pic:pic>'
+        f'    </a:graphicData>'
+        f'  </a:graphic>'
+        f'</wp:anchor>'
+    )
+
+    anchor = parse_xml(anchor_xml)
+
+    # Wrap in a drawing element and insert into a run in the paragraph
+    W_NS = "http://schemas.openxmlformats.org/wordprocessingml/2006/main"
+    drawing = parse_xml(f'<w:drawing xmlns:w="{W_NS}"/>')
+    drawing.append(anchor)
+
+    # Insert the drawing into the first run of the paragraph
+    first_run = paragraph.runs[0]._element
+    first_run.insert(0, drawing)
 
 
 def _add_blessing_line(doc: Document, text: str):

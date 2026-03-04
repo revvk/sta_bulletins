@@ -15,8 +15,14 @@ from copy import deepcopy
 from pathlib import Path
 
 from docx import Document
+from docx.shared import Inches
+from docx.enum.text import WD_TAB_ALIGNMENT
 from docx.oxml.ns import nsdecls, qn
 from docx.oxml import parse_xml
+
+from bulletin.config import (
+    FONT_HEADER_FOOTER, PAGE_WIDTH_INCHES, MARGIN_INCHES,
+)
 
 # Resolve templates directory relative to the project root.
 # bulletin/document/templates.py  ->  ../../templates/
@@ -110,6 +116,149 @@ def append_back_cover(doc: Document):
         if rid_map:
             _remap_rids(elem_copy, rid_map)
         body.append(elem_copy)
+
+
+def setup_footers(doc: Document, date_str: str, service_time: str,
+                  liturgical_title: str):
+    """Add odd/even page footers to the bulletin body section.
+
+    The document has two sections:
+      Section 0 — front cover (first page) + bulletin content
+      Section 1 — back cover
+
+    Footers only appear on the bulletin content pages (not front or back
+    cover).  The front cover is handled by ``different_first_page_header_footer``
+    being True, so its first-page footer is left empty.
+
+    Layout:
+      Odd pages:  page number (left)   |   "March 8, 2026 | 9 am" (right)
+      Even pages: "Third Sunday in Lent" (left)   |   page number (right)
+
+    Page numbering starts at 1 for the first bulletin content page.
+    """
+    # Enable document-wide even/odd headers & footers.
+    settings_elem = doc.settings.element
+    # Avoid duplicating if already present
+    if settings_elem.find(qn("w:evenAndOddHeaders")) is None:
+        settings_elem.append(
+            parse_xml(f'<w:evenAndOddHeaders {nsdecls("w")}/>')
+        )
+
+    section = doc.sections[0]
+
+    # Set page number start = 0 so the front cover is page 0 and the
+    # first bulletin content page is page 1.
+    sect_pr = section._sectPr
+    pg_num = sect_pr.find(qn("w:pgNumType"))
+    if pg_num is None:
+        pg_num = parse_xml(f'<w:pgNumType {nsdecls("w")} w:start="0"/>')
+        sect_pr.append(pg_num)
+    else:
+        pg_num.set(qn("w:start"), "0")
+
+    # ---- Odd footer (default footer when even/odd is enabled) --------
+    footer_odd = section.footer
+    footer_odd.is_linked_to_previous = False
+    _build_footer_paragraph(
+        footer_odd.paragraphs[0], doc,
+        left_field="page",
+        right_text=f"{date_str} | {service_time}",
+    )
+
+    # ---- Even footer ---------------------------------------------------
+    footer_even = section.even_page_footer
+    footer_even.is_linked_to_previous = False
+    _build_footer_paragraph(
+        footer_even.paragraphs[0], doc,
+        left_text=liturgical_title,
+        right_field="page",
+    )
+
+    # ---- First-page footer (front cover): empty -------------------------
+    footer_first = section.first_page_footer
+    footer_first.is_linked_to_previous = False
+    # Leave the first-page footer empty — no text or page number.
+
+    # ---- Back cover section: suppress footers ----------------------------
+    if len(doc.sections) > 1:
+        back = doc.sections[-1]
+        back.footer.is_linked_to_previous = False
+        back.even_page_footer.is_linked_to_previous = False
+        if back.different_first_page_header_footer:
+            back.first_page_footer.is_linked_to_previous = False
+
+
+def _build_footer_paragraph(paragraph, doc, *,
+                            left_text: str = "",
+                            left_field: str = "",
+                            right_text: str = "",
+                            right_field: str = ""):
+    """Configure a footer paragraph with left and right-aligned content.
+
+    Args:
+        paragraph: The footer paragraph to populate.
+        doc: The Document (for style access).
+        left_text/left_field: Content for the left side ("page" = PAGE field).
+        right_text/right_field: Content for the right side.
+    """
+    paragraph.style = doc.styles["Header & Footer"]
+
+    # Add a right tab stop at the full text width (page width − margins)
+    tab_pos = Inches(PAGE_WIDTH_INCHES - 2 * MARGIN_INCHES)
+    paragraph.paragraph_format.tab_stops.add_tab_stop(
+        tab_pos, WD_TAB_ALIGNMENT.RIGHT
+    )
+
+    # Left content
+    if left_field == "page":
+        _add_page_number_field(paragraph)
+    elif left_text:
+        paragraph.add_run(left_text)
+
+    # Tab to right side
+    paragraph.add_run("\t")
+
+    # Right content
+    if right_field == "page":
+        _add_page_number_field(paragraph)
+    elif right_text:
+        paragraph.add_run(right_text)
+
+
+def _add_page_number_field(paragraph):
+    """Insert a PAGE field code into a paragraph for automatic page numbering."""
+    fld_begin = parse_xml(
+        f'<w:r {nsdecls("w")}>'
+        f'  <w:fldChar w:fldCharType="begin"/>'
+        f'</w:r>'
+    )
+    fld_instr = parse_xml(
+        f'<w:r {nsdecls("w")}>'
+        f'  <w:instrText xml:space="preserve"> PAGE </w:instrText>'
+        f'</w:r>'
+    )
+    fld_sep = parse_xml(
+        f'<w:r {nsdecls("w")}>'
+        f'  <w:fldChar w:fldCharType="separate"/>'
+        f'</w:r>'
+    )
+    fld_text = parse_xml(
+        f'<w:r {nsdecls("w")}>'
+        f'  <w:t>1</w:t>'
+        f'</w:r>'
+    )
+    fld_end = parse_xml(
+        f'<w:r {nsdecls("w")}>'
+        f'  <w:fldChar w:fldCharType="end"/>'
+        f'</w:r>'
+    )
+
+    p_elem = paragraph._element
+    p_elem.append(fld_begin)
+    p_elem.append(fld_instr)
+    p_elem.append(fld_sep)
+    p_elem.append(fld_text)
+    p_elem.append(fld_end)
 
 
 # ------------------------------------------------------------------

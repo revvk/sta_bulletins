@@ -11,7 +11,7 @@ from datetime import date, datetime
 
 from bulletin.config import CHURCH_NAME, GIVING_URL
 from bulletin.document.styles import configure_document
-from bulletin.document.templates import load_front_cover, append_back_cover
+from bulletin.document.templates import load_front_cover, append_back_cover, setup_footers
 from bulletin.document.sections.word_of_god import add_word_of_god
 from bulletin.document.sections.holy_communion import add_holy_communion
 from bulletin.logic.rules import get_seasonal_rules, get_dismissal_text
@@ -68,6 +68,7 @@ class BulletinBuilder:
         self.proper_preface_text = ""
         self.advent_wreath_verse = None
         self.penitential_sentence = None
+        self.penitential_sentence_ref = ""
         self.blessing_text = ""
         self.eucharistic_prayer = "A"
         self.post_communion_prayer = "a"
@@ -128,6 +129,9 @@ class BulletinBuilder:
         # Back cover (template-based, new page section)
         append_back_cover(doc)
 
+        # Footers — added after back cover so both sections exist
+        setup_footers(doc, date_str, service_time, self.schedule.title)
+
         return doc
 
     # ------------------------------------------------------------------
@@ -179,11 +183,13 @@ class BulletinBuilder:
             for s in sentences:
                 if s["reference"] in answer:
                     self.penitential_sentence = s["text"]
+                    self.penitential_sentence_ref = s["reference"]
                     return
 
         # Default to first sentence
         if sentences:
             self.penitential_sentence = sentences[0]["text"]
+            self.penitential_sentence_ref = sentences[0]["reference"]
 
     def _resolve_advent_wreath(self, prompt_fn):
         """For Advent, resolve the O Antiphon verse for the wreath lighting."""
@@ -350,6 +356,7 @@ class BulletinBuilder:
             "advent_wreath_verse": self.advent_wreath_verse,
             "advent_hymnal_ref": "#56 (Hymnal 1982)",
             "penitential_sentence": self.penitential_sentence,
+            "penitential_sentence_ref": self.penitential_sentence_ref,
         }
 
     def _prepare_holy_communion_data(self) -> dict:
@@ -404,10 +411,14 @@ class BulletinBuilder:
     def _get_psalm_rubric(self) -> str:
         """Determine the psalm rubric from the sheet's psalm field."""
         psalm_field = (self.schedule.psalm or "").lower()
+        if "half verse" in psalm_field:
+            return "Read responsively by half verse."
         if "responsiv" in psalm_field:
             return "Read responsively by whole verse."
         if "antiphon" in psalm_field:
-            return ""
+            return "Read antiphonally."
+        if "men and women" in psalm_field or "alternating" in psalm_field:
+            return "Read alternating between men and women."
         # "unison" or default
         return "Read in unison."
 
@@ -458,6 +469,11 @@ class BulletinBuilder:
                 if field in new_elem:
                     for placeholder, value in subs.items():
                         new_elem[field] = new_elem[field].replace(placeholder, value)
+                    # Clean up spacing after empty placeholder substitution:
+                    # collapse multiple spaces to one, remove space between
+                    # cross symbol and following punctuation (e.g. "✠ ," → "✠,")
+                    new_elem[field] = re.sub(r" {2,}", " ", new_elem[field])
+                    new_elem[field] = re.sub(r"✠\s+([,;.])", r"✠\1", new_elem[field])
             result.append(new_elem)
 
         return result
