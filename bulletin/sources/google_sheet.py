@@ -158,7 +158,9 @@ class ServiceMusicRow:
 # known header names. We normalize by stripping whitespace and lowercasing.
 
 def _normalize_key(key: str) -> str:
-    return key.strip().lower().replace("\n", " ")
+    import re as _re
+    normalized = key.strip().lower().replace("\n", " ")
+    return _re.sub(r" {2,}", " ", normalized)  # collapse multiple spaces
 
 
 def _get(row: dict, *possible_keys, default: str = "") -> str:
@@ -194,7 +196,7 @@ def fetch_liturgical_schedule() -> list[LiturgicalScheduleRow]:
             gospel=_get(row, "gospel"),
             pop_form=_get(row, "pop"),
             special_blessing=_get(row, "special blessing"),
-            closing_prayer=_get(row, "closing prayer"),
+            closing_prayer=_get(row, "closing prayer", "clsing prayer"),
             dismissal=_get(row, "dismissal"),
             notes=_get(row, "notes"),
             hs_reading=_get(row, "hidden springs reading"),

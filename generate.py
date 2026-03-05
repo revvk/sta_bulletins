@@ -3,9 +3,10 @@
 Generate a church bulletin for St. Andrew's Episcopal Church, McKinney, TX.
 
 Usage:
-    python generate.py 2026-03-01
-    python generate.py 2026-03-01 --output output/bulletin.docx
-    python generate.py 2026-03-01 --no-prompt  (use defaults for all choices)
+    python generate.py 2026-03-01                          # all services
+    python generate.py 2026-03-01 --service "9 am"         # 9am only
+    python generate.py 2026-03-01 --service "11 am"        # 11am only
+    python generate.py 2026-03-01 --no-prompt              # use defaults
 """
 
 import argparse
@@ -13,9 +14,10 @@ import sys
 from datetime import date, datetime
 from pathlib import Path
 
-from bulletin.config import CHURCH_NAME
+from bulletin.config import CHURCH_NAME, SERVICE_TIMES
 from bulletin.sources.google_sheet import get_bulletin_data
 from bulletin.sources.music_9am import fetch_9am_music
+from bulletin.sources.music_11am import get_11am_music_slots
 from bulletin.sources.scripture import fetch_readings
 from bulletin.sources.songs import lookup_song
 from bulletin.sources.parish_prayers import get_ministries_for_date, format_ministries
@@ -50,8 +52,12 @@ def main():
         description=f"Generate a bulletin for {CHURCH_NAME}")
     parser.add_argument("date",
                         help="Target date in YYYY-MM-DD format")
+    parser.add_argument("--service", "-s",
+                        choices=SERVICE_TIMES + ["all"],
+                        default="all",
+                        help="Which service to generate (default: all)")
     parser.add_argument("--output", "-o",
-                        help="Output .docx file path (default: output/<date>.docx)")
+                        help="Output .docx file path (only with single service)")
     parser.add_argument("--no-prompt", action="store_true",
                         help="Use defaults for all choices (no interactive prompts)")
     args = parser.parse_args()
@@ -63,9 +69,15 @@ def main():
         print(f"Error: Invalid date format '{args.date}'. Use YYYY-MM-DD.")
         sys.exit(1)
 
+    # Determine which services to generate
+    if args.service == "all":
+        services = [s for s in SERVICE_TIMES if s != "8 am"]  # 8am not yet implemented
+    else:
+        services = [args.service]
+
     print(f"Generating bulletin for {target_date.strftime('%B %-d, %Y')}...")
 
-    # Step 1: Fetch Google Sheet data
+    # Step 1: Fetch Google Sheet data (shared across all services)
     print("  Fetching liturgical schedule from Google Sheets...")
     try:
         sheet_data = get_bulletin_data(target_date)
@@ -78,19 +90,7 @@ def main():
     if schedule.eucharistic_prayer:
         print(f"  Eucharistic Prayer: {schedule.eucharistic_prayer}")
 
-    # Step 2: Fetch 9am music data
-    print("  Fetching 9am music planning data...")
-    try:
-        music_data = fetch_9am_music(target_date)
-        if music_data:
-            print(f"  Found {len(music_data.slots)} music slots")
-        else:
-            print("  Warning: No 9am music data found for this date")
-    except Exception as e:
-        print(f"  Warning: Could not fetch 9am music: {e}")
-        music_data = None
-
-    # Step 3: Fetch scripture readings
+    # Step 2: Fetch scripture readings (shared across all services)
     print("  Fetching scripture readings from bible.oremus.org...")
     refs_to_fetch = {}
     if schedule.reading:
@@ -106,7 +106,7 @@ def main():
         except Exception as e:
             print(f"  Warning: Could not fetch scriptures: {e}")
 
-    # Step 4: Parish ministries
+    # Step 3: Parish ministries (shared across all services)
     print("  Looking up parish cycle of prayers...")
     try:
         ministries = get_ministries_for_date(target_date)
@@ -116,51 +116,81 @@ def main():
         print(f"  Warning: Could not fetch ministries: {e}")
         parish_ministries = "[ministries]"
 
-    # Step 5: Build the bulletin
-    print("  Assembling bulletin...")
+    # Step 4: Fetch service-specific music data
+    music_9am = None
+    if "9 am" in services:
+        print("  Fetching 9am music planning data...")
+        try:
+            music_9am = fetch_9am_music(target_date)
+            if music_9am:
+                print(f"  Found {len(music_9am.slots)} music slots")
+            else:
+                print("  Warning: No 9am music data found for this date")
+        except Exception as e:
+            print(f"  Warning: Could not fetch 9am music: {e}")
+
+    music_11am_slots = None
+    if "11 am" in services:
+        if sheet_data.music:
+            music_11am_slots = get_11am_music_slots(sheet_data.music)
+            print(f"  Found {len(music_11am_slots)} music slots for 11am")
+        else:
+            print("  Warning: No 11am music data found for this date")
+
     prompt_fn = None if args.no_prompt else prompt_choice
 
     def song_lookup_fn(identifier, service):
         return lookup_song(identifier, service)
 
-    builder = BulletinBuilder(
-        target_date=target_date,
-        sheet_data=sheet_data,
-        music_data=music_data,
-        scripture_readings=scripture_readings,
-        song_lookup_fn=song_lookup_fn,
-        parish_ministries=parish_ministries,
-    )
-
-    builder.resolve_all(prompt_fn=prompt_fn)
-
-    doc = builder.build()
-
-    # Step 6: Save
+    # Step 5: Generate each service bulletin
     output_dir = Path("output")
     output_dir.mkdir(exist_ok=True)
 
-    if args.output:
-        output_path = Path(args.output)
-    else:
-        date_str = target_date.strftime("%Y-%m-%d")
-        title_slug = schedule.title
-        output_path = output_dir / f"{date_str} - {title_slug} - 9 am - Bulletin.docx"
+    for service_time in services:
+        print(f"\n  === Assembling {service_time} bulletin ===")
 
-    # Remove the old file first so macOS extended attributes (like
-    # com.apple.quarantine set by Word) don't persist and cause Word
-    # to open the regenerated file in Protected View / read-only mode.
-    if output_path.exists():
-        output_path.unlink()
+        # Select the appropriate music data for this service
+        if service_time == "9 am":
+            music_data = music_9am
+        elif service_time == "11 am":
+            music_data = music_11am_slots
+        else:
+            music_data = None
 
-    doc.save(str(output_path))
-    print(f"\nBulletin saved to: {output_path}")
+        builder = BulletinBuilder(
+            target_date=target_date,
+            sheet_data=sheet_data,
+            music_data=music_data,
+            scripture_readings=scripture_readings,
+            song_lookup_fn=song_lookup_fn,
+            parish_ministries=parish_ministries,
+            service_time=service_time,
+        )
 
-    if builder._missing_songs:
-        print("\nWarning: Missing song lyrics for:")
-        for s in builder._missing_songs:
-            print(f"  - {s}")
-        print("These will show as [Song lyrics not found] in the bulletin.")
+        builder.resolve_all(prompt_fn=prompt_fn)
+        doc = builder.build()
+
+        # Determine output path
+        if args.output and len(services) == 1:
+            output_path = Path(args.output)
+        else:
+            date_str = target_date.strftime("%Y-%m-%d")
+            title_slug = schedule.title
+            output_path = output_dir / f"{date_str} - {title_slug} - {service_time} - Bulletin.docx"
+
+        # Remove old file first (macOS quarantine attribute workaround)
+        if output_path.exists():
+            output_path.unlink()
+
+        doc.save(str(output_path))
+        print(f"  Saved: {output_path}")
+
+        if builder._missing_songs:
+            print(f"  Warning: Missing song lyrics for:")
+            for s in builder._missing_songs:
+                print(f"    - {s}")
+
+    print("\nDone.")
 
 
 if __name__ == "__main__":

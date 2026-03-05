@@ -138,12 +138,12 @@ def add_hymn_header(doc: Document, title: str, tune_name: str = None,
         run.italic = True
     if hymnal_number:
         # Right-align hymnal ref using the Body style's right tab stop
-        ref_text = f"#{hymnal_number}"
-        if hymnal_name:
-            ref_text += f" ({hymnal_name})"
+        # The number is roman, only the hymnal name is italic
         p.add_run("\t")
-        run = p.add_run(ref_text)
-        run.italic = True
+        p.add_run(f"#{hymnal_number}")
+        if hymnal_name:
+            run = p.add_run(f" ({hymnal_name})")
+            run.italic = True
     return p
 
 
@@ -369,19 +369,28 @@ def add_scripture_text(doc: Document, text: str, style: str = "Reading/Gospel Te
     return p
 
 
-def _add_text_runs(paragraph, text: str):
+def _add_text_runs(paragraph, text: str, bold: bool = False):
     """Add text as runs, rendering 'LORD' as small-caps 'Lord'.
 
     In the NRSV, 'LORD' (all caps) represents the divine name (YHWH).
     Liturgical convention renders this as small-caps Lord.
+
+    When *bold* is True, all runs are set to bold with the bold font,
+    used for alternating psalm verses in responsive readings.
     """
     parts = re.split(r'\bLORD\b', text)
     for i, part in enumerate(parts):
         if i > 0:
             run = paragraph.add_run("Lord")
             run.font.small_caps = True
+            if bold:
+                run.bold = True
+                run.font.name = FONT_BODY_BOLD
         if part:
-            paragraph.add_run(part)
+            run = paragraph.add_run(part)
+            if bold:
+                run.bold = True
+                run.font.name = FONT_BODY_BOLD
 
 
 def _add_verse_numbered_text(paragraph, text: str):

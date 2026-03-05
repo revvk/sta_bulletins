@@ -76,12 +76,22 @@ def add_word_of_god(doc: Document, rules: SeasonalRules, data: dict):
     add_spacer(doc)
     _add_body_with_amen(doc, data["collect_text"])
 
-    # --- Be seated for readings ---
+    # --- Be seated for readings / Children ---
     add_spacer(doc)
-    add_introductory_rubric(doc, "Be seated.")
-
-    # --- Children's Sermon ---
-    add_heading2(doc, "Children's Sermon")
+    service_time = data.get("service_time", "9 am")
+    if service_time == "11 am":
+        # Children's Church rubric (replaces Children's Sermon heading)
+        add_introductory_rubric(
+            doc,
+            "Elementary-aged children are invited to attend Children\u2019s Church. "
+            "They will rejoin the service during The Peace."
+        )
+        add_spacer(doc)
+        add_introductory_rubric(doc, "Be seated.")
+    else:
+        add_introductory_rubric(doc, "Be seated.")
+        # --- Children's Sermon ---
+        add_heading2(doc, "Children\u2019s Sermon")
 
     # --- First Reading ---
     add_spacer(doc)
@@ -233,12 +243,21 @@ def _add_confession(doc: Document, prayers: dict):
     add_rubric(doc, "The Priest says the Absolution.")
     abs_text = prayers["absolution"]
     p = doc.add_paragraph(style="Body")
-    # Insert cross at "forgive you all your sins"
+    # Insert cross at "forgive you all your sins" and bold the final "Amen."
     if "forgive you" in abs_text:
         before, after = abs_text.split("forgive you", 1)
         p.add_run(before)
         add_cross_symbol(p)
-        run = p.add_run(" forgive you" + after)
+        # Split off final "Amen." to bold it
+        remainder = " forgive you" + after
+        if remainder.rstrip().endswith("Amen."):
+            body_part = remainder.rstrip()[:-5]
+            p.add_run(body_part)
+            run = p.add_run("Amen.")
+            run.bold = True
+            run.font.name = FONT_BODY_BOLD
+        else:
+            p.add_run(remainder)
     else:
         p.add_run(abs_text)
 
@@ -283,14 +302,33 @@ def _add_psalm(doc: Document, reference: str, rubric: str, lines):
     We render each verse as one "Psalm"-styled paragraph, using
     line breaks (not new paragraphs) within a verse so the hanging
     indent applies to the second-half lines.
+
+    When the psalm is read in unison, all verses are bold (the whole
+    congregation reads together).  When read responsively, antiphonally,
+    or alternating, verses alternate between regular and bold — the
+    congregation reads the bold verses.
     """
     add_heading2(doc, reference)
 
     if rubric:
         add_rubric(doc, rubric)
 
+    # Determine bold pattern from the rubric
+    rubric_lower = rubric.lower() if rubric else ""
+    alternating = any(kw in rubric_lower for kw in
+                      ("responsiv", "antiphon", "alternating", "men and women",
+                       "half verse"))
+    # Unison = all bold (everyone reads together)
+    all_bold = "unison" in rubric_lower
+
     if isinstance(lines, list):
-        for verse_text in lines:
+        for verse_idx, verse_text in enumerate(lines):
+            if all_bold:
+                bold_verse = True
+            elif alternating:
+                bold_verse = (verse_idx % 2 == 1)
+            else:
+                bold_verse = False
             p = doc.add_paragraph(style="Psalm")
             if "\n" in verse_text:
                 sub_lines = verse_text.split("\n")
@@ -298,13 +336,19 @@ def _add_psalm(doc: Document, reference: str, rubric: str, lines):
                     if i > 0:
                         run = p.add_run()
                         run.add_break()
-                    _add_text_runs(p, sub)
+                    _add_text_runs(p, sub, bold=bold_verse)
             else:
-                _add_text_runs(p, verse_text)
+                _add_text_runs(p, verse_text, bold=bold_verse)
     elif hasattr(lines, "paragraphs"):
-        for para in lines.paragraphs:
+        for verse_idx, para in enumerate(lines.paragraphs):
+            if all_bold:
+                bold_verse = True
+            elif alternating:
+                bold_verse = (verse_idx % 2 == 1)
+            else:
+                bold_verse = False
             p = doc.add_paragraph(style="Psalm")
-            _add_text_runs(p, para)
+            _add_text_runs(p, para, bold=bold_verse)
 
 
 def _add_gospel(doc: Document, reference: str, book: str, reading):
@@ -441,12 +485,28 @@ def _add_advent_wreath(doc: Document, data: dict):
 
 
 def _add_song_smart(doc: Document, song_data: dict | None):
-    """Add a song, choosing two-column layout for 3+ verse songs."""
+    """Add a song, choosing two-column layout for 3+ verse songs.
+
+    If the song has no sections (hymnal-only), renders just the header
+    line (title + hymnal reference) without wrapping in a lyric table.
+    """
     if not song_data:
         add_body(doc, "[Song lyrics not found]")
         return
 
     sections = song_data.get("sections", [])
+
+    # Hymnal-only: just the header line, no lyrics
+    if not sections:
+        add_hymn_header(
+            doc,
+            song_data["title"],
+            song_data.get("tune_name"),
+            song_data.get("hymnal_number"),
+            song_data.get("hymnal_name"),
+        )
+        return
+
     max_line_len = max(
         (len(line) for s in sections for line in s["lines"]),
         default=0

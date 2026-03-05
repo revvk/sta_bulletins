@@ -1,23 +1,18 @@
-This bulletin creation project is coming along well. The 9 am bulletin needs the following fixes.  
+The bulletins for both the 9 am and 11 am services are now mostly being generated correctly! 
 
-# Footer
-* Within the bulletin text (so not the front or back cover), we should have a footer. Page numbering should start from 1 in this section, which will be the second page of the overall document. The footer is different for odd and even numbered pages: 
-** Odd pages: The page number should be in the left corner of the footer of an odd page. On the inside (right) margin of the odd page should be “Month DD, YYYY | Service Time” 
-** Even pages: The page number should be in the right corner of the footer of an even page. On the inside (left) margin of the even pages should be the “Title of the Day” (same as the Title used on the front cover). The font across the footer should be Gill Sans Nova, Light, 9 pt.
-# Rubric
-* Between the Psalm heading and the text of the Psalm, there should be a rubric depending on how the Psalm is read:
-** Read in unison.
-** Read responsively by whole verse.
-** Read responsively by half verse.
-** Read antiphonally.
-** Read alternating between men and women.
-* Immediately before closing prayer, we should have a “Please stand.” rubric.
-* The rubric at the Dismissal should read “The Deacon or a Priest dismisses the people with these words”
-# Formatting
-* All of the Adobe Garamond Pro bold text is actually Adobe Garamond Pro Regular that’s been artificially bolded, rather than the Adobe Garamond Pro font in its bold weight, which is what it should be. I’m not sure why that happens (the same error doesn’t happen with the Italic), but Word should be using the proper weight font for Bold.
-* At the end of the Penitential Order scripture sentence, let’s print the verse reference (eg: Mark 12:29-31) in italics within parentheses.
-* The preacher’s name should not be in bold.
-* In the case of this Lenten preface (Paschal preparation), if we merge the preface to the preceding line, we create a run-on sentence. It should be one paragraph, but like this: “Creator of heaven and earth. You bid…”
-* In the Prayers of the People, after the cross there is an extra space before the comma.
-* In the right column of 2 column song layouts, we should have a new lyric style that has a hanging indent of .38 rather than .18.
-* The rubric after the Offertory heading should read: “Please place your offerings and Connection Cards in the offering plates as they are passed. You can also easily give online at standrewsmckinney.org/give or by scanning the QR code. If you are online with us, please also fill out a digital Connection Card at standrewsmckinney.org/connect.” Ideally those URL’s should be in Gill Sans Nova - Light rather than in the Rubric default, Adobe Garamond Pro - Italic. There also needs to be a QR code. It can be anchored to the text at the beginning of the rubric, but left 5.75” on the page. Text wrapping should be tight. .75” x .75”. The QR code is the same as the QR code image embedded in the front_cover.docx file.
+There are some small issues outstanding:
+# 11 am: 
+* The lyrics didn't print with the Kyrie. Even at 11 am, we should print the lyrics to this piece of service music. (Service music generally should have the lyrics printed, even if we have the hymnal reference).
+* In the same spot, the title “Lord, have mercy upon us (Willan) was missing the parentheses around Willan that are in the YAML file? Where did they go?
+* The opposite problem also happened. The lyrics to ‘Come thou fount of every blessing’ printed? That's song is in the hymnal, and so it should just have the First line / title and the hymnal reference. 
+# Both services: 
+* The Oremus text uses British spellings — i.e. Saviour instead of Savior. We don’t need a perfect solution, but can we find a list of most common British vs American spellings and run the texts through a script to Americanize them?
+* Different Versions of the Prayers of the People
+** We need to a way to have different versions of the Prayers of the People. For example, there might be several versions of Forms III, IV, V: One that we use regularly, one that we use while the bishop has asked us to pray for immigrants, and one we use at Hidden Springs. I’m happy to add versions to the YAML file for the prayers, but we’ll need some way to handle that (and to prompt for it in the bulletin creation project).
+
+When these todos are taken care of, we’ll move on to the 8 am bulletin generation. 
+
+# Remember: 
+All the formatting styles are consistent across the bulletins, the front and back covers are the same, and the propers (which is the Episcopal word for the readings and prayers that are assigned for that day) are the same. 
+
+Architect the code so that as much of the code base can be reused as possible. We will need to be able to specify when running generate.py which bulletin to generate, or generate all of them.

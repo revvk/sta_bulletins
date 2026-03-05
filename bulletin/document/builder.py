@@ -27,7 +27,8 @@ class BulletinBuilder:
 
     Usage:
         builder = BulletinBuilder(target_date, sheet_data, music_data,
-                                  scripture_data, song_lookup_fn)
+                                  scripture_data, song_lookup_fn,
+                                  service_time="9 am")
         builder.resolve_interactive()  # prompts user for choices
         doc = builder.build()
         doc.save("output/bulletin.docx")
@@ -35,15 +36,16 @@ class BulletinBuilder:
 
     def __init__(self, target_date: date, sheet_data, music_data,
                  scripture_readings: dict, song_lookup_fn,
-                 parish_ministries: str):
+                 parish_ministries: str, service_time: str = "9 am"):
         """
         Args:
             target_date: The Sunday date.
             sheet_data: BulletinData from google_sheet module.
-            music_data: Music9amEntry from music_9am module (or None).
+            music_data: ServiceMusic9am (has .slots) or list[MusicSlot], or None.
             scripture_readings: Dict of {ref: ScriptureReading} from scripture module.
             song_lookup_fn: Callable(identifier, service) -> song_data dict or None.
             parish_ministries: Formatted ministry string for POP.
+            service_time: "9 am" or "11 am" (default "9 am").
         """
         self.target_date = target_date
         self.sheet = sheet_data
@@ -51,6 +53,7 @@ class BulletinBuilder:
         self.scripture = scripture_readings
         self.song_lookup = song_lookup_fn
         self.parish_ministries = parish_ministries
+        self.service_time = service_time
 
         # Derived data
         self.schedule = sheet_data.schedule
@@ -71,7 +74,8 @@ class BulletinBuilder:
         self.penitential_sentence_ref = ""
         self.blessing_text = ""
         self.eucharistic_prayer = "A"
-        self.post_communion_prayer = "a"
+        self.post_communion_prayer = self._resolve_closing_prayer()
+        self.pop_form_key = None  # Resolved in resolve_all()
         self._missing_songs = []
 
     def resolve_all(self, prompt_fn=None):
@@ -86,13 +90,14 @@ class BulletinBuilder:
         self._resolve_penitential_sentence(prompt_fn)
         self._resolve_advent_wreath(prompt_fn)
         self._resolve_blessing()
+        self._resolve_pop_version(prompt_fn)
         self._resolve_songs(prompt_fn)
 
     def build(self) -> "Document":
         """Build and return the complete document."""
         # Format the date nicely
         date_str = self.target_date.strftime("%B %-d, %Y")
-        service_time = "9 am"
+        service_time = self.service_time
 
         # Start from the front-cover template (replaces placeholders)
         doc = load_front_cover(
@@ -112,7 +117,9 @@ class BulletinBuilder:
         add_introductory_rubric(
             doc,
             "Once the Prelude begins, please refrain from further visiting "
-            "and conversation as we prepare our hearts and thoughts for worship."
+            "and conversation as we prepare our hearts and thoughts for worship. "
+            "Prayers before worship can be found in the Book of Common Prayer, "
+            "p. 833-35."
         )
         add_spacer(doc)
         add_heading2(doc, "Prelude")
@@ -142,6 +149,20 @@ class BulletinBuilder:
         """Determine which Eucharistic Prayer to use from the sheet."""
         ep = self.schedule.eucharistic_prayer or "A"
         self.eucharistic_prayer = ep.strip().upper()
+
+    def _resolve_closing_prayer(self) -> str:
+        """Map the rota's closing_prayer field to prayer key 'a' or 'b'.
+
+        The sheet uses:
+          'Almighty'    → prayer_b (Almighty and everliving God)
+          'Eternal God' → prayer_a (Eternal God, heavenly Father)
+        Default: 'a'
+        """
+        raw = (self.schedule.closing_prayer or "").strip().lower()
+        if raw.startswith("almighty"):
+            return "b"
+        # "eternal god", "eternal", or empty → default
+        return "a"
 
     def _resolve_proper_preface(self, prompt_fn):
         """Resolve the proper preface text."""
@@ -271,14 +292,25 @@ class BulletinBuilder:
     def _resolve_songs(self, prompt_fn):
         """Look up all song lyrics from music data."""
         self._missing_songs = []
+        service_key = self.service_time  # e.g. "9 am" or "11 am"
 
-        if self.music:
-            # Map music slots to bulletin slots
-            for slot in self.music.slots:
-                song = self.song_lookup(slot.song_title, "9 am")
-                if not song and slot.song_title:
-                    self._missing_songs.append(
-                        f"{slot.service_part}: {slot.song_title}")
+        slots = self._get_music_slots()
+        for slot in slots:
+            if not slot.song_title:
+                continue
+            # For 11am, skip the Anthem slot (handled as raw title, not song)
+            if self.service_time == "11 am" and slot.service_part.lower() == "anthem":
+                continue
+            song = self.song_lookup(slot.song_title, service_key)
+            if not song:
+                # For 11am, hymnal-only songs are expected to have no lyrics
+                if self.service_time == "11 am":
+                    from bulletin.sources.music_11am import parse_11am_identifier
+                    parsed = parse_11am_identifier(slot.song_title)
+                    if parsed["hymnal_number"]:
+                        continue  # hymnal song — no lyrics expected
+                self._missing_songs.append(
+                    f"{slot.service_part}: {slot.song_title}")
 
         if self._missing_songs and prompt_fn:
             prompt_fn(
@@ -286,6 +318,78 @@ class BulletinBuilder:
                 "\n".join(f"  - {s}" for s in self._missing_songs),
                 ["Continue anyway"]
             )
+
+    def _resolve_pop_version(self, prompt_fn):
+        """Resolve which Prayers of the People form version to use.
+
+        The Google Sheet may specify a version in parentheses, e.g.,
+        "III (immigration)". If no version is specified and there are
+        alternative versions available in the YAML, the user is prompted
+        to choose.
+
+        Versioned forms are stored as separate top-level keys in the YAML:
+          form_III          (default)
+          form_III_immigration
+          form_III_hidden_springs
+        """
+        pop_forms = load_pop_forms()
+        key = self._get_pop_form_key()
+
+        # If the exact key exists, use it directly
+        if key in pop_forms:
+            self.pop_form_key = key
+        else:
+            # Versioned key doesn't exist in YAML — fall back to base form
+            # Base key is the part before any version suffix (e.g., form_III)
+            base_key = key
+            for prefix in ("form_VI", "form_IV", "form_V", "form_III",
+                           "form_II", "form_I"):
+                if key.startswith(prefix + "_") or key == prefix:
+                    base_key = prefix
+                    break
+            self.pop_form_key = base_key if base_key in pop_forms else "form_I"
+
+        # Check if there are versioned alternatives for the resolved base form
+        # Only applies to standard forms (form_I through form_VI)
+        base = self.pop_form_key
+        # If pop_form_key is itself a version (e.g., form_III_immigration),
+        # extract the base for scanning alternatives
+        for prefix in ("form_VI", "form_IV", "form_V", "form_III",
+                       "form_II", "form_I"):
+            if base.startswith(prefix):
+                base = prefix
+                break
+
+        version_keys = sorted(
+            k for k in pop_forms
+            if k.startswith(base + "_") and k != base
+        )
+
+        if not version_keys or not prompt_fn:
+            return
+
+        # Build options for the user
+        base_title = pop_forms[base].get("title", base)
+        options = [f"{base_title} (default)"]
+        for vk in version_keys:
+            vt = pop_forms[vk].get("title", vk)
+            options.append(vt)
+
+        answer = prompt_fn(
+            f"Multiple versions of {base_title} are available:", options
+        )
+
+        # Match user's answer to a version
+        if answer:
+            if "default" in answer:
+                self.pop_form_key = base
+                return
+            for vk in version_keys:
+                vt = pop_forms[vk].get("title", vk)
+                if vt in answer or vk in answer:
+                    self.pop_form_key = vk
+                    return
+        # Keep current selection (base or sheet-specified version)
 
     # ------------------------------------------------------------------
     # Data preparation for section modules
@@ -331,13 +435,17 @@ class BulletinBuilder:
         from bulletin.config import PREACHER_NAMES
         preacher_short = ""
         if self.clergy:
-            preacher_short = self.clergy.preacher_9am or ""
+            if self.service_time == "11 am":
+                preacher_short = self.clergy.preacher_11am or ""
+            else:
+                preacher_short = self.clergy.preacher_9am or ""
         preacher = PREACHER_NAMES.get(preacher_short.strip(), preacher_short)
 
         # POP elements
         pop_elements = self._prepare_pop_elements()
 
         return {
+            "service_time": self.service_time,
             "processional": processional,
             "song_of_praise": song_of_praise,
             "sequence_hymn": sequence,
@@ -362,7 +470,12 @@ class BulletinBuilder:
     def _prepare_holy_communion_data(self) -> dict:
         """Prepare the data dict for add_holy_communion."""
         offertory = self._lookup_slot("Offertory")
-        sanctus = self._lookup_slot("Sanctus")
+        # At 11am, always use the text Sanctus (with cross) rather than
+        # a hymnal reference — the setting doesn't matter for the bulletin.
+        if self.service_time == "11 am":
+            sanctus = None
+        else:
+            sanctus = self._lookup_slot("Sanctus")
         closing = self._lookup_slot("Recessional")
         fraction = self._lookup_slot("Fraction") if self.rules.use_fraction_anthem else None
 
@@ -381,8 +494,19 @@ class BulletinBuilder:
         deacon_text, people_text = get_dismissal_text(
             dismissal_num, self.rules.dismissal_has_alleluia)
 
+        # Offertory anthem title (11am only — raw text from the Anthem field)
+        offertory_anthem_title = None
+        if self.service_time == "11 am":
+            slots = self._get_music_slots()
+            for slot in slots:
+                if slot.service_part and slot.service_part.lower() == "anthem":
+                    offertory_anthem_title = slot.song_title
+                    break
+
         return {
+            "service_time": self.service_time,
             "offertory_song": offertory,
+            "offertory_anthem_title": offertory_anthem_title,
             "sanctus_song": sanctus,
             "communion_songs": comm_songs,
             "closing_hymn": closing,
@@ -397,15 +521,73 @@ class BulletinBuilder:
             "include_lev": True,
         }
 
-    def _lookup_slot(self, slot_name: str) -> dict | None:
-        """Look up a song from the music data for a given service slot."""
-        if not self.music:
-            return None
+    def _get_music_slots(self) -> list:
+        """Return the list of MusicSlot objects regardless of music data format.
 
-        for slot in self.music.slots:
+        Handles both ServiceMusic9am (has .slots) and list[MusicSlot].
+        """
+        if not self.music:
+            return []
+        if hasattr(self.music, "slots"):
+            return self.music.slots
+        if isinstance(self.music, list):
+            return self.music
+        return []
+
+    def _lookup_slot(self, slot_name: str) -> dict | None:
+        """Look up a song from the music data for a given service slot.
+
+        For 11am services, distinguishes between:
+          - Service music (S-prefix hymnal numbers like S91, S129):
+            prints full lyrics from the YAML.
+          - Regular hymns (all-digit hymnal numbers like 686, 473):
+            renders header-only (title + hymnal reference, no lyrics).
+          - Non-hymnal songs (no hymnal number):
+            prints full lyrics from the YAML.
+
+        When no YAML entry is found for an 11am song with a hymnal number,
+        constructs a minimal stub dict for header-only rendering.
+        """
+        slots = self._get_music_slots()
+        service_key = self.service_time
+
+        for slot in slots:
             if slot.service_part and slot.service_part.lower() == slot_name.lower():
                 if slot.song_title:
-                    return self.song_lookup(slot.song_title, "9 am")
+                    song = self.song_lookup(slot.song_title, service_key)
+                    if song:
+                        # For 11am: regular hymns → header only
+                        if self.service_time == "11 am":
+                            hymnal_num = str(song.get("hymnal_number", "") or "")
+                            # All-digit number = regular hymn → strip lyrics
+                            if hymnal_num and hymnal_num.isdigit():
+                                return {
+                                    "title": song["title"],
+                                    "hymnal_number": hymnal_num,
+                                    "hymnal_name": song.get("hymnal_name"),
+                                    "tune_name": song.get("tune_name"),
+                                    "sections": [],  # header only
+                                }
+                            # S-prefix or no number → keep full lyrics
+                        return song
+                    # For 11am: construct a hymnal-only stub if it has a hymnal number
+                    if self.service_time == "11 am":
+                        from bulletin.sources.music_11am import parse_11am_identifier
+                        parsed = parse_11am_identifier(slot.song_title)
+                        if parsed["hymnal_number"]:
+                            # Include setting in title with parentheses if available
+                            title = parsed["title"] or ""
+                            setting = parsed.get("setting")
+                            if setting and title:
+                                title = f"{title} ({setting})"
+                            return {
+                                "title": title,
+                                "hymnal_number": parsed["hymnal_number"],
+                                "hymnal_name": parsed["hymnal_name"],
+                                "tune_name": None,
+                                "sections": [],  # empty → header only
+                            }
+                    return None
         return None
 
     def _get_psalm_rubric(self) -> str:
@@ -439,8 +621,8 @@ class BulletinBuilder:
         staff = load_staff()
         liturgical_names = staff.get("liturgical_names", {})
 
-        # Determine which form to use
-        form_key = self._get_pop_form_key()
+        # Use the version resolved during resolve_all(), or fall back
+        form_key = self.pop_form_key or self._get_pop_form_key()
         form = pop_forms.get(form_key)
 
         if not form:
@@ -479,7 +661,18 @@ class BulletinBuilder:
         return result
 
     def _get_pop_form_key(self) -> str:
-        """Map the sheet's POP form designation to a YAML key."""
+        """Map the sheet's POP form designation to a YAML key.
+
+        Handles:
+          - "VI (w/ confession)" → form_VI (special case via rules)
+          - "III" → form_III
+          - "III (immigration)" → form_III_immigration (versioned form)
+          - Advent forms detected by season
+
+        Versioned forms use a suffix: form_III_immigration,
+        form_V_hidden_springs, etc. The version name is derived from
+        any parenthetical in the sheet that isn't "w/ confession".
+        """
         form = (self.schedule.pop_form or "").strip()
 
         # Check for BCP Form VI w/ confession (handled in YAML under form_VI)
@@ -506,6 +699,16 @@ class BulletinBuilder:
             "4": "form_IV", "5": "form_V", "6": "form_VI",
         }
 
-        # Extract just the Roman numeral from the form string
+        # Extract base form and optional version from parenthetical
+        paren_match = re.search(r'\(([^)]+)\)', form)
+        version_suffix = ""
+        if paren_match:
+            paren_content = paren_match.group(1).strip().lower()
+            # "w/ confession" and "with confession" are handled by rules
+            if paren_content not in ("w/ confession", "with confession"):
+                version_suffix = "_" + paren_content.replace(" ", "_")
+
         form_clean = form.split("(")[0].strip()
-        return roman_map.get(form_clean, "form_I")
+        base_key = roman_map.get(form_clean, "form_I")
+
+        return base_key + version_suffix

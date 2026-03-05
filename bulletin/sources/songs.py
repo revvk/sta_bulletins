@@ -6,7 +6,13 @@ Songs are identified in the Google Sheet's Service Music by either:
   - Title only: "Everlasting God"
   - Special identifiers: "Gloria", "Doxology"
 
-This module loads the YAML files and provides lookup by various identifiers.
+This module loads the unified songs.yaml file and provides lookup by various
+identifiers, filtering by service when applicable.
+
+Songs in the YAML may have a `services` field:
+  - services: "9am"  -> only for 9am service
+  - services: "11am" -> only for 11am service
+  - no services field -> available for both services
 """
 
 import re
@@ -17,31 +23,42 @@ import yaml
 
 
 DATA_DIR = Path(__file__).parent.parent / "data" / "hymns"
+SONGS_FILE = DATA_DIR / "songs.yaml"
+
+# Cache: all songs loaded once
+_all_songs: Optional[list[dict]] = None
 
 
-def _load_songs(service: str = "9am") -> list[dict]:
-    """Load songs from YAML file for the given service."""
-    # Normalize: "9 am" -> "9am", "11 am" -> "11am"
-    service = service.replace(" ", "")
-    filepath = DATA_DIR / f"songs_{service}.yaml"
-    if not filepath.exists():
-        return []
-    with open(filepath, encoding="utf-8") as f:
-        return yaml.safe_load(f) or []
-
-
-# Cache loaded songs
-_song_cache: dict[str, list[dict]] = {}
+def _load_all_songs() -> list[dict]:
+    """Load all songs from the unified YAML file."""
+    global _all_songs
+    if _all_songs is None:
+        if not SONGS_FILE.exists():
+            _all_songs = []
+        else:
+            with open(SONGS_FILE, encoding="utf-8") as f:
+                _all_songs = yaml.safe_load(f) or []
+    return _all_songs
 
 
 def _get_songs(service: str = "9am") -> list[dict]:
-    """Get songs with caching."""
-    if service not in _song_cache:
-        _song_cache[service] = _load_songs(service)
-    return _song_cache[service]
+    """Get songs available for the given service.
+
+    A song is available for a service if:
+      - It has no 'services' field (available for both), or
+      - Its 'services' field matches the requested service
+    """
+    # Normalize: "9 am" -> "9am", "11 am" -> "11am"
+    service = service.replace(" ", "")
+    all_songs = _load_all_songs()
+    return [
+        s for s in all_songs
+        if "services" not in s or s["services"] == service
+    ]
 
 
-def lookup_song(identifier: str, service: str = "9am") -> Optional[dict]:
+def lookup_song(identifier: str, service: str = "9am",
+                _in_fallback: bool = False) -> Optional[dict]:
     """Look up a song by various identifier formats.
 
     The identifier may be:
@@ -74,6 +91,12 @@ def lookup_song(identifier: str, service: str = "9am") -> Optional[dict]:
         if title_part and song["title"].lower() == title_part.lower():
             return song
 
+    # Try identifier/alias match (e.g., "Kyrie" → "Lord have mercy upon us")
+    for song in songs:
+        for alias in song.get("identifiers", []):
+            if alias.lower() == id_lower:
+                return song
+
     # Try starts-with match
     for song in songs:
         if song["title"].lower().startswith(id_lower):
@@ -86,9 +109,12 @@ def lookup_song(identifier: str, service: str = "9am") -> Optional[dict]:
         if id_lower in song["title"].lower():
             return song
 
-    # Also try the 11am songs if not found in the primary service
-    if service != "11am":
-        result = lookup_song(identifier, service="11am")
+    # Cross-service fallback: if not found in the primary service,
+    # try the other service's songs (lyrics are shared when needed)
+    if not _in_fallback:
+        svc = service.replace(" ", "")  # normalize "11 am" → "11am"
+        fallback = "9am" if svc == "11am" else "11am"
+        result = lookup_song(identifier, service=fallback, _in_fallback=True)
         if result:
             return result
 
@@ -97,4 +123,5 @@ def lookup_song(identifier: str, service: str = "9am") -> Optional[dict]:
 
 def clear_cache():
     """Clear the song cache (useful for testing)."""
-    _song_cache.clear()
+    global _all_songs
+    _all_songs = None

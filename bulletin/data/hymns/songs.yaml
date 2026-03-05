@@ -1,4 +1,34 @@
 - title: 10,000 Reasons
+  services: 9am
+  sections:
+  - type: chorus
+    lines:
+    - Bless the Lord, O my soul, O my soul;
+    - Worship his holy name.
+    - Sing like never before, O my soul;
+    - I'll worship your holy name.
+  - type: verse
+    lines:
+    - The sun comes up,
+    - it's a new day dawning,
+    - it's time to sing your song again.
+    - Whatever may pass,
+    - and whatever lies before me,
+    - let me be singing when the evening comes.
+  - type: verse
+    lines:
+    - You're rich in love, and you're slow to anger.
+    - Your name is great, and your heart is kind.
+    - For all your goodness, I will keep on singing;
+    - Ten thousand reasons for my heart to find.
+  - type: verse
+    lines:
+    - And on that day, when my strength is failing,
+    - the end draws near, and my time has come;
+    - Still, my soul will sing your praise unending
+    - ten thousand years, and then forevermore!
+- title: 10,000 Reasons
+  services: 11am
   sections:
   - type: chorus
     lines:
@@ -27,6 +57,7 @@
     - Still, my soul will sing your praise unending
     - ten thousand years, and then forevermore!
 - title: Above All
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -48,6 +79,7 @@
     - you took the fall, and thought of me,
     - above all.
 - title: Ah, holy Jesus, how hast thou offended
+  services: 9am
   hymnal_number: '158'
   hymnal_name: Hymnal 1982
   sections:
@@ -82,6 +114,7 @@
     - think on thy pity and thy love unswerving,
     - not my deserving.
 - title: All creatures of our God and King
+  services: 9am
   hymnal_number: '400'
   hymnal_name: Hymnal 1982
   sections:
@@ -149,6 +182,7 @@
     - O praise him, O praise him,
     - Alleluia, alleluia, alleluia!
 - title: All glory, laud, and honor
+  services: 9am
   hymnal_number: '154'
   hymnal_name: Hymnal 1982
   sections:
@@ -189,6 +223,7 @@
     - who in all good delightest,
     - thou good and gracious King.
 - title: All hail the power of Jesus' Name
+  services: 9am
   hymnal_number: '450'
   hymnal_name: Hymnal 1982
   sections:
@@ -241,6 +276,7 @@
     - to him all majesty ascribe,
     - and crown him Lord of all!
 - title: All the Poor and Powerless
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -266,6 +302,7 @@
     - go on an tell it to the masses
     - that he is God.
 - title: All Things Rise
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -314,6 +351,7 @@
     - you raise in promise.
     - Your beauty arches above it all.
 - title: All Who Are Thirsty
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -341,6 +379,7 @@
     - as deep cries out to deep,
     - we sing
 - title: Alleluia He is Coming
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -376,31 +415,8 @@
     - I looked up
     - and I saw my Lord a - rising
     - from the grave.
-- title: Alleluia, alleluia! Give thanks to the risen Lord
-  sections:
-  - type: chorus
-    lines:
-    - 'Alleluia, alleluia, '
-    - give thanks to the Risen Lord,
-    - alleluia, alleluia,
-    - give praise to his name.
-  - type: verse
-    lines:
-    - Jesus is Lord of all the earth,
-    - he is the King of creation.
-  - type: verse
-    lines:
-    - Spread the good news o’er all the earth,
-    - Jesus has died and has risen.
-  - type: verse
-    lines:
-    - We have been crucified with Christ.
-    - Now we shall live forever.
-  - type: verse
-    lines:
-    - Come let us praise the Living God,
-    - joyfully sing to our Savior.
 - title: Alleluia! sing to Jesus!
+  services: 9am
   hymnal_number: '460'
   hymnal_name: Hymnal 1982
   sections:
@@ -454,7 +470,33 @@
     - thunder like a mighty flood;
     - Jesus out of every nation
     - hath redeemed us by his blood.
+- title: Alleluia, alleluia! Give thanks to the risen Lord
+  services: 9am
+  sections:
+  - type: chorus
+    lines:
+    - 'Alleluia, alleluia, '
+    - give thanks to the Risen Lord,
+    - alleluia, alleluia,
+    - give praise to his name.
+  - type: verse
+    lines:
+    - Jesus is Lord of all the earth,
+    - he is the King of creation.
+  - type: verse
+    lines:
+    - Spread the good news o’er all the earth,
+    - Jesus has died and has risen.
+  - type: verse
+    lines:
+    - We have been crucified with Christ.
+    - Now we shall live forever.
+  - type: verse
+    lines:
+    - Come let us praise the Living God,
+    - joyfully sing to our Savior.
 - title: Amazing grace!
+  services: 9am
   hymnal_number: '671'
   hymnal_name: Hymnal 1982
   sections:
@@ -489,6 +531,7 @@
     - we've no less days to sing God's praise
     - than when we'd first begun.
 - title: Ancient Words
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -521,6 +564,7 @@
     - Hear them cry through the years;
     - Heed these words and hold them dear.
 - title: Angels, from the realms of glory
+  services: 9am
   hymnal_number: '93'
   hymnal_name: Hymnal 1982
   sections:
@@ -557,6 +601,7 @@
     - come and worship, come and worship
     - worship Christ, the newborn King.
 - title: As The Deer
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -583,6 +628,7 @@
     - You alone are the read joy giver
     - and the apple of my eye.
 - title: As We Seek Your Face
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -603,6 +649,7 @@
     - we cry, “Holy, holy,”
     - at your feet we fall.
 - title: At the Table
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -649,6 +696,7 @@
     - My Father run to me
     - Singing oh, my child
 - title: Awake, arise, lift up your voice
+  services: 9am
   hymnal_number: '212'
   hymnal_name: Hymnal 1982
   sections:
@@ -682,7 +730,30 @@
     - by seraphim adored!
     - O Solitude again command
     - your host from heaven restored!
+- title: Be
+  services: 9am
+  tune_name: thou my vision488 (Hymnal 1982)
+  sections:
+  - type: verse
+    lines:
+    - Be thou my vision, O Lord of my heart;
+    - all else be nought to me, save that thou art—
+    - thou my best thought, by day or by night,
+    - waking or sleeping, thy presence my light.
+  - type: verse
+    lines:
+    - Be thou my wisdom, and thou my true word;
+    - I ever with thee and thou with me, Lord;
+    - thou my great Father; thine own may I be;
+    - thou in me dwelling, and I one with thee.
+  - type: verse
+    lines:
+    - High King of heaven, when victory is won,
+    - may I reach heaven's joys, bright heaven's Sun!
+    - Heart of my heart, whatever befall,
+    - still be my vision, O Ruler of all.
 - title: Be Still
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -714,28 +785,8 @@
     - in faith receive from him.
     - Be still, for the power of the Lord
     - is moving in this place.
-- title: Be
-  tune_name: thou my vision488 (Hymnal 1982)
-  sections:
-  - type: verse
-    lines:
-    - Be thou my vision, O Lord of my heart;
-    - all else be nought to me, save that thou art—
-    - thou my best thought, by day or by night,
-    - waking or sleeping, thy presence my light.
-  - type: verse
-    lines:
-    - Be thou my wisdom, and thou my true word;
-    - I ever with thee and thou with me, Lord;
-    - thou my great Father; thine own may I be;
-    - thou in me dwelling, and I one with thee.
-  - type: verse
-    lines:
-    - High King of heaven, when victory is won,
-    - may I reach heaven's joys, bright heaven's Sun!
-    - Heart of my heart, whatever befall,
-    - still be my vision, O Ruler of all.
 - title: Before the throne of God above
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -771,6 +822,7 @@
     - with Christ my Savior and my God;
     - with Christ my Savior and my God!
 - title: Behold
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -811,7 +863,18 @@
   - type: verse
     lines:
     - My eyes are open.
+- title: Bless the Lord, my soul
+  services: 11am
+  hymnal_name: Communaute de Taizé
+  sections:
+    - type: verse
+      lines:
+      - Bless the Lord, my soul,
+      - and bless God’s holy name.
+      - Bless the Lord, my soul,
+      - who leads me into life.
 - title: Blessed Assurance
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -840,7 +903,35 @@
     - Death could not hold you.
     - You are victorious.
     - Praise to the risen King.
+- title: Blessed Assurance
+  services: 11am
+  sections:
+  - type: verse
+    lines:
+    - Blessed assurance, Jesus is mine!
+    - Oh, what a foretaste of glory divine!
+    - Heir of salvation, purchase of God,
+    - Born of His Spirit, washed in His blood.
+  - type: chorus
+    lines:
+    - This is my story, this is my song,
+    - praising my Savior all the day long.
+    - This is my story, this is my song,
+    - praising my Savior all the day long.
+  - type: verse
+    lines:
+    - Perfect submission, perfect delight,
+    - 'Visions of rapture now burst on my sight:'
+    - Angels descending bring from above
+    - Echoes of mercy, whispers of love.
+  - type: verse
+    lines:
+    - Perfect submission, all is at rest,
+    - I in my Savior am happy and blest;
+    - Watching and waiting, looking above,
+    - Filled with His goodness, lost in His love.
 - title: Blessed Be The Lord God Almighty
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -855,6 +946,7 @@
     - Blessed be the Lord God Almighty,
     - who reigns forevermore.
 - title: Blessed Be Your Name
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -898,7 +990,27 @@
     - you give and take away.
     - My heart will choose to say,
     - “Lord, blessed be your name.”
+- title: Breathe
+  services: 9am
+  sections:
+  - type: verse
+    lines:
+    - 'This is the air I breathe, '
+    - 'this is the air I breathe:'
+    - your holy presence
+    - living in me.
+  - type: chorus
+    lines:
+    - And I—I’m desperate for you.
+    - And I—I’m lost without you.
+  - type: verse
+    lines:
+    - This is my daily bread,
+    - 'this is my daily bread:'
+    - your very Word
+    - spoken to me.
 - title: Build My Life
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -928,25 +1040,8 @@
     - it is a firm foundation.
     - I will put my trust in you alone,
     - and I will not be shaken.
-- title: Breathe
-  sections:
-  - type: verse
-    lines:
-    - 'This is the air I breathe, '
-    - 'this is the air I breathe:'
-    - your holy presence
-    - living in me.
-  - type: chorus
-    lines:
-    - And I—I’m desperate for you.
-    - And I—I’m lost without you.
-  - type: verse
-    lines:
-    - This is my daily bread,
-    - 'this is my daily bread:'
-    - your very Word
-    - spoken to me.
 - title: Change My Heart O God
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -961,6 +1056,7 @@
     - Mold me and make me.
     - This is what I pray.
 - title: Christ is alive! Let Christians sing
+  services: 9am
   hymnal_number: '182'
   hymnal_name: Hymnal 1982
   sections:
@@ -995,6 +1091,7 @@
     - till all creation lives and learns
     - his joy, his justice, love, and praise.
 - title: Christ is Risen
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -1033,6 +1130,7 @@
     - O church, come stand in the light;
     - Our God is not dead–he’s alive, he’s alive!
 - title: Christ is Risen He is Risen Indeed
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -1078,6 +1176,7 @@
     - He’s alive, he’s alive!
     - Now in heaven glorified!
 - title: Christ the Lord
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -1120,6 +1219,7 @@
     - We are his and he forever
     - is our God and he alone.
 - title: Christians, let us love one another
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -1170,6 +1270,7 @@
     - Everyone who loves is born of God.
     - Jesus is our life. God is love.
 - title: Come Behold The Wondrous Mystery
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -1212,6 +1313,7 @@
     - Christ in power resurrected,
     - as we will be when he comes.
 - title: Come Just As You Are
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -1238,6 +1340,7 @@
     - come and live (come and live)
     - forever.
 - title: Come Light our Hearts
+  services: 9am
   sections:
   - type: chorus
     lines:
@@ -1259,7 +1362,24 @@
     - We come as we are;
     - O heal and restore,
     - come light our hearts.
+- title: Come Now is the Time to Worship
+  services: 9am
+  sections:
+  - type: chorus
+    lines:
+    - Come, now is the time to worship.
+    - Come, now is the time to give your heart.
+    - Come, just as you are to worship.
+    - Come, just as you are before your God.
+    - Come.
+  - type: verse
+    lines:
+    - One day every tongue will confess you are God.
+    - One day every knee will bow.
+    - Still the greatest treasure remains for those
+    - who gladly choose you now.
 - title: Come, my Way, my Truth, my Life
+  services: 9am
   hymnal_number: '487'
   hymnal_name: Hymnal 1982
   sections:
@@ -1281,22 +1401,8 @@
     - such a joy as none can move;
     - such a love as none can part;
     - such a heart as joys___ in love.
-- title: Come Now is the Time to Worship
-  sections:
-  - type: chorus
-    lines:
-    - Come, now is the time to worship.
-    - Come, now is the time to give your heart.
-    - Come, just as you are to worship.
-    - Come, just as you are before your God.
-    - Come.
-  - type: verse
-    lines:
-    - One day every tongue will confess you are God.
-    - One day every knee will bow.
-    - Still the greatest treasure remains for those
-    - who gladly choose you now.
 - title: Come, thou fount of every blessing
+  services: 9am
   hymnal_number: '686'
   hymnal_name: Hymnal 1982
   sections:
@@ -1331,6 +1437,7 @@
     - here's my heart, oh, take and seal it,
     - seal it for thy courts above.
 - title: Come, thou long-expected Jesus
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -1353,6 +1460,7 @@
     - by thine all-sufficient merit,
     - raise us to thy glorious throne.
 - title: Crown him with many crowns
+  services: 9am
   hymnal_number: '494'
   hymnal_name: Hymnal 1982
   sections:
@@ -1407,6 +1515,7 @@
     - crown him, ye kings, with many crowns,
     - for he is King of all.
 - title: Desert Song
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -1445,6 +1554,7 @@
     - I know I’m filled to be emptied again.
     - The seed I’ve received I will sow.
 - title: Draw Me Close
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -1468,6 +1578,7 @@
     lines:
     - Help me know you are here.
 - title: Even So Come
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -1498,6 +1609,7 @@
     - So we wait, we wait for you.
     - God, we wait; you’re coming soon.
 - title: Everlasting God
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -1520,6 +1632,7 @@
     - you comfort those in need.
     - You lift us up on wings like eagles.
 - title: Every Promise
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -1538,6 +1651,7 @@
     - Grace sufficient; grace for me; grace for all who will believe.
     - We will stand on every promise of your word.
 - title: Every Season
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -1574,6 +1688,7 @@
     - No matter the season,
     - bring a harvest out of me.
 - title: Father I Adore You
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -1591,6 +1706,7 @@
     - lay my life before you,
     - how I love you.
 - title: For the beauty of the earth
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -1633,6 +1749,7 @@
     - Lord of all, to thee we raise
     - This our hymn of grateful praise.
 - title: For the Cause
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -1671,6 +1788,7 @@
     - Deny myself, take up my cross,
     - and follow the Son.
 - title: Forever
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -1705,6 +1823,7 @@
     - Sing praise, sing praise.
     - Sing praise, sing praise.
 - title: Fraction Anthem
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -1719,6 +1838,7 @@
     - was poured out for us.
     - You were poured out for us.
 - title: Give Thanks
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -1732,6 +1852,7 @@
     - let the poor say, “I am rich”
     - because of what the Lord has done for us.
 - title: Give Us Clean Hands
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -1752,6 +1873,7 @@
     - And O God, let us be a generation that seeks,
     - that seeks your face, O God of Jacob.
 - title: Glorify Thy Name
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -1778,6 +1900,7 @@
     - glorify thy name
     - in the all the earth.
 - title: Glorious Day (Living He Loved Me)
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -1817,6 +1940,7 @@
     - Wonderful day my beloved one bringing.
     - My Savior Jesus is mine.
 - title: Go tell it on the mountain
+  services: 9am
   hymnal_number: '99'
   hymnal_name: Hymnal 1982
   sections:
@@ -1845,6 +1969,7 @@
     - and God sent us salvation
     - that blessed Christmas morn.
 - title: God the Maker
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -1872,6 +1997,7 @@
     - Show us that in every season
     - you will fill our emptiness.
 - title: God With Us
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -1905,6 +2031,7 @@
     - God with us. You are God with us.
     - Oh God with us. You are God with us.
 - title: Good Christian friends, rejoice
+  services: 9am
   tune_name: (Hymnal 1982)
   sections:
   - type: verse
@@ -1938,6 +2065,7 @@
     - Christ was born to save!
     - Christ was born to save!
 - title: Good News Great Joy
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -1987,6 +2115,7 @@
     - Sing for joy;
     - sing for joy.
 - title: Good To Give Thanks (Psalm 92)
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -2022,6 +2151,7 @@
     - He has made us glad.
     - It is good to give thanks to the Lord.
 - title: Good to Me
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -2054,6 +2184,7 @@
     - shall follow me all my life;
     - I trust in your promise.
 - title: Goodness of God
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -2087,6 +2218,7 @@
     - I’m surrendered now;
     - I give you everything.
 - title: Gratitude
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -2122,6 +2254,7 @@
     - cause you’ve got a lion inside of those lungs.
     - Get up and praise the Lord.
 - title: Great Are You Lord
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -2146,7 +2279,36 @@
     - And all the earth will shout your praise.
     - Our hearts will cry, these bones will sing,
     - “Great are you, Lord!”
+- title: Great is Thy Faithfulness
+  sections:
+  - type: verse
+    lines:
+    - Great is thy faithfulness, O God, my Father;
+    - There is no shadow of turning with thee.
+    - Thou changest not, thy compassions, they fail not;
+    - As thou hast been, thou forever wilt be.
+  - type: chorus
+    lines:
+    - Great is thy faithfulness,
+    - Great is thy faithfulness,
+    - Morning by morning new mercies I see.
+    - All I have needed thy hand hast provided;
+    - Great is thy faithfulness,
+    - Lord unto me.
+  - type: verse
+    lines:
+    - Summer and winter and springtime and harvest,
+    - Sun, moon, and stars in their courses above
+    - Join with all nature in manifold witness
+    - To thy great faithfulness, mercy, and love.
+  - type: verse
+    lines:
+    - Pardon for sin and a peace that endureth,
+    - Thine own dear presence to cheer and to guide;
+    - Strength for today and bright hope for tomorrow,
+    - Blessings all mine and ten thousand beside.
 - title: Hallelujah (Your Love Makes Me Sing)
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -2175,6 +2337,7 @@
     - I can feel this God song
     - rising up in me.
 - title: Hark! the glad sound! the Savior comes
+  services: 9am
   hymnal_number: '72'
   hymnal_name: Hymnal 1982
   sections:
@@ -2203,6 +2366,7 @@
     - and heaven's eternal arches ring
     - with thy beloved Name.
 - title: Hark! the herald angels sing
+  services: 9am
   hymnal_number: '87'
   hymnal_name: Hymnal 1982
   sections:
@@ -2243,6 +2407,7 @@
     - Hark! the herald angels sing,
     - glory to the newborn King!
 - title: He is Exalted
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -2259,41 +2424,8 @@
     - rejoice in his holy name.
     - He is exalted,
     - the King is exalted on high!
-- title: The Heart of Worship
-  sections:
-  - type: verse
-    lines:
-    - 'When the music fades, '
-    - 'all is stripped away, '
-    - and I simply come;
-    - Longing just to bring
-    - something that’s of worth
-    - that will bless your heart.
-  - type: verse
-    lines:
-    - I’ll bring you more than a song,
-    - for a song in itself
-    - is not what you have required.
-    - You search much deeper within
-    - though the way things appear;
-    - you’re looking into my heart.
-  - type: chorus
-    lines:
-    - I’m coming back to the heart of worship,
-    - and it’s all about you,
-    - all about you, Jesus.
-    - I’m sorry, Lord, for the thing I’ve made it,
-    - when it’s all about you,
-    - all about your, Jesus.
-  - type: verse
-    lines:
-    - King of endless worth,
-    - no one could express
-    - how much you deserve.
-    - Though I’m weak and poor,
-    - all I have is yours,
-    - every single breath.
 - title: Here I am to Worship
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -2324,6 +2456,7 @@
     - And I’ll never know how much it cost
     - to see my sin upon that cross.
 - title: His Mercy Is More
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -2349,6 +2482,7 @@
     - We stood 'neath a debt we could never afford;
     - our sins they are many, his mercy is more.
 - title: Holy Ground
+  services: 9am
   sections:
   - type: chorus
     lines:
@@ -2356,35 +2490,8 @@
     - and I know that there are angels all around.
     - Let us praise Jesus now.
     - We are standing in his presence on holy ground.
-- title: Holy, holy, holy!
-  hymnal_number: '362'
-  hymnal_name: Hymnal 1982
-  sections:
-  - type: verse
-    lines:
-    - Holy, holy, holy! Lord God Almighty!
-    - 'Early in the morning our song shall rise to thee:'
-    - Holy, holy, holy! Merciful and mighty,
-    - God in three Persons, blessed Trinity.
-  - type: verse
-    lines:
-    - Holy, holy, holy! All the saints adore thee,
-    - casting down their golden crowns around the glassy sea;
-    - cherubim and seraphim falling down before thee,
-    - which wert, and art, and evermore shalt be.
-  - type: verse
-    lines:
-    - Holy, holy, holy! Though the darkness hide thee,
-    - though the sinful human eye thy glory may not see,
-    - only thou art holy; there is none beside thee,
-    - perfect in power, in love, and purity.
-  - type: verse
-    lines:
-    - Holy, holy, holy! Lord God Almighty!
-    - All thy works shall praise thy Name, in earth, and sky, and sea;
-    - Holy, holy, holy! Merciful and mighty,
-    - God in three Persons, blessed Trinity.
 - title: Holy is Our God
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -2433,6 +2540,7 @@
     - give you glory,
     - give you glory, Lord.
 - title: Holy is the Lord
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -2458,6 +2566,7 @@
     - It is rising up all around.
     - It’s the anthem of the Lord’s renown.
 - title: Holy Spirit
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -2484,7 +2593,37 @@
     - Let us become more aware of your Presence;
     - Let us experience the glory of your goodness.
     - (Lord)
+- title: Holy, holy, holy!
+  services: 9am
+  hymnal_number: '362'
+  hymnal_name: Hymnal 1982
+  sections:
+  - type: verse
+    lines:
+    - Holy, holy, holy! Lord God Almighty!
+    - 'Early in the morning our song shall rise to thee:'
+    - Holy, holy, holy! Merciful and mighty,
+    - God in three Persons, blessed Trinity.
+  - type: verse
+    lines:
+    - Holy, holy, holy! All the saints adore thee,
+    - casting down their golden crowns around the glassy sea;
+    - cherubim and seraphim falling down before thee,
+    - which wert, and art, and evermore shalt be.
+  - type: verse
+    lines:
+    - Holy, holy, holy! Though the darkness hide thee,
+    - though the sinful human eye thy glory may not see,
+    - only thou art holy; there is none beside thee,
+    - perfect in power, in love, and purity.
+  - type: verse
+    lines:
+    - Holy, holy, holy! Lord God Almighty!
+    - All thy works shall praise thy Name, in earth, and sky, and sea;
+    - Holy, holy, holy! Merciful and mighty,
+    - God in three Persons, blessed Trinity.
 - title: Hosanna (Praise is Rising)
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -2518,6 +2657,7 @@
     - broken lives are made new,
     - you make us new;
 - title: How Deep The Father's Love For Us
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -2550,6 +2690,42 @@
     - 'But this I know with all my heart:'
     - his wounds have paid my ransom.
 - title: How firm a foundation, ye saints of the Lord
+  services: 9am
+  hymnal_number: '636'
+  hymnal_name: Hymnal 1982
+  sections:
+  - type: verse
+    lines:
+    - How firm a foundation, ye saints of the Lord,
+    - is laid for your faith in his excellent word!
+    - What more can he say than to you he hath said,
+    - to you that for refuge to Jesus have fled?
+  - type: verse
+    lines:
+    - '"Fear not, I am with thee; O be not dismayed!'
+    - For I am thy God, and will still give thee aid;
+    - I'll strengthen thee, help thee, and cause thee to stand,
+    - upheld by my righteous, omnipotent hand.
+  - type: verse
+    lines:
+    - '"When through the deep waters I call thee to go,'
+    - the rivers of woe shall not thee overflow;
+    - for I will be with thee, thy troubles to bless,
+    - and sanctify to thee thy deepest distress.
+  - type: verse
+    lines:
+    - '"When through fiery trials thy pathway shall lie,'
+    - my grace, all sufficient, shall be thy supply;
+    - the flame shall not hurt thee; I only design
+    - thy dross to consume, and thy gold to refine.
+  - type: verse
+    lines:
+    - '"The soul that to Jesus hath fled for repose,'
+    - I will not, I will not desert to its foes;
+    - that soul, though all hell shall endeavor to shake,
+    - I'll never, no, never, no, never forsake."
+- title: How firm a foundation, ye saints of the Lord
+  services: 9am
   hymnal_number: '636'
   hymnal_name: Hymnal 1982
   sections:
@@ -2584,6 +2760,7 @@
     - that soul, though all hell shall endeavor to shake,
     - I'll never, no, never, no, never forsake."
 - title: How Great Is Our God
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -2618,6 +2795,7 @@
     - 'My heart will sing:'
     - How great is our God!
 - title: How Great Thou Art
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -2666,6 +2844,7 @@
     - and there proclaim,
     - my God, how great thou art!
 - title: How High and How Wide
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -2697,41 +2876,36 @@
     - You are our treasure
     - and our great reward,
     - our hope and our glorious King.
-- title: How firm a foundation, ye saints of the Lord
-  hymnal_number: '636'
+- title: Humbly I adore thee, Verity unseen
+  hymnal_number: '314'
   hymnal_name: Hymnal 1982
   sections:
   - type: verse
     lines:
-    - How firm a foundation, ye saints of the Lord,
-    - is laid for your faith in his excellent word!
-    - What more can he say than to you he hath said,
-    - to you that for refuge to Jesus have fled?
+    - Humbly I adore thee, Verity unseen,
+    - who thy glory hidest ‘neath these shadows mean;
+    - lo, to thee surrendered, my whole heart is bowed,
+    - tranced as it beholds thee, shrined within the cloud.
   - type: verse
     lines:
-    - '"Fear not, I am with thee; O be not dismayed!'
-    - For I am thy God, and will still give thee aid;
-    - I'll strengthen thee, help thee, and cause thee to stand,
-    - upheld by my righteous, omnipotent hand.
+    - Taste and touch and vision to discern thee fail;
+    - faith, that comes by hearing, pierces through the veil.
+    - I believe whate’er the Son of God hath told;
+    - what the Truth hath spoken, that for truth I hold.
   - type: verse
     lines:
-    - '"When through the deep waters I call thee to go,'
-    - the rivers of woe shall not thee overflow;
-    - for I will be with thee, thy troubles to bless,
-    - and sanctify to thee thy deepest distress.
+    - O memorial wondrous of the Lord’s own death;
+    - living Bread that givest all thy creatures breath,
+    - grant my spirit ever by thy life may live,
+    - to my taste thy sweetness never failing give.
   - type: verse
     lines:
-    - '"When through fiery trials thy pathway shall lie,'
-    - my grace, all sufficient, shall be thy supply;
-    - the flame shall not hurt thee; I only design
-    - thy dross to consume, and thy gold to refine.
-  - type: verse
-    lines:
-    - '"The soul that to Jesus hath fled for repose,'
-    - I will not, I will not desert to its foes;
-    - that soul, though all hell shall endeavor to shake,
-    - I'll never, no, never, no, never forsake."
+    - Jesus, whom now hidden, I by faith behold,
+    - 'what my soul doth long for, that thy word foretold:'
+    - face to face thy splendor, I at last shall see,
+    - in the glorious vision, blessed Lord, of thee.
 - title: I Belong
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -2754,6 +2928,7 @@
     - not weakness, nor failure,
     - no broken dream or promise;
 - title: I Come to the Cross
+  services: 9am
   sections:
   - type: chorus
     lines:
@@ -2775,6 +2950,7 @@
     - Jesus, I come,
     - Jesus, I come to the cross.
 - title: I come with joy to meet my Lord
+  services: 9am
   hymnal_number: '304'
   hymnal_name: Hymnal 1982
   sections:
@@ -2809,6 +2985,7 @@
     - and as his people in the world
     - we'll live and speak his praise.
 - title: I Give You My Heart
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -2831,6 +3008,7 @@
     - every moment I’m awake,
     - Lord have your way in me.
 - title: I Heard the Bells on Christmas Day
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -2863,6 +3041,7 @@
     - a voice, a chime, a chant sublime,
     - of peace on earth, goodwill to men!
 - title: I love thy kingdom, Lord
+  services: 9am
   hymnal_number: '524'
   hymnal_name: Hymnal 1982
   sections:
@@ -2897,6 +3076,7 @@
     - the brightest glories earth can yield,
     - and brighter bliss of heaven.
 - title: I Saw the Light
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -2925,6 +3105,7 @@
     - Now I have traded the wrong for the right—
     - Praise the Lord! I saw the light.
 - title: I Surrender All
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -2963,6 +3144,48 @@
     - O the joy of full salvation!
     - Glory, glory to his name!
 - title: I the Lord of Sea and Sky
+  services: 9am
+  sections:
+  - type: verse
+    lines:
+    - I, the Lord of sea and sky,
+    - I have heard my people cry.
+    - All who dwell in deepest sin
+    - my hand will save.
+    - I who made the stars of night,
+    - I will make their darkness bright.
+    - Who will bear my light to them?
+    - Whom shall I send?
+  - type: chorus
+    lines:
+    - Here I am, Lord.
+    - Is it I, Lord?
+    - I have heard you calling in the night.
+    - I will go, Lord,
+    - if you lead me,
+    - I will hold your people in my heart.
+  - type: verse
+    lines:
+    - I, the Lord of snow and rain,
+    - I have borne my people's pain.
+    - I have wept for love of them.
+    - They turn away.
+    - I will break their hearts of stone,
+    - give them hearts for love alone.
+    - I will speak my word to them.
+    - Whom shall I send?
+  - type: verse
+    lines:
+    - I, the Lord of wind and flame,
+    - I will tend the poor and lame.
+    - I will set a feast for them.
+    - My hand will save.
+    - Finest bread I will provide
+    - till their hearts be satisfied.
+    - I will give my life to them.
+    - Whom shall I send?
+- title: I the Lord of Sea and Sky
+  services: 11am
   sections:
   - type: verse
     lines:
@@ -3003,6 +3226,7 @@
     - I will give my life to them.
     - Whom shall I send?
 - title: I Wait
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -3029,6 +3253,7 @@
     - though dim I am still a reflection
     - of his mercy and his truth.
 - title: I Will Not Forget You
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -3055,6 +3280,7 @@
     - Many men will read your words,
     - they will never change their minds.
 - title: I Will Sing
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -3081,6 +3307,7 @@
     - O Lord, God Almighty,
     - all the earth and sky belong to you.
 - title: Immortal, invisible, God only wise
+  services: 9am
   hymnal_number: '423'
   hymnal_name: Hymnal 1982
   sections:
@@ -3109,6 +3336,50 @@
     - 'all laud we would render: O help us to see'
     - '''tis only the splendor of light hideth thee.'
 - title: In Christ Alone
+  services: 9am
+  sections:
+  - type: verse
+    lines:
+    - In Christ alone my hope is found,
+    - he is my light, my strength, my song;
+    - This Cornerstone, this solid Ground,
+    - firm through the fiercest drought and storm.
+    - What heights of love, what depths of peace,
+    - when fears are stilled, when strivings cease.
+    - My Comforter, my All in All,
+    - here in the love of Christ I stand.
+  - type: verse
+    lines:
+    - In Christ alone, who took on flesh,
+    - fullness of God in helpless babe!
+    - This gift of love and righteousness,
+    - scorned by the ones he came to save.
+    - Till on that cross as Jesus died,
+    - the wrath of God was satisfied.
+    - For every sin on him was laid;
+    - Here in the death of Christ I live.
+  - type: verse
+    lines:
+    - There in the ground his body lay,
+    - Light of the world by darkness slain;
+    - Then, bursting forth in glorious Day,
+    - up from the grace he rose again!
+    - And as he stands in victory,
+    - sin’s curse has lost its grip on me;
+    - For I am his and he is mine,
+    - bought with the precious blood of Christ.
+  - type: verse
+    lines:
+    - No guilt in life, no fear in death,
+    - this is the power of Christ in me;
+    - From life’s first cry to final breath,
+    - Jesus commands my destiny.
+    - No power of hell, no scheme of man,
+    - can ever pluck me from his hand;
+    - Till he returns or calls me home,
+    - here in the power of Christ I’ll stand!
+- title: In Christ Alone
+  services: 11am
   sections:
   - type: verse
     lines:
@@ -3151,6 +3422,7 @@
     - Till he returns or calls me home,
     - here in the power of Christ I’ll stand!
 - title: In the Secret
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -3177,6 +3449,7 @@
     - out of my way,
     - ‘cause I want to know you more.
 - title: Jesus Christ is risen today, Alleluia!
+  services: 9am
   hymnal_number: '207'
   hymnal_name: Hymnal 1982
   sections:
@@ -3205,6 +3478,7 @@
     - praise him, all ye heavenly host, Alleluia!
     - Father, Son, and Holy Ghost, Alleluia!
 - title: Jesus is Alive
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -3241,6 +3515,7 @@
     - we overcome, oh, in Jesus
     - oh, in Jesus.
 - title: Jesus Messiah
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -3279,6 +3554,7 @@
     - all the glory to you, God,
     - the Light of the world.
 - title: Jesus Paid It All
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -3309,6 +3585,7 @@
     - Oh, praise the one who paid my debt,
     - and raised this life up from the dead.
 - title: Jesus shall reign where'er the sun
+  services: 9am
   hymnal_number: '544'
   hymnal_name: Hymnal 1982
   sections:
@@ -3343,6 +3620,7 @@
     - angels descend with songs again,
     - and earth repeat the loud amen.
 - title: Joy to the world!
+  services: 9am
   hymnal_number: '100'
   hymnal_name: Hymnal 1982
   sections:
@@ -3379,6 +3657,7 @@
     - and wonders of his love,
     - and wonders, wonders of his love.
 - title: Joyful, joyful, we adore thee
+  services: 9am
   hymnal_number: '376'
   hymnal_name: Hymnal 1982
   sections:
@@ -3413,6 +3692,7 @@
     - teach us how to love each other,
     - lift us to the joy divine.
 - title: King of Heaven
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -3447,6 +3727,7 @@
     - King of heaven, come;
     - Oh, King of heaven, come.
 - title: King of Kings
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -3495,6 +3776,7 @@
     - for the love of Jesus Christ
     - who has resurrected me.
 - title: King of Love
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -3541,6 +3823,7 @@
     - within your house for ever,
     - within your house forever.
 - title: Know You Are Loved (Prayer of Humble Access)
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -3577,6 +3860,34 @@
     - for you I’ve waited all this time;
     - for you I’ve made this feast.”
 - title: Lamb of God
+  services: 9am
+  sections:
+  - type: verse
+    lines:
+    - Your only Son, no sin to hide;
+    - But you have sent him from your side,
+    - to walk upon this guilty sod,
+    - and to become the Lamb of God.
+  - type: verse
+    lines:
+    - Your gift of love they crucified;
+    - They laughed and scorned him as he died.
+    - The humble King they named a fraud,
+    - and sacrificed the Lamb of God.
+  - type: chorus
+    lines:
+    - Oh Lamb of God, sweet Lamb of God.
+    - I love the holy Lamb of God.
+    - Oh, wash me in his precious blood,
+    - my Jesus Christ, the Lamb of God.
+  - type: verse
+    lines:
+    - I was so lost I should have died;
+    - But you have brought me to your side
+    - to be led by your staff and rod,
+    - and to be called a lamb of God.
+- title: Lamb of God
+  services: 11am
   sections:
   - type: verse
     lines:
@@ -3603,6 +3914,7 @@
     - to be led by your staff and rod,
     - and to be called a lamb of God.
 - title: Lead me to the Cross
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -3633,6 +3945,7 @@
     - Lead me to your heart.
     - Lead me to your heart.
 - title: Let Your Kingdom Come
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -3662,6 +3975,7 @@
     - By grace we’ll preach your Gospel
     - till our dying breath.
 - title: Lift High the Name of Jesus
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -3686,6 +4000,7 @@
     - He opens up our eyes to see the harvest he has grown.
     - We labor in his fields of grace as he leads sinners home.
 - title: Lord Be Glorified
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -3703,23 +4018,30 @@
     lines:
     - In our home, Lord be glorified, be glorified;
     - In our home, Lord be glorified today.
-- title: Lord, be thy word my rule
-  hymnal_number: '626'
+- title: Lord have mercy upon us (Willan)
+  identifiers:
+  - Kyrie
+  services: 11am
+  hymnal_number: 'S91'
   hymnal_name: Hymnal 1982
   sections:
   - type: verse
     lines:
-    - Lord, be thy word my rule;
-    - in it may I rejoice;
-    - thy glory be my aim,
-    - thy holy will my choice;
+    - Lord, have mercy upon us.
+    - Lord, have mercy upon us.
+    - Lord, have mercy upon us.
   - type: verse
     lines:
-    - thy promises my hope;
-    - thy providence my guard;
-    - thine arm my strong support;
-    - thyself my great reward.
+    - Christ, have mercy upon us.
+    - Christ, have mercy upon us.
+    - Christ, have mercy upon us.
+  - type: verse
+    lines:
+    - Lord, have mercy upon us.
+    - Lord, have mercy upon us.
+    - Lord, have mercy upon us.
 - title: Lord I lift Your name on high
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -3737,6 +4059,7 @@
     - from the grace to the sky;
     - Lord, I lift your name on high.
 - title: Lord I Need You
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -3763,6 +4086,7 @@
     - And when I cannot stand, I’ll fall on you.
     - Jesus, you’re my hope and stay.
 - title: Lord Reign in Me
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -3782,34 +4106,25 @@
     - may my life reflect the beauty of my Lord;
     - ‘Cause you mean more to me than any earthly thing.
     - So won’t you reign in me again.
-- title: The Lord's Prayer (It's Yours)
+- title: Lord, be thy word my rule
+  services: 9am
+  hymnal_number: '626'
+  hymnal_name: Hymnal 1982
   sections:
   - type: verse
     lines:
-    - Father, let your kingdom come.
-    - Father, let your will be done
-    - on Earth as in Heaven,
-    - right here in my heart.
-  - type: chorus
-    lines:
-    - Give us this day our daily bread.
-    - Forgive us, forgive us
-    - as we forgive the ones who sinned
-    - against us; forgive them.
-    - And lead us not into temptation,
-    - but deliver us from the evil one.
-    - Let your kingdom come.
+    - Lord, be thy word my rule;
+    - in it may I rejoice;
+    - thy glory be my aim,
+    - thy holy will my choice;
   - type: verse
     lines:
-    - It’s yours, it’s yours,
-    - all yours, all yours.
-    - The kingdom, the power,
-    - the glory are yours.
-    - It’s yours, it’s yours,
-    - all yours, all yours.
-    - Forever and ever
-    - the kingdom is yours.
+    - thy promises my hope;
+    - thy providence my guard;
+    - thine arm my strong support;
+    - thyself my great reward.
 - title: Love divine, all loves excelling
+  services: 9am
   hymnal_number: '657'
   hymnal_name: Hymnal 1982
   sections:
@@ -3844,6 +4159,7 @@
     - till we cast our crowns before thee,
     - lost in wonder, love, and praise.
 - title: More Love More Power
+  services: 9am
   sections:
   - type: chorus
     lines:
@@ -3862,6 +4178,7 @@
     - And I will seek your face with all of my strength,
     - for you are my Lord.
 - title: Morning has broken
+  services: 9am
   hymnal_number: '8'
   hymnal_name: Hymnal 1982
   sections:
@@ -3896,6 +4213,7 @@
     - God’s recreation,
     - of the new day!
 - title: Multiplied
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -3910,6 +4228,7 @@
     - May this offering stretch across the skies,
     - these hallelujahs be multiplied.
 - title: Now let us all with one accord
+  services: 9am
   hymnal_number: '147'
   hymnal_name: Hymnal 1982
   sections:
@@ -3943,7 +4262,47 @@
     - so when our wanderings here shall cease,
     - we may with you forever live,
     - in love and unity and peace.
+- title: O Come to the Altar
+  services: 9am
+  sections:
+  - type: verse
+    lines:
+    - Are you hurting and broken within,
+    - overwhelmed by the weight of your sin?
+    - Jesus is calling.
+  - type: verse
+    lines:
+    - Have you come to the end of yourself,
+    - do you thirst for a drink from the well?
+    - Jesus is calling.
+  - type: chorus
+    lines:
+    - O come to the altar;
+    - the Father’s arms are open wide.
+    - Forgiveness was bought with
+    - the precious blood of Jesus Christ.
+  - type: verse
+    lines:
+    - Leave behind your regrets and mistakes.
+    - Come today; there’s no reason to wait.
+    - Jesus is calling.
+  - type: verse
+    lines:
+    - Bring your sorrows and trade them for joy;
+    - From the ashes a new life is born.
+    - Jesus is calling.
+  - type: verse
+    lines:
+    - Oh, what a Savior, isn’t he wonderful;
+    - Sing alleluia, Christ is risen.
+    - Bow down before him, for he is Lord of all;
+    - Sing alleluia, Christ is risen.
+  - type: verse
+    lines:
+    - Bear your cross as you wait for the crown;
+    - Tell the world of the treasure you’ve found.
 - title: O come, O come, Emmanuel
+  services: 9am
   hymnal_number: '56'
   hymnal_name: Hymnal 1982
   sections:
@@ -3993,45 +4352,8 @@
     - bind in one the hearts of all mankind;
     - bid thou our sad divisions cease,
     - and be thyself our King of Peace.
-- title: O Come to the Altar
-  sections:
-  - type: verse
-    lines:
-    - Are you hurting and broken within,
-    - overwhelmed by the weight of your sin?
-    - Jesus is calling.
-  - type: verse
-    lines:
-    - Have you come to the end of yourself,
-    - do you thirst for a drink from the well?
-    - Jesus is calling.
-  - type: chorus
-    lines:
-    - O come to the altar;
-    - the Father’s arms are open wide.
-    - Forgiveness was bought with
-    - the precious blood of Jesus Christ.
-  - type: verse
-    lines:
-    - Leave behind your regrets and mistakes.
-    - Come today; there’s no reason to wait.
-    - Jesus is calling.
-  - type: verse
-    lines:
-    - Bring your sorrows and trade them for joy;
-    - From the ashes a new life is born.
-    - Jesus is calling.
-  - type: verse
-    lines:
-    - Oh, what a Savior, isn’t he wonderful;
-    - Sing alleluia, Christ is risen.
-    - Bow down before him, for he is Lord of all;
-    - Sing alleluia, Christ is risen.
-  - type: verse
-    lines:
-    - Bear your cross as you wait for the crown;
-    - Tell the world of the treasure you’ve found.
 - title: O for a thousand tongues to sing
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -4091,6 +4413,7 @@
     - there is one great love;
     - 'there is one great love: Jesus.'
 - title: Oh Great Is Our God
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -4125,6 +4448,7 @@
     - His mercy covers all that he’s made,
     - showing his glory and his grace.
 - title: Oh Lord You're Beautiful
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -4147,6 +4471,7 @@
     - Replace the lamp of my first love
     - that burns with holy fear.
 - title: Oh Lovely One
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -4179,6 +4504,7 @@
     - My dearest friend,
     - oh lovely One, oh lovely One.
 - title: Oh Our Lord
+  services: 9am
   sections:
   - type: chorus
     lines:
@@ -4209,6 +4535,28 @@
     - oh, your name,
     - oh your name.
 - title: Open the Eyes of My Heart
+  services: 9am
+  sections:
+  - type: verse
+    lines:
+    - Open the eyes of my heart, Lord,
+    - open the eyes of my heart;
+    - I want to see you,
+    - I want to see you.
+  - type: chorus
+    lines:
+    - To see you high and lifted up,
+    - shining in the light of your glory.
+    - Pour out your power and love;
+    - as we sing holy, holy, holy.
+  - type: verse
+    lines:
+    - Holy, holy, holy,
+    - holy, holy, holy;
+    - holy, holy, holy,
+    - I want to see you.
+- title: Open the Eyes of My Heart
+  services: 11am
   sections:
   - type: verse
     lines:
@@ -4229,6 +4577,7 @@
     - holy, holy, holy,
     - I want to see you.
 - title: Praise to the Lord, the Almighty
+  services: 9am
   hymnal_number: '390'
   hymnal_name: Hymnal 1982
   sections:
@@ -4256,37 +4605,8 @@
     - All that hath life and breath come now with praises before him!
     - Let the amen sound from his people again;
     - gladly forever adore him.
-- title: Psalm 8 (Hallé)
-  sections:
-  - type: chorus
-    lines:
-    - Hallé, hallé, hallé, hallé, hallelujah.
-    - We’re giving all our praise to ya.
-    - Hallé, hallé, hallé, hallé, hallelujah.
-    - How great is your name.
-  - type: verse
-    lines:
-    - When I consider the wonders your hands have made,
-    - the sun, moon and stars, all your glory on full display,
-    - who am I that you know me and love me and call me by name?
-    - Lord, I can’t help but lift up my hands and sing out your praise.
-  - type: verse
-    lines:
-    - O Lord, our Lord, how majestic is your name in all the earth.
-    - You deserve all the glory and the praise.
-  - type: verse
-    lines:
-    - You’ve established a stronghold against all your enemies.
-    - Oh, praises of infants and children, there’s victory.
-    - Who am I that you know me and love me and call me by name?
-    - Lord, I can’t help but lift up my hands and sing out your praise.
-  - type: chorus
-    lines:
-    - Yahweh, Yahweh, hallé, hallelujah.
-    - We’re giving all our praise to ya.
-    - Yahweh, Yahweh, hallé, hallé, hallelujah.
-    - How great is your name.
 - title: Psalm 34 (Taste and See)
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -4323,6 +4643,7 @@
     - never ending praise.
     - May our incense rise.
 - title: Psalm 51
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -4341,7 +4662,39 @@
     lines:
     - Then I shall teach your ways to the wicked,
     - and sinners shall turn to you.
+- title: Psalm 8 (Hallé)
+  services: 9am
+  sections:
+  - type: chorus
+    lines:
+    - Hallé, hallé, hallé, hallé, hallelujah.
+    - We’re giving all our praise to ya.
+    - Hallé, hallé, hallé, hallé, hallelujah.
+    - How great is your name.
+  - type: verse
+    lines:
+    - When I consider the wonders your hands have made,
+    - the sun, moon and stars, all your glory on full display,
+    - who am I that you know me and love me and call me by name?
+    - Lord, I can’t help but lift up my hands and sing out your praise.
+  - type: verse
+    lines:
+    - O Lord, our Lord, how majestic is your name in all the earth.
+    - You deserve all the glory and the praise.
+  - type: verse
+    lines:
+    - You’ve established a stronghold against all your enemies.
+    - Oh, praises of infants and children, there’s victory.
+    - Who am I that you know me and love me and call me by name?
+    - Lord, I can’t help but lift up my hands and sing out your praise.
+  - type: chorus
+    lines:
+    - Yahweh, Yahweh, hallé, hallelujah.
+    - We’re giving all our praise to ya.
+    - Yahweh, Yahweh, hallé, hallé, hallelujah.
+    - How great is your name.
 - title: Refiner’s Fire
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -4362,6 +4715,7 @@
     - Purify my heart, cleanse me from my sin,
     - deep within.
 - title: Revelation Song
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -4397,6 +4751,7 @@
     - breath and living water,
     - such a marvelous mystery, yeah.
 - title: Rise and Shine
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -4442,6 +4797,7 @@
     - We made it through the evening.
     - This is the joy of the morning.
 - title: Satisfied (Psalm 63)
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -4474,6 +4830,7 @@
     - hallelujah,
     - hallelujah amen.
 - title: Seek Ye First
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -4503,7 +4860,80 @@
     - take up his cross
     - and daily follow me–
     - Allelu, alleluia!
+- title: Shall we gather at the River
+  sections:
+  - type: verse
+    lines:
+    - Shall we gather at the river,
+    - Where bright angel feet have trod;
+    - With its crystal tide forever
+    - Flowing by the throne of God?
+  - type: chorus
+    lines:
+    - Yes, we'll gather at the river,
+    - The beautiful, the beautiful river;
+    - Gather with the saints at the river
+    - That flows by the throne of God.
+  - type: verse
+    lines:
+    - On the margin of the river,
+    - Washing up its silver spray,
+    - We will walk and worship ever,
+    - All the happy golden day.
+  - type: verse
+    lines:
+    - Ere we reach the shining river,
+    - Lay we ev'ry burden down;
+    - Grace our spirits will deliver,
+    - And provide a robe and crown.
+  - type: verse
+    lines:
+    - Soon we'll reach the shining river,
+    - Soon our pilgrimage will cease;
+    - Soon our happy hearts will quiver
+    - With the melody of peace.
 - title: Shine Jesus Shine
+  services: 9am
+  sections:
+  - type: verse
+    lines:
+    - Lord, the light of your love is shining,
+    - in the midst of the darkness, shining;
+    - Jesus, Light of the world, shine upon us,
+    - set us free by the truth
+    - you now bring us.
+    - Shine on me,
+    - shine on me.
+  - type: chorus
+    lines:
+    - Shine, Jesus, shine,
+    - fill this land with the Father’s glory;
+    - Blaze Spirit, blaze,
+    - set our hearts on fire.
+    - Flow, river, flow,
+    - flood the nations with grace and mercy;
+    - Send forth your word,
+    - Lord, and let there be light.
+  - type: verse
+    lines:
+    - Lord, I come to your awesome presence,
+    - from the shadows into your radiance;
+    - By the blood I may enter your brightness,
+    - search me, try me, consume
+    - all my darkness.
+    - Shine on me,
+    - shine on me.
+  - type: verse
+    lines:
+    - As we gaze on your kingly brightness,
+    - so our faces display your likeness;
+    - Ever changing from glory to glory,
+    - mirrored here may our lives
+    - tell your story.
+    - Shine on me,
+    - shine on me.
+- title: Shine Jesus Shine
+  services: 11am
   sections:
   - type: verse
     lines:
@@ -4543,6 +4973,7 @@
     - Shine on me,
     - shine on me.
 - title: Shine On Us
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -4567,6 +4998,7 @@
     - let your love come over us,
     - let your light shine on us.
 - title: Shout to the Lord
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -4588,6 +5020,7 @@
     - forever I’ll love you, forever I’ll stand,
     - nothing compares to the promise I have in you.
 - title: Shout to the North
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -4622,6 +5055,7 @@
     - of our God who reigns on high.
     - By his grace again we’ll fly.
 - title: Sing to the King
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -4644,6 +5078,7 @@
     - We’ll join in singing with all the redeemed,
     - ‘cause Satan is vanquished and Jesus is King.
 - title: Softly and Tenderly Jesus is Calling
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -4683,6 +5118,7 @@
     - He has mercy and pardon,
     - Pardon for you and for me.
 - title: Song of Hope (Heaven Come Down)
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -4724,6 +5160,7 @@
     - God of heave, come down,
     - heaven come down.
 - title: Speak O Lord
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -4746,6 +5183,7 @@
     - Speak, O Lord, till your church is built
     - and the earth is filled with your glory.
 - title: Spirit Of The Living God
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -4778,6 +5216,7 @@
     - till, perfected by thee, we reach
     - creation's glorious goal!
 - title: Take My Life
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -4804,6 +5243,7 @@
     - Take myself, and I will be
     - ever, only, all for thee.
 - title: Take to the World
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -4827,6 +5267,7 @@
     - Go and go far, take light deep in the dark.
     - 'Believe what''s true: he uses all, even you.'
 - title: Take up your cross, the Savior said
+  services: 9am
   tune_name: (Hymnal 1982)
   sections:
   - type: verse
@@ -4860,6 +5301,7 @@
     - for only those who bear the cross
     - may hope to wear the glorious crown.
 - title: That Easter day with joy was bright
+  services: 9am
   hymnal_number: '193'
   hymnal_name: Hymnal 1982
   sections:
@@ -4894,6 +5336,42 @@
     - to God the Father equal praise,
     - and God the Holy Ghost, we raise.
 - title: The Heart of Worship
+  services: 9am
+  sections:
+  - type: verse
+    lines:
+    - 'When the music fades, '
+    - 'all is stripped away, '
+    - and I simply come;
+    - Longing just to bring
+    - something that’s of worth
+    - that will bless your heart.
+  - type: verse
+    lines:
+    - I’ll bring you more than a song,
+    - for a song in itself
+    - is not what you have required.
+    - You search much deeper within
+    - though the way things appear;
+    - you’re looking into my heart.
+  - type: chorus
+    lines:
+    - I’m coming back to the heart of worship,
+    - and it’s all about you,
+    - all about you, Jesus.
+    - I’m sorry, Lord, for the thing I’ve made it,
+    - when it’s all about you,
+    - all about your, Jesus.
+  - type: verse
+    lines:
+    - King of endless worth,
+    - no one could express
+    - how much you deserve.
+    - Though I’m weak and poor,
+    - all I have is yours,
+    - every single breath.
+- title: The Heart of Worship
+  services: 9am
   sections:
   - type: chorus
     lines:
@@ -4928,6 +5406,35 @@
     - all I have is yours,
     - every single breath.
 - title: The Lord's Prayer (It's Yours)
+  services: 9am
+  sections:
+  - type: verse
+    lines:
+    - Father, let your kingdom come.
+    - Father, let your will be done
+    - on Earth as in Heaven,
+    - right here in my heart.
+  - type: chorus
+    lines:
+    - Give us this day our daily bread.
+    - Forgive us, forgive us
+    - as we forgive the ones who sinned
+    - against us; forgive them.
+    - And lead us not into temptation,
+    - but deliver us from the evil one.
+    - Let your kingdom come.
+  - type: verse
+    lines:
+    - It’s yours, it’s yours,
+    - all yours, all yours.
+    - The kingdom, the power,
+    - the glory are yours.
+    - It’s yours, it’s yours,
+    - all yours, all yours.
+    - Forever and ever
+    - the kingdom is yours.
+- title: The Lord's Prayer (It's Yours)
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -4955,6 +5462,7 @@
     - Forever and ever
     - the kingdom is yours.
 - title: The Old Rugged Cross
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -4987,6 +5495,7 @@
     - Then he’ll call me some day to my home far away,
     - where his glory forever I’ll share.
 - title: The Power Of The Cross
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -5033,6 +5542,7 @@
     - What a love, what a cost.
     - We stand forgiven at the cross.
 - title: The Servant Song
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -5071,6 +5581,31 @@
     - Pray that I might have the grace
     - to let you be my servant, too.
 - title: The Well
+  services: 9am
+  sections:
+  - type: chorus
+    lines:
+    - I lay my burdens down.
+    - My yoke is easy now.
+    - What a friend I’ve found in you.
+  - type: chorus
+    lines:
+    - ‘Cause you’re the well that won’t run dry.
+    - Only you can satisfy
+    - through every season of my life,
+    - ‘cause you are the well that won’t run dry.
+  - type: verse
+    lines:
+    - I will thirst no more,
+    - ‘cause you refresh my soul.
+    - Living waters flow from you.
+  - type: verse
+    lines:
+    - You have given me freedom.
+    - You have given me joy.
+    - You have taken my burdens.
+- title: The Well
+  services: 9am
   sections:
   - type: chorus
     lines:
@@ -5094,6 +5629,7 @@
     - You have given me joy.
     - You have taken my burdens.
 - title: The Wonderful Cross
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -5126,6 +5662,34 @@
     - love so amazing, so divine,
     - demands my soul, my life, my all.
 - title: There Is A Redeemer
+  services: 9am
+  sections:
+  - type: verse
+    lines:
+    - There is a Redeemer,
+    - Jesus, God’s own Son;
+    - Precious Lamb of God, Messiah,
+    - Holy One.
+  - type: chorus
+    lines:
+    - Thank you, O my Father,
+    - for giving us your Son,
+    - and leaving your Spirit
+    - till the work on earth is done.
+  - type: verse
+    lines:
+    - Jesus, my Redeemer,
+    - name above all names;
+    - Precious Lamb of God, Messiah,
+    - O for sinners slain.
+  - type: verse
+    lines:
+    - When I stand in glory,
+    - I will see his face;
+    - There I’ll serve my King forever
+    - in that holy place.
+- title: There Is A Redeemer
+  services: 11am
   sections:
   - type: verse
     lines:
@@ -5152,6 +5716,7 @@
     - There I’ll serve my King forever
     - in that holy place.
 - title: There's a wideness in God's mercy
+  services: 9am
   hymnal_number: '470'
   hymnal_name: Hymnal 1982
   sections:
@@ -5186,6 +5751,7 @@
     - and our life would be thanksgiving
     - for the goodness of the Lord.
 - title: Those Who Trust
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -5208,6 +5774,7 @@
     - are as Mount Zion.
     - They will not, they will not be moved.
 - title: Thy Word
+  services: 9am
   note: The People join in singing the refrains.
   sections:
   - type: chorus
@@ -5232,10 +5799,37 @@
     - Jesus, be my guide
     - and hold me by your side;
     - I will love you to the end.
+- title: Thy Word
+  services: 11am
+  sections:
+  - type: chorus
+    lines:
+    - Thy Word is a lamp unto my feet
+    - and a light unto my path.
+    - Thy Word is a lamp unto my feet
+    - and a light unto my path.
+  - type: verse
+    lines:
+    - When I feel afraid,
+    - and I think I’ve lost my way,
+    - still you’re there right beside me.
+    - Nothing will I fear
+    - as long as you are near.
+    - Please be near me to the end.
+  - type: verse
+    lines:
+    - I will not forget
+    - your love for me, and yet
+    - my heart forever is wandering.
+    - Jesus, be my guide
+    - and hold me by your side;
+    - I will love you to the end.
 - title: Wait for the Lord [refrain - verse - refrain]
+  services: 9am
   tune_name: Communauté de Taizé
   sections: []
 - title: We Are Hungry
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -5262,6 +5856,7 @@
     - We lift our voices higher
     - and higher and higher to you.
 - title: We Bow Down
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -5298,6 +5893,7 @@
     - 'and we crown you King. '
     - King of all kings you will be!
 - title: We Fall Down
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -5312,6 +5908,7 @@
     - and we cry holy, holy, holy
     - is the Lamb.
 - title: We Sing Alleluia
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -5338,6 +5935,7 @@
     - The ones who've gone before have gathered.
     - As one before the Lord we bow.
 - title: We three kings
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -5381,30 +5979,8 @@
     - 'heaven sings alleluia:'
     - alleluia
     - the earth replies.
-- title: The Well
-  sections:
-  - type: chorus
-    lines:
-    - I lay my burdens down.
-    - My yoke is easy now.
-    - What a friend I’ve found in you.
-  - type: chorus
-    lines:
-    - ‘Cause you’re the well that won’t run dry.
-    - Only you can satisfy
-    - through every season of my life,
-    - ‘cause you are the well that won’t run dry.
-  - type: verse
-    lines:
-    - I will thirst no more,
-    - ‘cause you refresh my soul.
-    - Living waters flow from you.
-  - type: verse
-    lines:
-    - You have given me freedom.
-    - You have given me joy.
-    - You have taken my burdens.
 - title: Were you there when they crucified my Lord?
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -5431,6 +6007,7 @@
     - Oh! Sometimes it causes me to tremble, tremble, tremble.
     - Were you there when they laid him in the tomb?
 - title: What a Beautiful Name
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -5494,6 +6071,7 @@
     - What a powerful name it is,
     - the name of Jesus.
 - title: What wondrous love is this, O my soul, O my soul
+  services: 9am
   hymnal_number: '439'
   hymnal_name: Hymnal 1982
   sections:
@@ -5519,6 +6097,7 @@
     - and through eternity I'll sing on, I'll sing on,
     - and through eternity I'll sing on.
 - title: Wherever He Leads I’ll Go
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -5551,6 +6130,7 @@
     - He is my Master, Lord, and King,
     - wherever he leads I’ll go.
 - title: Winter Snow
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -5594,6 +6174,7 @@
     - falling from the sky in the night
     - to the earth below.
 - title: Wonderful Merciful Savior
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -5624,6 +6205,7 @@
     - falling before your throne.
     - Oh, we’re falling before your throne.
 - title: Wood and Nails
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -5670,6 +6252,7 @@
     lines:
     - O humble carpenter.
 - title: Yet Not I But Through Christ In Me
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -5717,6 +6300,7 @@
     - 'still my lips shall repeat:'
     - Yet not I, but through Christ in me.
 - title: You Are My All in All
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -5739,6 +6323,7 @@
     - when I am dry, you fill my cup;
     - you are my all in all.
 - title: You Are My King (Amazing Love)
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -5760,6 +6345,7 @@
     - Jesus, you are my King.
     - Jesus, you are my King.
 - title: You Gave Your Life Away
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -5794,7 +6380,37 @@
     - how glorious is your love;
     - if I could sing forever, it's not enough,
     - it's not enough
+- title: You're Worthy of my Praise
+  services: 9am
+  sections:
+  - type: verse
+    lines:
+    - "\tI will worship "
+    - "\twith all of my heart. "
+    - "\tI will praise you "
+    - "\twith all of my strength. "
+    - "\tI will seek you "
+    - "\tall of my days. "
+    - "\tI will follow "
+    - "\tall of your ways. "
+  - type: chorus
+    lines:
+    - I will give you all my worship,
+    - I will give you all my praise.
+    - You alone I long to worship,
+    - you alone are worthy of my praise.
+  - type: verse
+    lines:
+    - "\tI will bow down "
+    - "\tand hail you ask King. "
+    - "\tI will serve you "
+    - "\tgive you everything. "
+    - "\tI will lift up "
+    - "\tmy eyes to your throne. "
+    - "\tI will trust you, "
+    - "\ttrust you alone. "
 - title: Your Grace Is Enough
+  services: 9am
   sections:
   - type: verse
     lines:
@@ -5828,31 +6444,3 @@
     - I’m covered in your love.
     - Your grace is enough for me,
     - for me.
-- title: You're Worthy of my Praise
-  sections:
-  - type: verse
-    lines:
-    - "\tI will worship "
-    - "\twith all of my heart. "
-    - "\tI will praise you "
-    - "\twith all of my strength. "
-    - "\tI will seek you "
-    - "\tall of my days. "
-    - "\tI will follow "
-    - "\tall of your ways. "
-  - type: chorus
-    lines:
-    - I will give you all my worship,
-    - I will give you all my praise.
-    - You alone I long to worship,
-    - you alone are worthy of my praise.
-  - type: verse
-    lines:
-    - "\tI will bow down "
-    - "\tand hail you ask King. "
-    - "\tI will serve you "
-    - "\tgive you everything. "
-    - "\tI will lift up "
-    - "\tmy eyes to your throne. "
-    - "\tI will trust you, "
-    - "\ttrust you alone. "

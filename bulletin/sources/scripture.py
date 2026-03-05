@@ -195,12 +195,143 @@ def _parse_oremus_response(soup: BeautifulSoup, reference: str) -> ScriptureRead
         if p:
             cleaned.append(p)
 
+    # Americanize British spellings (NRSV from Oremus uses British English)
+    cleaned = [_americanize_text(p) for p in cleaned]
+    poetry_cleaned = [
+        _americanize_text(re.sub(r'  +', ' ', l).strip())
+        for l in poetry_lines if l.strip()
+    ]
+
     return ScriptureReading(
         reference=reference,
         paragraphs=cleaned,
-        poetry_lines=[re.sub(r'  +', ' ', l).strip() for l in poetry_lines if l.strip()],
+        poetry_lines=poetry_cleaned,
         has_poetry=has_poetry,
     )
+
+
+# ---------------------------------------------------------------------------
+# British → American spelling conversion
+# ---------------------------------------------------------------------------
+
+# Word-level replacements: British → American (lowercase).
+# Applied case-sensitively by _americanize_text().
+_BRITISH_TO_AMERICAN = {
+    # -our → -or
+    "saviour": "savior",
+    "favour": "favor",
+    "favoured": "favored",
+    "favourable": "favorable",
+    "honour": "honor",
+    "honoured": "honored",
+    "honourable": "honorable",
+    "honour's": "honor's",
+    "neighbour": "neighbor",
+    "neighbours": "neighbors",
+    "neighbour's": "neighbor's",
+    "colour": "color",
+    "coloured": "colored",
+    "colours": "colors",
+    "labour": "labor",
+    "laboured": "labored",
+    "labours": "labors",
+    "behaviour": "behavior",
+    "endeavour": "endeavor",
+    "endeavoured": "endeavored",
+    "splendour": "splendor",
+    "vapour": "vapor",
+    "vapours": "vapors",
+    "valour": "valor",
+    "armour": "armor",
+    "tumour": "tumor",
+    "rigour": "rigor",
+    "fervour": "fervor",
+    "clamour": "clamor",
+    "rancour": "rancor",
+    "odour": "odor",
+    # -ise → -ize
+    "baptise": "baptize",
+    "baptised": "baptized",
+    "recognise": "recognize",
+    "recognised": "recognized",
+    "realise": "realize",
+    "realised": "realized",
+    "organise": "organize",
+    "organised": "organized",
+    "apologise": "apologize",
+    "criticise": "criticize",
+    "emphasise": "emphasize",
+    "symbolise": "symbolize",
+    "authorise": "authorize",
+    "authorised": "authorized",
+    # -ence/-ense
+    "defence": "defense",
+    "offence": "offense",
+    "offences": "offenses",
+    "licence": "license",
+    # -re → -er
+    "centre": "center",
+    "centres": "centers",
+    "metre": "meter",
+    "metres": "meters",
+    "theatre": "theater",
+    "sombre": "somber",
+    # Other common differences
+    "judgement": "judgment",
+    "judgements": "judgments",
+    "fulfil": "fulfill",
+    "fulfilled": "fulfilled",
+    "fulfilment": "fulfillment",
+    "enrol": "enroll",
+    "enrolled": "enrolled",
+    "skilful": "skillful",
+    "wilful": "willful",
+    "plough": "plow",
+    "ploughs": "plows",
+    "ploughed": "plowed",
+    "ploughman": "plowman",
+    "ploughmen": "plowmen",
+    "amongst": "among",
+    "whilst": "while",
+    "towards": "toward",
+    "counsellor": "counselor",
+    "counsellors": "counselors",
+    "traveller": "traveler",
+    "travellers": "travelers",
+    "marvelled": "marveled",
+    "marvellous": "marvelous",
+    "jewellery": "jewelry",
+    "grey": "gray",
+    "draught": "draft",
+}
+
+# Build a regex that matches any British word (case-insensitive, whole words).
+# Sorted longest-first so longer forms match before shorter ones.
+_BRIT_PATTERN = re.compile(
+    r"\b(" +
+    "|".join(re.escape(w) for w in sorted(_BRITISH_TO_AMERICAN, key=len, reverse=True)) +
+    r")\b",
+    re.IGNORECASE,
+)
+
+
+def _americanize_text(text: str) -> str:
+    """Replace common British spellings with American equivalents.
+
+    Preserves original capitalization: if the British word was capitalized
+    (e.g., 'Saviour'), the replacement will be too ('Savior').
+    """
+    def _replace(match):
+        word = match.group(0)
+        replacement = _BRITISH_TO_AMERICAN[word.lower()]
+        # Preserve capitalization
+        if word[0].isupper():
+            replacement = replacement[0].upper() + replacement[1:]
+        if word.isupper():
+            replacement = replacement.upper()
+        return replacement
+
+    return _BRIT_PATTERN.sub(_replace, text)
 
 
 def _get_start_verse(reference: str) -> str:

@@ -22,7 +22,7 @@ Covers everything from the Offertory through the Dismissal:
 from docx import Document
 
 from bulletin.config import (
-    CROSS_SYMBOL, FONT_BODY_BOLD, FONT_HEADER_FOOTER,
+    CROSS_SYMBOL, FONT_BODY, FONT_BODY_BOLD, FONT_HEADER_FOOTER,
     GIVING_URL, CONNECT_URL,
 )
 from bulletin.data.loader import (
@@ -74,7 +74,11 @@ def add_holy_communion(doc: Document, rules: SeasonalRules, data: dict):
 
     # Offering Music
     add_heading2(doc, "Offering Music")
-    _add_song_smart(doc, data.get("offertory_song"))
+    service_time = data.get("service_time", "9 am")
+    if service_time == "11 am":
+        _add_11am_offertory(doc, data)
+    else:
+        _add_song_smart(doc, data.get("offertory_song"))
 
     # Doxology
     add_spacer(doc)
@@ -122,20 +126,24 @@ def add_holy_communion(doc: Document, rules: SeasonalRules, data: dict):
     add_heading2(doc, "Breaking of the Bread")
     if rules.use_fraction_anthem:
         # Lent: sung fraction anthem (Agnus Dei)
-        fraction_song = data.get("fraction_song")
-        if fraction_song:
-            _add_song_smart(doc, fraction_song)
+        if service_time == "11 am":
+            # 11am: Cantor/People call-and-response with music notation images
+            _add_agnus_dei_images(doc)
         else:
-            # Default Agnus Dei text
-            for line in [
-                "Lamb of God, you take away the sins of the world: have mercy on us.",
-                "Lamb of God, you take away the sins of the world: have mercy on us.",
-                "Lamb of God, you take away the sins of the world: grant us peace.",
-            ]:
-                p = doc.add_paragraph(style="Body - Dialogue")
-                run = p.add_run(line)
-                run.bold = True
-                run.font.name = FONT_BODY_BOLD
+            fraction_song = data.get("fraction_song")
+            if fraction_song:
+                _add_song_smart(doc, fraction_song)
+            else:
+                # Default Agnus Dei text
+                for line in [
+                    "Lamb of God, you take away the sins of the world: have mercy on us.",
+                    "Lamb of God, you take away the sins of the world: have mercy on us.",
+                    "Lamb of God, you take away the sins of the world: grant us peace.",
+                ]:
+                    p = doc.add_paragraph(style="Body - Dialogue")
+                    run = p.add_run(line)
+                    run.bold = True
+                    run.font.name = FONT_BODY_BOLD
     else:
         add_celebrant_line(doc, "Celebrant", rules.fraction_celebrant)
         add_people_line(doc, "People", rules.fraction_people)
@@ -465,12 +473,28 @@ def _add_doxology_amen(doc: Document, prayer: dict):
 
 
 def _add_song_smart(doc: Document, song_data: dict | None):
-    """Add a song, choosing two-column layout for 3+ verse songs."""
+    """Add a song, choosing two-column layout for 3+ verse songs.
+
+    If the song has no sections (hymnal-only), renders just the header
+    line (title + hymnal reference) without wrapping in a lyric table.
+    """
     if not song_data:
         add_body(doc, "[Song lyrics not found]")
         return
 
     sections = song_data.get("sections", [])
+
+    # Hymnal-only: just the header line, no lyrics
+    if not sections:
+        add_hymn_header(
+            doc,
+            song_data["title"],
+            song_data.get("tune_name"),
+            song_data.get("hymnal_number"),
+            song_data.get("hymnal_name"),
+        )
+        return
+
     max_line_len = max(
         (len(line) for s in sections for line in s["lines"]),
         default=0
@@ -637,6 +661,106 @@ def _add_qr_code(doc: Document, paragraph):
     # Insert the drawing into the first run of the paragraph
     first_run = paragraph.runs[0]._element
     first_run.insert(0, drawing)
+
+
+def _add_11am_offertory(doc: Document, data: dict):
+    """Add the 11am offertory section.
+
+    The anthem/offering music at 11am may be:
+      - A hymnal song (e.g. '#482 Lord of all Hopefulness') → header only
+      - A choir anthem (e.g. 'Offertory, John Ness Beck') → title + stub
+      - A song with YAML lyrics → full song rendering
+
+    If the anthem has a hymnal number, it's treated as a hymn.
+    Otherwise, the anthem title is shown with a stub for pasting lyrics.
+    """
+    from docx.shared import Pt
+    from bulletin.sources.music_11am import parse_11am_identifier
+
+    anthem_title = data.get("offertory_anthem_title", "")
+
+    if anthem_title:
+        parsed = parse_11am_identifier(anthem_title)
+        if parsed["hymnal_number"]:
+            # It's a hymnal song — render as header only
+            add_hymn_header(
+                doc,
+                parsed["title"] or "",
+                parsed.get("setting"),
+                parsed["hymnal_number"],
+                parsed["hymnal_name"],
+            )
+        else:
+            # It's a choir anthem — render title + stub
+            p = doc.add_paragraph(style="Body")
+            p.add_run(anthem_title)
+
+            p = doc.add_paragraph(style="Body")
+            run = p.add_run("TODO: Paste lyrics here using Paste Unformatted text")
+            run.italic = True
+            run.font.name = FONT_BODY
+            run.font.size = Pt(11)
+    else:
+        p = doc.add_paragraph(style="Body")
+        p.add_run("[Anthem]")
+
+    # Also render the regular offertory hymn if one was assigned
+    offertory_song = data.get("offertory_song")
+    if offertory_song:
+        add_spacer(doc)
+        _add_song_smart(doc, offertory_song)
+
+
+def _add_agnus_dei_images(doc: Document):
+    """Add the Agnus Dei fraction anthem with inline music notation images.
+
+    For 11am Lent, the People's response is rendered as inline PNG images
+    of the music notation rather than as text. The images are:
+      - Agnus Dei Responses 1-2.png  (used for verses 1 and 2)
+      - Agnus Dei Response final.png (used for verse 3)
+
+    Layout:
+      Cantor  Lamb of God, you take away the sins of the world.
+      People  [inline image — 4" wide]
+      (spacer)
+      (repeat for verses 2 and 3)
+    """
+    from pathlib import Path
+    from docx.shared import Inches
+    from docx.oxml.ns import qn
+
+    source_dir = Path(__file__).parent.parent.parent.parent / "source_documents"
+    img_1_2 = source_dir / "Agnus Dei Responses 1-2.png"
+    img_final = source_dir / "Agnus Dei Response final.png"
+
+    cantor_lines = [
+        "Lamb of God, you take away the sins of the world.",
+        "Lamb of God, you take away the sins of the world.",
+        "Lamb of God, you take away the sins of the world.",
+    ]
+    image_paths = [img_1_2, img_1_2, img_final]
+
+    for i, (cantor_text, img_path) in enumerate(zip(cantor_lines, image_paths)):
+        # Cantor line
+        add_celebrant_line(doc, "Cantor", cantor_text)
+
+        # People line with inline image
+        p = doc.add_paragraph(style="Body - Dialogue")
+        run_label = p.add_run("People")
+        run_label.bold = True
+        run_label.font.name = FONT_BODY_BOLD
+        p.add_run("\t")
+
+        if img_path.exists():
+            run_img = p.add_run()
+            run_img.add_picture(str(img_path), width=Inches(4))
+        else:
+            run_fallback = p.add_run("[Music notation image not found]")
+            run_fallback.italic = True
+
+        # Spacer between verses (but not after the last)
+        if i < 2:
+            add_spacer(doc)
 
 
 def _add_blessing_line(doc: Document, text: str):

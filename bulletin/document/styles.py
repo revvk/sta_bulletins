@@ -128,8 +128,8 @@ _STYLE_DEFS = [
     ("Reading (Poetry)", FONT_BODY, 11, False, False,
      WD_ALIGN_PARAGRAPH.LEFT, 0.455, -0.135, 0, 0, 1.0),
 
-    # Psalm text (bold, all congregation reads)
-    ("Psalm", FONT_BODY, 12, True, False,
+    # Psalm text (non-bold base; bold applied per-verse for responsive readings)
+    ("Psalm", FONT_BODY, 12, False, False,
      WD_ALIGN_PARAGRAPH.LEFT, 0.455, -0.13, 3, 0, 1.0),
 
     # People's recitation of long texts: Confession, Lord's Prayer
