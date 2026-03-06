@@ -114,16 +114,25 @@ class BulletinBuilder:
         from bulletin.document.formatting import (
             add_spacer, add_introductory_rubric, add_heading2,
         )
-        add_introductory_rubric(
-            doc,
-            "Once the Prelude begins, please refrain from further visiting "
-            "and conversation as we prepare our hearts and thoughts for worship. "
-            "Prayers before worship can be found in the Book of Common Prayer, "
-            "p. 833-35."
-        )
-        add_spacer(doc)
-        add_heading2(doc, "Prelude")
-        add_spacer(doc)
+        if service_time == "8 am":
+            # 8am: shorter rubric, no Prelude heading (no music)
+            add_introductory_rubric(
+                doc,
+                "Prayers before worship can be found in the "
+                "Book of Common Prayer, p. 833-35."
+            )
+            add_spacer(doc)
+        else:
+            add_introductory_rubric(
+                doc,
+                "Once the Prelude begins, please refrain from further visiting "
+                "and conversation as we prepare our hearts and thoughts for worship. "
+                "Prayers before worship can be found in the Book of Common Prayer, "
+                "p. 833-35."
+            )
+            add_spacer(doc)
+            add_heading2(doc, "Prelude")
+            add_spacer(doc)
 
         # Word of God
         wog_data = self._prepare_word_of_god_data()
@@ -292,6 +301,8 @@ class BulletinBuilder:
     def _resolve_songs(self, prompt_fn):
         """Look up all song lyrics from music data."""
         self._missing_songs = []
+        if self.service_time == "8 am":
+            return  # No music at 8am
         service_key = self.service_time  # e.g. "9 am" or "11 am"
 
         slots = self._get_music_slots()
@@ -435,7 +446,9 @@ class BulletinBuilder:
         from bulletin.config import PREACHER_NAMES
         preacher_short = ""
         if self.clergy:
-            if self.service_time == "11 am":
+            if self.service_time == "8 am":
+                preacher_short = self.clergy.preacher_8am or ""
+            elif self.service_time == "11 am":
                 preacher_short = self.clergy.preacher_11am or ""
             else:
                 preacher_short = self.clergy.preacher_9am or ""
@@ -470,9 +483,9 @@ class BulletinBuilder:
     def _prepare_holy_communion_data(self) -> dict:
         """Prepare the data dict for add_holy_communion."""
         offertory = self._lookup_slot("Offertory")
-        # At 11am, always use the text Sanctus (with cross) rather than
-        # a hymnal reference — the setting doesn't matter for the bulletin.
-        if self.service_time == "11 am":
+        # At 8am and 11am, always use the text Sanctus (with cross)
+        # rather than a hymnal reference.
+        if self.service_time in ("8 am", "11 am"):
             sanctus = None
         else:
             sanctus = self._lookup_slot("Sanctus")

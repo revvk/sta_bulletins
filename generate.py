@@ -71,7 +71,7 @@ def main():
 
     # Determine which services to generate
     if args.service == "all":
-        services = [s for s in SERVICE_TIMES if s != "8 am"]  # 8am not yet implemented
+        services = list(SERVICE_TIMES)
     else:
         services = [args.service]
 

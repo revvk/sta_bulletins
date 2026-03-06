@@ -31,9 +31,9 @@ from bulletin.data.loader import (
 )
 from bulletin.document.formatting import (
     add_spacer, add_heading, add_heading2, add_rubric,
-    add_introductory_rubric, add_body, add_celebrant_line,
-    add_people_line, add_cross_symbol, add_song, add_song_two_column,
-    add_hymn_header,
+    add_introductory_rubric, add_body, add_body_with_bold_ending,
+    add_celebrant_line, add_people_line, add_cross_symbol,
+    add_song, add_song_two_column, add_hymn_header,
 )
 from bulletin.logic.rules import SeasonalRules
 
@@ -69,33 +69,42 @@ def add_holy_communion(doc: Document, rules: SeasonalRules, data: dict):
     add_spacer(doc)
     add_introductory_rubric(doc, "Be seated.")
     add_heading2(doc, "Offertory")
-    _add_offertory_rubric(doc)
-    add_spacer(doc)
-
-    # Offering Music
-    add_heading2(doc, "Offering Music")
     service_time = data.get("service_time", "9 am")
-    if service_time == "11 am":
-        _add_11am_offertory(doc, data)
+    if service_time in ("8 am", "11 am"):
+        _add_short_offertory_rubric(doc)
     else:
-        _add_song_smart(doc, data.get("offertory_song"))
-
-    # Doxology
+        _add_offertory_rubric(doc)
     add_spacer(doc)
-    add_introductory_rubric(doc, "Please stand.")
-    add_heading2(doc, "Doxology")
-    _DOXOLOGY = [
-        "Praise God, from Whom all blessings flow;",
-        "Praise Him, all creatures here below;",
-        "Praise Him above, ye heavenly host:",
-        "Praise Father, Son, and Holy Ghost.",
-    ]
-    for line in _DOXOLOGY:
-        doc.add_paragraph(line, style="Body - Lyrics")
+
+    # Offering Music (skip at 8am — no music)
+    if service_time != "8 am":
+        add_heading2(doc, "Offering Music")
+        if service_time == "11 am":
+            _add_11am_offertory(doc, data)
+        else:
+            _add_song_smart(doc, data.get("offertory_song"))
+
+    # Doxology (skip at 8am — no music)
+    if service_time != "8 am":
+        add_spacer(doc)
+        add_introductory_rubric(doc, "Please stand.")
+        add_heading2(doc, "Doxology")
+        _DOXOLOGY = [
+            "Praise God, from Whom all blessings flow;",
+            "Praise Him, all creatures here below;",
+            "Praise Him above, ye heavenly host:",
+            "Praise Father, Son, and Holy Ghost.",
+        ]
+        for line in _DOXOLOGY:
+            doc.add_paragraph(line, style="Body - Lyrics")
 
     # --- The Great Thanksgiving ---
     add_spacer(doc)
-    add_introductory_rubric(doc, "Remain standing.")
+    if service_time == "8 am":
+        # Congregation is still seated (no Doxology), so "Please stand"
+        add_introductory_rubric(doc, "Please stand.")
+    else:
+        add_introductory_rubric(doc, "Remain standing.")
     add_heading2(doc, "The Great Thanksgiving")
 
     # Sursum Corda
@@ -125,10 +134,13 @@ def add_holy_communion(doc: Document, rules: SeasonalRules, data: dict):
     add_spacer(doc)
     add_heading2(doc, "Breaking of the Bread")
     if rules.use_fraction_anthem:
-        # Lent: sung fraction anthem (Agnus Dei)
+        # Lent: fraction anthem (Agnus Dei)
         if service_time == "11 am":
             # 11am: Cantor/People call-and-response with music notation images
             _add_agnus_dei_images(doc)
+        elif service_time == "8 am":
+            # 8am: spoken Agnus Dei with split bold
+            _add_agnus_dei_spoken(doc)
         else:
             fraction_song = data.get("fraction_song")
             if fraction_song:
@@ -163,14 +175,15 @@ def add_holy_communion(doc: Document, rules: SeasonalRules, data: dict):
                "are still welcome at the rail for a blessing; just cross your "
                "arms over your chest.")
 
-    # --- Communion Music ---
-    add_spacer(doc)
-    add_heading2(doc, "Communion Music")
-    comm_songs = data.get("communion_songs", [])
-    for i, song in enumerate(comm_songs):
-        if i > 0:
-            add_spacer(doc)
-        _add_song_smart(doc, song)
+    # --- Communion Music (skip at 8am — no music) ---
+    if service_time != "8 am":
+        add_spacer(doc)
+        add_heading2(doc, "Communion Music")
+        comm_songs = data.get("communion_songs", [])
+        for i, song in enumerate(comm_songs):
+            if i > 0:
+                add_spacer(doc)
+            _add_song_smart(doc, song)
 
     # --- Closing Prayer ---
     add_spacer(doc)
@@ -232,10 +245,11 @@ def add_holy_communion(doc: Document, rules: SeasonalRules, data: dict):
             )
         _add_blessing_line(doc, blessing_text)
 
-    # --- Closing Hymn ---
-    add_spacer(doc)
-    add_heading2(doc, "Closing Hymn")
-    _add_song_smart(doc, data.get("closing_hymn"))
+    # --- Closing Hymn (skip at 8am — no music) ---
+    if service_time != "8 am":
+        add_spacer(doc)
+        add_heading2(doc, "Closing Hymn")
+        _add_song_smart(doc, data.get("closing_hymn"))
 
     # --- Dismissal ---
     add_spacer(doc)
@@ -244,12 +258,13 @@ def add_holy_communion(doc: Document, rules: SeasonalRules, data: dict):
     add_celebrant_line(doc, "", data.get("dismissal_deacon", ""))
     add_people_line(doc, "People", data.get("dismissal_people", ""))
 
-    # --- Postlude ---
-    add_spacer(doc)
-    add_heading2(doc, "Postlude")
-    postlude_songs = data.get("postlude_songs", [])
-    for song in postlude_songs:
-        _add_song_smart(doc, song)
+    # --- Postlude (skip at 8am — no music) ---
+    if service_time != "8 am":
+        add_spacer(doc)
+        add_heading2(doc, "Postlude")
+        postlude_songs = data.get("postlude_songs", [])
+        for song in postlude_songs:
+            _add_song_smart(doc, song)
 
 
 def _add_prayer_a_or_b(doc: Document, ep_data: dict, data: dict,
@@ -289,6 +304,8 @@ def _add_prayer_a_or_b(doc: Document, ep_data: dict, data: dict,
     sanctus_song = data.get("sanctus_song")
     if sanctus_song:
         _add_song_smart(doc, sanctus_song)
+    elif data.get("service_time") == "8 am":
+        _add_sanctus_spoken(doc, prayers["sanctus"])
     else:
         # Text version of Sanctus
         _add_sanctus_text(doc, prayers["sanctus"])
@@ -371,6 +388,8 @@ def _add_prayer_c(doc: Document, ep_data: dict, data: dict, prayers: dict):
     sanctus_song = data.get("sanctus_song")
     if sanctus_song:
         _add_song_smart(doc, sanctus_song)
+    elif data.get("service_time") == "8 am":
+        _add_sanctus_spoken(doc, prayers["sanctus"])
     else:
         _add_sanctus_text(doc, prayers["sanctus"])
 
@@ -777,3 +796,63 @@ def _add_blessing_line(doc: Document, text: str):
                 p.add_run(part)
     else:
         p.add_run(text)
+
+
+def _add_short_offertory_rubric(doc: Document):
+    """Add the shorter offertory rubric for 8am and 11am services.
+
+    No QR code, no Connection Card URL — just the giving URL in
+    Gill Sans Nova Light inline with the italic rubric text.
+    """
+    p = doc.add_paragraph(style="Body - Rubric")
+
+    p.add_run(
+        "Please place your offerings and Connection Cards in the "
+        "offering plates as they are passed. You can also easily give "
+        "online at "
+    )
+
+    run_url = p.add_run(GIVING_URL)
+    run_url.font.name = FONT_HEADER_FOOTER
+    run_url.italic = False
+
+    p.add_run(".")
+
+
+def _add_sanctus_spoken(doc: Document, lines: list[str]):
+    """Add the Sanctus as a spoken bold People recitation (8am).
+
+    All text is bold in the People character style, with ✠ rendered
+    via the bold cross symbol helper (same pattern as Nicene Creed).
+    """
+    text = " ".join(line.strip() for line in lines)
+    p = doc.add_paragraph(style="Body - People Recitation")
+
+    if CROSS_SYMBOL in text:
+        parts = text.split(CROSS_SYMBOL)
+        for i, part in enumerate(parts):
+            if i > 0:
+                add_cross_symbol(p)
+            if part:
+                run = p.add_run(part)
+                run.style = doc.styles["People"]
+    else:
+        run = p.add_run(text)
+        run.style = doc.styles["People"]
+
+
+def _add_agnus_dei_spoken(doc: Document):
+    """Add the Agnus Dei (Fraction Anthem) as spoken text (8am Lent).
+
+    Three lines with split bold — the response portion is bold:
+      Lamb of God, you take away the sins of the world: **have mercy on us.**
+      Lamb of God, you take away the sins of the world: **have mercy on us.**
+      Lamb of God, you take away the sins of the world: **grant us peace.**
+    """
+    _AGNUS_DEI = [
+        ("Lamb of God, you take away the sins of the world: ", "have mercy on us."),
+        ("Lamb of God, you take away the sins of the world: ", "have mercy on us."),
+        ("Lamb of God, you take away the sins of the world: ", "grant us peace."),
+    ]
+    for plain, bold in _AGNUS_DEI:
+        add_body_with_bold_ending(doc, plain, bold)

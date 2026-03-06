@@ -88,6 +88,9 @@ def add_word_of_god(doc: Document, rules: SeasonalRules, data: dict):
         )
         add_spacer(doc)
         add_introductory_rubric(doc, "Be seated.")
+    elif service_time == "8 am":
+        # No children's section at 8am
+        add_introductory_rubric(doc, "Be seated.")
     else:
         add_introductory_rubric(doc, "Be seated.")
         # --- Children's Sermon ---
@@ -105,8 +108,9 @@ def add_word_of_god(doc: Document, rules: SeasonalRules, data: dict):
     # --- Sequence Hymn ---
     add_spacer(doc)
     add_introductory_rubric(doc, "Please stand.")
-    add_heading2(doc, "Sequence Hymn")
-    _add_song_smart(doc, data.get("sequence_hymn"))
+    if service_time != "8 am":
+        add_heading2(doc, "Sequence Hymn")
+        _add_song_smart(doc, data.get("sequence_hymn"))
 
     # --- Gospel ---
     _add_gospel(doc, data["gospel_ref"], data["gospel_book"],
@@ -148,13 +152,16 @@ def add_word_of_god(doc: Document, rules: SeasonalRules, data: dict):
 def _add_standard_opening(doc: Document, rules: SeasonalRules,
                           data: dict, prayers: dict):
     """Standard (non-Lent) opening: Word of God → Processional → Acclamation → Collect for Purity → Song of Praise."""
+    service_time = data.get("service_time", "9 am")
+
     add_heading(doc, "The Word of God")
     add_spacer(doc)
 
     # Processional
     add_introductory_rubric(doc, "Please stand.")
     add_heading2(doc, "Processional")
-    _add_song_smart(doc, data.get("processional"))
+    if service_time != "8 am":
+        _add_song_smart(doc, data.get("processional"))
 
     # Opening Acclamation
     add_spacer(doc)
@@ -174,6 +181,8 @@ def _add_standard_opening(doc: Document, rules: SeasonalRules,
     add_heading2(doc, rules.song_of_praise_label)
     if rules.is_advent:
         _add_advent_wreath(doc, data)
+    elif service_time == "8 am":
+        _add_gloria_spoken(doc, prayers)
     else:
         _add_song_smart(doc, data.get("song_of_praise"))
 
@@ -181,13 +190,16 @@ def _add_standard_opening(doc: Document, rules: SeasonalRules,
 def _add_penitential_order(doc: Document, rules: SeasonalRules,
                            data: dict, prayers: dict):
     """Lenten opening: Penitential Order → Processional → Acclamation → [Decalogue/Sentence] → Confession → Word of God → Kyrie."""
+    service_time = data.get("service_time", "9 am")
+
     add_heading(doc, "A Penitential Order")
     add_spacer(doc)
 
     # Processional
     add_introductory_rubric(doc, "Please stand.")
     add_heading2(doc, "Processional")
-    _add_song_smart(doc, data.get("processional"))
+    if service_time != "8 am":
+        _add_song_smart(doc, data.get("processional"))
 
     # Opening Acclamation
     add_spacer(doc)
@@ -223,7 +235,10 @@ def _add_penitential_order(doc: Document, rules: SeasonalRules,
     add_spacer(doc)
     add_introductory_rubric(doc, "Please stand.")
     add_heading2(doc, "Kyrie")
-    _add_song_smart(doc, data.get("song_of_praise"))
+    if service_time == "8 am":
+        _add_kyrie_spoken(doc)
+    else:
+        _add_song_smart(doc, data.get("song_of_praise"))
 
 
 def _add_confession(doc: Document, prayers: dict):
@@ -547,3 +562,28 @@ def _add_celebrant_with_cross(doc: Document, label: str, text: str):
             p.add_run(parts[1])
     else:
         p.add_run(text)
+
+
+def _add_gloria_spoken(doc: Document, prayers: dict):
+    """Add the Gloria as spoken bold text (People recitation) for 8am.
+
+    Joins the Gloria lines into a single flowing paragraph rendered in bold
+    using the People character style, matching the Nicene Creed pattern.
+    """
+    text = " ".join(line.strip() for line in prayers["gloria"])
+    p = doc.add_paragraph(style="Body - People Recitation")
+    run = p.add_run(text)
+    run.style = doc.styles["People"]
+
+
+def _add_kyrie_spoken(doc: Document):
+    """Add the Kyrie as spoken Celebrant/People dialogue for 8am.
+
+    Renders the simplified three-line form:
+        Celebrant   Lord, have mercy.
+        People      Christ, have mercy.   (bold)
+        Celebrant   Lord, have mercy.
+    """
+    add_celebrant_line(doc, "Celebrant", "Lord, have mercy.")
+    add_people_line(doc, "People", "Christ, have mercy.")
+    add_celebrant_line(doc, "Celebrant", "Lord, have mercy.")
