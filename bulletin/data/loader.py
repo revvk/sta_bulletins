@@ -1,6 +1,6 @@
 """
 Loads YAML data files for BCP texts, proper prefaces, blessings, POP forms,
-reading introductions, psalm reader instructions, and staff.
+reading introductions, psalm reader instructions, hymnal index, and staff.
 """
 
 import re
@@ -51,6 +51,30 @@ def load_reading_introductions() -> dict:
 
 def load_psalm_reader_instructions() -> dict:
     return _load_yaml("bcp_texts/psalm_reader_instructions.yaml")
+
+
+def load_hymnal_first_lines() -> dict:
+    """Load the Hymnal 1982 index of first lines.
+
+    Returns:
+        Dict with int keys (hymn numbers 1-720) mapping to canonical
+        first-line strings, plus a 'cross_references' key with alternate
+        first lines.
+    """
+    return _load_yaml("hymnal_1982_first_lines.yaml")
+
+
+def get_canonical_hymn_title(hymn_number: int) -> str | None:
+    """Look up the canonical first line for a Hymnal 1982 hymn number.
+
+    Args:
+        hymn_number: Integer hymn number (1-720).
+
+    Returns:
+        The canonical first line, or None if the number isn't found.
+    """
+    data = load_hymnal_first_lines()
+    return data.get(hymn_number)
 
 
 def extract_book_name(reference: str) -> str:
