@@ -18,7 +18,7 @@ from bulletin.logic.rules import get_seasonal_rules, get_dismissal_text
 from bulletin.data.loader import (
     load_common_prayers, load_pop_forms, load_blessings,
     get_proper_preface_text, get_preface_option_labels,
-    load_staff,
+    load_staff, get_canonical_hymn_title,
 )
 
 
@@ -547,6 +547,28 @@ class BulletinBuilder:
             return self.music
         return []
 
+    @staticmethod
+    def _apply_canonical_title(song_data: dict) -> dict:
+        """Replace the title with the canonical Hymnal 1982 first line.
+
+        Only applies to regular hymns (all-digit hymnal numbers), not
+        service music (S-prefix) or songs without hymnal numbers.
+
+        Returns a new dict if the title was changed, otherwise the original.
+        """
+        if not song_data:
+            return song_data
+        hymnal_num = str(song_data.get("hymnal_number", "") or "")
+        if hymnal_num and hymnal_num.isdigit():
+            canonical = get_canonical_hymn_title(int(hymnal_num))
+            if canonical and canonical != song_data.get("title"):
+                original = song_data.get("title", "")
+                song_data = dict(song_data)  # shallow copy to avoid mutating cache
+                song_data["title"] = canonical
+                if original:
+                    print(f"  Hymn #{hymnal_num}: '{original}' → '{canonical}'")
+        return song_data
+
     def _lookup_slot(self, slot_name: str) -> dict | None:
         """Look up a song from the music data for a given service slot.
 
@@ -574,15 +596,15 @@ class BulletinBuilder:
                             hymnal_num = str(song.get("hymnal_number", "") or "")
                             # All-digit number = regular hymn → strip lyrics
                             if hymnal_num and hymnal_num.isdigit():
-                                return {
+                                return self._apply_canonical_title({
                                     "title": song["title"],
                                     "hymnal_number": hymnal_num,
                                     "hymnal_name": song.get("hymnal_name"),
                                     "tune_name": song.get("tune_name"),
                                     "sections": [],  # header only
-                                }
+                                })
                             # S-prefix or no number → keep full lyrics
-                        return song
+                        return self._apply_canonical_title(song)
                     # For 11am: construct a hymnal-only stub if it has a hymnal number
                     if self.service_time == "11 am":
                         from bulletin.sources.music_11am import parse_11am_identifier
@@ -593,13 +615,13 @@ class BulletinBuilder:
                             setting = parsed.get("setting")
                             if setting and title:
                                 title = f"{title} ({setting})"
-                            return {
+                            return self._apply_canonical_title({
                                 "title": title,
                                 "hymnal_number": parsed["hymnal_number"],
                                 "hymnal_name": parsed["hymnal_name"],
                                 "tune_name": None,
                                 "sections": [],  # empty → header only
-                            }
+                            })
                     return None
         return None
 
