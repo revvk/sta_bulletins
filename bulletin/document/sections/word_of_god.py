@@ -131,7 +131,7 @@ def add_word_of_god(doc: Document, rules: SeasonalRules, data: dict):
     # --- Prayers of the People ---
     add_spacer(doc)
     add_heading2(doc, "Prayers of the People")
-    _add_pop(doc, data.get("pop_elements", []))
+    add_pop(doc, data.get("pop_elements", []))
     add_spacer(doc)
     add_rubric(doc, data.get("pop_concluding_rubric",
                               "The Celebrant concludes with a suitable Collect."))
@@ -424,7 +424,7 @@ def _add_nicene_creed(doc: Document, prayers: dict):
             run.style = doc.styles["People"]
 
 
-def _add_pop(doc: Document, elements: list[dict]):
+def add_pop(doc: Document, elements: list[dict]):
     """Add Prayers of the People elements."""
     for i, elem in enumerate(elements):
         etype = elem.get("type", "leader")

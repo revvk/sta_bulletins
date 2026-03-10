@@ -16,6 +16,7 @@ All decisions are derived from the liturgical title, color, and notes
 fields in the Google Sheet.
 """
 
+import re
 from dataclasses import dataclass, field
 from datetime import date
 from typing import Optional
@@ -360,3 +361,128 @@ def get_seasonal_rules(title: str, color: str, notes: str,
         prompt_preface=prompt_preface,
         season=season,
     )
+
+
+# ---------------------------------------------------------------------------
+# Short liturgical title for filenames
+# ---------------------------------------------------------------------------
+
+_ORDINAL_MAP = {
+    "first": "1", "second": "2", "third": "3", "fourth": "4",
+    "fifth": "5", "sixth": "6", "seventh": "7", "eighth": "8",
+    "ninth": "9", "tenth": "10", "eleventh": "11", "twelfth": "12",
+    "thirteenth": "13", "fourteenth": "14", "fifteenth": "15",
+    "sixteenth": "16", "seventeenth": "17", "eighteenth": "18",
+    "nineteenth": "19", "twentieth": "20", "twenty-first": "21",
+    "twenty-second": "22", "twenty-third": "23", "twenty-fourth": "24",
+    "twenty-fifth": "25", "twenty-sixth": "26", "twenty-seventh": "27",
+    "twenty-eighth": "28",
+    "last": "Last",
+}
+
+# Season keywords to match in the title (order matters — check longer first)
+_SEASON_KEYWORDS = [
+    "after Pentecost",
+    "after the Epiphany",
+    "of Advent",
+    "in Advent",
+    "of Christmas",
+    "in Lent",
+    "of Easter",
+    "of Epiphany",
+    "in Epiphany",
+]
+
+_SEASON_SHORT = {
+    "after Pentecost": "Pentecost",
+    "after the Epiphany": "Epiphany",
+    "of Advent": "Advent",
+    "in Advent": "Advent",
+    "of Christmas": "Christmas",
+    "in Lent": "Lent",
+    "of Easter": "Easter",
+    "of Epiphany": "Epiphany",
+    "in Epiphany": "Epiphany",
+}
+
+# Special days that should use their full title as-is
+_SPECIAL_DAYS = [
+    "ash wednesday",
+    "palm sunday",
+    "maundy thursday",
+    "good friday",
+    "holy saturday",
+    "easter day",
+    "easter vigil",
+    "pentecost",
+    "trinity sunday",
+    "all saints",
+    "christ the king",
+    "christmas eve",
+    "christmas day",
+    "the epiphany",
+]
+
+
+def get_short_liturgical_title(title: str, proper: str = "") -> str:
+    """Convert a full liturgical title to a short form for filenames.
+
+    Examples:
+        "Third Sunday in Lent"           → "Lent 3"
+        "First Sunday of Advent"         → "Advent 1"
+        "Fourth Sunday of Easter"        → "Easter 4"
+        "Second Sunday after Pentecost"  → "Proper 5"  (uses proper field)
+        "Ash Wednesday"                  → "Ash Wednesday"
+        "Trinity Sunday"                 → "Trinity Sunday"
+
+    Args:
+        title: Full liturgical title from the Google Sheet.
+        proper: The Proper number from the sheet (e.g., "5" or "-" or "").
+
+    Returns:
+        Short title string (without the year letter — caller appends that).
+    """
+    title_lower = title.strip().lower()
+
+    # Check for Ordinary Time — use Proper number
+    # (must come before special-day check so "after Pentecost" isn't
+    # caught by the "pentecost" special-day entry)
+    if "after pentecost" in title_lower or "proper" in title_lower:
+        proper_clean = proper.strip().replace("-", "")
+        if proper_clean and proper_clean.isdigit():
+            return f"Proper {proper_clean}"
+        # Fall through to ordinal extraction
+
+    # Try to extract ordinal + season keyword
+    # (must come before special-day check so "after the Epiphany" isn't
+    # caught by the "the epiphany" special-day entry)
+    for season_phrase in _SEASON_KEYWORDS:
+        if season_phrase.lower() in title_lower:
+            short_season = _SEASON_SHORT[season_phrase]
+            ordinal_num = _extract_ordinal(title_lower)
+            if ordinal_num:
+                return f"{short_season} {ordinal_num}"
+            return short_season
+
+    # Check for special days (standalone feasts, not part of a season pattern)
+    for special in _SPECIAL_DAYS:
+        if special in title_lower:
+            return title.strip()
+
+    # Fallback: return the full title
+    return title.strip()
+
+
+def _extract_ordinal(title_lower: str) -> str:
+    """Extract an ordinal number from a lowercased title string."""
+    # Check word ordinals (longest first to match "twenty-first" before "first")
+    for word, num in sorted(_ORDINAL_MAP.items(), key=lambda x: -len(x[0])):
+        if word in title_lower:
+            return num
+
+    # Check numeric ordinals (e.g., "1st", "2nd", "3rd", "23rd")
+    m = re.search(r'\b(\d+)(?:st|nd|rd|th)\b', title_lower)
+    if m:
+        return m.group(1)
+
+    return ""

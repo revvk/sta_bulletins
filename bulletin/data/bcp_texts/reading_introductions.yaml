@@ -1,0 +1,88 @@
+# Reading Introductions for the Books of the Bible
+#
+# Maps the book name (as it appears in lectionary reference strings)
+# to the descriptive phrase used in the lay reader's introduction.
+#
+# Usage: "A Reading from {value}:"
+# Example: "A Reading from the Book of Exodus:"
+#
+# Source: "Reading Introductions for the Books of the Bible.docx"
+
+# --- Old Testament ---
+Genesis: "the Book of Genesis"
+Exodus: "the Book of Exodus"
+Leviticus: "the Book of Leviticus"
+Numbers: "the Book of Numbers"
+Deuteronomy: "the Book of Deuteronomy"
+Joshua: "the Book of Joshua"
+Judges: "the Book of Judges"
+Ruth: "the Book of Ruth"
+1 Samuel: "the First Book of Samuel"
+2 Samuel: "the Second Book of Samuel"
+1 Kings: "the First Book of Kings"
+2 Kings: "the Second Book of Kings"
+1 Chronicles: "the First Book of Chronicles"
+2 Chronicles: "the Second Book of Chronicles"
+Ezra: "the Book of Ezra"
+Nehemiah: "the Book of Nehemiah"
+Esther: "the Book of Esther"
+Job: "the Book of Job"
+Proverbs: "the Book of Proverbs"
+Ecclesiastes: "the Book of Ecclesiastes"
+Song of Solomon: "the Song of Solomon"
+Lamentations: "the Book of Lamentations"
+
+# --- Prophets ---
+Isaiah: "the Book of the Prophet Isaiah"
+Jeremiah: "the Book of the Prophet Jeremiah"
+Ezekiel: "the Book of the Prophet Ezekiel"
+Daniel: "the Book of the Prophet Daniel"
+Hosea: "the Book of the Prophet Hosea"
+Joel: "the Book of the Prophet Joel"
+Amos: "the Book of the Prophet Amos"
+Obadiah: "the Book of the Prophet Obadiah"
+Jonah: "the Book of the Prophet Jonah"
+Micah: "the Book of the Prophet Micah"
+Nahum: "the Book of the Prophet Nahum"
+Habakkuk: "the Book of the Prophet Habakkuk"
+Zephaniah: "the Book of the Prophet Zephaniah"
+Haggai: "the Book of the Prophet Haggai"
+Zechariah: "the Book of the Prophet Zechariah"
+Malachi: "the Book of the Prophet Malachi"
+
+# --- Gospels ---
+Matthew: "the Gospel according to Matthew"
+Mark: "the Gospel according to Mark"
+Luke: "the Gospel according to Luke"
+John: "the Gospel according to John"
+
+# --- Acts ---
+Acts: "the Acts of the Apostles"
+
+# --- Pauline Epistles ---
+Romans: "the Letter of Paul to the Romans"
+1 Corinthians: "the First Letter of Paul to the Corinthians"
+2 Corinthians: "the Second Letter of Paul to the Corinthians"
+Galatians: "the Letter of Paul to the Galatians"
+Ephesians: "the Letter of Paul to the Ephesians"
+Philippians: "the Letter of Paul to the Philippians"
+Colossians: "the Letter of Paul to the Colossians"
+1 Thessalonians: "the First Letter of Paul to the Thessalonians"
+2 Thessalonians: "the Second Letter of Paul to the Thessalonians"
+1 Timothy: "the First Letter of Paul to Timothy"
+2 Timothy: "the Second Letter of Paul to Timothy"
+Titus: "the Letter of Paul to Titus"
+Philemon: "the Letter of Paul to Philemon"
+
+# --- General Epistles ---
+Hebrews: "the Letter to the Hebrews"
+James: "the Letter of James"
+1 Peter: "the First Letter of Peter"
+2 Peter: "the Second Letter of Peter"
+1 John: "the First Letter of John"
+2 John: "the Second Letter of John"
+3 John: "the Third Letter of John"
+Jude: "the Letter of Jude"
+
+# --- Revelation ---
+Revelation: "the Revelation to St. John"

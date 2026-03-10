@@ -1,8 +1,9 @@
 """
-Loads YAML data files for BCP texts, proper prefaces, blessings, POP forms, and staff.
+Loads YAML data files for BCP texts, proper prefaces, blessings, POP forms,
+reading introductions, psalm reader instructions, and staff.
 """
 
-import os
+import re
 from pathlib import Path
 from functools import lru_cache
 
@@ -42,6 +43,26 @@ def load_pop_forms() -> dict:
 
 def load_staff() -> dict:
     return _load_yaml("staff.yaml")
+
+
+def load_reading_introductions() -> dict:
+    return _load_yaml("bcp_texts/reading_introductions.yaml")
+
+
+def load_psalm_reader_instructions() -> dict:
+    return _load_yaml("bcp_texts/psalm_reader_instructions.yaml")
+
+
+def extract_book_name(reference: str) -> str:
+    """Extract the book name from a scripture reference string.
+
+    Examples:
+        "Exodus 17:1-7"           → "Exodus"
+        "1 Corinthians 10:1-13"   → "1 Corinthians"
+        "Song of Solomon 2:1-7"   → "Song of Solomon"
+    """
+    m = re.match(r"^(.+?)\s+\d+", reference.strip())
+    return m.group(1) if m else reference.strip()
 
 
 def get_proper_preface_text(preface_key: str, option_key: str = None) -> str:

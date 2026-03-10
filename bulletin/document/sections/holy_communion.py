@@ -437,7 +437,7 @@ def _add_prayer_c(doc: Document, ep_data: dict, data: dict, prayers: dict):
 
     # Epiclesis
     pc4 = [
-        ("celebrant", "Lord God of our Fathers; God of Abraham, Isaac, and Jacob; God and Father of our Lord Jesus Christ: Open our eyes to see your hand at work in the world about us. Deliver us from the presumption of coming to this Table for solace only, and not for strength; for pardon only, and not for renewal. Let the grace of this Holy Communion make us one body, one spirit in Christ, that we may worthily serve the world in his name."),
+        ("celebrant", "Lord God of our Fathers; God of Abraham, Isaac, and Jacob; God and Father of our Lord Jesus Christ: Open our eyes to see your hand at work in the world about us. Deliver us from the presumption of coming to this Table for solace only, and not for strength; for pardon only, and not for renewal. Let the grace of this Holy Communion make us one body, one spirit in Christ ✠, that we may worthily serve the world in his name."),
         ("people", "Risen Lord, be known to us in the breaking of the Bread."),
     ]
     for role, text in pc4:

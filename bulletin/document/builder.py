@@ -604,7 +604,13 @@ class BulletinBuilder:
         return None
 
     def _get_psalm_rubric(self) -> str:
-        """Determine the psalm rubric from the sheet's psalm field."""
+        """Determine the psalm rubric from the sheet's psalm field.
+
+        The 8am service always reads the psalm in unison, regardless
+        of what the Google Sheet specifies.
+        """
+        if self.service_time == "8 am":
+            return "Read in unison."
         psalm_field = (self.schedule.psalm or "").lower()
         if "half verse" in psalm_field:
             return "Read responsively by half verse."
@@ -725,3 +731,28 @@ class BulletinBuilder:
         base_key = roman_map.get(form_clean, "form_I")
 
         return base_key + version_suffix
+
+    def get_reading_sheet_data(self) -> dict:
+        """Return the data subset needed for reading sheet generation.
+
+        Must be called after resolve_all() so POP version is resolved.
+        """
+        wog = self._prepare_word_of_god_data()
+        return {
+            "reading_1_ref": wog["reading_1_ref"],
+            "reading_1_text": wog["reading_1_text"],
+            "psalm_ref": wog["psalm_ref"],
+            "psalm_text": wog["psalm_text"],
+            "psalm_rubric": wog["psalm_rubric"],
+            "pop_elements": wog["pop_elements"],
+            "pop_concluding_rubric": wog["pop_concluding_rubric"],
+        }
+
+    def get_psalm_rubric_for_service(self, service_time: str) -> str:
+        """Return the psalm rubric for a given service time.
+
+        8am always returns unison; other services read from the sheet.
+        """
+        if service_time == "8 am":
+            return "Read in unison."
+        return self._get_psalm_rubric()

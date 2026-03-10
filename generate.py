@@ -7,6 +7,7 @@ Usage:
     python generate.py 2026-03-01 --service "9 am"         # 9am only
     python generate.py 2026-03-01 --service "11 am"        # 11am only
     python generate.py 2026-03-01 --no-prompt              # use defaults
+    python generate.py 2026-03-01 --reading-sheets         # bulletins + reading sheets
 """
 
 import argparse
@@ -14,7 +15,8 @@ import sys
 from datetime import date, datetime
 from pathlib import Path
 
-from bulletin.config import CHURCH_NAME, SERVICE_TIMES
+from bulletin.config import CHURCH_NAME, SERVICE_TIMES, get_lectionary_year
+from bulletin.logic.rules import get_short_liturgical_title
 from bulletin.sources.google_sheet import get_bulletin_data
 from bulletin.sources.music_9am import fetch_9am_music
 from bulletin.sources.music_11am import get_11am_music_slots
@@ -22,6 +24,7 @@ from bulletin.sources.scripture import fetch_readings
 from bulletin.sources.songs import lookup_song
 from bulletin.sources.parish_prayers import get_ministries_for_date, format_ministries
 from bulletin.document.builder import BulletinBuilder
+from bulletin.document.reading_sheet import build_reading_sheet
 
 
 def prompt_choice(question: str, options: list[str]) -> str:
@@ -60,6 +63,8 @@ def main():
                         help="Output .docx file path (only with single service)")
     parser.add_argument("--no-prompt", action="store_true",
                         help="Use defaults for all choices (no interactive prompts)")
+    parser.add_argument("--reading-sheets", action="store_true",
+                        help="Also generate reading sheets for lay readers")
     args = parser.parse_args()
 
     # Parse the target date
@@ -175,8 +180,10 @@ def main():
             output_path = Path(args.output)
         else:
             date_str = target_date.strftime("%Y-%m-%d")
-            title_slug = schedule.title
-            output_path = output_dir / f"{date_str} - {title_slug} - {service_time} - Bulletin.docx"
+            short_title = get_short_liturgical_title(schedule.title, schedule.proper)
+            year_letter = get_lectionary_year(target_date.year)
+            ep_letter = builder.eucharistic_prayer
+            output_path = output_dir / f"{date_str} - {short_title}{year_letter} - {service_time} (HEII-{ep_letter}) - Bulletin.docx"
 
         # Remove old file first (macOS quarantine attribute workaround)
         if output_path.exists():
@@ -189,6 +196,57 @@ def main():
             print(f"  Warning: Missing song lyrics for:")
             for s in builder._missing_songs:
                 print(f"    - {s}")
+
+    # Step 6: Generate reading sheets (if requested)
+    if args.reading_sheets:
+        print("\n  === Generating reading sheets ===")
+
+        # Build a reference builder to get the shared reading/POP data.
+        # Use "9 am" so the psalm rubric reflects the Google Sheet's mode.
+        rs_builder = BulletinBuilder(
+            target_date=target_date,
+            sheet_data=sheet_data,
+            music_data=None,
+            scripture_readings=scripture_readings,
+            song_lookup_fn=song_lookup_fn,
+            parish_ministries=parish_ministries,
+            service_time="9 am",
+        )
+        rs_builder.resolve_all(prompt_fn=prompt_fn)
+        rs_data = rs_builder.get_reading_sheet_data()
+
+        # Determine psalm rubrics for each service group
+        rubric_8am = "Read in unison."
+        rubric_9_11 = rs_builder.get_psalm_rubric_for_service("9 am")
+
+        date_str = target_date.strftime("%Y-%m-%d")
+        short_title = get_short_liturgical_title(schedule.title, schedule.proper)
+        year_letter = get_lectionary_year(target_date.year)
+        title_tag = f"{short_title}{year_letter}"
+
+        if rubric_8am == rubric_9_11:
+            # Same psalm mode for all services → one reading sheet
+            doc = build_reading_sheet(rs_data, rubric_8am)
+            rs_path = output_dir / f"{date_str} - {title_tag} - Readings and Prayers.docx"
+            if rs_path.exists():
+                rs_path.unlink()
+            doc.save(str(rs_path))
+            print(f"  Saved: {rs_path}")
+        else:
+            # Different psalm modes → two reading sheets
+            doc_8 = build_reading_sheet(rs_data, rubric_8am)
+            rs_path_8 = output_dir / f"{date_str} - {title_tag} - Readings and Prayers - 8am.docx"
+            if rs_path_8.exists():
+                rs_path_8.unlink()
+            doc_8.save(str(rs_path_8))
+            print(f"  Saved: {rs_path_8}")
+
+            doc_9_11 = build_reading_sheet(rs_data, rubric_9_11)
+            rs_path_9_11 = output_dir / f"{date_str} - {title_tag} - Readings and Prayers - 9 and 11.docx"
+            if rs_path_9_11.exists():
+                rs_path_9_11.unlink()
+            doc_9_11.save(str(rs_path_9_11))
+            print(f"  Saved: {rs_path_9_11}")
 
     print("\nDone.")
 

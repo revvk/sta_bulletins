@@ -168,14 +168,79 @@ _STYLE_DEFS = [
 # Styles that get the left + right tab stops.
 _STYLES_WITH_TABS = {"Body", "Body - Dialogue"}
 
+# ---------------------------------------------------------------------------
+# Reading sheet style definitions — same style names, larger sizes, red rubrics
+# ---------------------------------------------------------------------------
+# Extends the 11-field format with an optional 12th field: color (RGBColor).
+# When omitted or None, defaults to black.
 
-def _create_styles(doc: Document):
-    """Register all custom paragraph and character styles in the document."""
+_RS_RED = RGBColor(0xED, 0x22, 0x0B)
+
+_RS_STYLE_DEFS = [
+    # Section marker headings (red, centered)
+    ("Heading", FONT_HEADING, 16, True, False,
+     WD_ALIGN_PARAGRAPH.CENTER, 0, 0, 0, 0, 1.0, _RS_RED),
+
+    # Sub-headings (red)
+    ("Heading 2", FONT_HEADING2, 16, False, False,
+     WD_ALIGN_PARAGRAPH.LEFT, 0, 0, 0, 0, 1.0, _RS_RED),
+
+    # Body text — readings, prayers
+    ("Body", FONT_BODY, 16, False, False,
+     WD_ALIGN_PARAGRAPH.LEFT, 0.32, 0, 0, 0, 1.0),
+
+    # Celebrant/People dialogue (larger for readability)
+    ("Body - Dialogue", FONT_BODY, 16, False, False,
+     WD_ALIGN_PARAGRAPH.LEFT, 1.5, -1.18, 0, 0, 1.0),
+
+    # Rubrics — red italic instructions for the reader
+    ("Body - Rubric", FONT_BODY, 14, False, True,
+     WD_ALIGN_PARAGRAPH.LEFT, 0.32, 0, 2, 0, 1.0, _RS_RED),
+
+    # Introductory rubrics (red italic)
+    ("Body - Introductory Rubric", FONT_BODY, 14, False, True,
+     WD_ALIGN_PARAGRAPH.LEFT, 0.004, 0, 0, 0, 1.0, _RS_RED),
+
+    # Scripture reading prose text (large for reading aloud)
+    ("Reading/Gospel Text", FONT_BODY, 16, False, False,
+     WD_ALIGN_PARAGRAPH.LEFT, 0.32, 0, 0, 0, 1.0),
+
+    # Scripture reading poetry
+    ("Reading (Poetry)", FONT_BODY, 16, False, False,
+     WD_ALIGN_PARAGRAPH.LEFT, 0.455, -0.135, 0, 0, 1.0),
+
+    # Psalm text
+    ("Psalm", FONT_BODY, 16, False, False,
+     WD_ALIGN_PARAGRAPH.LEFT, 0.455, -0.13, 3, 0, 1.0),
+
+    # People's recitation
+    ("Body - People Recitation", FONT_BODY, 16, False, False,
+     WD_ALIGN_PARAGRAPH.LEFT, 0.32, 0, 6, 0, 1.0),
+
+    # Spacer
+    ("Spacer - Small", FONT_BODY, 12, False, False,
+     WD_ALIGN_PARAGRAPH.LEFT, 0, 0, 0, 0, 1.0),
+]
+
+
+def _create_styles(doc: Document, style_defs=None):
+    """Register paragraph and character styles in the document.
+
+    Args:
+        doc: The Document to configure.
+        style_defs: List of style definition tuples. Each tuple has 11 or 12
+            fields — the 12th (optional) is an RGBColor for font color.
+            Defaults to _STYLE_DEFS (bulletin styles).
+    """
+    if style_defs is None:
+        style_defs = _STYLE_DEFS
 
     # --- Paragraph styles ---
-    for (name, font_name, size_pt, bold, italic, alignment,
-         left_in, first_in, sp_before_pt, sp_after_pt,
-         line_spacing) in _STYLE_DEFS:
+    for entry in style_defs:
+        name, font_name, size_pt, bold, italic, alignment, \
+            left_in, first_in, sp_before_pt, sp_after_pt, \
+            line_spacing = entry[:11]
+        color = entry[11] if len(entry) > 11 else None
 
         # If the style already exists (e.g., "Heading"), modify it;
         # otherwise create a new one.
@@ -193,7 +258,7 @@ def _create_styles(doc: Document):
         style.font.size = Pt(size_pt)
         style.font.bold = bold
         style.font.italic = italic
-        style.font.color.rgb = RGBColor(0, 0, 0)  # Explicit black; overrides theme
+        style.font.color.rgb = color if color else RGBColor(0, 0, 0)
 
         # Built-in heading styles carry theme-font attributes (asciiTheme,
         # hAnsiTheme, …) that override the explicit font name.  Strip them
@@ -273,3 +338,41 @@ def _create_character_styles(doc: Document):
     people.font.bold = True
     people.font.name = FONT_BODY_BOLD
     people.font.color.rgb = RGBColor(0, 0, 0)
+
+
+# ---------------------------------------------------------------------------
+# Reading sheet document configuration
+# ---------------------------------------------------------------------------
+
+def configure_reading_sheet_document(doc: Document):
+    """Set up page layout and styles for a reading sheet.
+
+    Uses the same style names as the bulletin but with larger fonts
+    (16pt body, 14pt rubrics) and red rubric/heading colors.
+    Mirror margins are enabled for booklet printing.
+    """
+    _setup_reading_sheet_page(doc)
+    _create_styles(doc, style_defs=_RS_STYLE_DEFS)
+
+
+def _setup_reading_sheet_page(doc: Document):
+    """Configure page size and mirror margins for booklet printing.
+
+    Mirror margins swap left/right on even pages:
+      Odd pages:  left (inside) = 0.75", right (outside) = 0.5"
+      Even pages: left (outside) = 0.5", right (inside) = 0.75"
+    """
+    section = doc.sections[0]
+    section.page_width = Inches(PAGE_WIDTH_INCHES)
+    section.page_height = Inches(PAGE_HEIGHT_INCHES)
+    # With mirror margins, "left" = inside (binding edge), "right" = outside
+    section.left_margin = Inches(0.75)
+    section.right_margin = Inches(0.5)
+    section.top_margin = Inches(MARGIN_INCHES)
+    section.bottom_margin = Inches(MARGIN_INCHES)
+
+    # Enable mirror margins via Word XML settings
+    W_NS = "http://schemas.openxmlformats.org/wordprocessingml/2006/main"
+    settings_elem = doc.settings.element
+    mirror = parse_xml(f'<w:mirrorMargins {nsdecls("w")}/>')
+    settings_elem.append(mirror)

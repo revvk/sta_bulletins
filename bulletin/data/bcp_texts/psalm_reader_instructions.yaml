@@ -1,0 +1,37 @@
+# Psalm Lay Reader Instructions
+#
+# Maps each psalm reading mode to the instruction text the reader
+# should say before leading the psalm.
+#
+# The {psalm_number} placeholder is substituted at render time.
+#
+# Source: "Psalm Lay Reader Instructions.docx"
+
+unison:
+  instruction: "Let us say Psalm {psalm_number} in unison:"
+
+men_and_women:
+  instruction: >-
+    We will read the Psalm alternating between men and women
+    by whole verse, beginning with the men:
+
+responsive_whole_verse:
+  instruction: >-
+    We will read the Psalm responsively by whole verse.
+    I will say the first verse, and you will respond
+    by saying the next verse in bold:
+
+responsive_half_verse:
+  instruction: >-
+    We will read the Psalm responsively by half-verse.
+    I will say the first half of the verse, and you will respond
+    by saying the next half in bold:
+
+antiphonal:
+  instruction: "We will read the Psalm antiphonally by whole verse."
+  left_side_setup: >-
+    With your right hand, indicate the left side of the congregation, and say
+  left_side_text: "I will lead the left side in saying the first verse;"
+  right_side_setup: >-
+    With your left hand, indicate the right side of the congregation, and say
+  right_side_text: "and the right side will respond by saying the next verse:"
