@@ -65,6 +65,9 @@ def main():
                         help="Use defaults for all choices (no interactive prompts)")
     parser.add_argument("--reading-sheets", action="store_true",
                         help="Also generate reading sheets for lay readers")
+    parser.add_argument("--force-fetch", action="store_true",
+                        help="Re-fetch scripture readings from oremus.org "
+                             "(ignore cache)")
     args = parser.parse_args()
 
     # Parse the target date
@@ -96,7 +99,7 @@ def main():
         print(f"  Eucharistic Prayer: {schedule.eucharistic_prayer}")
 
     # Step 2: Fetch scripture readings (shared across all services)
-    print("  Fetching scripture readings from bible.oremus.org...")
+    print("  Fetching scripture readings...")
     refs_to_fetch = {}
     if schedule.reading:
         refs_to_fetch["reading"] = schedule.reading
@@ -106,7 +109,8 @@ def main():
     scripture_readings = {}
     if refs_to_fetch:
         try:
-            scripture_readings = fetch_readings(refs_to_fetch)
+            scripture_readings = fetch_readings(
+                refs_to_fetch, force_fetch=args.force_fetch)
             print(f"  Fetched {len(scripture_readings)} readings")
         except Exception as e:
             print(f"  Warning: Could not fetch scriptures: {e}")

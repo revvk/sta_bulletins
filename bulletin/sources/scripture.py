@@ -9,15 +9,62 @@ so we take a stream-based approach: walk the entire bibletext div's
 descendants and collect text, detecting verse numbers and paragraph breaks.
 """
 
+import json
 import re
 import time
 from dataclasses import dataclass, field
+from pathlib import Path
 from typing import Optional
 
 import requests
 from bs4 import BeautifulSoup, NavigableString, Comment, Tag
 
 from bulletin.config import OREMUS_BASE_URL, OREMUS_PARAMS
+
+
+# ---------------------------------------------------------------------------
+# Scripture cache — stores fetched readings to avoid repeated HTTP requests.
+# Over a three-year lectionary cycle, this builds a complete library of all
+# readings used in the bulletin.
+# ---------------------------------------------------------------------------
+
+SCRIPTURE_CACHE_FILE = Path(__file__).parent.parent / "data" / "scripture_cache.json"
+
+
+def _load_cache() -> dict:
+    """Load the scripture cache from disk."""
+    if SCRIPTURE_CACHE_FILE.exists():
+        try:
+            with open(SCRIPTURE_CACHE_FILE, encoding="utf-8") as f:
+                return json.load(f)
+        except (json.JSONDecodeError, OSError):
+            return {}
+    return {}
+
+
+def _save_cache(cache: dict):
+    """Write the scripture cache to disk."""
+    with open(SCRIPTURE_CACHE_FILE, "w", encoding="utf-8") as f:
+        json.dump(cache, f, ensure_ascii=False, indent=2, sort_keys=True)
+
+
+def _reading_to_cache(reading: "ScriptureReading") -> dict:
+    """Serialize a ScriptureReading for JSON storage."""
+    return {
+        "paragraphs": reading.paragraphs,
+        "poetry_lines": reading.poetry_lines,
+        "has_poetry": reading.has_poetry,
+    }
+
+
+def _reading_from_cache(reference: str, data: dict) -> "ScriptureReading":
+    """Reconstruct a ScriptureReading from cached JSON data."""
+    return ScriptureReading(
+        reference=reference,
+        paragraphs=data["paragraphs"],
+        poetry_lines=data.get("poetry_lines", []),
+        has_poetry=data.get("has_poetry", False),
+    )
 
 
 @dataclass
@@ -355,23 +402,44 @@ def _get_start_verse(reference: str) -> str:
 # ---------------------------------------------------------------------------
 
 def fetch_readings(references: dict[str, str],
-                   delay: float = 0.5) -> dict[str, ScriptureReading]:
-    """Fetch multiple readings with a delay between requests.
+                   delay: float = 0.5,
+                   force_fetch: bool = False) -> dict[str, ScriptureReading]:
+    """Fetch multiple readings, using a local cache when available.
+
+    On first fetch, readings are saved to scripture_cache.json. Subsequent
+    runs load cached text instantly — no network request needed. Over a
+    three-year lectionary cycle this builds a complete offline library.
 
     Args:
         references: Dict mapping label to reference,
                     e.g., {"reading": "Genesis 12:1-4a", "gospel": "John 3:1-17"}
         delay: Seconds to wait between requests (be nice to oremus.org)
+        force_fetch: If True, bypass the cache and re-fetch from oremus.org.
 
     Returns:
         Dict mapping label to ScriptureReading.
     """
+    cache = _load_cache()
     results = {}
-    for i, (label, ref) in enumerate(references.items()):
-        if i > 0:
+    fetched_new = False
+
+    for label, ref in references.items():
+        cache_key = ref.strip()
+
+        # Use cache if available (and not forcing a refresh)
+        if not force_fetch and cache_key in cache:
+            results[label] = _reading_from_cache(ref, cache[cache_key])
+            print(f"    {label}: {ref} (cached)")
+            continue
+
+        # Fetch from oremus.org
+        if fetched_new:
             time.sleep(delay)
         try:
-            results[label] = fetch_reading(ref)
+            reading = fetch_reading(ref)
+            results[label] = reading
+            cache[cache_key] = _reading_to_cache(reading)
+            fetched_new = True
         except Exception as e:
             print(f"Warning: Could not fetch {label} ({ref}): {e}")
             results[label] = ScriptureReading(
@@ -380,4 +448,9 @@ def fetch_readings(references: dict[str, str],
                 poetry_lines=[],
                 has_poetry=False,
             )
+
+    # Persist any newly fetched readings
+    if fetched_new:
+        _save_cache(cache)
+
     return results
