@@ -78,20 +78,65 @@ class BulletinBuilder:
         self.pop_form_key = None  # Resolved in resolve_all()
         self._missing_songs = []
 
-    def resolve_all(self, prompt_fn=None):
+    def resolve_all(self, prompt_fn=None, shared_resolutions=None):
         """Resolve all data that might need user input.
 
         Args:
             prompt_fn: Callable(question, options) -> answer.
                        If None, makes best-guess choices silently.
+            shared_resolutions: Dict of previously resolved values to reuse.
+                       When provided, skips prompting for these values.
+                       Used when generating multiple bulletins so the user
+                       is only prompted once for shared liturgical choices.
         """
+        shared = shared_resolutions or {}
+
         self._resolve_eucharistic_prayer()
-        self._resolve_proper_preface(prompt_fn)
-        self._resolve_penitential_sentence(prompt_fn)
-        self._resolve_advent_wreath(prompt_fn)
+
+        if "proper_preface_text" in shared:
+            self.proper_preface_text = shared["proper_preface_text"]
+        else:
+            self._resolve_proper_preface(prompt_fn)
+
+        if "penitential_sentence" in shared:
+            self.penitential_sentence = shared["penitential_sentence"]
+            self.penitential_sentence_ref = shared.get(
+                "penitential_sentence_ref", "")
+        else:
+            self._resolve_penitential_sentence(prompt_fn)
+
+        if "advent_wreath_verse" in shared:
+            self.advent_wreath_verse = shared["advent_wreath_verse"]
+        else:
+            self._resolve_advent_wreath(prompt_fn)
+
         self._resolve_blessing()
-        self._resolve_pop_version(prompt_fn)
+
+        if "pop_form_key" in shared:
+            self.pop_form_key = shared["pop_form_key"]
+        else:
+            self._resolve_pop_version(prompt_fn)
+
         self._resolve_songs(prompt_fn)
+
+    def get_shared_resolutions(self) -> dict:
+        """Return resolved liturgical choices that apply across all services.
+
+        These values (proper preface, penitential sentence, POP form, etc.)
+        are the same regardless of service time and can be passed to
+        subsequent builders via resolve_all(shared_resolutions=...).
+        """
+        result = {}
+        if self.proper_preface_text:
+            result["proper_preface_text"] = self.proper_preface_text
+        if self.penitential_sentence:
+            result["penitential_sentence"] = self.penitential_sentence
+            result["penitential_sentence_ref"] = self.penitential_sentence_ref
+        if self.advent_wreath_verse:
+            result["advent_wreath_verse"] = self.advent_wreath_verse
+        if self.pop_form_key:
+            result["pop_form_key"] = self.pop_form_key
+        return result
 
     def build(self) -> "Document":
         """Build and return the complete document."""
@@ -594,12 +639,21 @@ class BulletinBuilder:
                         # For 11am: regular hymns → header only
                         if self.service_time == "11 am":
                             hymnal_num = str(song.get("hymnal_number", "") or "")
+                            hymnal_name = song.get("hymnal_name")
+                            # If the song dict doesn't carry a hymnal number,
+                            # check the identifier from the slot (e.g., "#493 ...")
+                            if not (hymnal_num and hymnal_num.isdigit()):
+                                from bulletin.sources.music_11am import parse_11am_identifier
+                                parsed_id = parse_11am_identifier(slot.song_title)
+                                if parsed_id["hymnal_number"] and parsed_id["hymnal_number"].isdigit():
+                                    hymnal_num = parsed_id["hymnal_number"]
+                                    hymnal_name = parsed_id.get("hymnal_name") or "Hymnal 1982"
                             # All-digit number = regular hymn → strip lyrics
                             if hymnal_num and hymnal_num.isdigit():
                                 return self._apply_canonical_title({
                                     "title": song["title"],
                                     "hymnal_number": hymnal_num,
-                                    "hymnal_name": song.get("hymnal_name"),
+                                    "hymnal_name": hymnal_name,
                                     "tune_name": song.get("tune_name"),
                                     "sections": [],  # header only
                                 })

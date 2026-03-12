@@ -62,6 +62,7 @@ PREACHER_NAMES = {
     "Gene":     "The Rev. Gene Zeilfelder",
     "Rob":      "The Rt. Rev. Robert Price",
     "Katie":    "The Rev. Deacon Katie Gerber",
+    "Tim":      "Tim Jenkins",
 }
 
 # Cross symbol used throughout the liturgy

@@ -360,100 +360,233 @@ form_V:
         In peace, let us pray to the Lord, saying, "Lord have
         mercy"
 
-    - type: leader
-      text: >-
+    - type: people
+      leader_text: >-
         For the holy Church of God, that it may be filled with
         truth and love, and be found without fault at the day of
-        your coming, we pray to you, O Lord. Lord, have mercy.
+        your coming, we pray to you, O Lord.
+      people_text: "Lord, have mercy."
 
-    - type: leader
-      text: >-
+    - type: people
+      leader_text: >-
         For {presiding_bishop} our Presiding Bishop, {bishop} our
         own Bishop, for all bishops, for {clergy_names}, and other
         ministers, and for all the holy people of God, we pray to
-        you, O Lord. Lord, have mercy.
+        you, O Lord.
+      people_text: "Lord, have mercy."
 
-    - type: leader
-      text: >-
+    - type: people
+      leader_text: >-
         For Christ the King, our partner parish in Belize, that
         their witness to your love and redemption may be a bright
-        light to their community, we pray to you, O Lord. Lord,
-        have mercy.
+        light to their community, we pray to you, O Lord.
+      people_text: "Lord, have mercy."
 
-    - type: leader
-      text: >-
+    - type: people
+      leader_text: >-
         For all who fear God and believe in you, Lord Christ, that
         our divisions may cease, and that all may be one as you and
-        the Father are one, we pray to you, O Lord. Lord, have
-        mercy.
+        the Father are one, we pray to you, O Lord.
+      people_text: "Lord, have mercy."
 
-    - type: leader
-      text: >-
+    - type: people
+      leader_text: >-
         For the mission of the Church and the ministries of this
         parish, especially the {parish_ministries}, that in
         faithful witness we may preach the Gospel to the ends of
-        the earth, we pray to you, O Lord. Lord, have mercy.
+        the earth, we pray to you, O Lord.
+      people_text: "Lord, have mercy."
 
-    - type: leader
-      text: >-
+    - type: people
+      leader_text: >-
         For the peace of the world, that a spirit of respect and
         forbearance may grow among nations and peoples, we pray to
-        you, O Lord. Lord, have mercy.
+        you, O Lord.
+      people_text: "Lord, have mercy."
 
-    - type: leader
-      text: >-
+    - type: people
+      leader_text: >-
         For those in positions of public trust that they may serve
         justice, and promote the dignity and freedom of every
-        person, we pray to you, O Lord. Lord, have mercy.
+        person, we pray to you, O Lord.
+      people_text: "Lord, have mercy."
 
-    - type: leader
-      text: >-
+    - type: people
+      leader_text: >-
         For all who live and work in this community, we pray to
-        you, O Lord. Lord, have mercy.
+        you, O Lord.
+      people_text: "Lord, have mercy."
 
-    - type: leader
-      text: >-
+    - type: people
+      leader_text: >-
         For the teammates, staff and volunteers at Hugs Cafe, and
         all those with special needs and gifts, we pray to you, O
-        Lord. Lord, have mercy.
+        Lord.
+      people_text: "Lord, have mercy."
 
-    - type: leader
-      text: >-
+    - type: people
+      leader_text: >-
         For the poor, the persecuted, the sick, and all who suffer;
         for refugees, prisoners, and all who are in danger; that
         they may be relieved and protected, we pray to you, O Lord.
-        Lord, have mercy.
+      people_text: "Lord, have mercy."
 
-    - type: leader
-      text: >-
+    - type: people
+      leader_text: >-
         For this congregation, that we may be delivered from
         hardness of heart, and show forth your glory in all that we
-        do, we pray to you, O Lord. Lord, have mercy.
+        do, we pray to you, O Lord.
+      people_text: "Lord, have mercy."
 
-    - type: leader
-      text: >-
+    - type: people
+      leader_text: >-
         For all who have commended themselves to our prayers; for
         our families, friends, and neighbors; that being freed from
         anxiety, they may live in joy, peace, and health, we pray
-        to you, O Lord. Lord, have mercy.
+        to you, O Lord.
+      people_text: "Lord, have mercy."
 
-    - type: leader
-      text: >-
+    - type: people
+      leader_text: >-
         For all who have died ✠ {departed} in the communion of your
         Church, and those whose faith is known to you alone, that,
         with all the saints, they may have rest in that place where
         there is no pain or grief, but life eternal, we pray to
-        you, O Lord. Lord, have mercy.
+        you, O Lord.
+      people_text: "Lord, have mercy."
 
-    - type: leader
-      text: >-
+    - type: people
+      leader_text: >-
         Rejoicing in the fellowship of the ever-blessed Virgin
         Mary, blessed Saint Andrew and all the saints, let us
         commend ourselves, and one another, and all our life to
-        Christ our God. To you, O Lord our God.
+        Christ our God.
+      people_text: "To you, O Lord our God."
 
 # ==========================================================================
-# Form VI  (custom adaptation; separate from Form VI "w/ confession")
+# Form V Immigration (based on BCP Form V, p.389)
+# ==========================================================================
+form_V_immigration:
+  title: "Prayers of the People Form V"
+  elements:
+    - type: leader
+      text: >-
+        In peace, let us pray to the Lord, saying, "Lord have
+        mercy"
+
+    - type: people
+      leader_text: >-
+        For the holy Church of God, that it may be filled with
+        truth and love, and be found without fault at the day of
+        your coming, we pray to you, O Lord.
+      people_text: "Lord, have mercy."
+
+    - type: people
+      leader_text: >-
+        For {presiding_bishop} our Presiding Bishop, {bishop} our
+        own Bishop, for all bishops, for {clergy_names}, and other
+        ministers, and for all the holy people of God, we pray to
+        you, O Lord.
+      people_text: "Lord, have mercy."
+
+    - type: people
+      leader_text: >-
+        For Christ the King, our partner parish in Belize, that
+        their witness to your love and redemption may be a bright
+        light to their community, we pray to you, O Lord.
+      people_text: "Lord, have mercy."
+
+    - type: people
+      leader_text: >-
+        For all who fear God and believe in you, Lord Christ, that
+        our divisions may cease, and that all may be one as you and
+        the Father are one, we pray to you, O Lord.
+      people_text: "Lord, have mercy."
+
+    - type: people
+      leader_text: >-
+        For the mission of the Church and the ministries of this
+        parish, especially the Stretching Our Our Arms of Love campaign, that in
+        faithful witness we may preach the Gospel to the ends of
+        the earth, we pray to you, O Lord.
+      people_text: "Lord, have mercy."
+
+    - type: people
+      leader_text: >-
+        For the peace of the world, that a spirit of respect and
+        forbearance may grow among nations and peoples, we pray to
+        you, O Lord.
+      people_text: "Lord, have mercy."
+
+    - type: people
+      leader_text: >-
+        For those in positions of public trust that they may serve
+        justice, and promote the dignity and freedom of every
+        person, we pray to you, O Lord.
+      people_text: "Lord, have mercy."
+
+    - type: people
+      leader_text: >-
+        For all who live and work in this community, we pray to
+        you, O Lord.
+      people_text: "Lord, have mercy."
+
+    - type: people
+      leader_text: >-
+        For the teammates, staff and volunteers at Hugs Cafe, and
+        all those with special needs and gifts, we pray to you, O
+        Lord.
+      people_text: "Lord, have mercy."
+
+    - type: people
+      leader_text: >-
+        For the poor, the persecuted, the sick, and all who suffer;
+        for refugees, prisoners, and all who are in danger; that
+        they may be relieved and protected, we pray to you, O Lord.
+      people_text: "Lord, have mercy."
+
+    - type: people
+      leader_text: >-
+        For the members of our diocesan family currently held in immigration 
+        detention: Juan, Jose, Pedro, Omar, Dina and her father, Mo, Barbod, 
+        Milad, Sahel, Asra, Amir, Hana, Saeed, Farshid and their families, 
+        we pray to you, O Lord.
+      people_text: "Lord, have mercy."
+
+    - type: people
+      leader_text: >-
+        For this congregation, that we may be delivered from
+        hardness of heart, and show forth your glory in all that we
+        do, we pray to you, O Lord.
+      people_text: "Lord, have mercy."
+
+    - type: people
+      leader_text: >-
+        For all who have commended themselves to our prayers; for
+        our families, friends, and neighbors; that being freed from
+        anxiety, they may live in joy, peace, and health, we pray
+        to you, O Lord.
+      people_text: "Lord, have mercy."
+
+    - type: people
+      leader_text: >-
+        For all who have died ✠ {departed} in the communion of your
+        Church, and those whose faith is known to you alone, that,
+        with all the saints, they may have rest in that place where
+        there is no pain or grief, but life eternal, we pray to
+        you, O Lord.
+      people_text: "Lord, have mercy."
+
+    - type: people
+      leader_text: >-
+        Rejoicing in the fellowship of the ever-blessed Virgin
+        Mary, blessed Saint Andrew and all the saints, let us
+        commend ourselves, and one another, and all our life to
+        Christ our God.
+      people_text: "To you, O Lord our God."
+
+# ==========================================================================
+# Form VI (custom adaptation; separate from Form VI "w/ confession")
 # ==========================================================================
 form_VI:
   title: "Prayers of the People Form VI"
@@ -484,6 +617,104 @@ form_VI:
       people_text: >-
         For those who find themselves desperate for the aid of
         others.
+
+    - type: both
+      leader_text: >-
+        For all who are in danger, sorrow, or any kind of trouble;
+      people_text: >-
+        For those who minister to the sick, the friendless, and the
+        needy.
+
+    - type: both
+      leader_text: "For the peace and unity of the Church of God;"
+      people_text: >-
+        For all who proclaim the Gospel, and all who seek the
+        Truth.
+
+    - type: both
+      leader_text: >-
+        For {presiding_bishop} our Presiding Bishop, {bishop} our
+        own Bishop; for our clergy, {clergy_names}, for all bishops
+        and other ministers;
+      people_text: "For all who serve God in his Church."
+
+    - type: both
+      leader_text: "For the {parish_ministries};"
+      people_text: "For all the ministries of this parish."
+
+    - type: leader
+      text: "For the special needs and concerns of this congregation."
+    - type: rubric
+      text: "Silence. The People may add their own petitions."
+
+    - type: both
+      leader_text: "Hear us, Lord;"
+      people_text: "For your mercy is great."
+
+    - type: leader
+      text: >-
+        We thank you, Lord, for all the blessings of this life.
+    - type: rubric
+      text: "Silence. The People may add their own thanksgivings."
+
+    - type: both
+      leader_text: "We will exalt you, O God our King;"
+      people_text: "And praise your Name for ever and ever."
+
+    - type: leader
+      text: >-
+        We pray for all who have died {departed}, that they may
+        have a place in your eternal kingdom.
+    - type: rubric
+      text: "Silence. The People may add their own petitions."
+
+    - type: both
+      leader_text: "Lord, let your loving kindness be upon them;"
+      people_text: "Who put their trust in you."
+
+    - type: rubric
+      text: "Silence may be kept."
+
+# ==========================================================================
+# Form VI Immigration Focus  (custom adaptation; separate from Form VI "w/ confession")
+# ==========================================================================
+form_VI_immigration:
+  title: "Prayers of the People Form VI"
+  elements:
+    - type: leader
+      text: "In peace, we pray to you, Lord God."
+    - type: rubric
+      text: "Silence"
+
+    - type: both
+      leader_text: "For all people in their daily life and work;"
+      people_text: >-
+        For our families, friends, and neighbors, and for those who
+        are alone.
+
+    - type: both
+      leader_text: "For this community, the nation, and the world;"
+      people_text: >-
+        For all who work for justice, freedom, and peace.
+
+    - type: both
+      leader_text: "For the just and proper use of your creation;"
+      people_text: >-
+        For the victims of hunger, fear, injustice, and oppression.
+
+    - type: both
+      leader_text: "For our community partners and adopted schools;"
+      people_text: >-
+        For those who find themselves desperate for the aid of
+        others.
+
+    - type: both
+      leader_text: >-
+        For the members of our diocesan family currently held in immigration 
+        detention: Juan, Jose, Pedro, Omar, Dina and her father, Mo, Barbod, 
+        Milad, Sahel, Asra, Amir, Hana, Saeed, Farshid and their families
+      people_text: >-
+        For wisdom, discipline, and protection for officers and agents.
 
     - type: both
       leader_text: >-

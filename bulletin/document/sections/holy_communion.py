@@ -820,25 +820,27 @@ def _add_short_offertory_rubric(doc: Document):
 
 
 def _add_sanctus_spoken(doc: Document, lines: list[str]):
-    """Add the Sanctus as a spoken bold People recitation (8am).
+    """Add the Sanctus as bold poetry (8am).
 
-    All text is bold in the People character style, with ✠ rendered
-    via the bold cross symbol helper (same pattern as Nicene Creed).
+    Same line-by-line layout as the 9/11am text Sanctus, but all text
+    is bold (spoken in unison by the people). ✠ is rendered via the
+    bold cross symbol helper.
     """
-    text = " ".join(line.strip() for line in lines)
-    p = doc.add_paragraph(style="Body - People Recitation")
-
-    if CROSS_SYMBOL in text:
-        parts = text.split(CROSS_SYMBOL)
-        for i, part in enumerate(parts):
-            if i > 0:
-                add_cross_symbol(p)
-            if part:
-                run = p.add_run(part)
-                run.style = doc.styles["People"]
-    else:
-        run = p.add_run(text)
-        run.style = doc.styles["People"]
+    for line in lines:
+        p = doc.add_paragraph(style="Body - Lyrics")
+        if CROSS_SYMBOL in line:
+            parts = line.split(CROSS_SYMBOL)
+            for i, part in enumerate(parts):
+                if i > 0:
+                    add_cross_symbol(p)
+                if part:
+                    run = p.add_run(part)
+                    run.bold = True
+                    run.font.name = FONT_BODY_BOLD
+        else:
+            run = p.add_run(line)
+            run.bold = True
+            run.font.name = FONT_BODY_BOLD
 
 
 def _add_agnus_dei_spoken(doc: Document):

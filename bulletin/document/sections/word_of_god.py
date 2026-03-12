@@ -95,9 +95,9 @@ def add_word_of_god(doc: Document, rules: SeasonalRules, data: dict):
         add_introductory_rubric(doc, "Be seated.")
         # --- Children's Sermon ---
         add_heading2(doc, "Children\u2019s Sermon")
+        add_spacer(doc)
 
     # --- First Reading ---
-    add_spacer(doc)
     _add_reading(doc, data["reading_1_ref"], data["reading_1_text"])
 
     # --- Psalm ---
@@ -107,14 +107,14 @@ def add_word_of_god(doc: Document, rules: SeasonalRules, data: dict):
 
     # --- Sequence Hymn ---
     add_spacer(doc)
-    add_introductory_rubric(doc, "Please stand.")
     if service_time != "8 am":
+        add_introductory_rubric(doc, "Please stand.")
         add_heading2(doc, "Sequence Hymn")
         _add_song_smart(doc, data.get("sequence_hymn"))
 
     # --- Gospel ---
     _add_gospel(doc, data["gospel_ref"], data["gospel_book"],
-                data["gospel_text"])
+                data["gospel_text"], service_time=service_time)
 
     # --- Sermon ---
     add_spacer(doc)
@@ -366,10 +366,14 @@ def _add_psalm(doc: Document, reference: str, rubric: str, lines):
             _add_text_runs(p, para, bold=bold_verse)
 
 
-def _add_gospel(doc: Document, reference: str, book: str, reading):
+def _add_gospel(doc: Document, reference: str, book: str, reading,
+                service_time: str = "9 am"):
     """Add the Gospel reading with announcement and response."""
     add_spacer(doc)
-    add_introductory_rubric(doc, "Remain standing.")
+    if service_time == "8 am":
+        add_introductory_rubric(doc, "Please stand.")
+    else:
+        add_introductory_rubric(doc, "Remain standing.")
     add_heading2(doc, f"The Gospel: {reference}")
 
     add_rubric(doc, "The Deacon or a Priest reads the Gospel, first saying")

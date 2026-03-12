@@ -57,8 +57,7 @@ vestry:
 # presiding_bishop and bishop are used in Form VI and other POP forms
 liturgical_names:
   presiding_bishop: "Sean"
-  bishop: "George"
-  bishop_coadjutor: "Rob"
+  bishop: "Rob"
   president: "Donald"
   governor: "Greg"
   mayor: "George"

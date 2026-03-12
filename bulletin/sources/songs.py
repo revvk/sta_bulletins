@@ -57,6 +57,20 @@ def _get_songs(service: str = "9am") -> list[dict]:
     ]
 
 
+def _clean_identifier(identifier: str) -> str:
+    """Strip parenthetical notes and hymnal refs for title matching.
+
+    Transforms identifiers like:
+      "Savior, like a shepherd lead us (H708+Bradbury)" → "Savior, like a shepherd lead us"
+      "King of Love (no bridge)"                        → "King of Love"
+      "Come, thou fount of every blessing H686"         → "Come, thou fount of every blessing"
+      "Holy, holy, holy Lord S129 (Powell)"             → "Holy, holy, holy Lord"
+    """
+    clean = re.sub(r'\s*\([^)]*\)', '', identifier)   # strip (...)
+    clean = re.sub(r'\s+[HS]\d+\b', '', clean)        # strip trailing H### / S###
+    return clean.strip()
+
+
 def lookup_song(identifier: str, service: str = "9am",
                 _in_fallback: bool = False) -> Optional[dict]:
     """Look up a song by various identifier formats.
@@ -65,6 +79,8 @@ def lookup_song(identifier: str, service: str = "9am",
       - A hymnal number with title: "#93 Angels From the Realms of Glory"
       - Just a hymnal number: "#93"
       - A song title: "Everlasting God"
+      - A title with hymnal ref: "Come, thou fount H686"
+      - A title with notes: "King of Love (no bridge)"
       - A partial title match
 
     Returns a song dict with keys: title, hymnal_number, hymnal_name,
@@ -73,6 +89,7 @@ def lookup_song(identifier: str, service: str = "9am",
     songs = _get_songs(service)
 
     # Try to extract hymnal number from identifier
+    # Format 1: "#93 Angels From the Realms" (11am sheet format)
     num_match = re.match(r'#(\d+)', identifier.strip())
     if num_match:
         hymnal_num = num_match.group(1)
@@ -80,10 +97,24 @@ def lookup_song(identifier: str, service: str = "9am",
             if song.get("hymnal_number") == hymnal_num:
                 return song
 
+    # Format 2: "Song Title H400" or "Song Title S129 (Powell)" (9am sheet format)
+    hymn_ref = re.search(r'\b([HS])(\d+)\b', identifier)
+    if hymn_ref:
+        prefix = hymn_ref.group(1)
+        number = hymn_ref.group(2)
+        hymnal_num = f"S{number}" if prefix == "S" else number
+        for song in songs:
+            if song.get("hymnal_number") == hymnal_num:
+                return song
+
+    # Clean identifier for title matching: strip parenthetical notes
+    # and hymnal references (H###, S###)
+    clean = _clean_identifier(identifier)
+
     # Try exact title match (case-insensitive)
-    id_lower = identifier.strip().lower()
-    # Strip hymnal ref from identifier for title matching
-    title_part = re.sub(r'^#\d+\s*', '', identifier).strip()
+    id_lower = clean.lower()
+    # Also strip leading #NNN from the cleaned identifier
+    title_part = re.sub(r'^#\d+\s*', '', clean).strip()
 
     for song in songs:
         if song["title"].lower() == id_lower:

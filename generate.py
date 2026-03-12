@@ -151,6 +151,9 @@ def main():
     output_dir = Path("output")
     output_dir.mkdir(exist_ok=True)
 
+    # Shared liturgical resolutions: prompt once, reuse across services
+    shared_resolutions = None
+
     for service_time in services:
         print(f"\n  === Assembling {service_time} bulletin ===")
 
@@ -172,7 +175,13 @@ def main():
             service_time=service_time,
         )
 
-        builder.resolve_all(prompt_fn=prompt_fn)
+        builder.resolve_all(prompt_fn=prompt_fn,
+                            shared_resolutions=shared_resolutions)
+
+        # Capture resolved choices from the first service to share
+        if shared_resolutions is None:
+            shared_resolutions = builder.get_shared_resolutions()
+
         doc = builder.build()
 
         # Determine output path
@@ -212,7 +221,8 @@ def main():
             parish_ministries=parish_ministries,
             service_time="9 am",
         )
-        rs_builder.resolve_all(prompt_fn=prompt_fn)
+        rs_builder.resolve_all(prompt_fn=prompt_fn,
+                               shared_resolutions=shared_resolutions)
         rs_data = rs_builder.get_reading_sheet_data()
 
         # Determine psalm rubrics for each service group
