@@ -144,7 +144,8 @@ def add_holy_communion(doc: Document, rules: SeasonalRules, data: dict):
         else:
             fraction_song = data.get("fraction_song")
             if fraction_song:
-                _add_song_smart(doc, fraction_song)
+                _add_song_smart(doc, fraction_song,
+                                force_single_column=True)
             else:
                 # Default Agnus Dei text
                 for line in [
@@ -303,7 +304,7 @@ def _add_prayer_a_or_b(doc: Document, ep_data: dict, data: dict,
     # Sanctus hymn
     sanctus_song = data.get("sanctus_song")
     if sanctus_song:
-        _add_song_smart(doc, sanctus_song)
+        _add_song_smart(doc, sanctus_song, force_single_column=True)
     elif data.get("service_time") == "8 am":
         _add_sanctus_spoken(doc, prayers["sanctus"])
     else:
@@ -387,7 +388,7 @@ def _add_prayer_c(doc: Document, ep_data: dict, data: dict, prayers: dict):
     # Sanctus
     sanctus_song = data.get("sanctus_song")
     if sanctus_song:
-        _add_song_smart(doc, sanctus_song)
+        _add_song_smart(doc, sanctus_song, force_single_column=True)
     elif data.get("service_time") == "8 am":
         _add_sanctus_spoken(doc, prayers["sanctus"])
     else:
@@ -491,11 +492,17 @@ def _add_doxology_amen(doc: Document, prayer: dict):
     run.font.name = FONT_BODY_BOLD
 
 
-def _add_song_smart(doc: Document, song_data: dict | None):
-    """Add a song, choosing two-column layout for 3+ verse songs.
+def _add_song_smart(doc: Document, song_data: dict | None,
+                    force_single_column: bool = False):
+    """Add a song, choosing two-column layout when it saves space.
 
     If the song has no sections (hymnal-only), renders just the header
     line (title + hymnal reference) without wrapping in a lyric table.
+
+    Args:
+        force_single_column: If True, always use single-column layout.
+            Use for liturgical service music (fraction anthem, Sanctus)
+            that should not be split across columns.
     """
     if not song_data:
         add_body(doc, "[Song lyrics not found]")
@@ -519,7 +526,8 @@ def _add_song_smart(doc: Document, song_data: dict | None):
         default=0
     )
 
-    if len(sections) >= 3 and max_line_len <= 52:
+    # Two-column if 2+ sections and lines fit half-width
+    if not force_single_column and len(sections) >= 2 and max_line_len <= 52:
         add_song_two_column(doc, song_data)
     else:
         add_song(doc, song_data)

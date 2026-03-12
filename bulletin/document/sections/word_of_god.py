@@ -503,11 +503,17 @@ def _add_advent_wreath(doc: Document, data: dict):
             run.italic = True
 
 
-def _add_song_smart(doc: Document, song_data: dict | None):
-    """Add a song, choosing two-column layout for 3+ verse songs.
+def _add_song_smart(doc: Document, song_data: dict | None,
+                    force_single_column: bool = False):
+    """Add a song, choosing two-column layout when it saves space.
 
     If the song has no sections (hymnal-only), renders just the header
     line (title + hymnal reference) without wrapping in a lyric table.
+
+    Args:
+        force_single_column: If True, always use single-column layout.
+            Use for liturgical service music (fraction anthem, Sanctus)
+            that should not be split across columns.
     """
     if not song_data:
         add_body(doc, "[Song lyrics not found]")
@@ -531,8 +537,8 @@ def _add_song_smart(doc: Document, song_data: dict | None):
         default=0
     )
 
-    # Two-column if 3+ sections (verses + choruses) and lines fit half-width
-    if len(sections) >= 3 and max_line_len <= 52:
+    # Two-column if 2+ sections and lines fit half-width
+    if not force_single_column and len(sections) >= 2 and max_line_len <= 52:
         add_song_two_column(doc, song_data)
     else:
         add_song(doc, song_data)
