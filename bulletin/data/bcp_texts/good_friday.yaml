@@ -17,8 +17,9 @@ solemn_collects:
   exhortation: >-
     We pray, therefore, for people everywhere according to their needs.
   rubric: >-
-    All kneel in silence. After each bidding, the people pray
-    silently. The Celebrant stands to pray the Collect.
+    All kneel in silence. The Deacon reads the biddings. After
+    each bidding, the people pray silently. The Celebrant will
+    pray the Collect.
 
   collects:
     - title: "For the Holy Catholic Church"
@@ -107,15 +108,20 @@ solemn_collects:
         ever. Amen.
 
 veneration:
-  antiphon: >-
-    We glory in your cross, O Lord, and praise and glorify your
-    holy resurrection; for by virtue of your cross joy has come
-    to the whole world.
-  antiphon_psalm: >-
-    May God be merciful to us and bless us, show us the light of
-    his countenance, and come to us. Let your ways be known upon
-    earth, your saving health among all nations. Let the peoples
-    praise you, O God; let all the peoples praise you.
+  anthem:
+    - text: "We glory in your cross, O Lord, "
+      bold: false
+      inline: true
+    - text: "and praise and glorify your holy resurrection; for by virtue of your cross joy has come to the whole world."
+      bold: true
+    - text: "May God be merciful to us and bless us, show us the light of his countenance, and come to us."
+      bold: false
+    - text: "Let your ways be known upon earth, your saving health among all nations."
+      bold: true
+    - text: "Let the peoples praise you, O God; let all the peoples praise you."
+      bold: false
+    - text: "We glory in your cross, O Lord, and praise and glorify your holy resurrection; for by virtue of your cross joy has come to the whole world."
+      bold: true
 
 closing_prayer: >-
   Lord Jesus Christ, Son of the living God, we pray you to set

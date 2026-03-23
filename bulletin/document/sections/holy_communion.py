@@ -34,6 +34,7 @@ from bulletin.document.formatting import (
     add_introductory_rubric, add_body, add_body_with_bold_ending,
     add_celebrant_line, add_people_line, add_cross_symbol,
     add_song, add_song_two_column, add_hymn_header,
+    add_no_split_block,
 )
 from bulletin.logic.rules import SeasonalRules
 
@@ -95,8 +96,10 @@ def add_holy_communion(doc: Document, rules: SeasonalRules, data: dict):
             "Praise Him above, ye heavenly host:",
             "Praise Father, Son, and Holy Ghost.",
         ]
-        for line in _DOXOLOGY:
-            doc.add_paragraph(line, style="Body - Lyrics")
+        def _add_doxology(cell):
+            for line in _DOXOLOGY:
+                cell.add_paragraph(line, style="Body - Lyrics")
+        add_no_split_block(doc, _add_doxology)
 
     # --- The Great Thanksgiving ---
     add_spacer(doc)
@@ -464,18 +467,20 @@ def add_prayer_c(doc: Document, ep_data: dict, data: dict, prayers: dict):
 
 
 def add_sanctus_text(doc: Document, lines: list[str]):
-    """Add text Sanctus, rendering ✠ as a bold cross."""
-    for line in lines:
-        if CROSS_SYMBOL in line:
-            p = doc.add_paragraph(style="Body - Lyrics")
-            parts = line.split(CROSS_SYMBOL)
-            for i, part in enumerate(parts):
-                if i > 0:
-                    add_cross_symbol(p)
-                if part:
-                    p.add_run(part)
-        else:
-            doc.add_paragraph(line, style="Body - Lyrics")
+    """Add text Sanctus in a no-split block, rendering ✠ as a bold cross."""
+    def _add_sanctus_lines(cell):
+        for line in lines:
+            if CROSS_SYMBOL in line:
+                p = cell.add_paragraph(style="Body - Lyrics")
+                parts = line.split(CROSS_SYMBOL)
+                for i, part in enumerate(parts):
+                    if i > 0:
+                        add_cross_symbol(p)
+                    if part:
+                        p.add_run(part)
+            else:
+                cell.add_paragraph(line, style="Body - Lyrics")
+    add_no_split_block(doc, _add_sanctus_lines)
 
 
 def _add_institution_words(doc: Document, text: str):
@@ -828,27 +833,29 @@ def add_short_offertory_rubric(doc: Document):
 
 
 def add_sanctus_spoken(doc: Document, lines: list[str]):
-    """Add the Sanctus as bold poetry (8am).
+    """Add the Sanctus as bold poetry (8am) in a no-split block.
 
     Same line-by-line layout as the 9/11am text Sanctus, but all text
     is bold (spoken in unison by the people). ✠ is rendered via the
     bold cross symbol helper.
     """
-    for line in lines:
-        p = doc.add_paragraph(style="Body - Lyrics")
-        if CROSS_SYMBOL in line:
-            parts = line.split(CROSS_SYMBOL)
-            for i, part in enumerate(parts):
-                if i > 0:
-                    add_cross_symbol(p)
-                if part:
-                    run = p.add_run(part)
-                    run.bold = True
-                    run.font.name = FONT_BODY_BOLD
-        else:
-            run = p.add_run(line)
-            run.bold = True
-            run.font.name = FONT_BODY_BOLD
+    def _add_spoken_lines(cell):
+        for line in lines:
+            p = cell.add_paragraph(style="Body - Lyrics")
+            if CROSS_SYMBOL in line:
+                parts = line.split(CROSS_SYMBOL)
+                for i, part in enumerate(parts):
+                    if i > 0:
+                        add_cross_symbol(p)
+                    if part:
+                        run = p.add_run(part)
+                        run.bold = True
+                        run.font.name = FONT_BODY_BOLD
+            else:
+                run = p.add_run(line)
+                run.bold = True
+                run.font.name = FONT_BODY_BOLD
+    add_no_split_block(doc, _add_spoken_lines)
 
 
 def add_agnus_dei_spoken(doc: Document):

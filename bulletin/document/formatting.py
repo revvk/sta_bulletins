@@ -161,6 +161,29 @@ def add_lyric_chorus(doc: Document, lines: list[str]):
         run.italic = True
 
 
+def add_no_split_block(doc: Document, add_content_fn):
+    """Wrap content in a 1×1 borderless table to prevent page splits.
+
+    Args:
+        doc: The Document.
+        add_content_fn: A callable that takes (cell) and adds paragraphs
+                        to the cell. The cell's default empty paragraph
+                        is already removed before calling.
+    """
+    table = doc.add_table(rows=1, cols=1)
+    table.autofit = True
+    _remove_table_borders(table)
+    _prevent_row_split(table)
+    _remove_cell_margins(table)
+
+    cell = table.cell(0, 0)
+    # Remove default empty paragraph
+    for p in cell.paragraphs:
+        p._element.getparent().remove(p._element)
+
+    add_content_fn(cell)
+
+
 def add_song(doc: Document, song_data: dict):
     """Add a complete song (header + all verses/choruses).
 

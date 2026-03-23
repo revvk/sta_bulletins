@@ -17,7 +17,7 @@ from bulletin.data.loader import load_common_prayers, load_eucharistic_prayers
 from bulletin.document.formatting import (
     add_spacer, add_heading, add_heading2, add_rubric,
     add_introductory_rubric, add_body, add_celebrant_line,
-    add_people_line,
+    add_people_line, add_no_split_block,
 )
 from bulletin.document.sections.word_of_god import (
     add_standard_opening, add_reading, add_psalm, add_gospel,
@@ -26,6 +26,7 @@ from bulletin.document.sections.word_of_god import (
 from bulletin.document.sections.holy_communion import (
     add_prayer_a_or_b, add_prayer_c,
     add_short_offertory_rubric, add_agnus_dei_spoken,
+    _add_agnus_dei_images,
 )
 from bulletin.logic.rules import SeasonalRules
 
@@ -156,10 +157,12 @@ def _add_foot_washing(doc: Document, mt_data: dict):
 
     sections = anthem.get("sections", [])
     if sections:
-        # Render alternating normal/bold sections
-        for section in sections:
+        # Render alternating normal/bold sections with spacers between
+        for i, section in enumerate(sections):
             text = section.get("text", "")
             is_bold = section.get("bold", False)
+            if i > 0:
+                add_spacer(doc)
             if is_bold:
                 p = doc.add_paragraph(style="Body")
                 run = p.add_run(text)
@@ -214,7 +217,7 @@ def _add_holy_communion(doc: Document, rules: SeasonalRules,
     add_heading2(doc, "Offering Music")
     add_song_smart(doc, hc_data.get("offertory_song"))
 
-    # Doxology
+    # Doxology (wrapped in no-split block to prevent page break)
     add_spacer(doc)
     add_introductory_rubric(doc, "Please stand.")
     add_heading2(doc, "Doxology")
@@ -224,8 +227,10 @@ def _add_holy_communion(doc: Document, rules: SeasonalRules,
         "Praise Him above, ye heavenly host:",
         "Praise Father, Son, and Holy Ghost.",
     ]
-    for line in _DOXOLOGY:
-        doc.add_paragraph(line, style="Body - Lyrics")
+    def _add_doxology(cell):
+        for line in _DOXOLOGY:
+            cell.add_paragraph(line, style="Body - Lyrics")
+    add_no_split_block(doc, _add_doxology)
 
     # --- The Great Thanksgiving ---
     add_spacer(doc)
@@ -259,11 +264,8 @@ def _add_holy_communion(doc: Document, rules: SeasonalRules,
     add_spacer(doc)
     add_heading2(doc, "Breaking of the Bread")
     if rules.use_fraction_anthem:
-        fraction_song = hc_data.get("fraction_song")
-        if fraction_song:
-            add_song_smart(doc, fraction_song, force_single_column=True)
-        else:
-            add_agnus_dei_spoken(doc)
+        # Use the same Agnus Dei with music notation images as 11am Lent
+        _add_agnus_dei_images(doc)
     else:
         add_celebrant_line(doc, "Celebrant", rules.fraction_celebrant)
         add_people_line(doc, "People", rules.fraction_people)
@@ -328,7 +330,7 @@ def _add_stripping(doc: Document, mt_data: dict):
     stripping = mt_data.get("stripping", {})
 
     add_spacer(doc)
-    add_heading2(doc, "Stripping the Altar")
+    add_heading2(doc, "Stripping of the Altar")
 
     rubric = stripping.get("rubric", "")
     if rubric:

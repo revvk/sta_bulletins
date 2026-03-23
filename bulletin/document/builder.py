@@ -11,7 +11,9 @@ from datetime import date, datetime
 
 from bulletin.config import CHURCH_NAME, GIVING_URL
 from bulletin.document.styles import configure_document
-from bulletin.document.templates import load_front_cover, append_back_cover, setup_footers
+from bulletin.document.templates import (
+    load_front_cover, append_back_cover, append_template_page, setup_footers,
+)
 from bulletin.document.sections.word_of_god import add_word_of_god
 from bulletin.document.sections.holy_communion import add_holy_communion
 from bulletin.logic.rules import get_seasonal_rules, get_dismissal_text, detect_special_service
@@ -27,7 +29,14 @@ from bulletin.data.loader import (
 # Cover template overrides for special services
 _COVER_TEMPLATES = {
     "palm_sunday": "front_cover_palm_sunday.docx",
+    "maundy_thursday": "front_cover_maundy_thursday.docx",
     "good_friday": "front_cover_good_friday.docx",
+}
+
+# Inside back cover template overrides for special services
+_INSIDE_BACK_COVER_TEMPLATES = {
+    "maundy_thursday": "inside_back_cover_maundy_thursday.docx",
+    "good_friday": "inside_back_cover_good_friday.docx",
 }
 
 
@@ -180,6 +189,11 @@ class BulletinBuilder:
             self._build_palm_sunday(doc)
         else:
             self._build_standard(doc)
+
+        # Inside back cover for special services (before back cover)
+        inside_back_template = _INSIDE_BACK_COVER_TEMPLATES.get(self.special_service)
+        if inside_back_template:
+            append_template_page(doc, inside_back_template)
 
         # Back cover (template-based, new page section)
         append_back_cover(doc)

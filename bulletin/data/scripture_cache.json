@@ -30,14 +30,322 @@
     "poetry_lines": []
   },
   "Isaiah 52:13-53:12": {
-    "has_poetry": false,
-    "paragraphs": [
-      "\u000113\u0001 See, my servant shall prosper;   he shall be exalted and lifted up,   and shall be very high.\n\u000114\u0001 Just as there were many who were astonished at him*   —so marred was his appearance, beyond human semblance,   and his form beyond that of mortals—\n\u000115\u0001 so he shall startle* many nations;   kings shall shut their mouths because of him;for that which had not been told them they shall see,   and that which they had not heard they shall contemplate.\n\u000113\u0001 Who has believed what we have heard?   And to whom has the arm of the Lord been revealed?\n\u00012\u0001 For he grew up before him like a young plant,   and like a root out of dry ground;he had no form or majesty that we should look at him,   nothing in his appearance that we should desire him.\n\u00013\u0001 He was despised and rejected by others;   a man of suffering* and acquainted with infirmity;and as one from whom others hide their faces*   he was despised, and we held him of no account.",
-      "\u00014\u0001 Surely he has borne our infirmities   and carried our diseases;yet we accounted him stricken,   struck down by God, and afflicted.\n\u00015\u0001 But he was wounded for our transgressions,   crushed for our iniquities;upon him was the punishment that made us whole,   and by his bruises we are healed.\n\u00016\u0001 All we like sheep have gone astray;   we have all turned to our own way,and the Lord has laid on him   the iniquity of us all.",
-      "\u00017\u0001 He was oppressed, and he was afflicted,   yet he did not open his mouth;like a lamb that is led to the slaughter,   and like a sheep that before its shearers is silent,   so he did not open his mouth.\n\u00018\u0001 By a perversion of justice he was taken away.   Who could have imagined his future?For he was cut off from the land of the living,   stricken for the transgression of my people.\n\u00019\u0001 They made his grave with the wicked   and his tomb* with the rich,*although he had done no violence,   and there was no deceit in his mouth.",
-      "\u000110\u0001 Yet it was the will of the Lord to crush him with pain.*When you make his life an offering for sin,*   he shall see his offspring, and shall prolong his days;through him the will of the Lord shall prosper.\n\u000111\u0001    Out of his anguish he shall see light;*he shall find satisfaction through his knowledge.   The righteous one,* my servant, shall make many righteous,   and he shall bear their iniquities.\n\u000112\u0001 Therefore I will allot him a portion with the great,   and he shall divide the spoil with the strong;because he poured out himself to death,   and was numbered with the transgressors;yet he bore the sin of many,   and made intercession for the transgressors."
+    "has_poetry": true,
+    "paragraphs": [],
+    "poetry_lines": [
+      "\u000113\u0001 See, my servant shall prosper;",
+      "he shall be exalted and lifted up,",
+      "and shall be very high.",
+      "\u000114\u0001 Just as there were many who were astonished at him*",
+      "—so marred was his appearance, beyond human semblance,",
+      "and his form beyond that of mortals—",
+      "\u000115\u0001 so he shall startle* many nations;",
+      "kings shall shut their mouths because of him;",
+      "for that which had not been told them they shall see,",
+      "and that which they had not heard they shall contemplate.\n\u000113\u0001 Who has believed what we have heard?",
+      "And to whom has the arm of the Lord been revealed?",
+      "\u00012\u0001 For he grew up before him like a young plant,",
+      "and like a root out of dry ground;",
+      "he had no form or majesty that we should look at him,",
+      "nothing in his appearance that we should desire him.",
+      "\u00013\u0001 He was despised and rejected by others;",
+      "a man of suffering* and acquainted with infirmity;",
+      "and as one from whom others hide their faces*",
+      "he was despised, and we held him of no account.",
+      "\u00014\u0001 Surely he has borne our infirmities",
+      "and carried our diseases;",
+      "yet we accounted him stricken,",
+      "struck down by God, and afflicted.",
+      "\u00015\u0001 But he was wounded for our transgressions,",
+      "crushed for our iniquities;",
+      "upon him was the punishment that made us whole,",
+      "and by his bruises we are healed.",
+      "\u00016\u0001 All we like sheep have gone astray;",
+      "we have all turned to our own way,",
+      "and the Lord has laid on him",
+      "the iniquity of us all.",
+      "\u00017\u0001 He was oppressed, and he was afflicted,",
+      "yet he did not open his mouth;",
+      "like a lamb that is led to the slaughter,",
+      "and like a sheep that before its shearers is silent,",
+      "so he did not open his mouth.",
+      "\u00018\u0001 By a perversion of justice he was taken away.",
+      "Who could have imagined his future?",
+      "For he was cut off from the land of the living,",
+      "stricken for the transgression of my people.",
+      "\u00019\u0001 They made his grave with the wicked",
+      "and his tomb* with the rich,*",
+      "although he had done no violence,",
+      "and there was no deceit in his mouth.",
+      "\u000110\u0001 Yet it was the will of the Lord to crush him with pain.*",
+      "When you make his life an offering for sin,*",
+      "he shall see his offspring, and shall prolong his days;",
+      "through him the will of the Lord shall prosper.",
+      "\u000111\u0001 Out of his anguish he shall see light;*",
+      "he shall find satisfaction through his knowledge.",
+      "The righteous one,* my servant, shall make many righteous,",
+      "and he shall bear their iniquities.",
+      "\u000112\u0001 Therefore I will allot him a portion with the great,",
+      "and he shall divide the spoil with the strong;",
+      "because he poured out himself to death,",
+      "and was numbered with the transgressors;",
+      "yet he bore the sin of many,",
+      "and made intercession for the transgressors."
     ],
-    "poetry_lines": []
+    "segments": [
+      {
+        "lines": [
+          {
+            "indent": 0,
+            "text": "\u000113\u0001 See, my servant shall prosper;"
+          },
+          {
+            "indent": 1,
+            "text": "he shall be exalted and lifted up,"
+          },
+          {
+            "indent": 1,
+            "text": "and shall be very high."
+          },
+          {
+            "indent": 0,
+            "text": "\u000114\u0001 Just as there were many who were astonished at him*"
+          },
+          {
+            "indent": 1,
+            "text": "—so marred was his appearance, beyond human semblance,"
+          },
+          {
+            "indent": 1,
+            "text": "and his form beyond that of mortals—"
+          },
+          {
+            "indent": 0,
+            "text": "\u000115\u0001 so he shall startle* many nations;"
+          },
+          {
+            "indent": 1,
+            "text": "kings shall shut their mouths because of him;"
+          },
+          {
+            "indent": 0,
+            "text": "for that which had not been told them they shall see,"
+          },
+          {
+            "indent": 1,
+            "text": "and that which they had not heard they shall contemplate.\n\u000113\u0001 Who has believed what we have heard?"
+          },
+          {
+            "indent": 1,
+            "text": "And to whom has the arm of the Lord been revealed?"
+          },
+          {
+            "indent": 0,
+            "text": "\u00012\u0001 For he grew up before him like a young plant,"
+          },
+          {
+            "indent": 1,
+            "text": "and like a root out of dry ground;"
+          },
+          {
+            "indent": 0,
+            "text": "he had no form or majesty that we should look at him,"
+          },
+          {
+            "indent": 1,
+            "text": "nothing in his appearance that we should desire him."
+          },
+          {
+            "indent": 0,
+            "text": "\u00013\u0001 He was despised and rejected by others;"
+          },
+          {
+            "indent": 1,
+            "text": "a man of suffering* and acquainted with infirmity;"
+          },
+          {
+            "indent": 0,
+            "text": "and as one from whom others hide their faces*"
+          },
+          {
+            "indent": 1,
+            "text": "he was despised, and we held him of no account."
+          }
+        ],
+        "type": "poetry"
+      },
+      {
+        "lines": [
+          {
+            "indent": 0,
+            "text": "\u00014\u0001 Surely he has borne our infirmities"
+          },
+          {
+            "indent": 1,
+            "text": "and carried our diseases;"
+          },
+          {
+            "indent": 0,
+            "text": "yet we accounted him stricken,"
+          },
+          {
+            "indent": 1,
+            "text": "struck down by God, and afflicted."
+          },
+          {
+            "indent": 0,
+            "text": "\u00015\u0001 But he was wounded for our transgressions,"
+          },
+          {
+            "indent": 1,
+            "text": "crushed for our iniquities;"
+          },
+          {
+            "indent": 0,
+            "text": "upon him was the punishment that made us whole,"
+          },
+          {
+            "indent": 1,
+            "text": "and by his bruises we are healed."
+          },
+          {
+            "indent": 0,
+            "text": "\u00016\u0001 All we like sheep have gone astray;"
+          },
+          {
+            "indent": 1,
+            "text": "we have all turned to our own way,"
+          },
+          {
+            "indent": 0,
+            "text": "and the Lord has laid on him"
+          },
+          {
+            "indent": 1,
+            "text": "the iniquity of us all."
+          }
+        ],
+        "type": "poetry"
+      },
+      {
+        "lines": [
+          {
+            "indent": 0,
+            "text": "\u00017\u0001 He was oppressed, and he was afflicted,"
+          },
+          {
+            "indent": 1,
+            "text": "yet he did not open his mouth;"
+          },
+          {
+            "indent": 0,
+            "text": "like a lamb that is led to the slaughter,"
+          },
+          {
+            "indent": 1,
+            "text": "and like a sheep that before its shearers is silent,"
+          },
+          {
+            "indent": 1,
+            "text": "so he did not open his mouth."
+          },
+          {
+            "indent": 0,
+            "text": "\u00018\u0001 By a perversion of justice he was taken away."
+          },
+          {
+            "indent": 1,
+            "text": "Who could have imagined his future?"
+          },
+          {
+            "indent": 0,
+            "text": "For he was cut off from the land of the living,"
+          },
+          {
+            "indent": 1,
+            "text": "stricken for the transgression of my people."
+          },
+          {
+            "indent": 0,
+            "text": "\u00019\u0001 They made his grave with the wicked"
+          },
+          {
+            "indent": 1,
+            "text": "and his tomb* with the rich,*"
+          },
+          {
+            "indent": 0,
+            "text": "although he had done no violence,"
+          },
+          {
+            "indent": 1,
+            "text": "and there was no deceit in his mouth."
+          }
+        ],
+        "type": "poetry"
+      },
+      {
+        "lines": [
+          {
+            "indent": 0,
+            "text": "\u000110\u0001 Yet it was the will of the Lord to crush him with pain.*"
+          },
+          {
+            "indent": 0,
+            "text": "When you make his life an offering for sin,*"
+          },
+          {
+            "indent": 1,
+            "text": "he shall see his offspring, and shall prolong his days;"
+          },
+          {
+            "indent": 0,
+            "text": "through him the will of the Lord shall prosper."
+          },
+          {
+            "indent": 0,
+            "text": "\u000111\u0001 Out of his anguish he shall see light;*"
+          },
+          {
+            "indent": 0,
+            "text": "he shall find satisfaction through his knowledge."
+          },
+          {
+            "indent": 1,
+            "text": "The righteous one,* my servant, shall make many righteous,"
+          },
+          {
+            "indent": 1,
+            "text": "and he shall bear their iniquities."
+          },
+          {
+            "indent": 0,
+            "text": "\u000112\u0001 Therefore I will allot him a portion with the great,"
+          },
+          {
+            "indent": 1,
+            "text": "and he shall divide the spoil with the strong;"
+          },
+          {
+            "indent": 0,
+            "text": "because he poured out himself to death,"
+          },
+          {
+            "indent": 1,
+            "text": "and was numbered with the transgressors;"
+          },
+          {
+            "indent": 0,
+            "text": "yet he bore the sin of many,"
+          },
+          {
+            "indent": 1,
+            "text": "and made intercession for the transgressors."
+          }
+        ],
+        "type": "poetry"
+      }
+    ]
   },
   "John 11:1-45": {
     "has_poetry": false,

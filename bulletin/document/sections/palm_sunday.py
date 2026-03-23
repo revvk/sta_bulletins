@@ -280,8 +280,8 @@ def _add_passion_gospel_lines(doc: Document, passion_lines: list[dict]):
             style_name = "Passion Gospel - Narrator"
 
         p = doc.add_paragraph(style=style_name)
-        # Part name (small caps, 9pt) + tab + spoken text
-        label_run = p.add_run(f"{part}:\t")
+        # Part name (lowercase + small caps renders as capitals, 9pt) + tab + spoken text
+        label_run = p.add_run(f"{part.lower()}:\t")
         label_run.font.small_caps = True
         label_run.font.size = Pt(9)
         p.add_run(text)

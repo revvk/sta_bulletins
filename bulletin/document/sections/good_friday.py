@@ -99,7 +99,6 @@ def _add_entrance_and_collect(doc: Document, rules: SeasonalRules,
                        acclamation.get("celebrant", rules.acclamation_celebrant))
     add_people_line(doc, "People",
                     acclamation.get("people", rules.acclamation_people))
-    add_spacer(doc)
 
     add_celebrant_line(doc, "Celebrant", "Let us pray.")
     add_spacer(doc)
@@ -134,13 +133,21 @@ def _add_readings_and_sermon(doc: Document, data: dict, gf_data: dict = None):
     add_heading2(doc, f"The Gospel: {data['gospel_ref']}")
     add_rubric(doc, "The congregation may be seated for the first part of "
                "the Passion. At the verse which mentions the arrival at "
-               "Golgotha all stand.")
+               "Golgotha (John 19:17) all stand.")
+    add_spacer(doc)
+
+    # Gospel preamble as a Narrator line
+    from bulletin.document.sections.palm_sunday import _add_passion_gospel_lines
+    _add_passion_gospel_lines(doc, [
+        {"part": "Narrator",
+         "text": "The Passion of our Lord Jesus Christ according to John."},
+    ])
+
     add_rubric(doc, "The customary responses before and after the Gospel "
                "are omitted.")
     add_spacer(doc)
 
     # Render passion gospel in parts if available
-    from bulletin.document.sections.palm_sunday import _add_passion_gospel_lines
     passion_lines = gf_data.get("passion_gospel_lines", []) if gf_data else []
     if passion_lines:
         _add_passion_gospel_lines(doc, passion_lines)
@@ -191,20 +198,29 @@ def _add_solemn_collects(doc: Document, gf_data: dict):
     # Each bidding + silence + collect
     collects = solemn.get("collects", [])
     for i, collect in enumerate(collects):
-        # Bidding
+        # Bidding (spoken by the Deacon)
         bidding = collect.get("bidding", "")
         if bidding:
             add_body(doc, bidding)
 
         # Silence
         add_spacer(doc)
-        add_rubric(doc, "Silence")
+        add_introductory_rubric(doc, "Silence")
         add_spacer(doc)
 
-        # Celebrant's collect
+        # Celebrant's collect — formatted with "Celebrant" label and tab
         collect_text = collect.get("collect", "")
         if collect_text:
-            add_body_with_amen(doc, collect_text)
+            # Split off trailing "Amen." to make it bold
+            if collect_text.rstrip().endswith("Amen."):
+                body_text = collect_text.rstrip()[:-5].rstrip()
+                p = doc.add_paragraph(style="Body - Dialogue")
+                p.add_run("Celebrant\t" + body_text + " ")
+                run = p.add_run("Amen.")
+                run.bold = True
+                run.font.name = FONT_BODY_BOLD
+            else:
+                add_celebrant_line(doc, "Celebrant", collect_text)
 
         # Spacer between collects (but not after the last)
         if i + 1 < len(collects):
@@ -226,33 +242,57 @@ def _add_veneration(doc: Document, gf_data: dict):
         add_song_smart(doc, veneration_hymns[0])
         add_spacer(doc)
 
-    # Antiphon (after the cross is placed)
+    # Antiphon and psalm (after the cross is placed)
     veneration = gf_data.get("veneration", {})
-    antiphon = veneration.get("antiphon", "")
-    antiphon_psalm = veneration.get("antiphon_psalm", "")
+    anthem_sections = veneration.get("anthem", [])
 
     add_rubric(doc, "After the cross is nailed together, the anthem below "
                "is recited, the congregation reading the part in bold.")
     add_spacer(doc)
 
-    if antiphon:
-        # Antiphon (versicle — normal text)
-        add_body(doc, antiphon)
+    # Render anthem sections with interleaved bold/normal formatting
+    # Some sections are "inline" (continue on the same paragraph as the next)
+    pending_inline = None
+    for section in anthem_sections:
+        text = section.get("text", "")
+        is_bold = section.get("bold", False)
+        is_inline = section.get("inline", False)
 
-    if antiphon_psalm:
-        # Psalm verse (normal text)
-        add_body(doc, antiphon_psalm)
+        if is_inline:
+            # Start a paragraph but don't close it yet
+            pending_inline = (text, is_bold)
+            continue
 
-    if antiphon:
-        # Antiphon repeated (bold — people's part)
-        p = doc.add_paragraph(style="Body")
-        run = p.add_run(antiphon)
-        run.bold = True
-        run.font.name = FONT_BODY_BOLD
+        if pending_inline:
+            # Continue the previous inline section
+            p = doc.add_paragraph(style="Body")
+            inline_text, inline_bold = pending_inline
+            if inline_bold:
+                run = p.add_run(inline_text)
+                run.bold = True
+                run.font.name = FONT_BODY_BOLD
+            else:
+                p.add_run(inline_text)
+            # Add current section to the same paragraph
+            if is_bold:
+                run = p.add_run(text)
+                run.bold = True
+                run.font.name = FONT_BODY_BOLD
+            else:
+                p.add_run(text)
+            pending_inline = None
+        else:
+            if is_bold:
+                p = doc.add_paragraph(style="Body")
+                run = p.add_run(text)
+                run.bold = True
+                run.font.name = FONT_BODY_BOLD
+            else:
+                add_body(doc, text)
+        add_spacer(doc)
 
     # Additional hymn(s) during veneration
     if len(veneration_hymns) > 1:
-        add_spacer(doc)
         add_rubric(doc, "Led by the cantor, the people now sing together "
                    "the following hymn. During the singing of the hymn, "
                    "the congregation is invited to come forward to the "

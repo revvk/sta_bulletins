@@ -6,6 +6,7 @@ acclamation:
   people: "And blessed be his kingdom, now and for ever. Amen."
 
 foot_washing:
+  # NOTE: This invitation text is from the BCP (p. 274). Review for accuracy.
   invitation: >-
     Fellow servants of our Lord Jesus Christ: on the night before his
     death, Jesus set an example for his disciples by washing their feet,

@@ -122,6 +122,54 @@ def append_back_cover(doc: Document):
         body.append(elem_copy)
 
 
+def append_template_page(doc: Document, template_filename: str):
+    """Append a template .docx as a new page section at the end.
+
+    Works exactly like append_back_cover but for any template file.
+    Used for inside back covers on special services.
+    """
+    template_path = _TEMPLATES_DIR / template_filename
+    if not template_path.exists():
+        print(f"  Warning: Template not found: {template_path}")
+        return
+
+    tmpl_doc = Document(str(template_path))
+    body = doc.element.body
+    tmpl_body = tmpl_doc.element.body
+
+    # Copy images & hyperlinks, build rId remapping
+    rid_map = _copy_related_parts(tmpl_doc, doc)
+
+    # Close the current section (next-page break)
+    main_sect_pr = body.find(qn("w:sectPr"))
+    if main_sect_pr is not None:
+        body.remove(main_sect_pr)
+
+        sect_type = main_sect_pr.find(qn("w:type"))
+        if sect_type is not None:
+            sect_type.set(qn("w:val"), "nextPage")
+        else:
+            main_sect_pr.insert(
+                0, parse_xml(f'<w:type {nsdecls("w")} w:val="nextPage"/>')
+            )
+
+        paragraphs = list(body.iterchildren(qn("w:p")))
+        if paragraphs:
+            last_p = paragraphs[-1]
+            pPr = last_p.find(qn("w:pPr"))
+            if pPr is None:
+                pPr = parse_xml(f'<w:pPr {nsdecls("w")}/>')
+                last_p.insert(0, pPr)
+            pPr.append(main_sect_pr)
+
+    # Append template elements with remapped rIds
+    for element in list(tmpl_body):
+        elem_copy = deepcopy(element)
+        if rid_map:
+            _remap_rids(elem_copy, rid_map)
+        body.append(elem_copy)
+
+
 def setup_footers(doc: Document, date_str: str, service_time: str,
                   liturgical_title: str):
     """Add odd/even page footers to the bulletin body section.

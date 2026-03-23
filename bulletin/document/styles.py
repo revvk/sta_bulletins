@@ -393,7 +393,7 @@ def _create_passion_gospel_styles(doc: Document):
         pf.left_indent = Inches(1.18)
         pf.first_line_indent = Inches(-0.86)
         pf.space_before = Pt(0)
-        pf.space_after = Pt(0)
+        pf.space_after = Pt(7)
         pf.line_spacing = 1.0
 
         # Tab stop at the hanging indent position for clean text alignment
