@@ -31,7 +31,7 @@ def _load_psalms() -> dict:
 class PsalmVerse:
     """A single psalm verse with its half-verse components."""
     number: int
-    first_half: str
+    first_half: str | list[str]  # str or list for multi-line first halves
     second_half: list[str]
 
 
@@ -57,7 +57,10 @@ class PsalmSelection:
         for verse in self.verses:
             parts = []
             if verse.first_half:
-                parts.append(verse.first_half)
+                if isinstance(verse.first_half, list):
+                    parts.extend(verse.first_half)
+                else:
+                    parts.append(verse.first_half)
             for sh_line in verse.second_half:
                 parts.append(f"\t{sh_line}")
             if parts:

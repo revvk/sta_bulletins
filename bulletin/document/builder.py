@@ -14,12 +14,21 @@ from bulletin.document.styles import configure_document
 from bulletin.document.templates import load_front_cover, append_back_cover, setup_footers
 from bulletin.document.sections.word_of_god import add_word_of_god
 from bulletin.document.sections.holy_communion import add_holy_communion
-from bulletin.logic.rules import get_seasonal_rules, get_dismissal_text
+from bulletin.logic.rules import get_seasonal_rules, get_dismissal_text, detect_special_service
 from bulletin.data.loader import (
     load_common_prayers, load_pop_forms, load_blessings,
     get_proper_preface_text, get_preface_option_labels,
     load_staff, get_canonical_hymn_title,
+    load_maundy_thursday, load_good_friday,
+    load_palm_sunday, load_passion_gospel,
 )
+
+
+# Cover template overrides for special services
+_COVER_TEMPLATES = {
+    "palm_sunday": "front_cover_palm_sunday.docx",
+    "good_friday": "front_cover_good_friday.docx",
+}
 
 
 class BulletinBuilder:
@@ -58,6 +67,9 @@ class BulletinBuilder:
         # Derived data
         self.schedule = sheet_data.schedule
         self.clergy = sheet_data.clergy
+
+        # Detect special service type (Maundy Thursday, Good Friday, etc.)
+        self.special_service = detect_special_service(self.schedule.title)
 
         # Compute seasonal rules
         self.rules = get_seasonal_rules(
@@ -144,21 +156,47 @@ class BulletinBuilder:
         date_str = self.target_date.strftime("%B %-d, %Y")
         service_time = self.service_time
 
+        # Use special cover template if applicable
+        cover_template = _COVER_TEMPLATES.get(self.special_service)
+
         # Start from the front-cover template (replaces placeholders)
         doc = load_front_cover(
             date_str=date_str,
             service_time=service_time,
             liturgical_title=self.schedule.title,
             subtitle=" ",  # single space to preserve spacing when unused
+            cover_template=cover_template,
         )
 
         # Apply page setup and register all bulletin styles
         configure_document(doc)
 
-        # Prelude items (bridge between cover and liturgy)
+        # Route to special service module or standard flow
+        if self.special_service == "maundy_thursday":
+            self._build_maundy_thursday(doc)
+        elif self.special_service == "good_friday":
+            self._build_good_friday(doc)
+        elif self.special_service == "palm_sunday":
+            self._build_palm_sunday(doc)
+        else:
+            self._build_standard(doc)
+
+        # Back cover (template-based, new page section)
+        append_back_cover(doc)
+
+        # Footers — added after back cover so both sections exist
+        setup_footers(doc, date_str, service_time, self.schedule.title)
+
+        return doc
+
+    def _build_standard(self, doc):
+        """Standard Sunday bulletin flow."""
         from bulletin.document.formatting import (
             add_spacer, add_introductory_rubric, add_heading2,
         )
+        service_time = self.service_time
+
+        # Prelude items (bridge between cover and liturgy)
         if service_time == "8 am":
             # 8am: shorter rubric, no Prelude heading (no music)
             add_introductory_rubric(
@@ -187,13 +225,84 @@ class BulletinBuilder:
         hc_data = self._prepare_holy_communion_data()
         add_holy_communion(doc, self.rules, hc_data)
 
-        # Back cover (template-based, new page section)
-        append_back_cover(doc)
+    def _build_maundy_thursday(self, doc):
+        """Maundy Thursday liturgy flow."""
+        from bulletin.document.formatting import (
+            add_spacer, add_introductory_rubric, add_heading2,
+        )
+        from bulletin.document.sections.maundy_thursday import add_maundy_thursday
 
-        # Footers — added after back cover so both sections exist
-        setup_footers(doc, date_str, service_time, self.schedule.title)
+        # Prelude (Maundy Thursday has a prelude like a regular service)
+        add_introductory_rubric(
+            doc,
+            "Once the Prelude begins, please refrain from further visiting "
+            "and conversation as we prepare our hearts and thoughts for worship. "
+            "Prayers before worship can be found in the Book of Common Prayer, "
+            "p. 833-35."
+        )
+        add_spacer(doc)
+        add_heading2(doc, "Prelude")
+        add_spacer(doc)
 
-        return doc
+        wog_data = self._prepare_word_of_god_data()
+        hc_data = self._prepare_holy_communion_data()
+        mt_data = self._prepare_maundy_thursday_data()
+
+        add_maundy_thursday(doc, self.rules, wog_data, hc_data, mt_data)
+
+    def _build_good_friday(self, doc):
+        """Good Friday liturgy flow — no prelude, no Eucharist."""
+        from bulletin.document.sections.good_friday import add_good_friday
+
+        # No prelude on Good Friday — ministers enter in silence
+        wog_data = self._prepare_word_of_god_data()
+        gf_data = self._prepare_good_friday_data()
+
+        add_good_friday(doc, self.rules, wog_data, gf_data)
+
+    def _build_palm_sunday(self, doc):
+        """Palm Sunday liturgy flow — Liturgy of the Palms + Word of God + Communion."""
+        from bulletin.document.formatting import (
+            add_spacer, add_introductory_rubric, add_heading2,
+        )
+        from bulletin.document.sections.palm_sunday import (
+            add_liturgy_of_the_palms, add_palm_sunday_word_of_god,
+        )
+
+        service_time = self.service_time
+
+        # Palm Sunday 9/11am begins outside — no initial rubric or Prelude.
+        # 8am still gets the short prayer rubric (no prelude at 8am anyway).
+        if service_time == "8 am":
+            add_introductory_rubric(
+                doc,
+                "Prayers before worship can be found in the "
+                "Book of Common Prayer, p. 833-35."
+            )
+            add_spacer(doc)
+
+        wog_data = self._prepare_word_of_god_data()
+        ps_data = self._prepare_palm_sunday_data()
+
+        # Palm Sunday processional is sung outside without hymnals,
+        # so always print full lyrics (even for 11am).
+        if service_time == "11 am" and wog_data.get("processional"):
+            proc = wog_data["processional"]
+            if not proc.get("sections"):
+                # Re-lookup with full lyrics
+                full_song = self.song_lookup(proc.get("title", ""), self.service_time)
+                if full_song and full_song.get("sections"):
+                    wog_data["processional"] = self._apply_canonical_title(full_song)
+
+        # Liturgy of the Palms
+        add_liturgy_of_the_palms(doc, self.rules, wog_data, ps_data)
+
+        # Word of God (with Passion Gospel in parts)
+        add_palm_sunday_word_of_god(doc, self.rules, wog_data, ps_data)
+
+        # Holy Communion (standard)
+        hc_data = self._prepare_holy_communion_data()
+        add_holy_communion(doc, self.rules, hc_data)
 
     # ------------------------------------------------------------------
     # Resolution methods
@@ -807,6 +916,125 @@ class BulletinBuilder:
         base_key = roman_map.get(form_clean, "form_I")
 
         return base_key + version_suffix
+
+    def _prepare_maundy_thursday_data(self) -> dict:
+        """Prepare the Maundy-Thursday-specific data dict."""
+        mt_texts = load_maundy_thursday()
+
+        # Psalm 22 for the Stripping of the Altar
+        psalm_22_text = []
+        try:
+            from bulletin.sources.psalms import get_psalm
+            ps = get_psalm("Psalm 22")
+            psalm_22_text = ps.to_lines()
+        except Exception as e:
+            print(f"  Warning: Could not look up Psalm 22: {e}")
+
+        # Post-communion hymn uses the Recessional slot
+        post_comm = self._lookup_slot("Recessional")
+
+        # Foot washing songs — look up from music slots
+        # The sheet may use slots like "Communion 1", "Communion 2", etc.
+        # for foot washing music, or we may need custom slot names.
+        # For now, foot washing songs are not populated from the sheet.
+        foot_washing_songs = []
+
+        return {
+            "foot_washing": mt_texts.get("foot_washing", {}),
+            "foot_washing_songs": foot_washing_songs,
+            "anthem": mt_texts.get("anthem", {}),
+            "post_communion_hymn": post_comm,
+            "stripping": mt_texts.get("stripping", {}),
+            "psalm_22_text": psalm_22_text,
+            "watch": mt_texts.get("watch", {}),
+        }
+
+    def _prepare_good_friday_data(self) -> dict:
+        """Prepare the Good-Friday-specific data dict."""
+        gf_texts = load_good_friday()
+
+        # Veneration hymns from music slots
+        # First hymn: processional slot (cross procession hymn)
+        # Second hymn: recessional slot (veneration/devotion hymn)
+        veneration_hymns = []
+        proc = self._lookup_slot("Processional")
+        if proc:
+            veneration_hymns.append(proc)
+        recess = self._lookup_slot("Recessional")
+        if recess:
+            veneration_hymns.append(recess)
+
+        # Passion Gospel in parts (John — same every year on Good Friday)
+        passion_lines = []
+        try:
+            passion_data = load_passion_gospel("john")
+            passion_lines = passion_data.get("lines", [])
+        except Exception as e:
+            print(f"  Warning: Could not load Good Friday passion gospel: {e}")
+
+        return {
+            "entrance_rubric": gf_texts.get("entrance_rubric", ""),
+            "acclamation": gf_texts.get("acclamation", {}),
+            "solemn_collects": gf_texts.get("solemn_collects", {}),
+            "veneration_hymns": veneration_hymns,
+            "veneration": gf_texts.get("veneration", {}),
+            "closing_prayer": gf_texts.get("closing_prayer", ""),
+            "closing_rubric": gf_texts.get("closing_rubric", ""),
+            "passion_gospel_lines": passion_lines,
+        }
+
+    def _prepare_palm_sunday_data(self) -> dict:
+        """Prepare the Palm-Sunday-specific data dict."""
+        palm_texts = load_palm_sunday()
+
+        # Determine liturgical year from the schedule title or date
+        year = self._get_liturgical_year()
+
+        # Palm Gospel (triumphal entry) — varies by year
+        liturgy = palm_texts["liturgy_of_the_palms"]
+        palm_gospel_ref = liturgy["palm_gospel"].get(year, "Matthew 21:1-11")
+        palm_gospel_text = self.scripture.get("palm_gospel")
+
+        # Passion Gospel (read in parts)
+        passion_config = palm_texts["passion_gospel"]
+        passion_ref = passion_config["references"].get(year, "Matthew 27:11-54")
+
+        # Load the passion gospel lines from the year-specific YAML
+        try:
+            passion_data = load_passion_gospel(year)
+            passion_lines = passion_data.get("lines", [])
+        except Exception as e:
+            print(f"  Warning: Could not load passion gospel for year {year}: {e}")
+            passion_lines = []
+
+        return {
+            "palm_texts": palm_texts,
+            "palm_gospel_ref": palm_gospel_ref,
+            "palm_gospel_text": palm_gospel_text,
+            "passion_gospel_ref": passion_ref,
+            "passion_gospel_lines": passion_lines,
+        }
+
+    def _get_liturgical_year(self) -> str:
+        """Determine the liturgical year (A, B, or C) from the schedule.
+
+        The RCL (Revised Common Lectionary) year cycle:
+          A: years divisible by 3 with remainder 1 (2023, 2026, 2029, ...)
+          B: years divisible by 3 with remainder 2 (2024, 2027, 2030, ...)
+          C: years divisible by 3 with remainder 0 (2025, 2028, 2031, ...)
+
+        Note: the liturgical year starts in Advent (late Nov/early Dec),
+        but for simplicity we use the calendar year since Palm Sunday
+        is always well into the liturgical year.
+        """
+        year_num = self.target_date.year
+        remainder = year_num % 3
+        if remainder == 1:
+            return "A"
+        elif remainder == 2:
+            return "B"
+        else:
+            return "C"
 
     def get_reading_sheet_data(self) -> dict:
         """Return the data subset needed for reading sheet generation.

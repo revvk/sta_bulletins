@@ -1,0 +1,275 @@
+# The Great Litany — BCP pp. 148-153
+#
+# Used on Palm Sunday in place of the Prayers of the People.
+# When used before the Eucharist, it ends with "Lord, have mercy upon us."
+#
+# Element types match POP rendering:
+#   leader  - spoken by the leader/intercessor
+#   people  - response spoken by the people (bold)
+#   both    - leader petition with people response
+#   rubric  - instruction (italic)
+#
+# The patron saint petition uses "Saint Andrew" per parish custom.
+
+title: "The Great Litany"
+
+elements:
+  # --- Trinitarian Invocations ---
+  - type: both
+    leader_text: "O God the Father, Creator of heaven and earth,"
+    people_text: "Have mercy upon us."
+
+  - type: both
+    leader_text: "O God the Son, Redeemer of the world,"
+    people_text: "Have mercy upon us."
+
+  - type: both
+    leader_text: "O God the Holy Ghost, Sanctifier of the faithful,"
+    people_text: "Have mercy upon us."
+
+  - type: both
+    leader_text: "O holy, blessed, and glorious Trinity, one God,"
+    people_text: "Have mercy upon us."
+
+  # --- Plea for Mercy ---
+  - type: both
+    leader_text: >-
+      Remember not, Lord Christ, our offenses, nor the offenses of our
+      forefathers; neither reward us according to our sins. Spare us,
+      good Lord, spare thy people, whom thou hast redeemed with thy
+      most precious blood, and by thy mercy preserve us, for ever.
+    people_text: "Spare us, good Lord."
+
+  # --- Deprecations ---
+  - type: both
+    leader_text: >-
+      From all evil and wickedness; from sin; from the crafts and
+      assaults of the devil; and from everlasting damnation,
+    people_text: "Good Lord, deliver us."
+
+  - type: both
+    leader_text: >-
+      From all blindness of heart; from pride, vainglory, and
+      hypocrisy; from envy, hatred, and malice; and from all want
+      of charity,
+    people_text: "Good Lord, deliver us."
+
+  - type: both
+    leader_text: >-
+      From all inordinate and sinful affections; and from all the
+      deceits of the world, the flesh, and the devil,
+    people_text: "Good Lord, deliver us."
+
+  - type: both
+    leader_text: >-
+      From all false doctrine, heresy, and schism; from hardness
+      of heart, and contempt of thy Word and commandment,
+    people_text: "Good Lord, deliver us."
+
+  - type: both
+    leader_text: >-
+      From lightning and tempest; from earthquake, fire, and flood;
+      from plague, pestilence, and famine,
+    people_text: "Good Lord, deliver us."
+
+  - type: both
+    leader_text: >-
+      From all oppression, conspiracy, and rebellion; from violence,
+      battle, and murder; and from dying suddenly and unprepared,
+    people_text: "Good Lord, deliver us."
+
+  # --- Obsecrations ---
+  - type: both
+    leader_text: >-
+      By the mystery of thy holy Incarnation; by thy holy Nativity
+      and submission to the Law; by thy Baptism, Fasting, and
+      Temptation,
+    people_text: "Good Lord, deliver us."
+
+  - type: both
+    leader_text: >-
+      By thine Agony and Bloody Sweat; by thy Cross and Passion;
+      by thy precious Death and Burial; by thy glorious Resurrection
+      and Ascension; and by the Coming of the Holy Ghost,
+    people_text: "Good Lord, deliver us."
+
+  - type: both
+    leader_text: >-
+      In all time of our tribulation; in all time of our prosperity;
+      in the hour of death, and in the day of judgment,
+    people_text: "Good Lord, deliver us."
+
+  # --- Supplications ---
+  - type: both
+    leader_text: >-
+      We sinners do beseech thee to hear us, O Lord God; and that
+      it may please thee to rule and govern thy holy Church Universal
+      in the right way,
+    people_text: "We beseech thee to hear us, good Lord."
+
+  - type: both
+    leader_text: >-
+      That it may please thee to illumine all bishops, priests, and
+      deacons, with true knowledge and understanding of thy Word;
+      and that both by their preaching and living, they may set it
+      forth, and show it accordingly,
+    people_text: "We beseech thee to hear us, good Lord."
+
+  - type: both
+    leader_text: "That it may please thee to bless and keep all thy people,"
+    people_text: "We beseech thee to hear us, good Lord."
+
+  - type: both
+    leader_text: >-
+      That it may please thee to send forth laborers into thy
+      harvest, and to draw all mankind into thy kingdom,
+    people_text: "We beseech thee to hear us, good Lord."
+
+  - type: both
+    leader_text: >-
+      That it may please thee to give to all people increase of
+      grace to hear and receive thy Word, and to bring forth the
+      fruits of the Spirit,
+    people_text: "We beseech thee to hear us, good Lord."
+
+  - type: both
+    leader_text: >-
+      That it may please thee to bring into the way of truth all
+      such as have erred, and are deceived,
+    people_text: "We beseech thee to hear us, good Lord."
+
+  - type: both
+    leader_text: >-
+      That it may please thee to give us a heart to love and fear
+      thee, and diligently to live after thy commandments,
+    people_text: "We beseech thee to hear us, good Lord."
+
+  - type: both
+    leader_text: >-
+      That it may please thee so to rule the hearts of thy servants,
+      the President of the United States, and all others in authority,
+      that they may do justice, and love mercy, and walk in the ways
+      of truth,
+    people_text: "We beseech thee to hear us, good Lord."
+
+  - type: both
+    leader_text: >-
+      That it may please thee to make wars to cease in all the world;
+      to give to all nations unity, peace, and concord; and to bestow
+      freedom upon all peoples,
+    people_text: "We beseech thee to hear us, good Lord."
+
+  - type: both
+    leader_text: >-
+      That it may please thee to show thy pity upon all prisoners and
+      captives, the homeless and the hungry, and all who are desolate
+      and oppressed,
+    people_text: "We beseech thee to hear us, good Lord."
+
+  - type: both
+    leader_text: >-
+      That it may please thee to give and preserve to our use the
+      bountiful fruits of the earth, so that in due time all may
+      enjoy them,
+    people_text: "We beseech thee to hear us, good Lord."
+
+  - type: both
+    leader_text: >-
+      That it may please thee to inspire us, in our several callings,
+      to do the work which thou givest us to do with singleness of
+      heart as thy servants, and for the common good,
+    people_text: "We beseech thee to hear us, good Lord."
+
+  - type: both
+    leader_text: >-
+      That it may please thee to preserve all who are in danger by
+      reason of their labor or their travel,
+    people_text: "We beseech thee to hear us, good Lord."
+
+  - type: both
+    leader_text: >-
+      That it may please thee to preserve, and provide for, all women
+      in childbirth, young children and orphans, the widowed, and all
+      whose homes are broken or torn by strife,
+    people_text: "We beseech thee to hear us, good Lord."
+
+  - type: both
+    leader_text: >-
+      That it may please thee to visit the lonely; to strengthen all
+      who suffer in mind, body, and spirit; and to comfort with thy
+      presence those who are failing and infirm,
+    people_text: "We beseech thee to hear us, good Lord."
+
+  - type: both
+    leader_text: >-
+      That it may please thee to support, help, and comfort all who
+      are in danger, necessity, and tribulation,
+    people_text: "We beseech thee to hear us, good Lord."
+
+  - type: both
+    leader_text: "That it may please thee to have mercy upon all mankind,"
+    people_text: "We beseech thee to hear us, good Lord."
+
+  - type: both
+    leader_text: >-
+      That it may please thee to give us true repentance; to forgive
+      us all our sins, negligences, and ignorances; and to endue us
+      with the grace of thy Holy Spirit to amend our lives according
+      to thy holy Word,
+    people_text: "We beseech thee to hear us, good Lord."
+
+  - type: both
+    leader_text: >-
+      That it may please thee to forgive our enemies, persecutors,
+      and slanderers, and to turn their hearts,
+    people_text: "We beseech thee to hear us, good Lord."
+
+  - type: both
+    leader_text: >-
+      That it may please thee to strengthen such as do stand; to
+      comfort and help the weak-hearted; to raise up those who fall;
+      and finally to beat down Satan under our feet,
+    people_text: "We beseech thee to hear us, good Lord."
+
+  - type: both
+    leader_text: >-
+      That it may please thee to grant to all the faithful departed
+      eternal life and peace,
+    people_text: "We beseech thee to hear us, good Lord."
+
+  - type: both
+    leader_text: >-
+      That it may please thee to grant that, in the fellowship of
+      Saint Andrew and all the saints, we may attain to thy heavenly
+      kingdom,
+    people_text: "We beseech thee to hear us, good Lord."
+
+  # --- Concluding Prayers ---
+  - type: both
+    leader_text: "Son of God, we beseech thee to hear us."
+    people_text: "Son of God, we beseech thee to hear us."
+
+  # Agnus Dei
+  - type: both
+    leader_text: "O Lamb of God, that takest away the sins of the world,"
+    people_text: "Have mercy upon us."
+
+  - type: both
+    leader_text: "O Lamb of God, that takest away the sins of the world,"
+    people_text: "Have mercy upon us."
+
+  - type: both
+    leader_text: "O Lamb of God, that takest away the sins of the world,"
+    people_text: "Grant us thy peace."
+
+  - type: both
+    leader_text: "O Christ, hear us."
+    people_text: "O Christ, hear us."
+
+  # Kyrie
+  - type: both
+    leader_text: "Lord, have mercy upon us."
+    people_text: "Christ, have mercy upon us."
+
+  - type: people
+    text: "Lord, have mercy upon us."

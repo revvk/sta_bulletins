@@ -53,6 +53,36 @@ def load_psalm_reader_instructions() -> dict:
     return _load_yaml("bcp_texts/psalm_reader_instructions.yaml")
 
 
+def load_maundy_thursday() -> dict:
+    """Load Maundy Thursday proper texts."""
+    return _load_yaml("bcp_texts/maundy_thursday.yaml")
+
+
+def load_good_friday() -> dict:
+    """Load Good Friday proper texts."""
+    return _load_yaml("bcp_texts/good_friday.yaml")
+
+
+def load_great_litany() -> dict:
+    """Load the Great Litany (BCP pp. 148-153)."""
+    return _load_yaml("bcp_texts/great_litany.yaml")
+
+
+def load_palm_sunday() -> dict:
+    """Load Palm Sunday proper texts (Liturgy of the Palms, etc.)."""
+    return _load_yaml("bcp_texts/palm_sunday.yaml")
+
+
+def load_passion_gospel(year: str) -> dict:
+    """Load the Passion Gospel for a given liturgical year (A, B, or C).
+
+    Returns:
+        Dict with 'reference', 'liturgical_year', and 'lines' keys.
+        Each line has 'part' (speaker name) and 'text'.
+    """
+    return _load_yaml(f"bcp_texts/passion_gospel_{year.lower()}.yaml")
+
+
 def load_hymnal_first_lines() -> dict:
     """Load the Hymnal 1982 index of first lines.
 

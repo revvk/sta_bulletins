@@ -1,8 +1,3 @@
-# BCP Psalter - All 150 Psalms
-# Parsed from 'Psalms 1-75 from BCP.doc' and 'Psalms 76-150 from BCP.doc'
-# Verse numbers and asterisk positions are encoded in the structure
-# but not printed in the bulletin.
-
 1:
   latin: Beatus vir qui non abiit
   verses:
@@ -16,11 +11,13 @@
       second_half:
       - and they meditate on his law day and night.
     3:
-      first_half: They are like trees planted by streams of water, bearing fruit in due season, with leaves that do not wither;
+      first_half:
+      - They are like trees planted by streams of water,
+      - bearing fruit in due season, with leaves that do not wither;
       second_half:
       - everything they do shall prosper.
     4:
-      first_half: It is not so with the wicked;
+      first_half: They have said, “Come, let us wipe them out from among the nations;
       second_half:
       - they are like chaff which the wind blows away.
     5:
@@ -39,7 +36,9 @@
       second_half:
       - Why do the peoples mutter empty threats?
     2:
-      first_half: Why do the kings of the earth rise up in revolt, and the princes plot together,
+      first_half:
+      - Why do the kings of the earth rise up in revolt,
+      - and the princes plot together,
       second_half:
       - against the LORD and against his Anointed?
     3:
@@ -148,7 +147,9 @@
       second_half:
       - and put your trust in the LORD.
     6:
-      first_half: Many are saying, “Oh, that we might see better times!”
+      first_half:
+      - Many are saying,
+      - '"Oh, that we might see better times!"'
       second_half:
       - Lift up the light of your countenance upon us, O LORD.
     7:
@@ -184,13 +185,16 @@
       - you hate all those who work wickedness.
     6:
       first_half: You destroy those who speak lies;
-      second_half: []
+      second_half:
+      - the bloodthirsty and deceitful, O LORD, you abhor.
     7:
       first_half: But as for me, through the greatness of your mercy I will go into your house;
       second_half:
       - I will bow down toward your holy temple in awe of you.
     8:
-      first_half: Lead me, O LORD, in your righteousness, because of those who lie in wait for me;
+      first_half:
+      - Lead me, O LORD, in your righteousness,
+      - because of those who lie in wait for me;
       second_half:
       - make your way straight before me.
     9:
@@ -306,7 +310,9 @@
       second_half:
       - and according to my innocence, O Most High.
     10:
-      first_half: Let the malice of the wicked come to an end, but establish the righteous;
+      first_half:
+      - Let the malice of the wicked come to an end,
+      - but establish the righteous;
       second_half:
       - for you test the mind and heart, O righteous God.
     11:
@@ -441,7 +447,9 @@
       - see the misery I suffer from those who hate me,
       - O you who lift me up from the gate of death;
     14:
-      first_half: So that I may tell of all your praises and rejoice in your salvation
+      first_half:
+      - So that I may tell of all your praises
+      - and rejoice in your salvation
       second_half:
       - in the gates of the city of Zion.
     15:
@@ -488,7 +496,9 @@
       second_half:
       - their only thought is, “God does not matter.”
     5:
-      first_half: Their ways are devious at all times; your judgments are far above out of their sight;
+      first_half:
+      - Their ways are devious at all times;
+      - your judgments are far above out of their sight;
       second_half:
       - they defy all their enemies.
     6:
@@ -500,11 +510,15 @@
       second_half:
       - under their tongue are mischief and wrong.
     8:
-      first_half: They lurk in ambush in public squares and in secret places they murder the innocent;
+      first_half:
+      - They lurk in ambush in public squares
+      - and in secret places they murder the innocent;
       second_half:
       - they spy out the helpless.
     9:
-      first_half: They lie in wait, like a lion in a covert; they lie in wait to seize upon the lowly;
+      first_half:
+      - They lie in wait, like a lion in a covert;
+      - they lie in wait to seize upon the lowly;
       second_half:
       - they seize the lowly and drag them away in their net.
     10:
@@ -516,7 +530,9 @@
       second_half:
       - he hides his face; he will never notice.”
     12:
-      first_half: Rise up, O LORD; lift up your hand, O God;
+      first_half:
+      - Rise up, O LORD;
+      - lift up your hand, O God;
       second_half:
       - do not forget the afflicted.
     13:
@@ -556,7 +572,9 @@
       - how then can you say to me,
       - “Fly away like a bird to the hilltop;
     2:
-      first_half: For see how the wicked bend the bow and fit their arrows to the string,
+      first_half:
+      - For see how the wicked bend the bow
+      - and fit their arrows to the string,
       second_half:
       - to shoot from ambush at the true of heart.
     3:
@@ -580,7 +598,9 @@
       second_half:
       - a scorching wind shall be their lot.
     8:
-      first_half: For the LORD is righteous; he delights in righteous deeds;
+      first_half:
+      - For the LORD is righteous;
+      - he delights in righteous deeds;
       second_half:
       - and the just shall see his face.
 12:
@@ -603,7 +623,9 @@
       second_half:
       - our lips are our own; who is lord over us?”
     5:
-      first_half: “Because the needy are oppressed, and the poor cry out in misery,
+      first_half:
+      - “Because the needy are oppressed,
+      - and the poor cry out in misery,
       second_half:
       - I will rise up,” says the LORD,
       - “and give them the help they long for.”
@@ -624,11 +646,15 @@
   latin: Usquequo, Domine?
   verses:
     1:
-      first_half: How long, O LORD? will you forget me for ever?
+      first_half:
+      - How long, O LORD?
+      - will you forget me for ever?
       second_half:
       - how long will you hide your face from me?
     2:
-      first_half: How long shall I have perplexity in my mind, and grief in my heart, day after day?
+      first_half:
+      - How long shall I have perplexity in my mind,
+      - and grief in my heart, day after day?
       second_half:
       - how long shall my enemy triumph over me?
     3:
@@ -661,7 +687,9 @@
       - to see if there is any who is wise,
       - if there is one who seeks after God.
     3:
-      first_half: Every one has proved faithless; all alike have turned bad;
+      first_half:
+      - Every one has proved faithless;
+      - all alike have turned bad;
       second_half:
       - there is none who does good; no, not one.
     4:
@@ -694,7 +722,9 @@
       second_half:
       - who speaks the truth from his heart.
     3:
-      first_half: There is no guile upon his tongue; he does no evil to his friend;
+      first_half:
+      - There is no guile upon his tongue;
+      - he does no evil to his friend;
       second_half:
       - he does not heap contempt upon his neighbor.
     4:
@@ -744,7 +774,9 @@
   latin: Exaudi, Domine
   verses:
     1:
-      first_half: Hear my plea of innocence, O LORD; give heed to my cry;
+      first_half:
+      - Hear my plea of innocence, O LORD;
+      - give heed to my cry;
       second_half:
       - listen to my prayer, which does not come from lying lips.
     2:
@@ -785,7 +817,9 @@
       second_half:
       - and their mouth speaks proud things.
     11:
-      first_half: They press me hard, now they surround me,
+      first_half:
+      - They press me hard,
+      - now they surround me,
       second_half:
       - watching how they may cast me to the ground,
     12:
@@ -848,7 +882,9 @@
       - the roots of the mountains shook;
       - they reeled because of his anger.
     9:
-      first_half: Smoke rose from his nostrils and a consuming fire out of his mouth;
+      first_half:
+      - Smoke rose from his nostrils
+      - and a consuming fire out of his mouth;
       second_half:
       - hot burning coals blazed forth from him.
     10:
@@ -876,7 +912,9 @@
       second_half:
       - he hurled thunderbolts and routed them.
     16:
-      first_half: The beds of the seas were uncovered, and the foundations of the world laid bare,
+      first_half:
+      - The beds of the seas were uncovered,
+      - and the foundations of the world laid bare,
       second_half:
       - at your battle cry, O LORD,
       - at the blast of the breath of your nostrils.
@@ -885,7 +923,9 @@
       second_half:
       - he drew me out of great waters.
     18:
-      first_half: He delivered me from my strong enemies and from those who hated me;
+      first_half:
+      - He delivered me from my strong enemies
+      - and from those who hated me;
       second_half:
       - for they were too mighty for me.
     19:
@@ -937,7 +977,9 @@
       second_half:
       - with the help of my God I will scale any wall.
     31:
-      first_half: As for God, his ways are perfect; the words of the LORD are tried in the fire;
+      first_half:
+      - As for God, his ways are perfect;
+      - the words of the LORD are tried in the fire;
       second_half:
       - he is a shield to all who trust in him.
     32:
@@ -979,7 +1021,9 @@
       - you have cast down my adversaries beneath me;
       - you have put my enemies to flight.
     41:
-      first_half: I destroy those who hate me; they cry out, but there is none to help them;
+      first_half:
+      - I destroy those who hate me;
+      - they cry out, but there is none to help them;
       second_half:
       - they cry to the LORD, but he does not answer.
     42:
@@ -991,7 +1035,9 @@
       second_half:
       - you put me at the head of the nations.
     44:
-      first_half: A people I have not known shall serve me; no sooner shall they hear than they shall obey me;
+      first_half:
+      - A people I have not known shall serve me;
+      - no sooner shall they hear than they shall obey me;
       second_half:
       - strangers will cringe before me.
     45:
@@ -1007,7 +1053,9 @@
       second_half:
       - and cast down the peoples beneath me.
     48:
-      first_half: You rescued me from the fury of my enemies; you exalted me above those who rose against me;
+      first_half:
+      - You rescued me from the fury of my enemies;
+      - you exalted me above those who rose against me;
       second_half:
       - you saved me from my deadly foe.
     49:
@@ -1049,7 +1097,9 @@
       - it comes forth like a bridegroom out of his chamber;
       - it rejoices like a champion to run its course.
     6:
-      first_half: It goes forth from the uttermost edge of the heavens and runs about to the end of it again;
+      first_half:
+      - It goes forth from the uttermost edge of the heavens
+      - and runs about to the end of it again;
       second_half:
       - nothing is hidden from its burning heat.
     7:
@@ -1081,7 +1131,9 @@
       second_half:
       - cleanse me from my secret faults.
     13:
-      first_half: Above all, keep your servant from presumptuous sins; let them not get dominion over me;
+      first_half:
+      - Above all, keep your servant from presumptuous sins;
+      - let them not get dominion over me;
       second_half:
       - then shall I be whole and sound,
       - and innocent of a great offense.
@@ -1109,7 +1161,9 @@
       second_half:
       - and prosper all your plans.
     5:
-      first_half: We will shout for joy at your victory and triumph in the Name of our God;
+      first_half:
+      - We will shout for joy at your victory
+      - and triumph in the Name of our God;
       second_half:
       - may the LORD grant all your requests.
     6:
@@ -1178,7 +1232,9 @@
       second_half:
       - and their descendants from among the peoples of the earth.
     12:
-      first_half: Though they intend evil against you and devise wicked schemes,
+      first_half:
+      - Though they intend evil against you
+      - and devise wicked schemes,
       second_half:
       - yet they shall not prevail.
     13:
@@ -1247,15 +1303,21 @@
       second_half:
       - like a ravening and a roaring lion.
     14:
-      first_half: I am poured out like water; all my bones are out of joint;
+      first_half:
+      - I am poured out like water;
+      - all my bones are out of joint;
       second_half:
       - my heart within my breast is melting wax.
     15:
-      first_half: My mouth is dried out like a pot-sherd; my tongue sticks to the roof of my mouth;
+      first_half:
+      - My mouth is dried out like a potsherd;
+      - my tongue sticks to the roof of my mouth;
       second_half:
       - and you have laid me in the dust of the grave.
     16:
-      first_half: Packs of dogs close me in, and gangs of evildoers circle around me;
+      first_half:
+      - Packs of dogs close me in,
+      - and gangs of evildoers circle around me;
       second_half:
       - they pierce my hands and my feet;
       - I can count all my bones.
@@ -1286,7 +1348,9 @@
       - stand in awe of him, O offspring of Israel;
       - all you of Jacob’s line, give glory.
     23:
-      first_half: For he does not despise nor abhor the poor in their poverty; neither does he hide his face from them;
+      first_half:
+      - For he does not despise nor abhor the poor in their poverty;
+      - neither does he hide his face from them;
       second_half:
       - but when they cry to him he hears them.
     24:
@@ -1295,7 +1359,9 @@
       - I will perform my vows in the presence of those who
       - worship him.
     25:
-      first_half: 'The poor shall eat and be satisfied, and those who seek the LORD shall praise him:'
+      first_half:
+      - The poor shall eat and be satisfied,
+      - 'and those who seek the LORD shall praise him:'
       second_half:
       - “May your heart live for ever!”
     26:
@@ -1311,7 +1377,9 @@
       second_half:
       - all who go down to the dust fall before him.
     29:
-      first_half: My soul shall live for him; my descendants shall serve him;
+      first_half:
+      - My soul shall live for him;
+      - my descendants shall serve him;
       second_half:
       - they shall be known as the LORD’s for ever.
     30:
@@ -1334,7 +1402,9 @@
       second_half:
       - and guides me along right pathways for his Name’s sake.
     4:
-      first_half: Though I walk through the valley of the shadow of death, I shall fear no evil;
+      first_half:
+      - Though I walk through the valley of the shadow of death,
+      - I shall fear no evil;
       second_half:
       - for you are with me;
       - your rod and your staff, they comfort me.
@@ -1376,7 +1446,9 @@
       second_half:
       - of those who seek your face, O God of Jacob.
     7:
-      first_half: Lift up your heads, O gates; lift them high, O everlasting doors;
+      first_half:
+      - Lift up your heads, O gates;
+      - lift them high, O everlasting doors;
       second_half:
       - and the King of glory shall come in.
     8:
@@ -1385,7 +1457,9 @@
       - “The LORD, strong and mighty,
       - the LORD, mighty in battle.”
     9:
-      first_half: Lift up your heads, O gates; lift them high, O everlasting doors;
+      first_half:
+      - Lift up your heads, O gates;
+      - lift them high, O everlasting doors;
       second_half:
       - and the King of glory shall come in.
     10:
@@ -1397,7 +1471,9 @@
   latin: Ad te, Domine, levavi
   verses:
     1:
-      first_half: To you, O LORD, I lift up my soul; my God, I put my trust in you;
+      first_half:
+      - To you, O LORD, I lift up my soul;
+      - my God, I put my trust in you;
       second_half:
       - let me not be humiliated,
       - nor let my enemies triumph over me.
@@ -1421,6 +1497,7 @@
     6:
       first_half: Remember not the sins of my youth and my transgressions;
       second_half:
+      - remember me according to your love
       - and for the sake of your goodness, O LORD.
     7:
       first_half: Gracious and upright is the LORD;
@@ -1486,7 +1563,9 @@
   latin: Judica me, Domine
   verses:
     1:
-      first_half: Give judgment for me, O LORD, for I have lived with integrity;
+      first_half:
+      - Give judgment for me, O LORD,
+      - for I have lived with integrity;
       second_half:
       - I have trusted in the Lord and have not faltered.
     2:
@@ -1537,7 +1616,9 @@
   latin: Dominus illuminatio
   verses:
     1:
-      first_half: The LORD is my light and my salvation; whom then shall I fear?
+      first_half:
+      - The LORD is my light and my salvation;
+      - whom then shall I fear?
       second_half:
       - the LORD is the strength of my life;
       - of whom then shall I be afraid?
@@ -1555,7 +1636,9 @@
       second_half:
       - yet will I put my trust in him.
     5:
-      first_half: One thing have I asked of the LORD; one thing I seek;
+      first_half:
+      - One thing have I asked of the LORD;
+      - one thing I seek;
       second_half:
       - that I may dwell in the house of the LORD all the days
       - of my life;
@@ -1573,7 +1656,9 @@
       second_half:
       - above my enemies round about me.
     9:
-      first_half: Therefore I will offer in his dwelling an oblation with sounds of great gladness;
+      first_half:
+      - Therefore I will offer in his dwelling an oblation
+      - with sounds of great gladness;
       second_half:
       - I will sing and make music to the LORD.
     10:
@@ -1589,7 +1674,9 @@
       second_half:
       - nor turn away your servant in displeasure.
     13:
-      first_half: You have been my helper; cast me not away;
+      first_half:
+      - You have been my helper;
+      - cast me not away;
       second_half:
       - do not forsake me, O God of my salvation.
     14:
@@ -1606,18 +1693,24 @@
       - for false witnesses have risen up against me,
       - and also those who speak malice.
     17:
-      first_half: What if I had not believed that I should see the goodness of the LORD
+      first_half:
+      - What if I had not believed
+      - that I should see the goodness of the LORD
       second_half:
       - in the land of the living!
     18:
-      first_half: O tarry and await the LORD=S pleasure; be strong, and he shall comfort your heart;
+      first_half:
+      - O tarry and await the LORD=S pleasure;
+      - be strong, and he shall comfort your heart;
       second_half:
       - wait patiently for the LORD.
 28:
   latin: Ad te, Domine
   verses:
     1:
-      first_half: O LORD, I call to you; my Rock, do not be deaf to my cry;
+      first_half:
+      - O LORD, I call to you;
+      - my Rock, do not be deaf to my cry;
       second_half:
       - lest, if you do not hear me,
       - I become like those who go down to the Pit.
@@ -1639,7 +1732,9 @@
       second_half:
       - and give them their just deserts.
     6:
-      first_half: They have no understanding of the LORD=S doings, nor of the works of his hands;
+      first_half:
+      - They have no understanding of the LORD=S doings,
+      - nor of the works of his hands;
       second_half:
       - therefore he will break them down and not
       - build them up.
@@ -1675,7 +1770,9 @@
       second_half:
       - worship the LORD in the beauty of holiness.
     3:
-      first_half: The voice of the LORD is upon the waters; the God of glory thunders;
+      first_half:
+      - The voice of the LORD is upon the waters;
+      - the God of glory thunders;
       second_half:
       - the LORD is upon the mighty waters.
     4:
@@ -1691,7 +1788,9 @@
       second_half:
       - and Mount Hermon like a young wild ox.
     7:
-      first_half: The voice of the LORD splits the flames of fire; the voice of the LORD shakes the wilderness;
+      first_half:
+      - The voice of the LORD splits the flames of fire;
+      - the voice of the LORD shakes the wilderness;
       second_half:
       - the LORD shakes the wilderness of Kadesh.
     8:
@@ -1714,7 +1813,9 @@
   latin: Exaltabo te, Domine
   verses:
     1:
-      first_half: I will exalt you, O LORD, because you have lifted me up
+      first_half:
+      - I will exalt you, O LORD,
+      - because you have lifted me up
       second_half:
       - and have not let my enemies triumph over me.
     2:
@@ -1738,7 +1839,9 @@
       second_half:
       - but joy comes in the morning.
     7:
-      first_half: While I felt secure, I said, “I shall never be disturbed.
+      first_half:
+      - While I felt secure, I said,
+      - “I shall never be disturbed.
       second_half:
       - You, LORD, with your favor, made me as strong as
       - the mountains.”
@@ -1770,7 +1873,9 @@
   latin: In te, Domine, speravi
   verses:
     1:
-      first_half: In you, O LORD, have I taken refuge; let me never be put to shame;
+      first_half:
+      - In you, O LORD, have I taken refuge;
+      - let me never be put to shame;
       second_half:
       - deliver me in your righteousness.
     2:
@@ -1778,7 +1883,9 @@
       second_half:
       - make haste to deliver me.
     3:
-      first_half: Be my strong rock, a castle to keep me safe, for you are my crag and my stronghold;
+      first_half:
+      - Be my strong rock, a castle to keep me safe,
+      - for you are my crag and my stronghold;
       second_half:
       - for the sake of your Name, lead me and guide me.
     4:
@@ -1809,12 +1916,16 @@
       - my eye is consumed with sorrow,
       - and also my throat and my belly.
     10:
-      first_half: For my life is wasted with grief, and my years with sighing;
+      first_half:
+      - For my life is wasted with grief,
+      - and my years with sighing;
       second_half:
       - my strength fails me because of affliction,
       - and my bones are consumed.
     11:
-      first_half: I have become a reproach to all my enemies and even to my neighbors, a dismay to those of my acquaintance;
+      first_half:
+      - I have become a reproach to all my enemies and even to my neighbors,
+      - a dismay to those of my acquaintance;
       second_half:
       - when they see me in the street they avoid me.
     12:
@@ -1822,7 +1933,9 @@
       second_half:
       - I am as useless as a broken pot.
     13:
-      first_half: For I have heard the whispering of the crowd; fear is all around;
+      first_half:
+      - For I have heard the whispering of the crowd;
+      - fear is all around;
       second_half:
       - they put their heads together against me;
       - they plot to take my life.
@@ -1849,7 +1962,9 @@
       second_half:
       - haughtily, disdainfully, and with contempt.
     19:
-      first_half: How great is your goodness, O LORD! which you have laid up for those who fear you;
+      first_half:
+      - How great is your goodness, O LORD!
+      - which you have laid up for those who fear you;
       second_half:
       - which you have done in the sight of all
       - for those who put their trust in you.
@@ -1863,7 +1978,9 @@
       - for he has shown me the wonders of his love in a
       - besieged city.
     22:
-      first_half: Yet I said in my alarm, “I have been cut off from the sight of your eyes.”
+      first_half:
+      - Yet I said in my alarm,
+      - “I have been cut off from the sight of your eyes.”
       second_half:
       - Nevertheless, you heard the sound of my entreaty
       - when I cried out to you.
@@ -1908,7 +2025,9 @@
       second_half:
       - when the great waters overflow, they shall not reach them.
     8:
-      first_half: You are my hiding-place; you preserve me from trouble;
+      first_half:
+      - You are my hiding-place;
+      - you preserve me from trouble;
       second_half:
       - you surround me with shouts of deliverance.
     9:
@@ -2168,12 +2287,16 @@
       second_half:
       - and humbled myself by fasting;
     14:
-      first_half: I prayed with my whole heart, as one would for a friend or a brother;
+      first_half:
+      - I prayed with my whole heart,
+      - as one would for a friend or a brother;
       second_half:
       - I behaved like one who mourns for his mother,
       - bowed down and grieving.
     15:
-      first_half: But when I stumbled, they were glad and gathered together; they gathered against me;
+      first_half:
+      - But when I stumbled, they were glad and gathered together;
+      - they gathered against me;
       second_half:
       - strangers whom I did not know tore me to pieces and
       - would not stop.
@@ -2213,11 +2336,15 @@
       second_half:
       - to my defense, my God and my Lord!
     24:
-      first_half: Give me justice, O LORD my God, according to your righteousness;
+      first_half:
+      - Give me justice, O LORD my God,
+      - according to your righteousness;
       second_half:
       - do not let them triumph over me.
     25:
-      first_half: Do not let them say in their hearts, “Aha! just what we want!”
+      first_half:
+      - Do not let them say in their hearts,
+      - “Aha! just what we want!”
       second_half:
       - Do not let them say, “We have swallowed him up.”
     26:
@@ -2250,7 +2377,9 @@
       second_half:
       - he has left off acting wisely and doing good.
     4:
-      first_half: He thinks up wickedness upon his bed and has set himself in no good way;
+      first_half:
+      - He thinks up wickedness upon his bed
+      - and has set himself in no good way;
       second_half:
       - he does not abhor that which is evil.
     5:
@@ -2258,7 +2387,9 @@
       second_half:
       - and your faithfulness to the clouds.
     6:
-      first_half: Your righteousness is like the strong mountains, your justice like the great deep;
+      first_half:
+      - Your righteousness is like the strong mountains,
+      - your justice like the great deep;
       second_half:
       - you save both man and beast, O LORD.
     7:
@@ -2346,7 +2477,9 @@
       second_half:
       - because he sees that their day will come.
     15:
-      first_half: The wicked draw their sword and bend their bow to strike down the poor and needy,
+      first_half:
+      - The wicked draw their sword and bend their bow
+      - to strike down the poor and needy,
       second_half:
       - to slaughter those who are upright in their ways.
     16:
@@ -2446,7 +2579,9 @@
       second_half:
       - I searched for them, but they could not be found.
     39:
-      first_half: Mark those who are honest; observe the upright;
+      first_half:
+      - Mark those who are honest;
+      - observe the upright;
       second_half:
       - for there is a future for the peaceable.
     40:
@@ -2479,7 +2614,9 @@
       second_half:
       - and your hand presses hard upon me.
     3:
-      first_half: There is no health in my flesh, because of your indignation;
+      first_half:
+      - There is no health in my flesh,
+      - because of your indignation;
       second_half:
       - there is no soundness in my body, because of my sin.
     4:
@@ -2576,7 +2713,9 @@
       - I refrained from rash words;
       - but my pain became unbearable.
     4:
-      first_half: My heart was hot within me; while I pondered, the fire burst into flame;
+      first_half:
+      - My heart was hot within me;
+      - while I pondered, the fire burst into flame;
       second_half:
       - 'I spoke out with my tongue:'
     5:
@@ -2584,11 +2723,15 @@
       second_half:
       - so that I may know how short my life is.
     6:
-      first_half: You have given me a mere handful of days, and my lifetime is as nothing in your sight;
+      first_half:
+      - You have given me a mere handful of days,
+      - and my lifetime is as nothing in your sight;
       second_half:
       - truly, even those who stand erect are but a puff of wind.
     7:
-      first_half: We walk about like a shadow, and in vain we are in turmoil;
+      first_half:
+      - We walk about like a shadow,
+      - and in vain we are in turmoil;
       second_half:
       - we heap up riches and cannot tell who will gather them.
     8:
@@ -2608,11 +2751,15 @@
       second_half:
       - I am worn down by the blows of your hand.
     12:
-      first_half: With rebukes for sin you punish us; like a moth you eat away all that is dear to us;
+      first_half:
+      - With rebukes for sin you punish us;
+      - like a moth you eat away all that is dear to us;
       second_half:
       - truly, everyone is but a puff of wind.
     13:
-      first_half: Hear my prayer, O LORD, and give ear to my cry;
+      first_half:
+      - Hear my prayer, O LORD,
+      - and give ear to my cry;
       second_half:
       - hold not your peace at my tears.
     14:
@@ -2635,7 +2782,9 @@
       second_half:
       - he set my feet upon a high cliff and made my footing sure.
     3:
-      first_half: He put a new song in my mouth, a song of praise to our God;
+      first_half:
+      - He put a new song in my mouth,
+      - a song of praise to our God;
       second_half:
       - many shall see, and stand in awe,
       - and put their trust in the LORD.
@@ -2644,7 +2793,9 @@
       second_half:
       - they do not resort to evil spirits or turn to false gods.
     5:
-      first_half: Great things are they that you have done, O LORD my God! how great your wonders and your plans for us!
+      first_half:
+      - Great things are they that you have done, O LORD my God!
+      - how great your wonders and your plans for us!
       second_half:
       - there is none who can be compared with you.
     6:
@@ -2670,16 +2821,22 @@
       - behold, I did not restrain my lips;
       - and that, O LORD, you know.
     11:
-      first_half: Your righteousness have I not hidden in my heart; I have spoken of your faithfulness and your deliverance;
+      first_half:
+      - Your righteousness have I not hidden in my heart;
+      - I have spoken of your faithfulness and your deliverance;
       second_half:
       - I have not concealed your love and faithfulness from the
       - great congregation.
     12:
-      first_half: You are the LORD; do not withhold your compassion from me;
+      first_half:
+      - You are the LORD;
+      - do not withhold your compassion from me;
       second_half:
       - let your love and your faithfulness keep me safe for ever,
     13:
-      first_half: For innumerable troubles have crowded upon me; my sins have overtaken me, and I cannot see;
+      first_half:
+      - For innumerable troubles have crowded upon me;
+      - my sins have overtaken me, and I cannot see;
       second_half:
       - they are more in number than the hairs of my head,
       - and my heart fails me.
@@ -2688,7 +2845,9 @@
       second_half:
       - O LORD, make haste to help me.
     15:
-      first_half: Let them be ashamed and altogether dismayed who seek after my life to destroy it;
+      first_half:
+      - Let them be ashamed and altogether dismayed
+      - who seek after my life to destroy it;
       second_half:
       - let them draw back and be disgraced
       - who take pleasure in my misfortune.
@@ -2717,7 +2876,9 @@
       second_half:
       - the LORD will deliver them in the time of trouble.
     2:
-      first_half: The LORD preserves them and keeps them alive, so that they may be happy in the land;
+      first_half:
+      - The LORD preserves them and keeps them alive,
+      - so that they may be happy in the land;
       second_half:
       - he does not hand them over to the will of their enemies.
     3:
@@ -2746,7 +2907,9 @@
       second_half:
       - he has taken to his bed and will never get up again.”
     9:
-      first_half: Even my best friend, whom I trusted, who broke bread with me,
+      first_half:
+      - Even my best friend, whom I trusted,
+      - who broke bread with me,
       second_half:
       - has lifted up his heel and turned against me.
     10:
@@ -2759,7 +2922,8 @@
       - that my enemy does not triumph over me.
     12:
       first_half: In my integrity you hold me fast,
-      second_half: []
+      second_half:
+      - and shall set me before your face for ever.
     13:
       first_half: Blessed be the LORD God of Israel,
       second_half:
@@ -2813,7 +2977,9 @@
       - in the night season his song is with me,
       - a prayer to the God of my life.
     11:
-      first_half: I will say to the God of my strength, “Why have you forgotten me?
+      first_half:
+      - I will say to the God of my strength,
+      - “Why have you forgotten me?
       second_half:
       - and why do I go so heavily while the enemy
       - oppresses me?”
@@ -2838,11 +3004,15 @@
   latin: Judica me, Deus
   verses:
     1:
-      first_half: Give judgment for me, O God, and defend my cause against an ungodly people;
+      first_half:
+      - Give judgment for me, O God,
+      - and defend my cause against an ungodly people;
       second_half:
       - deliver me from the deceitful and the wicked.
     2:
-      first_half: For you are the God of my strength; why have you put me from you?
+      first_half:
+      - For you are the God of my strength;
+      - why have you put me from you?
       second_half:
       - and why do I go so heavily while the enemy
       - oppresses me?
@@ -2852,7 +3022,9 @@
       - and bring me to your holy hill
       - and to your dwelling;
     4:
-      first_half: That I may go to the altar of God, to the God of my joy and gladness;
+      first_half:
+      - That I may go to the altar of God,
+      - to the God of my joy and gladness;
       second_half:
       - and on the harp I will give thanks to you, O God my God.
     5:
@@ -2868,16 +3040,22 @@
   latin: Deus, auribus
   verses:
     1:
-      first_half: We have heard with our ears, O God, our forefathers have told us,
+      first_half:
+      - We have heard with our ears, O God,
+      - our forefathers have told us,
       second_half:
       - the deeds you did in their days,
       - in the days of old.
     2:
-      first_half: How with your hand you drove the peoples out and planted our forefathers in the land;
+      first_half:
+      - How with your hand you drove the peoples out
+      - and planted our forefathers in the land;
       second_half:
       - how you destroyed nations and made your people flourish.
     3:
-      first_half: For they did not take the land by their sword, nor did their arm win the victory for them;
+      first_half:
+      - For they did not take the land by their sword,
+      - nor did their arm win the victory for them;
       second_half:
       - but your right hand, your arm, and the
       - light of your countenance,
@@ -2980,7 +3158,9 @@
   latin: Eructavit cor meum
   verses:
     1:
-      first_half: My heart is stirring with a noble song; let me recite what I have fashioned for the king;
+      first_half:
+      - My heart is stirring with a noble song;
+      - let me recite what I have fashioned for the king;
       second_half:
       - my tongue shall be the pen of a skilled writer.
     2:
@@ -3051,7 +3231,9 @@
       second_half:
       - you shall make them princes over all the earth.
     18:
-      first_half: I will make your name to be remembered from one generation to another;
+      first_half:
+      - I will make your name to be remembered
+      - from one generation to another;
       second_half:
       - therefore nations will praise you for ever and ever.”
 46:
@@ -3079,7 +3261,9 @@
       second_half:
       - the holy habitation of the Most High.
     6:
-      first_half: God is in the midst of her; she shall not be overthrown;
+      first_half:
+      - God is in the midst of her;
+      - she shall not be overthrown;
       second_half:
       - God shall help her at the break of day.
     7:
@@ -3159,7 +3343,9 @@
       second_half:
       - in the city of our God is his holy hill.
     2:
-      first_half: Beautiful and lofty, the joy of all the earth, is the hill of Zion,
+      first_half:
+      - Beautiful and lofty, the joy of all the earth, is the
+      - hill of Zion,
       second_half:
       - the very center of the world and the city of the great King.
     3:
@@ -3180,7 +3366,9 @@
       - they writhed like a woman in childbirth,
       - like ships of the sea when the east wind shatters them.
     7:
-      first_half: As we have heard, so have we seen, in the city of the LORD of hosts, in the city of our God;
+      first_half:
+      - As we have heard, so have we seen,
+      - in the city of the LORD of hosts, in the city of our God;
       second_half:
       - God has established her for ever.
     8:
@@ -3188,19 +3376,27 @@
       second_half:
       - in the midst of your temple.
     9:
-      first_half: Your praise, like your Name, O God, reaches to the world’s end;
+      first_half:
+      - Your praise, like your Name, O God, reaches to
+      - the world’s end;
       second_half:
       - your right hand is full of justice.
     10:
-      first_half: Let Mount Zion be glad and the cities of Judah rejoice,
+      first_half:
+      - Let Mount Zion be glad
+      - and the cities of Judah rejoice,
       second_half:
       - because of your judgments.
     11:
-      first_half: Make the circuit of Zion; walk round about her;
+      first_half:
+      - Make the circuit of Zion;
+      - walk round about her;
       second_half:
       - count the number of her towers.
     12:
-      first_half: Consider well her bulwarks; examine her strongholds;
+      first_half:
+      - Consider well her bulwarks;
+      - examine her strongholds;
       second_half:
       - that you may tell those who come after.
     13:
@@ -3211,7 +3407,9 @@
   latin: Audite hæc, omnes
   verses:
     1:
-      first_half: Hear this, all you peoples; hearken, all you who dwell in the world,
+      first_half:
+      - Hear this, all you peoples;
+      - hearken, all you who dwell in the world,
       second_half:
       - you of high degree and low, rich and poor together.
     2:
@@ -3243,11 +3441,15 @@
       second_half:
       - and never see the grave.
     9:
-      first_half: For we see that the wise die also; like the dull and stupid they perish
+      first_half:
+      - For we see that the wise die also;
+      - like the dull and stupid they perish
       second_half:
       - and leave their wealth to those who come after them.
     10:
-      first_half: Their graves shall be their homes for ever, their dwelling places from generation to generation,
+      first_half:
+      - Their graves shall be their homes for ever,
+      - their dwelling places from generation to generation,
       second_half:
       - though they call the lands after their own names.
     11:
@@ -3259,7 +3461,9 @@
       second_half:
       - and the end of those who delight in their own words.
     13:
-      first_half: Like a flock of sheep they are destined to die; Death is their shepherd;
+      first_half:
+      - Like a flock of sheep they are destined to die;
+      - Death is their shepherd;
       second_half:
       - they go down straightway to the grave.
     14:
@@ -3321,7 +3525,9 @@
       second_half:
       - for God himself is judge.
     7:
-      first_half: 'Hear, O my people, and I will speak: “O Israel, I will bear witness against you;'
+      first_half:
+      - 'Hear, O my people, and I will speak:'
+      - '"O Israel, I will bear witness against you;'
       second_half:
       - for I am God, your God.
     8:
@@ -3359,7 +3565,8 @@
     16:
       first_half: 'But to the wicked God says:'
       second_half:
-      - “Why do you recite my statutes,
+      - '"Why do you recite my statutes,'
+      - and take my covenant upon your lips;
     17:
       first_half: Since you refuse discipline,
       second_half:
@@ -3381,7 +3588,7 @@
       second_half:
       - and you thought that I am like you.”
     22:
-      first_half: AI have made my accusation;
+      first_half: '"I have made my accusation;'
       second_half:
       - I have put my case in order before your eyes.
     23:
@@ -3474,7 +3681,9 @@
       second_half:
       - and rebuild the walls of Jerusalem.
     20:
-      first_half: Then you will be pleased with the appointed sacrifices, with burnt-offerings and oblations;
+      first_half:
+      - Then you will be pleased with the appointed sacrifices,
+      - with burnt-offerings and oblations;
       second_half:
       - then shall they offer young bullocks upon your altar.
 52:
@@ -3485,7 +3694,9 @@
       second_half:
       - against the godly all day long?
     2:
-      first_half: You plot ruin; your tongue is like a sharpened razor,
+      first_half:
+      - You plot ruin;
+      - your tongue is like a sharpened razor,
       second_half:
       - O worker of deception.
     3:
@@ -3533,7 +3744,9 @@
       - to see if there is any who is wise,
       - if there is one who seeks after God.
     3:
-      first_half: Every one has proved faithless; all alike have turned bad;
+      first_half:
+      - Every one has proved faithless;
+      - all alike have turned bad;
       second_half:
       - there is none who does good; no, not one.
     4:
@@ -3542,7 +3755,9 @@
       - who eat up my people like bread
       - and do not call upon God?
     5:
-      first_half: See how greatly they tremble, such trembling as never was;
+      first_half:
+      - See how greatly they tremble,
+      - such trembling as never was;
       second_half:
       - for God has scattered the bones of the enemy;
       - they are put to shame, because God has rejected them.
@@ -3563,7 +3778,9 @@
       second_half:
       - give ear to the words of my mouth.
     3:
-      first_half: For the arrogant have risen up against me, and the ruthless have sought my life,
+      first_half:
+      - For the arrogant have risen up against me,
+      - and the ruthless have sought my life,
       second_half:
       - those who have no regard for God.
     4:
@@ -3622,7 +3839,9 @@
       second_half:
       - from the stormy wind and tempest.”
     10:
-      first_half: Swallow them up, O Lord; confound their speech;
+      first_half:
+      - Swallow them up, O Lord;
+      - confound their speech;
       second_half:
       - for I have seen violence and strife in the city.
     11:
@@ -3634,7 +3853,9 @@
       second_half:
       - her streets are never free of oppression and deceit.
     13:
-      first_half: For had it been an adversary who taunted me, then I could have borne it;
+      first_half:
+      - For had it been an adversary who taunted me,
+      - then I could have borne it;
       second_half:
       - or had it been an enemy who vaunted himself against me,
       - then I could have hidden from him.
@@ -3647,7 +3868,9 @@
       second_half:
       - and walked with the throng in the house of God.
     16:
-      first_half: Let death come upon them suddenly; let them go down alive into the grave;
+      first_half:
+      - Let death come upon them suddenly;
+      - let them go down alive into the grave;
       second_half:
       - for wickedness is in their dwellings, in their very midst.
     17:
@@ -3655,7 +3878,9 @@
       second_half:
       - and the LORD will deliver me.
     18:
-      first_half: In the evening, in the morning, and at noonday, I will complain and lament,
+      first_half:
+      - In the evening, in the morning, and at noonday,
+      - I will complain and lament,
       second_half:
       - and he will hear my voice.
     19:
@@ -3679,7 +3904,9 @@
       second_half:
       - but they are drawn swords.
     24:
-      first_half: Cast your burden upon the LORD, and he will sustain you;
+      first_half:
+      - Cast your burden upon the LORD,
+      - and he will sustain you;
       second_half:
       - he will never let the righteous stumble.
     25:
@@ -3694,7 +3921,9 @@
   latin: Miserere mei, Deus
   verses:
     1:
-      first_half: Have mercy on me, O God, for my enemies are hounding me;
+      first_half:
+      - Have mercy on me, O God,
+      - for my enemies are hounding me;
       second_half:
       - all day long they assault and oppress me.
     2:
@@ -3706,7 +3935,9 @@
       second_half:
       - I will put my trust in you.
     4:
-      first_half: In God, whose word I praise, In God I trust and will not be afraid,
+      first_half:
+      - In God, whose word I praise,
+      - In God I trust and will not be afraid,
       second_half:
       - for what can flesh do to me?
     5:
@@ -3723,7 +3954,9 @@
       second_half:
       - O God, in your anger, cast down the peoples.
     8:
-      first_half: You have noted my lamentation; put my tears into your bottle;
+      first_half:
+      - You have noted my lamentation;
+      - put my tears into your bottle;
       second_half:
       - are they not recorded in your book?
     9:
@@ -3731,7 +3964,9 @@
       second_half:
       - this I know, for God is on my side.
     10:
-      first_half: In God the LORD, whose word I praise, in God I trust and will not be afraid,
+      first_half:
+      - In God the LORD, whose word I praise,
+      - in God I trust and will not be afraid,
       second_half:
       - for what can mortals do to me?
     11:
@@ -3739,14 +3974,18 @@
       second_half:
       - I will present to you thank-offerings;
     12:
-      first_half: For you have rescued my soul from death and my feet from stumbling,
+      first_half:
+      - For you have rescued my soul from death and my feet
+      - from stumbling,
       second_half:
       - that I may walk before God in the light of the living.
 57:
   latin: Miserere mei, Deus
   verses:
     1:
-      first_half: Be merciful to me, O God, be merciful, for I have taken refuge in you;
+      first_half:
+      - Be merciful to me, O God, be merciful,
+      - for I have taken refuge in you;
       second_half:
       - in the shadow of your wings will I take refuge
       - until this time of trouble has gone by.
@@ -3755,7 +3994,9 @@
       second_half:
       - the God who maintains my cause.
     3:
-      first_half: He will send from heaven and save me; he will confound those who trample upon me;
+      first_half:
+      - He will send from heaven and save me;
+      - he will confound those who trample upon me;
       second_half:
       - God will send forth his love and his faithfulness.
     4:
@@ -3764,7 +4005,9 @@
       - their teeth are spears and arrows,
       - their tongue a sharp sword.
     5:
-      first_half: They have laid a net for my feet, and I am bowed low;
+      first_half:
+      - They have laid a net for my feet,
+      - and I am bowed low;
       second_half:
       - they have dug a pit before me,
       - but have fallen into it themselves.
@@ -3777,7 +4020,9 @@
       second_half:
       - I will sing and make melody.
     8:
-      first_half: Wake up, my spirit; awake, lute and harp;
+      first_half:
+      - Wake up, my spirit;
+      - awake, lute and harp;
       second_half:
       - I myself will waken the dawn.
     9:
@@ -3836,7 +4081,9 @@
       second_half:
       - they will bathe their feet in the blood of the wicked.
     11:
-      first_half: And they will say, “Surely, there is a reward for the righteous;
+      first_half:
+      - And they will say,
+      - “Surely, there is a reward for the righteous;
       second_half:
       - surely, there is a God who rules in the earth.”
 59:
@@ -3851,7 +4098,9 @@
       second_half:
       - and save me from those who thirst for my blood.
     3:
-      first_half: See how they lie in wait for my life, how the mighty gather together against me;
+      first_half:
+      - See how they lie in wait for my life,
+      - how the mighty gather together against me;
       second_half:
       - not for any offense or fault of mine, O LORD.
     4:
@@ -3871,9 +4120,11 @@
       second_half:
       - they snarl like dogs and run about the city.
     8:
-      first_half: Behold, they boast with their mouths, and taunts are on their lips;
+      first_half:
+      - Behold, they boast with their mouths,
+      - and taunts are on their lips;
       second_half:
-      - “For who.” they say, “will hear us?”
+      - '"For who," they say, "will hear us?"'
     9:
       first_half: But you, O LORD, you laugh at them;
       second_half:
@@ -3892,7 +4143,9 @@
       - send them reeling by your might
       - and put them down, O Lord our shield.
     13:
-      first_half: For the sins of their mouths, for the words of their lips, for the cursing and lies that they utter,
+      first_half:
+      - For the sins of their mouths, for the words of their lips,
+      - for the cursing and lies that they utter,
       second_half:
       - let them be caught in their pride.
     14:
@@ -3957,7 +4210,9 @@
       second_half:
       - Ephraim is my helmet and Judah my scepter.
     8:
-      first_half: Moab is my wash-basin, on Edom I throw down my sandal to claim it,
+      first_half:
+      - Moab is my washbasin,
+      - on Edom I throw down my sandal to claim it,
       second_half:
       - and over Philistia will I shout in triumph.”
     9:
@@ -3984,7 +4239,9 @@
       second_half:
       - and listen to my prayer.
     2:
-      first_half: I call upon you from the ends of the earth with heaviness in my heart;
+      first_half:
+      - I call upon you from the ends of the earth
+      - with heaviness in my heart;
       second_half:
       - set me upon the rock that is higher than I.
     3:
@@ -4024,7 +4281,9 @@
       second_half:
       - my stronghold, so that I shall not be greatly shaken.
     3:
-      first_half: How long will you assail me to crush me, all of you together,
+      first_half:
+      - How long will you assail me to crush me,
+      - all of you together,
       second_half:
       - as if you were a leaning fence, a toppling wall?
     4:
@@ -4060,7 +4319,9 @@
       second_half:
       - all of them together.
     12:
-      first_half: Put no trust in extortion; in robbery take no empty pride;
+      first_half:
+      - Put no trust in extortion;
+      - in robbery take no empty pride;
       second_half:
       - though wealth increase, set not your heart upon it.
     13:
@@ -4116,7 +4377,9 @@
       second_half:
       - and let them be food for jackals.
     11:
-      first_half: But the king will rejoice in God; all those who swear by him will be glad;
+      first_half:
+      - But the king will rejoice in God;
+      - all those who swear by him will be glad;
       second_half:
       - for the mouth of those who speak lies shall be stopped.
 64:
@@ -4143,7 +4406,9 @@
       second_half:
       - they plan how they may hide their snares.
     6:
-      first_half: They say, “Who will see us? who will find out our crimes?
+      first_half:
+      - They say, “Who will see us?
+      - who will find out our crimes?
       second_half:
       - we have thought out a perfect plot.”
     7:
@@ -4179,12 +4444,16 @@
       second_half:
       - but you will blot them out.
     4:
-      first_half: Happy are they whom you choose and draw to your courts to dwell there!
+      first_half:
+      - Happy are they whom you choose
+      - and draw to your courts to dwell there!
       second_half:
       - they will be satisfied by the beauty of your house,
       - by the holiness of your temple.
     5:
-      first_half: Awesome things will you show us in your righteousness, O God of our salvation,
+      first_half:
+      - Awesome things will you show us in your righteousness,
+      - O God of our salvation,
       second_half:
       - O Hope of all the ends of the earth
       - and of the seas that are far away.
@@ -4202,7 +4471,9 @@
       second_half:
       - you make the dawn and the dusk to sing for joy.
     9:
-      first_half: You visit the earth and water it abundantly; you make it very plenteous;
+      first_half:
+      - You visit the earth and water it abundantly;
+      - you make it very plenteous;
       second_half:
       - the river of God is full of water.
     10:
@@ -4222,7 +4493,9 @@
       second_half:
       - and the hills be clothed with joy.
     14:
-      first_half: May the meadows cover themselves with flocks, and the valleys cloak themselves with grain;
+      first_half:
+      - May the meadows cover themselves with flocks,
+      - and the valleys cloak themselves with grain;
       second_half:
       - let them shout for joy and sing.
 66:
@@ -4247,11 +4520,15 @@
       second_half:
       - how wonderful he is in his doing toward all people.
     5:
-      first_half: He turned the sea into dry land, so that they went through the water on foot,
+      first_half:
+      - He turned the sea into dry land,
+      - so that they went through the water on foot,
       second_half:
       - and there we rejoiced in him.
     6:
-      first_half: In his might he rules for ever; his eyes keep watch over the nations;
+      first_half:
+      - In his might he rules for ever;
+      - his eyes keep watch over the nations;
       second_half:
       - let no rebel rise up against him.
     7:
@@ -4271,16 +4548,22 @@
       second_half:
       - you laid heavy burdens upon our backs.
     11:
-      first_half: You let enemies ride over our heads; we went through fire and water;
+      first_half:
+      - You let enemies ride over our heads;
+      - we went through fire and water;
       second_half:
       - but you brought us out into a place of refreshment.
     12:
-      first_half: I will enter your house with burnt-offerings and will pay you my vows,
+      first_half:
+      - I will enter your house with burnt-offerings
+      - and will pay you my vows,
       second_half:
       - which I promised with my lips
       - and spoke with my mouth when I was in trouble.
     13:
-      first_half: I will offer you sacrifices of fat beasts with the smoke of rams;
+      first_half:
+      - I will offer you sacrifices of fat beasts
+      - with the smoke of rams;
       second_half:
       - I will give you oxen and goats.
     14:
@@ -4352,7 +4635,9 @@
       second_half:
       - let them also be merry and joyful.
     4:
-      first_half: Sing to God, sing praises to his Name; exalt him who rides upon the heavens;
+      first_half:
+      - Sing to God, sing praises to his Name;
+      - exalt him who rides upon the heavens;
       second_half:
       - YAHWEH is his Name, rejoice before him!
     5:
@@ -4368,7 +4653,9 @@
       second_half:
       - when you marched through the wilderness,
     8:
-      first_half: The earth shook, and the skies poured down rain, at the presence of God, the God of Sinai,
+      first_half:
+      - The earth shook, and the skies poured down rain,
+      - at the presence of God, the God of Sinai,
       second_half:
       - at the presence of God, the God of Israel.
     9:
@@ -4402,15 +4689,21 @@
       second_half:
       - O rugged mountain, O hill of Bashan!
     16:
-      first_half: Why do you look with envy, O rugged mountain, at the hill which God chose for his resting place?
+      first_half:
+      - Why do you look with envy, O rugged mountain,
+      - at the hill which God chose for his resting place?
       second_half:
       - truly, the LORD will dwell there for ever.
     17:
-      first_half: The chariots of God are twenty thousand, even thousands of thousands;
+      first_half:
+      - The chariots of God are twenty thousand,
+      - even thousands of thousands;
       second_half:
       - the Lord comes in holiness from Sinai.
     18:
-      first_half: You have gone up on high and led captivity captive; you have received gifts even from your enemies,
+      first_half:
+      - You have gone up on high and led captivity captive;
+      - you have received gifts even from your enemies,
       second_half:
       - that the LORD God might dwell among them.
     19:
@@ -4447,7 +4740,9 @@
       second_half:
       - bless the LORD, you that are of the fountain of Israel.
     27:
-      first_half: There is Benjamin, least of the tribes, at the head; the princes of Judah in a company;
+      first_half:
+      - There is Benjamin, least of the tribes, at the head;
+      - the princes of Judah in a company;
       second_half:
       - and the princes of Zebulon and Naphtali.
     28:
@@ -4504,12 +4799,15 @@
       second_half:
       - and the torrent washes over me.
     4:
-      first_half: I have grown weary with my crying; my throat is inflamed;
+      first_half:
+      - I have grown weary with my crying;
+      - my throat is inflamed;
       second_half:
       - my eyes have failed from looking for my God.
     5:
-      first_half: Those who hate me without a cause are more than the hairs of my head; my lying foes who would destroy me
-        are mighty.
+      first_half:
+      - Those who hate me without a cause are more than the hairs of my head;
+      - my lying foes who would destroy me are mighty.
       second_half:
       - Must I then give back what I never stole?
     6:
@@ -4559,7 +4857,9 @@
       - let me be rescued from those who hate me
       - and out of the deep waters.
     17:
-      first_half: Let not the torrent of waters wash over me, neither let the deep swallow me up;
+      first_half:
+      - Let not the torrent of waters wash over me,
+      - neither let the deep swallow me up;
       second_half:
       - do not let the Pit shut its mouth upon me.
     18:
@@ -4655,7 +4955,9 @@
       second_half:
       - O LORD, make haste to help me.
     2:
-      first_half: Let those who seek my life be ashamed and altogether dismayed;
+      first_half:
+      - Let those who seek my life be ashamed
+      - and altogether dismayed;
       second_half:
       - let those who take pleasure in my misfortune
       - draw back and be disgraced.
@@ -4700,14 +5002,15 @@
       second_half:
       - my confidence since I was young.
     6:
-      first_half: I have been sustained by you ever since I was born; from my mother’s womb you have been my strength;
+      first_half:
+      - I have been sustained by you ever since I was born;
+      - from my mother’s womb you have been my strength;
       second_half:
       - my praise shall be always of you.
     7:
       first_half: I have become a portent to many;
       second_half:
       - but you are my refuge and my strength.
-      - "8 `\tLet my mouth be full of your praise *"
     9:
       first_half: Do not cast me off in my old age;
       second_half:
@@ -4717,7 +5020,9 @@
       second_half:
       - and those who lie in wait for my life take counsel together.
     11:
-      first_half: They say, “God has forsaken him; go after him and seize him;
+      first_half:
+      - They say, “God has forsaken him;
+      - go after him and seize him;
       second_half:
       - because there is none who will save.”
     12:
@@ -4734,7 +5039,9 @@
       second_half:
       - and shall praise you more and more.
     15:
-      first_half: My mouth shall recount your mighty acts and saving deeds all day long;
+      first_half:
+      - My mouth shall recount your mighty acts
+      - and saving deeds all day long;
       second_half:
       - though I cannot know the number of them.
     16:
@@ -4838,17 +5145,23 @@
       second_half:
       - and dear shall their blood be in his sight.
     15:
-      first_half: Long may he live! and may there be given to him gold from Arabia;
+      first_half:
+      - Long may he live!
+      - and may there be given to him gold from Arabia;
       second_half:
       - may prayer be made for him always,
       - and may they bless him all the day long.
     16:
-      first_half: May there be abundance of grain on the earth, growing thick even on the hilltops;
+      first_half:
+      - May there be abundance of grain on the earth,
+      - growing thick even on the hilltops;
       second_half:
       - may its fruit flourish like Lebanon,
       - and its grain like grass upon the earth.
     17:
-      first_half: May his Name remain for ever and be established as long as the sun endures;
+      first_half:
+      - May his Name remain for ever
+      - and be established as long as the sun endures;
       second_half:
       - may all the nations bless themselves in him and
       - call him blessed.
@@ -5016,7 +5329,9 @@
       - They burned down all the meeting-places of God
       - in the land.
     8:
-      first_half: There are no signs for us to see; there is no prophet left;
+      first_half:
+      - There are no signs for us to see;
+      - there is no prophet left;
       second_half:
       - there is not one among us who knows how long.
     9:
@@ -5080,7 +5395,9 @@
       second_half:
       - he puts down one and lifts up another.
     8:
-      first_half: For in the LORD’s hand there is a cup, full of spiced and foaming wine, which he pours out,
+      first_half:
+      - For in the LORD's hand there is a cup,
+      - full of spiced and foaming wine, which he pours out,
       second_half:
       - and all the wicked of the earth shall drink and
       - drain the dregs.
@@ -5112,7 +5429,9 @@
       second_half:
       - more splendid than the everlasting mountains!
     5:
-      first_half: The strong of heart have been despoiled; they sink into sleep;
+      first_half:
+      - The strong of heart have been despoiled;
+      - they sink into sleep;
       second_half:
       - none of the warriors can lift a hand.
     6:
@@ -5209,19 +5528,27 @@
       second_half:
       - the children of Jacob and Joseph.
     16:
-      first_half: The waters saw you, O God; the waters saw you and trembled;
+      first_half:
+      - The waters saw you, O God;
+      - the waters saw you and trembled;
       second_half:
       - the very depths were shaken.
     17:
-      first_half: The clouds poured out water; the skies thundered;
+      first_half:
+      - The clouds poured out water;
+      - the skies thundered;
       second_half:
       - your arrows flashed to and fro;
     18:
-      first_half: The sound of your thunder was in the whirlwind; your lightnings lit up the world;
+      first_half:
+      - The sound of your thunder was in the whirlwind;
+      - your lightnings lit up the world;
       second_half:
       - the earth trembled and shook.
     19:
-      first_half: Your way was in the sea, and your paths in the great waters,
+      first_half:
+      - Your way was in the sea,
+      - and your paths in the great waters,
       second_half:
       - yet your footsteps were not seen.
     20:
@@ -5240,19 +5567,27 @@
       second_half:
       - I will declare the mysteries of ancient times.
     3:
-      first_half: That which we have heard and known, and what our forefathers have told us,
+      first_half:
+      - That which we have heard and known,
+      - and what our forefathers have told us,
       second_half:
       - we will not hide from their children.
     4:
-      first_half: We will recount to generations to come the praiseworthy deeds and the power of the LORD,
+      first_half:
+      - We will recount to generations to come
+      - the praiseworthy deeds and the power of the LORD,
       second_half:
       - and the wonderful works he has done.
     5:
-      first_half: He gave his decrees to Jacob and established a law for Israel,
+      first_half:
+      - He gave his decrees to Jacob
+      - and established a law for Israel,
       second_half:
       - which he commanded them to teach their children;
     6:
-      first_half: That the generations to come might know, and the children yet unborn;
+      first_half:
+      - That the generations to come might know,
+      - and the children yet unborn;
       second_half:
       - that they in their turn might tell it to their children;
     7:
@@ -5261,7 +5596,9 @@
       - and not forget the deeds of God,
       - but keep his commandments;
     8:
-      first_half: And not be like their forefathers, a stubborn and rebellious generation,
+      first_half:
+      - And not be like their forefathers,
+      - a stubborn and rebellious generation,
       second_half:
       - a generation whose heart was not steadfast,
       - and whose spirit was not faithful to God.
@@ -5385,7 +5722,9 @@
       second_half:
       - and they were not faithful to his covenant.
     38:
-      first_half: But he was so merciful that he forgave their sins and did not destroy them;
+      first_half:
+      - But he was so merciful that he forgave their sins
+      - and did not destroy them;
       second_half:
       - many times he held back his anger
       - and did not permit his wrath to be roused.
@@ -5435,7 +5774,9 @@
       - fury, indignation, and distress,
       - a troop of destroying angels.
     50:
-      first_half: He gave full rein to his anger; he did not spare their souls from death;
+      first_half:
+      - He gave full rein to his anger;
+      - he did not spare their souls from death;
       second_half:
       - but delivered their lives to the plague.
     51:
@@ -5455,7 +5796,9 @@
       second_half:
       - the mountain his right hand had won.
     55:
-      first_half: He drove out the Canaanites before them and apportioned an inheritance to them by lot;
+      first_half:
+      - He drove out the Canaanites before them
+      - and apportioned an inheritance to them by lot;
       second_half:
       - he made the tribes of Israel to dwell in their tents.
     56:
@@ -5536,7 +5879,9 @@
   latin: Deus, venerunt
   verses:
     1:
-      first_half: O God, the heathen have come into your inheritance; they have profaned your holy temple;
+      first_half:
+      - O God, the heathen have come into your inheritance;
+      - they have profaned your holy temple;
       second_half:
       - they have made Jerusalem a heap of rubble.
     2:
@@ -5566,7 +5911,9 @@
       second_half:
       - and made his dwelling a ruin.
     8:
-      first_half: Remember not our past sins; let your compassion be swift to meet us;
+      first_half:
+      - Remember not our past sins;
+      - let your compassion be swift to meet us;
       second_half:
       - for we have been brought very low.
     9:
@@ -5649,7 +5996,9 @@
       second_half:
       - and the beasts of the field have grazed upon it.
     14:
-      first_half: Turn now, O God of hosts, look down from heaven; behold and tend this vine;
+      first_half:
+      - Turn now, O God of hosts, look down from heaven;
+      - behold and tend this vine;
       second_half:
       - preserve what your right hand has planted.
     15:
@@ -5710,7 +6059,9 @@
       second_half:
       - you shall not worship a foreign god.
     10:
-      first_half: I am the LORD your God, who brought you out of the land of Egypt and said,
+      first_half:
+      - I am the LORD your God,
+      - who brought you out of the land of Egypt and said,
       second_half:
       - “Open your mouth wide, and I will fill it.”
     11:
@@ -5757,7 +6108,9 @@
       second_half:
       - deliver them from the power of the wicked.
     5:
-      first_half: They do not know, neither do they understand; they go about in darkness;
+      first_half:
+      - They do not know, neither do they understand;
+      - they go about in darkness;
       second_half:
       - all the foundations of the earth are shaken.
     6:
@@ -5857,7 +6210,9 @@
       - the LORD;
       - my heart and my flesh rejoice in the living God.
     2:
-      first_half: The sparrow has found her a house and the swallow a nest where she may lay her young;
+      first_half:
+      - The sparrow has found her a house
+      - and the swallow a nest where she may lay her young;
       second_half:
       - by the side of your altars, O LORD of hosts,
       - my King and my God.
@@ -5998,11 +6353,15 @@
       second_half:
       - and glorify your Name.
     10:
-      first_half: For you are great; you do wondrous things;
+      first_half:
+      - For you are great;
+      - you do wondrous things;
       second_half:
       - and you alone are God.
     11:
-      first_half: Teach me your way, O LORD, and I will walk in your truth;
+      first_half:
+      - Teach me your way, O LORD,
+      - and I will walk in your truth;
       second_half:
       - knit my heart to you that I may fear your Name.
     12:
@@ -6014,7 +6373,9 @@
       second_half:
       - you have delivered me from the nethermost Pit.
     14:
-      first_half: The arrogant rise up against me, O God, and a band of violent men seeks my life;
+      first_half:
+      - The arrogant rise up against me, O God,
+      - and a band of violent men seeks my life;
       second_half:
       - they have not set you before their eyes.
     15:
@@ -6027,7 +6388,9 @@
       - give your strength to your servant;
       - and save the child of your handmaid.
     17:
-      first_half: Show me a sign of your favor, so that those who hate me may see it and be ashamed;
+      first_half:
+      - Show me a sign of your favor,
+      - so that those who hate me may see it and be ashamed;
       second_half:
       - because you, O LORD, have helped me and comforted me.
 87:
@@ -6095,7 +6458,9 @@
       second_half:
       - and all your great waves overwhelm me.
     9:
-      first_half: You have put my friends far from me; you have made me to be abhorred by them;
+      first_half:
+      - You have put my friends far from me;
+      - you have made me to be abhorred by them;
       second_half:
       - I am in prison and cannot get free.
     10:
@@ -6325,7 +6690,9 @@
       second_half:
       - and have covered him with shame.
     46:
-      first_half: How long will you hide yourself, O LORD? will you hide yourself for ever?
+      first_half:
+      - How long will you hide yourself, O LORD?
+      - will you hide yourself for ever?
       second_half:
       - how long will your anger burn like fire?
     47:
@@ -6365,7 +6732,9 @@
       second_half:
       - from one generation to another.
     2:
-      first_half: Before the mountains were brought forth, or the land and the earth were born,
+      first_half:
+      - Before the mountains were brought forth,
+      - or the land and the earth were born,
       second_half:
       - from age to age you are God.
     3:
@@ -6373,7 +6742,9 @@
       second_half:
       - “Go back, O child of earth.”
     4:
-      first_half: For a thousand years in your sight are like yesterday when it is past
+      first_half:
+      - For a thousand years in your sight are like yesterday
+      - when it is past
       second_half:
       - and like a watch in the night.
     5:
@@ -6397,7 +6768,9 @@
       second_half:
       - we bring our years to an end like a sigh.
     10:
-      first_half: The span of our life is seventy years, perhaps in strength even eighty;
+      first_half:
+      - The span of our life is seventy years,
+      - perhaps in strength even eighty;
       second_half:
       - yet the sum of them is but labor and sorrow,
       - for they pass away quickly and we are gone.
@@ -6438,7 +6811,9 @@
       second_half:
       - abides under the shadow of the Almighty.
     2:
-      first_half: He shall say to the LORD, “You are my refuge and my stronghold,
+      first_half:
+      - He shall say to the LORD,
+      - “You are my refuge and my stronghold,
       second_half:
       - my God in whom I put my trust.”
     3:
@@ -6446,7 +6821,9 @@
       second_half:
       - and from the deadly pestilence.
     4:
-      first_half: He shall cover you with his pinions, and you shall find refuge under his wings;
+      first_half:
+      - He shall cover you with his pinions,
+      - and you shall find refuge under his wings;
       second_half:
       - his faithfulness shall be a shield and buckler.
     5:
@@ -6458,7 +6835,9 @@
       second_half:
       - nor of the sickness that lays waste at mid-day.
     7:
-      first_half: A thousand shall fall at your side and ten thousand at your right hand,
+      first_half:
+      - A thousand shall fall at your side
+      - and ten thousand at your right hand,
       second_half:
       - but it shall not come near you.
     8:
@@ -6487,7 +6866,9 @@
       - you shall trample the young lion and the serpent
       - under your feet.
     14:
-      first_half: Because he is bound to me in love, therefore will I deliver him;
+      first_half:
+      - Because he is bound to me in love,
+      - therefore will I deliver him;
       second_half:
       - I will protect him, because he knows my Name.
     15:
@@ -6523,7 +6904,9 @@
       second_half:
       - your thoughts are very deep.
     6:
-      first_half: The dullard does not know, nor does the fool understand,
+      first_half:
+      - The dullard does not know,
+      - nor does the fool understand,
       second_half:
       - that though the wicked grow like weeds,
       - and all the workers of iniquity flourish,
@@ -6532,7 +6915,9 @@
       second_half:
       - but you, O LORD, are exalted for evermore.
     8:
-      first_half: For lo, your enemies, O LORD, lo, your enemies shall perish,
+      first_half:
+      - For lo, your enemies, O LORD,
+      - lo, your enemies shall perish,
       second_half:
       - and all the workers of iniquity shall be scattered.
     9:
@@ -6564,7 +6949,9 @@
   latin: Dominus regnavit
   verses:
     1:
-      first_half: The LORD is King; he has put on splendid apparel;
+      first_half:
+      - The LORD is King;
+      - he has put on splendid apparel;
       second_half:
       - the LORD has put on his apparel
       - and girded himself with strength.
@@ -6577,11 +6964,15 @@
       second_half:
       - you are from everlasting.
     4:
-      first_half: The waters have lifted up, O LORD, the waters have lifted up their voice;
+      first_half:
+      - The waters have lifted up, O LORD,
+      - the waters have lifted up their voice;
       second_half:
       - the waters have lifted up their pounding waves.
     5:
-      first_half: Mightier than the sound of many waters, mightier than the breakers of the sea,
+      first_half:
+      - Mightier than the sound of many waters,
+      - mightier than the breakers of the sea,
       second_half:
       - mightier is the LORD who dwells on high.
     6:
@@ -6681,7 +7072,9 @@
       second_half:
       - and my God the rock of my trust.
     23:
-      first_half: He will turn their wickedness back upon them and destroy them in their own malice;
+      first_half:
+      - He will turn their wickedness back upon them
+      - and destroy them in their own malice;
       second_half:
       - the LORD our God will destroy them.
 95:
@@ -6712,11 +7105,15 @@
       second_half:
       - and kneel before the LORD our Maker.
     7:
-      first_half: For he is our God, and we are the people of his pasture and the sheep of his hand.
+      first_half:
+      - For he is our God,
+      - and we are the people of his pasture and the sheep of his hand.
       second_half:
       - Oh, that today you would hearken to his voice!
     8:
-      first_half: Harden not your hearts, as your forebears did in the wilderness,
+      first_half:
+      - Harden not your hearts,
+      - as your forebears did in the wilderness,
       second_half:
       - at Meribah, and on that day at Massah,
       - when they tempted me.
@@ -6778,11 +7175,15 @@
       - he has made the world so firm that it cannot be moved;
       - he will judge the peoples with equity.”
     11:
-      first_half: Let the heavens rejoice, and let the earth be glad; let the sea thunder and all that is in it;
+      first_half:
+      - Let the heavens rejoice, and let the earth be glad;
+      - let the sea thunder and all that is in it;
       second_half:
       - let the field be joyful and all that is therein.
     12:
-      first_half: Then shall all the trees of the wood shout for joy before the LORD when he comes,
+      first_half:
+      - Then shall all the trees of the wood shout for joy
+      - before the LORD when he comes,
       second_half:
       - when he comes to judge the earth.
     13:
@@ -6793,7 +7194,9 @@
   latin: Dominus regnavit
   verses:
     1:
-      first_half: The LORD is King; let the earth rejoice;
+      first_half:
+      - The LORD is King;
+      - let the earth rejoice;
       second_half:
       - let the multitude of the isles be glad.
     2:
@@ -6817,7 +7220,9 @@
       second_half:
       - and all the peoples see his glory.
     7:
-      first_half: Confounded be all who worship carved images and delight in false gods!
+      first_half:
+      - Confounded be all who worship carved images
+      - and delight in false gods!
       second_half:
       - Bow down before him, all you gods.
     8:
@@ -6825,7 +7230,9 @@
       second_half:
       - because of your judgments, O LORD.
     9:
-      first_half: For you are the LORD, most high over all the earth;
+      first_half:
+      - For you are the LORD,
+      - most high over all the earth;
       second_half:
       - you are exalted far above all gods.
     10:
@@ -6891,7 +7298,9 @@
   latin: Dominus regnavit
   verses:
     1:
-      first_half: The LORD is King; let the people tremble;
+      first_half:
+      - The LORD is King;
+      - let the people tremble;
       second_half:
       - he is enthroned upon the cherubim;
       - let the earth shake.
@@ -6904,15 +7313,21 @@
       second_half:
       - he is the Holy One.
     4:
-      first_half: “O mighty King, lover of justice, you have established equity;
+      first_half:
+      - “O mighty King, lover of justice,
+      - you have established equity;
       second_half:
       - you have executed justice and righteousness in Jacob.”
     5:
-      first_half: Proclaim the greatness of the LORD our God and fall down before his footstool;
+      first_half:
+      - Proclaim the greatness of the LORD our God
+      - and fall down before his footstool;
       second_half:
       - he is the Holy One.
     6:
-      first_half: Moses and Aaron among his priests, and Samuel among those who call upon his Name,
+      first_half:
+      - Moses and Aaron among his priests,
+      - and Samuel among those who call upon his Name,
       second_half:
       - they called upon the LORD, and he answered them.
     7:
@@ -6925,7 +7340,9 @@
       - you were a God who forgave them,
       - yet punished them for their evil deeds.”
     9:
-      first_half: Proclaim the greatness of the LORD our God and worship him upon his holy hill;
+      first_half:
+      - Proclaim the greatness of the LORD our God
+      - and worship him upon his holy hill;
       second_half:
       - for the LORD our God is the Holy One.
 100:
@@ -6942,11 +7359,15 @@
       - he himself has made us, and we are his;
       - we are his people and the sheep of his pasture.
     3:
-      first_half: Enter his gates with thanksgiving; go into his courts with praise;
+      first_half:
+      - Enter his gates with thanksgiving;
+      - go into his courts with praise;
       second_half:
       - give thanks to him and call upon his Name.
     4:
-      first_half: For the LORD is good; his mercy is everlasting;
+      first_half:
+      - For the LORD is good;
+      - his mercy is everlasting;
       second_half:
       - and his faithfulness endures from age to age.
 101:
@@ -6957,7 +7378,9 @@
       second_half:
       - to you, O LORD, will I sing praises.
     2:
-      first_half: I will strive to follow a blameless course; oh, when will you come to me?
+      first_half:
+      - I will strive to follow a blameless course;
+      - oh, when will you come to me?
       second_half:
       - I will walk with sincerity of heart within my house.
     3:
@@ -7039,7 +7462,9 @@
       second_half:
       - and your Name from age to age.
     13:
-      first_half: You will arise and have compassion on Zion, for it is time to have mercy upon her;
+      first_half:
+      - You will arise and have compassion on Zion,
+      - for it is time to have mercy upon her;
       second_half:
       - indeed, the appointed time has come.
     14:
@@ -7083,7 +7508,9 @@
       second_half:
       - he has shortened the number of my days;
     24:
-      first_half: And I said, “O my God, do not take me away in the midst of my days;
+      first_half:
+      - And I said, “O my God,
+      - do not take me away in the midst of my days;
       second_half:
       - your years endure throughout all generations.
     25:
@@ -7091,7 +7518,9 @@
       second_half:
       - and the heavens are the work of your hands;
     26:
-      first_half: They shall perish, but you will endure; they all shall wear out like a garment;
+      first_half:
+      - They shall perish, but you will endure;
+      - they all shall wear out like a garment;
       second_half:
       - as clothing you will change them,
       - and they shall be changed;
@@ -7183,7 +7612,9 @@
       second_half:
       - and his kingship has dominion over all.
     20:
-      first_half: Bless the LORD, you angels of his, you mighty ones who do his bidding,
+      first_half:
+      - Bless the LORD, you angels of his,
+      - you mighty ones who do his bidding,
       second_half:
       - and hearken to the voice of his word.
     21:
@@ -7191,7 +7622,9 @@
       second_half:
       - you ministers of his who do his will.
     22:
-      first_half: Bless the LORD, all you works of his, in all places of his dominion;
+      first_half:
+      - Bless the LORD, all you works of his,
+      - in all places of his dominion;
       second_half:
       - bless the LORD, O my soul.
 104:
@@ -7301,11 +7734,15 @@
       - in wisdom you have made them all;
       - the earth is full of your creatures.
     26:
-      first_half: Yonder is the great and wide sea with its living things too many to number,
+      first_half:
+      - Yonder is the great and wide sea
+      - with its living things too many to number,
       second_half:
       - creatures both small and great.
     27:
-      first_half: There move the ships, and there is that Leviathan,
+      first_half:
+      - There move the ships,
+      - and there is that Leviathan,
       second_half:
       - which you have made for the sport of it.
     28:
@@ -7542,7 +7979,9 @@
   latin: Confitemini Domino
   verses:
     1:
-      first_half: Hallelujah! Give thanks to the LORD, for he is good,
+      first_half:
+      - Hallelujah!
+      - Give thanks to the LORD, for he is good,
       second_half:
       - for his mercy endures for ever.
     2:
@@ -7558,7 +7997,9 @@
       second_half:
       - and visit me with your saving help;
     5:
-      first_half: That I may see the prosperity of your elect and be glad with the gladness of your people,
+      first_half:
+      - That I may see the prosperity of your elect
+      - and be glad with the gladness of your people,
       second_half:
       - that I may glory with your inheritance.
     6:
@@ -7566,7 +8007,9 @@
       second_half:
       - we have done wrong and dealt wickedly.
     7:
-      first_half: In Egypt they did not consider your marvelous works, nor remember the abundance of your love;
+      first_half:
+      - In Egypt they did not consider your marvelous works,
+      - nor remember the abundance of your love;
       second_half:
       - they defied the Most High at the Red Sea.
     8:
@@ -7630,7 +8073,9 @@
       second_half:
       - and fearful things at the Red Sea.
     23:
-      first_half: So he would have destroyed them, had not Moses his chosen stood before him in the breach,
+      first_half:
+      - So he would have destroyed them,
+      - had not Moses his chosen stood before him in the breach,
       second_half:
       - to turn away his wrath from consuming them.
     24:
@@ -7690,7 +8135,9 @@
       second_half:
       - and their daughters to evil spirits.
     38:
-      first_half: They shed innocent blood, the blood of their sons and daughters,
+      first_half:
+      - They shed innocent blood,
+      - the blood of their sons and daughters,
       second_half:
       - which they offered to the idols of Canaan,
       - and the land was defiled with blood.
@@ -7711,7 +8158,9 @@
       second_half:
       - and they were humbled under their hand.
     43:
-      first_half: Many a time did he deliver them, but they rebelled through their own devices,
+      first_half:
+      - Many a time did he deliver them,
+      - but they rebelled through their own devices,
       second_half:
       - and were brought down in their iniquity.
     44:
@@ -7727,12 +8176,16 @@
       second_half:
       - by those who held them captive.
     47:
-      first_half: Save us, O LORD our God, and gather us from among the nations,
+      first_half:
+      - Save us, O LORD our God,
+      - and gather us from among the nations,
       second_half:
       - that we may give thanks to your holy Name
       - and glory in your praise.
     48:
-      first_half: Blessed be the LORD, the God of Israel, from everlasting and to everlasting;
+      first_half:
+      - Blessed be the LORD, the God of Israel,
+      - from everlasting and to everlasting;
       second_half:
       - and let all the people say, “Amen!”
       - Hallelujah!
@@ -7930,7 +8383,9 @@
       second_half:
       - I will sing and make melody.
     2:
-      first_half: Wake up, my spirit; awake, lute and harp;
+      first_half:
+      - Wake up, my spirit;
+      - awake, lute and harp;
       second_half:
       - I myself will waken the dawn.
     3:
@@ -7959,7 +8414,9 @@
       second_half:
       - Ephraim is my helmet and Judah my scepter.
     9:
-      first_half: Moab is my washbasin, on Edom I throw down my sandal to claim it,
+      first_half:
+      - Moab is my washbasin,
+      - on Edom I throw down my sandal to claim it,
       second_half:
       - and over Philistia will I shout in triumph.”
     10:
@@ -8045,7 +8502,9 @@
       - but persecuted the poor and needy
       - and sought to kill the brokenhearted.
     16:
-      first_half: He loved cursing, let it come upon him;
+      first_half:
+      - He loved cursing,
+      - let it come upon him;
       second_half:
       - he took no delight in blessing,
       - let it depart from him.
@@ -8063,7 +8522,9 @@
       second_half:
       - and to those who speak evil against me.
     20:
-      first_half: But you, O Lord my God, oh, deal with me according to your Name;
+      first_half:
+      - But you, O Lord my God,
+      - oh, deal with me according to your Name;
       second_half:
       - for your tender mercy’s sake, deliver me.
     21:
@@ -8128,7 +8589,9 @@
       second_half:
       - “You are a priest for ever after the order of Melchizedek.”
     5:
-      first_half: The Lord who is at your right hand will smite kings in the day of his wrath;
+      first_half:
+      - The Lord who is at your right hand
+      - will smite kings in the day of his wrath;
       second_half:
       - he will rule over the nations.
     6:
@@ -8143,7 +8606,9 @@
   latin: Confitebor tibi
   verses:
     1:
-      first_half: Hallelujah! I will give thanks to the LORD with my whole heart,
+      first_half:
+      - Hallelujah!
+      - I will give thanks to the LORD with my whole heart,
       second_half:
       - in the assembly of the upright, in the congregation.
     2:
@@ -8175,7 +8640,9 @@
       second_half:
       - because they are done in truth and equity.
     9:
-      first_half: He sent redemption to his people; he commanded his covenant for ever;
+      first_half:
+      - He sent redemption to his people;
+      - he commanded his covenant for ever;
       second_half:
       - holy and awesome is his Name.
     10:
@@ -8187,7 +8654,9 @@
   latin: Beatus vir
   verses:
     1:
-      first_half: Hallelujah! Happy are they who fear the Lord
+      first_half:
+      - Hallelujah!
+      - Happy are they who fear the Lord
       second_half:
       - and have great delight in his commandments!
     2:
@@ -8225,14 +8694,18 @@
       - and their righteousness stands fast for ever;
       - they will hold up their head with honor.
     10:
-      first_half: The wicked will see it and be angry; they will gnash their teeth and pine away;
+      first_half:
+      - The wicked will see it and be angry;
+      - they will gnash their teeth and pine away;
       second_half:
       - the desires of the wicked will perish.
 113:
   latin: Laudate, pueri
   verses:
     1:
-      first_half: Hallelujah! Give praise, you servants of the LORD;
+      first_half:
+      - Hallelujah!
+      - Give praise, you servants of the LORD;
       second_half:
       - praise the Name of the LORD.
     2:
@@ -8267,7 +8740,9 @@
   latin: In exitu Israel
   verses:
     1:
-      first_half: Hallelujah! When Israel came out of Egypt,
+      first_half:
+      - Hallelujah!
+      - When Israel came out of Egypt,
       second_half:
       - the house of Jacob from a people of strange speech,
     2:
@@ -8302,7 +8777,9 @@
   latin: Non nobis, Domine
   verses:
     1:
-      first_half: Not to us, O LORD, not to us, but to your Name give glory;
+      first_half:
+      - Not to us,
+      - O LORD, not to us, but to your Name give glory;
       second_half:
       - because of your love and because of your faithfulness.
     2:
@@ -8326,7 +8803,9 @@
       second_half:
       - noses, but they cannot smell;
     7:
-      first_half: They have hands, but they cannot feel; feet, but they cannot walk;
+      first_half:
+      - They have hands, but they cannot feel;
+      - feet, but they cannot walk;
       second_half:
       - they make no sound with their throat.
     8:
@@ -8384,7 +8863,9 @@
       - because he has inclined his ear to me whenever
       - I called upon him.
     2:
-      first_half: The cords of death entangled me; the grip of the grave took hold of me;
+      first_half:
+      - The cords of death entangled me;
+      - the grip of the grave took hold of me;
       second_half:
       - I came to grief and sorrow.
     3:
@@ -8412,7 +8893,9 @@
       second_half:
       - in the land of the living.
     9:
-      first_half: I believed, even when I said, “I have been brought very low.”
+      first_half:
+      - I believed, even when I said,
+      - “I have been brought very low.”
       second_half:
       - In my distress I said, “No one can be trusted.”
     10:
@@ -8509,7 +8992,9 @@
       second_half:
       - in the name of the LORD I will repel them.
     12:
-      first_half: They swarm about me like bees; they blaze like a fire of thorns;
+      first_half:
+      - They swarm about me like bees;
+      - they blaze like a fire of thorns;
       second_half:
       - in the name of the LORD I will repel them.
     13:
@@ -9168,7 +9653,9 @@
       second_half:
       - answer me, O LORD, that I may keep your statutes.
     146:
-      first_half: I call to you; oh, that you would save me!
+      first_half:
+      - I call to you;
+      - oh, that you would save me!
       second_half:
       - I will keep your decrees.
     147:
@@ -9441,7 +9928,9 @@
       second_half:
       - that is at unity with itself;
     4:
-      first_half: To which the tribes go up, the tribes of the LORD,
+      first_half:
+      - To which the tribes go up,
+      - the tribes of the LORD,
       second_half:
       - the assembly of Israel,
       - to praise the Name of the LORD.
@@ -9544,7 +10033,9 @@
       second_half:
       - and to those who are true of heart.
     5:
-      first_half: As for those who turn aside to crooked ways, the LORD will lead them away with the evildoers;
+      first_half:
+      - As for those who turn aside to crooked ways,
+      - the LORD will lead them away with the evildoers;
       second_half:
       - but peace be upon Israel.
 126:
@@ -9667,14 +10158,18 @@
       second_half:
       - nor the bosom of him who binds the sheaves;
     8:
-      first_half: So that those who go by say not so much as, “The LORD prosper you.
+      first_half:
+      - So that those who go by say not so much as,
+      - “The LORD prosper you.
       second_half:
       - We wish you well in the Name of the LORD.”
 130:
   latin: De profundis
   verses:
     1:
-      first_half: Out of the depths have I called to you, O LORD; LORD, hear my voice;
+      first_half:
+      - Out of the depths have I called to you, O LORD;
+      - LORD, hear my voice;
       second_half:
       - let your ears consider well the voice of my supplication.
     2:
@@ -9690,7 +10185,9 @@
       second_half:
       - in his word is my hope.
     5:
-      first_half: My soul waits for the LORD, more than watchmen for the morning,
+      first_half:
+      - My soul waits for the LORD,
+      - more than watchmen for the morning,
       second_half:
       - more than watchmen for the morning.
     6:
@@ -9713,7 +10210,9 @@
       second_half:
       - or with things that are too hard for me.
     3:
-      first_half: But I still my soul and make it quiet, like a child upon its mother’s breast;
+      first_half:
+      - But I still my soul and make it quiet,
+      - like a child upon its mother’s breast;
       second_half:
       - my soul is quieted within me.
     4:
@@ -9772,7 +10271,9 @@
       second_half:
       - will I set upon your throne.
     13:
-      first_half: If your children keep my covenant and my testimonies that I shall teach them,
+      first_half:
+      - If your children keep my covenant
+      - and my testimonies that I shall teach them,
       second_half:
       - their children will sit upon your throne for evermore.”
     14:
@@ -9838,7 +10339,9 @@
   latin: Laudate nomen
   verses:
     1:
-      first_half: Hallelujah! Praise the Name of the LORD;
+      first_half:
+      - Hallelujah!
+      - Praise the Name of the LORD;
       second_half:
       - give praise, you servants of the LORD,
     2:
@@ -9879,7 +10382,9 @@
       second_half:
       - 'and put mighty kings to death:'
     11:
-      first_half: Sihon, king of the Amorites, and Og, the king of Bashan,
+      first_half:
+      - Sihon, king of the Amorites,
+      - and Og, the king of Bashan,
       second_half:
       - and all the kingdoms of Canaan.
     12:
@@ -10042,7 +10547,9 @@
       second_half:
       - on the trees in the midst of that land.
     3:
-      first_half: 'For those who led us away captive asked us for a song, and our oppressors called for mirth:'
+      first_half:
+      - For those who led us away captive asked us for a song,
+      - 'and our oppressors called for mirth:'
       second_half:
       - “Sing us one of the songs of Zion.”
     4:
@@ -10054,11 +10561,15 @@
       second_half:
       - let my right hand forget its skill.
     6:
-      first_half: Let my tongue cleave to the roof of my mouth if I do not remember you,
+      first_half:
+      - Let my tongue cleave to the roof of my mouth
+      - if I do not remember you,
       second_half:
       - if I do not set Jerusalem above my highest joy.
     7:
-      first_half: Remember the day of Jerusalem, O LORD, against the people of Edom,
+      first_half:
+      - Remember the day of Jerusalem, O LORD,
+      - against the people of Edom,
       second_half:
       - who said, “Down with it! down with it!
       - even to the ground!”
@@ -10079,7 +10590,9 @@
       second_half:
       - before the gods I will sing your praise.
     2:
-      first_half: I will bow down toward your holy temple and praise your Name,
+      first_half:
+      - I will bow down toward your holy temple
+      - and praise your Name,
       second_half:
       - because of your love and faithfulness;
     3:
@@ -10157,7 +10670,9 @@
       second_half:
       - and the light around me turn to night,”
     11:
-      first_half: Darkness is not dark to you; the night is as bright as the day;
+      first_half:
+      - Darkness is not dark to you;
+      - the night is as bright as the day;
       second_half:
       - darkness and light to you are both alike.
     12:
@@ -10174,7 +10689,9 @@
       - while I was being made in secret
       - and woven in the depths of the earth.
     15:
-      first_half: Your eyes beheld my limbs, yet unfinished in the womb; all of them were written in your book;
+      first_half:
+      - Your eyes beheld my limbs, yet unfinished in the womb;
+      - all of them were written in your book;
       second_half:
       - they were fashioned day by day,
       - when as yet there was none of them.
@@ -10232,7 +10749,9 @@
       - protect me from the violent,
       - who are determined to trip me up.
     5:
-      first_half: The proud have hidden a snare for me and stretched out a net of cords;
+      first_half:
+      - The proud have hidden a snare for me
+      - and stretched out a net of cords;
       second_half:
       - they have set traps for me along the path.
     6:
@@ -10279,7 +10798,9 @@
       second_half:
       - the lifting up of my hands as the evening sacrifice.
     3:
-      first_half: Set a watch before my mouth, O LORD, and guard the door of my lips;
+      first_half:
+      - Set a watch before my mouth, O LORD,
+      - and guard the door of my lips;
       second_half:
       - let not my heart incline to any evil thing.
     4:
@@ -10287,7 +10808,9 @@
       second_half:
       - nor eat of their choice foods.
     5:
-      first_half: Let the righteous smite me in friendly rebuke; let not the oil of the unrighteous anoint my head;
+      first_half:
+      - Let the righteous smite me in friendly rebuke;
+      - let not the oil of the unrighteous anoint my head;
       second_half:
       - for my prayer is continually against their wicked deeds.
     6:
@@ -10349,7 +10872,9 @@
   latin: Domine, exaudi
   verses:
     1:
-      first_half: LORD, hear my prayer, and in your faithfulness heed my supplications;
+      first_half:
+      - LORD, hear my prayer,
+      - and in your faithfulness heed my supplications;
       second_half:
       - answer me in your righteousness.
     2:
@@ -10357,7 +10882,9 @@
       second_half:
       - for in your sight shall no one living be justified.
     3:
-      first_half: For my enemy has sought my life; he has crushed me to the ground;
+      first_half:
+      - For my enemy has sought my life;
+      - he has crushed me to the ground;
       second_half:
       - he has made me live in dark places like those who
       - are long dead.
@@ -10366,7 +10893,9 @@
       second_half:
       - my heart within me is desolate.
     5:
-      first_half: I remember the time past; I muse upon all your deeds;
+      first_half:
+      - I remember the time past;
+      - I muse upon all your deeds;
       second_half:
       - I consider the works of your hands.
     6:
@@ -10379,7 +10908,9 @@
       - do not hide your face from me
       - or I shall be like those who go down to the Pit.
     8:
-      first_half: Let me hear of your loving-kindness in the morning, for I put my trust in you;
+      first_half:
+      - Let me hear of your loving-kindness in the morning,
+      - for I put my trust in you;
       second_half:
       - show me the road that I must walk,
       - for I lift up my soul to you.
@@ -10396,10 +10927,11 @@
       second_half:
       - for your righteousness’ sake, bring me out of trouble.
     12:
-      first_half: Of your goodness, destroy my enemies and bring all my foes to naught,
+      first_half:
+      - Of your goodness, destroy my enemies
+      - and bring all my foes to naught,
       second_half:
       - for truly I am your servant.
-      - 'Thirtieth Day: Morning Prayer'
 144:
   latin: Benedictus Dominus
   verses:
@@ -10566,7 +11098,9 @@
   latin: Lauda, anima mea
   verses:
     1:
-      first_half: Hallelujah! Praise the LORD, O my soul!
+      first_half:
+      - Hallelujah!
+      - Praise the LORD, O my soul!
       second_half:
       - I will praise the LORD as long as I live;
       - I will sing praises to my God while I have my being.
@@ -10591,11 +11125,15 @@
       second_half:
       - and food to those who hunger.
     7:
-      first_half: The LORD sets the prisoners free; the LORD opens the eyes of the blind;
+      first_half:
+      - The LORD sets the prisoners free;
+      - the LORD opens the eyes of the blind;
       second_half:
       - the LORD lifts up those who are bowed down;
     8:
-      first_half: The LORD loves the righteous; the LORD cares for the stranger;
+      first_half:
+      - The LORD loves the righteous;
+      - the LORD cares for the stranger;
       second_half:
       - he sustains the orphan and widow,
       - but frustrates the way of the wicked.
@@ -10604,12 +11142,13 @@
       second_half:
       - your God, O Zion, throughout all generations.
       - Hallelujah!
-      - 'Thirtieth Day: Evening Prayer'
 147:
   latin: Laudate Dominum
   verses:
     1:
-      first_half: Hallelujah! How good it is to sing praises to our God!
+      first_half:
+      - Hallelujah!
+      - How good it is to sing praises to our God!
       second_half:
       - how pleasant it is to honor him with praise!
     2:
@@ -10697,7 +11236,9 @@
   latin: Laudate Dominum
   verses:
     1:
-      first_half: Hallelujah! Praise the LORD from the heavens;
+      first_half:
+      - Hallelujah!
+      - Praise the LORD from the heavens;
       second_half:
       - praise him in the heights.
     2:
@@ -10750,7 +11291,9 @@
       - for his Name only is exalted,
       - his splendor is over earth and heaven.
     14:
-      first_half: He has raised up strength for his people and praise for all his loyal servants,
+      first_half:
+      - He has raised up strength for his people
+      - and praise for all his loyal servants,
       second_half:
       - the children of Israel, a people who are near him.
       - Hallelujah!
@@ -10758,7 +11301,9 @@
   latin: Cantate Domino
   verses:
     1:
-      first_half: Hallelujah! Sing to the LORD a new song;
+      first_half:
+      - Hallelujah!
+      - Sing to the LORD a new song;
       second_half:
       - sing his praise in the congregation of the faithful.
     2:
@@ -10798,7 +11343,9 @@
   latin: Laudate Dominum
   verses:
     1:
-      first_half: Hallelujah! Praise God in his holy temple;
+      first_half:
+      - Hallelujah!
+      - Praise God in his holy temple;
       second_half:
       - praise him in the firmament of his power.
     2:

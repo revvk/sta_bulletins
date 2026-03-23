@@ -214,6 +214,22 @@ def _pop_has_confession(pop_form: str, notes: str) -> bool:
 # Proper Preface selection (BCP pp.377-382)
 # ---------------------------------------------------------------------------
 
+def detect_special_service(title: str) -> str | None:
+    """Detect if this is a special service requiring its own liturgical flow.
+
+    Returns a key like 'maundy_thursday', 'good_friday', 'palm_sunday',
+    or None for regular services.
+    """
+    t = title.lower()
+    if "palm sunday" in t or "sunday of the passion" in t:
+        return "palm_sunday"
+    if "maundy" in t:
+        return "maundy_thursday"
+    if "good friday" in t:
+        return "good_friday"
+    return None
+
+
 def _is_holy_week(title: str) -> bool:
     """Check if this is Holy Week (Palm Sunday through Holy Saturday)."""
     t = title.lower()
@@ -337,6 +353,19 @@ def get_seasonal_rules(title: str, color: str, notes: str,
     # Proper Preface
     preface_key, preface_options, prompt_preface = _get_proper_preface_key(
         title, season)
+
+    # --- Special service overrides (Holy Week) ---
+    special = detect_special_service(title)
+    if special == "maundy_thursday":
+        # Maundy Thursday uses the festal acclamation, not Lenten penitential
+        use_penitential = False
+        acc_cel = "Blessed be God: Father, Son, and Holy Spirit."
+        acc_ppl = "And blessed be his kingdom, now and for ever. Amen."
+    elif special == "good_friday":
+        # Good Friday has its own unique acclamation and no penitential order
+        use_penitential = False
+        acc_cel = "Blessed be our God."
+        acc_ppl = "For ever and ever. Amen."
 
     return SeasonalRules(
         use_penitential_order=use_penitential,

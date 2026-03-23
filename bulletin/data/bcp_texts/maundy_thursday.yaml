@@ -1,0 +1,61 @@
+# Maundy Thursday proper texts (BCP pp. 274-275)
+# These texts are fixed year to year; only readings and music vary.
+
+acclamation:
+  celebrant: "Blessed be God: Father, Son, and Holy Spirit."
+  people: "And blessed be his kingdom, now and for ever. Amen."
+
+foot_washing:
+  invitation: >-
+    Fellow servants of our Lord Jesus Christ: on the night before his
+    death, Jesus set an example for his disciples by washing their feet,
+    an act of humble service. He taught that strength and growth in the
+    life of the Kingdom of God come not by power, authority, or even
+    miracle, but by such lowly service.
+  rubric: >-
+    All are invited to the foot washing stations in order to have
+    their feet washed and participate in the washing of others.
+
+anthem:
+  rubric: >-
+    At the conclusion of the foot washing, all stand and the
+    Celebrant and people say the following anthem
+  sections:
+    - text: >-
+        The Lord Jesus, after he had supped with his disciples and had
+        washed their feet, said to them, "Do you know what I, your Lord
+        and Master, have done to you? I have given you an example, that
+        you should do as I have done."
+      bold: false
+    - text: >-
+        Peace is my last gift to you, my own peace I now leave with you;
+        peace which the world cannot give, I give to you.
+      bold: true
+    - text: >-
+        I give you a new commandment: Love one another as I have loved you.
+      bold: false
+    - text: >-
+        Peace is my last gift to you, my own peace I now leave with you;
+        peace which the world cannot give, I give to you.
+      bold: true
+    - text: >-
+        By this shall the world know that you are my disciples: That you
+        have love for one another.
+      bold: false
+
+stripping:
+  rubric: >-
+    The altar is stripped of all ornament until all is desolate,
+    without music or speech.
+  psalm_ref: "Psalm 22"
+  psalm_rubric: "Read in unison."
+  closing_rubric: >-
+    After the lights have been brought back up, all depart in silence.
+
+watch:
+  text: >-
+    All are invited to keep watch in Michie Hall. A night vigil of
+    prayer begins at 9 pm and continues through 11 am on Good Friday,
+    recalling Jesus' charge to his disciples in the garden of
+    Gethsemane to "Stay awake and pray." Prayer books and aids are
+    available at the vigil.

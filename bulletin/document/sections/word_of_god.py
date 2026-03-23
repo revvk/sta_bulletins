@@ -63,9 +63,9 @@ def add_word_of_god(doc: Document, rules: SeasonalRules, data: dict):
 
     # --- Penitential Order (Lent) or standard Word of God ---
     if rules.use_penitential_order:
-        _add_penitential_order(doc, rules, data, prayers)
+        add_penitential_order(doc, rules, data, prayers)
     else:
-        _add_standard_opening(doc, rules, data, prayers)
+        add_standard_opening(doc, rules, data, prayers)
 
     # --- Collect of the Day ---
     add_spacer(doc)
@@ -74,7 +74,7 @@ def add_word_of_god(doc: Document, rules: SeasonalRules, data: dict):
     add_people_line(doc, "People", "And also with you.")
     add_celebrant_line(doc, "Celebrant", "Let us pray.")
     add_spacer(doc)
-    _add_body_with_amen(doc, data["collect_text"])
+    add_body_with_amen(doc, data["collect_text"])
 
     # --- Be seated for readings / Children ---
     add_spacer(doc)
@@ -98,11 +98,11 @@ def add_word_of_god(doc: Document, rules: SeasonalRules, data: dict):
         add_spacer(doc)
 
     # --- First Reading ---
-    _add_reading(doc, data["reading_1_ref"], data["reading_1_text"])
+    add_reading(doc, data["reading_1_ref"], data["reading_1_text"])
 
     # --- Psalm ---
     add_spacer(doc)
-    _add_psalm(doc, data["psalm_ref"], data.get("psalm_rubric", ""),
+    add_psalm(doc, data["psalm_ref"], data.get("psalm_rubric", ""),
                data["psalm_text"])
 
     # --- Sequence Hymn ---
@@ -110,10 +110,10 @@ def add_word_of_god(doc: Document, rules: SeasonalRules, data: dict):
     if service_time != "8 am":
         add_introductory_rubric(doc, "Please stand.")
         add_heading2(doc, "Sequence Hymn")
-        _add_song_smart(doc, data.get("sequence_hymn"))
+        add_song_smart(doc, data.get("sequence_hymn"))
 
     # --- Gospel ---
-    _add_gospel(doc, data["gospel_ref"], data["gospel_book"],
+    add_gospel(doc, data["gospel_ref"], data["gospel_book"],
                 data["gospel_text"], service_time=service_time)
 
     # --- Sermon ---
@@ -126,7 +126,7 @@ def add_word_of_god(doc: Document, rules: SeasonalRules, data: dict):
     add_spacer(doc)
     add_introductory_rubric(doc, "Please stand.")
     add_heading2(doc, "The Nicene Creed")
-    _add_nicene_creed(doc, prayers)
+    add_nicene_creed(doc, prayers)
 
     # --- Prayers of the People ---
     add_spacer(doc)
@@ -139,7 +139,7 @@ def add_word_of_god(doc: Document, rules: SeasonalRules, data: dict):
     # --- Confession & Absolution (if not already done in Penitential Order) ---
     if not rules.no_confession_after_pop:
         add_spacer(doc)
-        _add_confession(doc, prayers)
+        add_confession(doc, prayers)
 
     # --- The Peace ---
     add_spacer(doc)
@@ -149,7 +149,7 @@ def add_word_of_god(doc: Document, rules: SeasonalRules, data: dict):
     add_people_line(doc, "People", "And also with you.")
 
 
-def _add_standard_opening(doc: Document, rules: SeasonalRules,
+def add_standard_opening(doc: Document, rules: SeasonalRules,
                           data: dict, prayers: dict):
     """Standard (non-Lent) opening: Word of God → Processional → Acclamation → Collect for Purity → Song of Praise."""
     service_time = data.get("service_time", "9 am")
@@ -161,20 +161,20 @@ def _add_standard_opening(doc: Document, rules: SeasonalRules,
     add_introductory_rubric(doc, "Please stand.")
     add_heading2(doc, "Processional")
     if service_time != "8 am":
-        _add_song_smart(doc, data.get("processional"))
+        add_song_smart(doc, data.get("processional"))
 
     # Opening Acclamation
     add_spacer(doc)
     add_introductory_rubric(doc, "Remain standing.")
     add_heading2(doc, "Opening Acclamation")
     cel_text = rules.acclamation_celebrant.replace("{cross}", CROSS_SYMBOL)
-    _add_celebrant_with_cross(doc, "Celebrant", cel_text)
+    add_celebrant_with_cross(doc, "Celebrant", cel_text)
     add_people_line(doc, "People", rules.acclamation_people)
     add_spacer(doc)
 
     # Collect for Purity
     if rules.include_collect_for_purity:
-        _add_body_with_amen(doc, prayers["collect_for_purity"])
+        add_body_with_amen(doc, prayers["collect_for_purity"])
 
     # Song of Praise / Kyrie / Advent Wreath
     add_spacer(doc)
@@ -184,10 +184,10 @@ def _add_standard_opening(doc: Document, rules: SeasonalRules,
     elif service_time == "8 am":
         _add_gloria_spoken(doc, prayers)
     else:
-        _add_song_smart(doc, data.get("song_of_praise"))
+        add_song_smart(doc, data.get("song_of_praise"))
 
 
-def _add_penitential_order(doc: Document, rules: SeasonalRules,
+def add_penitential_order(doc: Document, rules: SeasonalRules,
                            data: dict, prayers: dict):
     """Lenten opening: Penitential Order → Processional → Acclamation → [Decalogue/Sentence] → Confession → Word of God → Kyrie."""
     service_time = data.get("service_time", "9 am")
@@ -199,14 +199,14 @@ def _add_penitential_order(doc: Document, rules: SeasonalRules,
     add_introductory_rubric(doc, "Please stand.")
     add_heading2(doc, "Processional")
     if service_time != "8 am":
-        _add_song_smart(doc, data.get("processional"))
+        add_song_smart(doc, data.get("processional"))
 
     # Opening Acclamation
     add_spacer(doc)
     add_introductory_rubric(doc, "Remain standing.")
     add_heading2(doc, "Opening Acclamation")
     cel_text = rules.acclamation_celebrant.replace("{cross}", CROSS_SYMBOL)
-    _add_celebrant_with_cross(doc, "Celebrant", cel_text)
+    add_celebrant_with_cross(doc, "Celebrant", cel_text)
     add_people_line(doc, "People", rules.acclamation_people)
     add_spacer(doc)
 
@@ -226,7 +226,7 @@ def _add_penitential_order(doc: Document, rules: SeasonalRules,
     # Confession
     add_spacer(doc)
     add_introductory_rubric(doc, "Please kneel or remain standing.")
-    _add_confession(doc, prayers)
+    add_confession(doc, prayers)
 
     # Then "The Word of God" section heading
     add_heading(doc, "The Word of God")
@@ -238,10 +238,10 @@ def _add_penitential_order(doc: Document, rules: SeasonalRules,
     if service_time == "8 am":
         _add_kyrie_spoken(doc)
     else:
-        _add_song_smart(doc, data.get("song_of_praise"))
+        add_song_smart(doc, data.get("song_of_praise"))
 
 
-def _add_confession(doc: Document, prayers: dict):
+def add_confession(doc: Document, prayers: dict):
     """Add the Confession of Sin and Absolution."""
     add_heading2(doc, "Confession of Sin")
     add_rubric(doc, "The Deacon or a Priest says")
@@ -288,20 +288,36 @@ def _add_decalogue(doc: Document, prayers: dict):
     add_spacer(doc)
 
 
-def _add_reading(doc: Document, reference: str, reading):
-    """Add a scripture reading with responses."""
-    add_heading2(doc, f"The Scriptures: {reference}")
+def _add_reading_text(doc: Document, reading):
+    """Render the text of a scripture reading (prose, poetry, or interleaved).
 
-    # Add the reading text
-    if hasattr(reading, "paragraphs"):
+    Supports three formats:
+    - segments: list of {type: 'prose'/'poetry'} dicts for interleaved content
+    - paragraphs + poetry_lines: prose first, then poetry appended
+    - plain string fallback
+    """
+    if hasattr(reading, "segments") and reading.segments:
+        for seg in reading.segments:
+            if seg["type"] == "prose":
+                add_scripture_text(doc, seg["text"])
+            elif seg["type"] == "poetry":
+                for line in seg["lines"]:
+                    add_scripture_text(doc, line, style="Reading (Poetry)")
+    elif hasattr(reading, "paragraphs"):
         for i, para in enumerate(reading.paragraphs):
             add_scripture_text(doc, para, indent=(i > 0))
         if reading.has_poetry:
             for line in reading.poetry_lines:
                 add_scripture_text(doc, line, style="Reading (Poetry)")
     else:
-        # Fallback: reading is a plain string
         add_scripture_text(doc, str(reading))
+
+
+def add_reading(doc: Document, reference: str, reading):
+    """Add a scripture reading with responses."""
+    add_heading2(doc, f"The Scriptures: {reference}")
+
+    _add_reading_text(doc, reading)
 
     add_spacer(doc)
     add_rubric(doc, "After the reading, the Reader will say")
@@ -309,7 +325,7 @@ def _add_reading(doc: Document, reference: str, reading):
     add_people_line(doc, "People", "Thanks be to God.")
 
 
-def _add_psalm(doc: Document, reference: str, rubric: str, lines):
+def add_psalm(doc: Document, reference: str, rubric: str, lines):
     """Add a psalm or canticle.
 
     Each entry in *lines* is a single verse formatted as:
@@ -366,7 +382,7 @@ def _add_psalm(doc: Document, reference: str, rubric: str, lines):
             _add_text_runs(p, para, bold=bold_verse)
 
 
-def _add_gospel(doc: Document, reference: str, book: str, reading,
+def add_gospel(doc: Document, reference: str, book: str, reading,
                 service_time: str = "9 am"):
     """Add the Gospel reading with announcement and response."""
     add_spacer(doc)
@@ -397,7 +413,7 @@ def _add_gospel(doc: Document, reference: str, book: str, reading,
     add_people_line(doc, "People", "Praise to you, Lord Christ.")
 
 
-def _add_nicene_creed(doc: Document, prayers: dict):
+def add_nicene_creed(doc: Document, prayers: dict):
     """Add the Nicene Creed in the three-article format."""
     creed_lines = prayers["nicene_creed"]
     # Group into three articles (separated by blank lines)
@@ -503,7 +519,7 @@ def _add_advent_wreath(doc: Document, data: dict):
             run.italic = True
 
 
-def _add_song_smart(doc: Document, song_data: dict | None,
+def add_song_smart(doc: Document, song_data: dict | None,
                     force_single_column: bool = False):
     """Add a song, choosing two-column layout when it saves space.
 
@@ -544,7 +560,7 @@ def _add_song_smart(doc: Document, song_data: dict | None,
         add_song(doc, song_data)
 
 
-def _add_body_with_amen(doc: Document, text: str):
+def add_body_with_amen(doc: Document, text: str):
     """Add body text, making the final 'Amen.' bold."""
     if text.rstrip().endswith("Amen."):
         body = text.rstrip()[:-5]
@@ -557,7 +573,7 @@ def _add_body_with_amen(doc: Document, text: str):
         add_body(doc, text)
 
 
-def _add_celebrant_with_cross(doc: Document, label: str, text: str):
+def add_celebrant_with_cross(doc: Document, label: str, text: str):
     """Add a celebrant line, rendering {cross} / ✠ as a bold-italic cross symbol."""
     p = doc.add_paragraph(style="Body - Dialogue")
     if label:

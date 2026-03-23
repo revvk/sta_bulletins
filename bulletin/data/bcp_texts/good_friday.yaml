@@ -1,0 +1,131 @@
+# Good Friday proper texts (BCP pp. 276-282)
+# The Solemn Collects and other texts are fixed year to year.
+
+acclamation:
+  celebrant: "Blessed be our God."
+  people: "For ever and ever. Amen."
+
+entrance_rubric: "On this day the ministers enter in silence."
+
+solemn_collects:
+  introduction: >-
+    Dear People of God: Our heavenly Father sent his Son into the
+    world, not to condemn the world, but that the world through him
+    might be saved; that all who believe in him might be delivered
+    from the power of sin and death, and become heirs with him of
+    everlasting life.
+  exhortation: >-
+    We pray, therefore, for people everywhere according to their needs.
+  rubric: >-
+    All kneel in silence. After each bidding, the people pray
+    silently. The Celebrant stands to pray the Collect.
+
+  collects:
+    - title: "For the Holy Catholic Church"
+      bidding: >-
+        Let us pray for the holy Catholic Church of Christ throughout
+        the world; for its unity in witness and service; for all
+        bishops and other ministers and the people whom they serve;
+        for Rob, our Bishop; for all Christians in this community;
+        and for those about to be baptized.
+      collect: >-
+        Almighty and everlasting God, by whose Spirit the whole body
+        of your faithful people is governed and sanctified: Receive
+        our supplications and prayers which we offer before you for
+        all members of your holy Church, that in their vocation and
+        ministry they may truly and devoutly serve you; through our
+        Lord and Savior Jesus Christ. Amen.
+
+    - title: "For All Nations and Peoples of the Earth"
+      bidding: >-
+        Let us pray for all nations and peoples of the earth, and
+        for those in authority among them; for Donald, the President
+        of the United States; for the Congress and the Supreme Court;
+        for the members of the United Nations; and for all who serve
+        the common good.
+      collect: >-
+        Almighty God, kindle, we pray, in every heart the true love
+        of peace, and guide with your wisdom those who take counsel
+        for the nations of the earth; that in tranquility your
+        dominion may increase, until the earth is filled with the
+        knowledge of your love; through Jesus Christ our Lord. Amen.
+
+    - title: "For All Who Suffer and Are Afflicted"
+      bidding: >-
+        Let us pray for all who suffer and are afflicted in body or
+        in mind; for the hungry and the homeless, the destitute and
+        the oppressed; for the sick, the wounded, and the crippled;
+        for those in loneliness, fear, and anguish; for those who
+        face temptation, doubt, and despair; for the sorrowful and
+        bereaved; for prisoners and captives, and those in mortal
+        danger.
+      collect: >-
+        Gracious God, the comfort of all who sorrow, the strength
+        of all who suffer: Let the cry of those in misery and need
+        come to you, that they may find your mercy present with them
+        in all their afflictions; and give us, we pray, the strength
+        to serve them for the sake of him who suffered for us, your
+        Son Jesus Christ our Lord. Amen.
+
+    - title: "For All Who Have Not Received the Gospel"
+      bidding: >-
+        Let us pray for those who have never heard the word of
+        salvation, for those who have lost their faith, for those
+        hardened by sin or indifference, for the contemptuous and
+        the scornful, for those who are enemies of the cross of
+        Christ and persecutors of his disciples, and for all who in
+        the name of Christ have persecuted others.
+      collect: >-
+        Merciful God, creator of all the peoples of the earth and
+        lover of souls: Have compassion on all who do not know you
+        as you are revealed in your Son Jesus Christ; let your
+        Gospel be preached with grace and power to those who have
+        not heard it; turn the hearts of those who resist it; and
+        bring home to your fold those who have gone astray; that
+        there may be one flock under one shepherd, Jesus Christ our
+        Lord. Amen.
+
+    - title: "For the Grace of a Holy Life"
+      bidding: >-
+        Let us commit ourselves to God, and pray for the grace of
+        a holy life, that, with all who have departed this world and
+        have died in the peace of Christ, and those whose faith is
+        known to God alone, we may be accounted worthy to enter into
+        the fullness of the joy of our Lord, and receive the crown
+        of life in the day of resurrection.
+      collect: >-
+        O God of unchangeable power and eternal light: Look
+        favorably on your whole Church, that wonderful and sacred
+        mystery; by the effectual working of your providence, carry
+        out in tranquility the plan of salvation; let the whole
+        world see and know that things which were cast down are
+        being raised up, and things which had grown old are being
+        made new, and that all things are being brought to their
+        perfection by him through whom all things were made, your
+        Son Jesus Christ our Lord; who lives and reigns with you,
+        in the unity of the Holy Spirit, one God, for ever and
+        ever. Amen.
+
+veneration:
+  antiphon: >-
+    We glory in your cross, O Lord, and praise and glorify your
+    holy resurrection; for by virtue of your cross joy has come
+    to the whole world.
+  antiphon_psalm: >-
+    May God be merciful to us and bless us, show us the light of
+    his countenance, and come to us. Let your ways be known upon
+    earth, your saving health among all nations. Let the peoples
+    praise you, O God; let all the peoples praise you.
+
+closing_prayer: >-
+  Lord Jesus Christ, Son of the living God, we pray you to set
+  your passion, cross, and death between your judgment and our
+  souls, now and in the hour of our death. Give mercy and grace
+  to the living; pardon and rest to the dead; to your holy Church
+  peace and concord; and to us sinners everlasting life and glory;
+  for with the Father and the Holy Spirit you live and reign, one
+  God, now and for ever. Amen.
+
+closing_rubric: >-
+  The ministers leave in silence. Please leave in silence as you
+  are ready.

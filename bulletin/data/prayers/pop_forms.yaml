@@ -467,7 +467,7 @@ form_V:
 # Form V Immigration (based on BCP Form V, p.389)
 # ==========================================================================
 form_V_immigration:
-  title: "Prayers of the People Form V"
+  title: "Prayers of the People Form V (Immigration Focus)"
   elements:
     - type: leader
       text: >-
@@ -663,7 +663,7 @@ form_VI:
 
     - type: leader
       text: >-
-        We pray for all who have died {departed}, that they may
+        We pray for all who have died ✠ {departed}, that they may
         have a place in your eternal kingdom.
     - type: rubric
       text: "Silence. The People may add their own petitions."
@@ -679,7 +679,7 @@ form_VI:
 # Form VI Immigration Focus  (custom adaptation; separate from Form VI "w/ confession")
 # ==========================================================================
 form_VI_immigration:
-  title: "Prayers of the People Form VI"
+  title: "Prayers of the People Form VI (Immigration Focus)"
   elements:
     - type: leader
       text: "In peace, we pray to you, Lord God."
@@ -761,7 +761,7 @@ form_VI_immigration:
 
     - type: leader
       text: >-
-        We pray for all who have died {departed}, that they may
+        We pray for all who have died ✠ {departed}, that they may
         have a place in your eternal kingdom.
     - type: rubric
       text: "Silence. The People may add their own petitions."

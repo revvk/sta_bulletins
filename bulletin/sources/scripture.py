@@ -59,11 +59,17 @@ def _reading_to_cache(reading: "ScriptureReading") -> dict:
 
 def _reading_from_cache(reference: str, data: dict) -> "ScriptureReading":
     """Reconstruct a ScriptureReading from cached JSON data."""
+    # Collapse multiple spaces (legacy cache entries may have uncollapsed
+    # whitespace from oremus.org poetry formatting)
+    paragraphs = [re.sub(r'  +', ' ', p) for p in data["paragraphs"]]
+    poetry_lines = [re.sub(r'  +', ' ', l) for l in data.get("poetry_lines", [])]
+    segments = data.get("segments")
     return ScriptureReading(
         reference=reference,
-        paragraphs=data["paragraphs"],
-        poetry_lines=data.get("poetry_lines", []),
+        paragraphs=paragraphs,
+        poetry_lines=poetry_lines,
         has_poetry=data.get("has_poetry", False),
+        segments=segments,
     )
 
 
@@ -74,6 +80,7 @@ class ScriptureReading:
     paragraphs: list[str]       # Prose paragraphs, verse nums inline
     poetry_lines: list[str]     # If poetry section exists, individual lines
     has_poetry: bool            # Whether the text contains poetic formatting
+    segments: list[dict] | None = None  # For interleaved prose/poetry
 
     @property
     def text(self) -> str:

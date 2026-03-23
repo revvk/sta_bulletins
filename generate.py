@@ -8,6 +8,8 @@ Usage:
     python generate.py 2026-03-01 --service "11 am"        # 11am only
     python generate.py 2026-03-01 --no-prompt              # use defaults
     python generate.py 2026-03-01 --reading-sheets         # bulletins + reading sheets
+    python generate.py 2026-04-02                          # Maundy Thursday → 7 pm
+    python generate.py 2026-04-03                          # Good Friday → 7 pm
 """
 
 import argparse
@@ -16,7 +18,7 @@ from datetime import date, datetime
 from pathlib import Path
 
 from bulletin.config import CHURCH_NAME, SERVICE_TIMES, get_lectionary_year
-from bulletin.logic.rules import get_short_liturgical_title
+from bulletin.logic.rules import get_short_liturgical_title, detect_special_service
 from bulletin.sources.google_sheet import get_bulletin_data
 from bulletin.sources.music_9am import fetch_9am_music
 from bulletin.sources.music_11am import get_11am_music_slots
@@ -56,7 +58,7 @@ def main():
     parser.add_argument("date",
                         help="Target date in YYYY-MM-DD format")
     parser.add_argument("--service", "-s",
-                        choices=SERVICE_TIMES + ["all"],
+                        choices=SERVICE_TIMES + ["7 pm", "all"],
                         default="all",
                         help="Which service to generate (default: all)")
     parser.add_argument("--output", "-o",
@@ -77,12 +79,6 @@ def main():
         print(f"Error: Invalid date format '{args.date}'. Use YYYY-MM-DD.")
         sys.exit(1)
 
-    # Determine which services to generate
-    if args.service == "all":
-        services = list(SERVICE_TIMES)
-    else:
-        services = [args.service]
-
     print(f"Generating bulletin for {target_date.strftime('%B %-d, %Y')}...")
 
     # Step 1: Fetch Google Sheet data (shared across all services)
@@ -98,6 +94,20 @@ def main():
     if schedule.eucharistic_prayer:
         print(f"  Eucharistic Prayer: {schedule.eucharistic_prayer}")
 
+    # Detect special weekday services (Maundy Thursday, Good Friday)
+    special = detect_special_service(schedule.title)
+    is_weekday_special = special in ("maundy_thursday", "good_friday")
+
+    # Determine which services to generate
+    if args.service != "all":
+        services = [args.service]
+    elif is_weekday_special:
+        # Weekday special services → one bulletin at "7 pm"
+        services = ["7 pm"]
+        print(f"  Detected weekday special service: generating 7 pm bulletin")
+    else:
+        services = list(SERVICE_TIMES)
+
     # Step 2: Fetch scripture readings (shared across all services)
     print("  Fetching scripture readings...")
     refs_to_fetch = {}
@@ -105,6 +115,17 @@ def main():
         refs_to_fetch["reading"] = schedule.reading
     if schedule.gospel:
         refs_to_fetch["gospel"] = schedule.gospel
+
+    # Palm Sunday: also fetch the Palm Gospel (triumphal entry reading)
+    if special == "palm_sunday":
+        from bulletin.data.loader import load_palm_sunday
+        palm_texts = load_palm_sunday()
+        liturgy = palm_texts["liturgy_of_the_palms"]
+        year_num = target_date.year
+        remainder = year_num % 3
+        lect_year = "A" if remainder == 1 else ("B" if remainder == 2 else "C")
+        palm_gospel_ref = liturgy["palm_gospel"].get(lect_year, "Matthew 21:1-11")
+        refs_to_fetch["palm_gospel"] = palm_gospel_ref
 
     scripture_readings = {}
     if refs_to_fetch:
@@ -139,12 +160,15 @@ def main():
             print(f"  Warning: Could not fetch 9am music: {e}")
 
     music_11am_slots = None
-    if "11 am" in services:
+    if "11 am" in services or "7 pm" in services:
+        # 11am and weekday services use the Service Music tab
         if sheet_data.music:
             music_11am_slots = get_11am_music_slots(sheet_data.music)
-            print(f"  Found {len(music_11am_slots)} music slots for 11am")
+            label = "7 pm" if "7 pm" in services else "11am"
+            print(f"  Found {len(music_11am_slots)} music slots for {label}")
         else:
-            print("  Warning: No 11am music data found for this date")
+            label = "7 pm" if "7 pm" in services else "11am"
+            print(f"  Warning: No {label} music data found for this date")
 
     prompt_fn = None if args.no_prompt else prompt_choice
 
@@ -164,7 +188,8 @@ def main():
         # Select the appropriate music data for this service
         if service_time == "9 am":
             music_data = music_9am
-        elif service_time == "11 am":
+        elif service_time in ("11 am", "7 pm"):
+            # Weekday services use the same Service Music tab as 11am
             music_data = music_11am_slots
         else:
             music_data = None
@@ -196,7 +221,15 @@ def main():
             short_title = get_short_liturgical_title(schedule.title, schedule.proper)
             year_letter = get_lectionary_year(target_date.year)
             ep_letter = builder.eucharistic_prayer
-            output_path = output_dir / f"{date_str} - {short_title}{year_letter} - {service_time} (HEII-{ep_letter}) - Bulletin.docx"
+
+            if builder.special_service == "good_friday":
+                # Good Friday has no Eucharist → no EP designation
+                output_path = output_dir / f"{date_str} - {short_title}{year_letter} - {service_time} - Bulletin.docx"
+            elif builder.special_service:
+                # Other special weekday services (Maundy Thursday)
+                output_path = output_dir / f"{date_str} - {short_title}{year_letter} - {service_time} (HEII-{ep_letter}) - Bulletin.docx"
+            else:
+                output_path = output_dir / f"{date_str} - {short_title}{year_letter} - {service_time} (HEII-{ep_letter}) - Bulletin.docx"
 
         # Remove old file first (macOS quarantine attribute workaround)
         if output_path.exists():
@@ -210,8 +243,8 @@ def main():
             for s in builder._missing_songs:
                 print(f"    - {s}")
 
-    # Step 6: Generate reading sheets (if requested)
-    if args.reading_sheets:
+    # Step 6: Generate reading sheets (if requested, not for weekday services)
+    if args.reading_sheets and not is_weekday_special:
         print("\n  === Generating reading sheets ===")
 
         # Build a reference builder to get the shared reading/POP data.

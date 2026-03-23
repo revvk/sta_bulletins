@@ -165,6 +165,25 @@ _STYLE_DEFS = [
      WD_ALIGN_PARAGRAPH.LEFT, 0, 0, 0, 0, 1.0),
 ]
 
+# Passion Gospel part styles — created dynamically in _create_passion_gospel_styles.
+# Each part gets its own style (e.g., "Passion Gospel - Narrator") with a hanging
+# indent so the speaker label sits on the left and spoken text wraps cleanly.
+# All style definitions are identical; separate styles allow generating
+# individual reading sheets for each part later.
+_PASSION_GOSPEL_PARTS = [
+    # Matthew (Year A)
+    "Narrator", "Jesus", "Pilate", "Wife", "Soldier",
+    "Servant 1", "Servant 2", "Passerby 1", "Passerby 2",
+    "Chief Priest", "Scribe", "Elder", "Bystander 1", "Bystander 2",
+    "Centurion",
+    # John (Good Friday) — additional parts
+    "Peter", "Guard", "Police", "Priest", "Slave",
+    # Luke (Year C) — additional parts
+    "Disciples", "Maid", "Officer",
+    # John (Good Friday) — additional parts
+    "Elder 1", "Elder 2", "Slave",
+]
+
 # Styles that get the left + right tab stops.
 _STYLES_WITH_TABS = {"Body", "Body - Dialogue"}
 
@@ -294,6 +313,10 @@ def _create_styles(doc: Document, style_defs=None):
         if name in _STYLES_WITH_TABS:
             _add_tab_stops(pf)
 
+    # --- Passion Gospel part styles ---
+    if style_defs is _STYLE_DEFS:
+        _create_passion_gospel_styles(doc)
+
     # --- Character styles ---
     _create_character_styles(doc)
 
@@ -323,6 +346,42 @@ def _add_tab_stops(pf):
     tab_stops = pf.tab_stops
     tab_stops.add_tab_stop(Inches(_TAB_LEFT_INCHES), WD_TAB_ALIGNMENT.LEFT)
     tab_stops.add_tab_stop(Inches(_TAB_RIGHT_INCHES), WD_TAB_ALIGNMENT.RIGHT)
+
+
+def _create_passion_gospel_styles(doc: Document):
+    """Create a paragraph style for each Passion Gospel speaking part.
+
+    Each style has a hanging indent: the speaker name sits at the left margin
+    and spoken text wraps at a tab stop (1.18" indent with -0.86" first-line).
+    The styles are identical in formatting but named separately
+    (e.g., "Passion Gospel - Narrator") so individual reading sheets can
+    be generated later by filtering on style name.
+    """
+    for part_name in _PASSION_GOSPEL_PARTS:
+        style_name = f"Passion Gospel - {part_name}"
+        try:
+            style = doc.styles[style_name]
+        except KeyError:
+            style = doc.styles.add_style(style_name, 1)  # PARAGRAPH
+
+        style.font.name = FONT_BODY
+        style.font.size = Pt(11)
+        style.font.bold = False
+        style.font.italic = False
+        style.font.color.rgb = RGBColor(0, 0, 0)
+
+        pf = style.paragraph_format
+        pf.alignment = WD_ALIGN_PARAGRAPH.LEFT
+        # Hanging indent: left at 1.18", first line pulls back to 0.32"
+        pf.left_indent = Inches(1.18)
+        pf.first_line_indent = Inches(-0.86)
+        pf.space_before = Pt(0)
+        pf.space_after = Pt(0)
+        pf.line_spacing = 1.0
+
+        # Tab stop at the hanging indent position for clean text alignment
+        tab_stops = pf.tab_stops
+        tab_stops.add_tab_stop(Inches(1.18), WD_TAB_ALIGNMENT.LEFT)
 
 
 def _create_character_styles(doc: Document):

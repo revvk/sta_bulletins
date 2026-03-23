@@ -36,6 +36,7 @@ def load_front_cover(
     service_time: str,
     liturgical_title: str,
     subtitle: str = " ",
+    cover_template: str = None,
 ) -> Document:
     """Open the front-cover template and fill in dynamic fields.
 
@@ -45,11 +46,14 @@ def load_front_cover(
         liturgical_title:  e.g. "Second Sunday in Lent"
         subtitle:          Optional subtitle line; defaults to a single
                            space to preserve the template's spacing.
+        cover_template:    Optional template filename (e.g. "palm_sunday_cover.docx").
+                           Defaults to "front_cover.docx" if not provided.
 
     Returns:
         A python-docx Document with placeholders replaced.
     """
-    template_path = _TEMPLATES_DIR / "front_cover.docx"
+    filename = cover_template if cover_template else "front_cover.docx"
+    template_path = _TEMPLATES_DIR / filename
     if not template_path.exists():
         raise FileNotFoundError(f"Front cover template not found: {template_path}")
 
