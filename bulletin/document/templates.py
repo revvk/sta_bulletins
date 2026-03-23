@@ -162,8 +162,13 @@ def append_template_page(doc: Document, template_filename: str):
                 last_p.insert(0, pPr)
             pPr.append(main_sect_pr)
 
-    # Append template elements with remapped rIds
+    # Append template elements with remapped rIds, but skip the
+    # template's own <w:sectPr> — having multiple direct-child sectPr
+    # elements in the body produces invalid XML that triggers Word's
+    # "unreadable content" recovery dialog.
     for element in list(tmpl_body):
+        if element.tag == qn("w:sectPr"):
+            continue
         elem_copy = deepcopy(element)
         if rid_map:
             _remap_rids(elem_copy, rid_map)
