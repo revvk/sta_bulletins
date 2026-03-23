@@ -125,8 +125,17 @@ _STYLE_DEFS = [
      WD_ALIGN_PARAGRAPH.LEFT, 0.32, 0, 0, 0, 1.0),
 
     # Scripture reading poetry (prophetic/poetic quotations)
+    # Indent 0 (base poetry): left 0.705" to visually set off from prose (0.32")
     ("Reading (Poetry)", FONT_BODY, 11, False, False,
-     WD_ALIGN_PARAGRAPH.LEFT, 0.455, -0.135, 0, 0, 1.0),
+     WD_ALIGN_PARAGRAPH.LEFT, 0.705, -0.135, 0, 0, 1.0),
+
+    # Poetry indent level 1: additional 0.25" indent
+    ("Reading (Poetry Indent 1)", FONT_BODY, 11, False, False,
+     WD_ALIGN_PARAGRAPH.LEFT, 0.955, -0.135, 0, 0, 1.0),
+
+    # Poetry indent level 2: additional 0.50" indent
+    ("Reading (Poetry Indent 2)", FONT_BODY, 11, False, False,
+     WD_ALIGN_PARAGRAPH.LEFT, 1.205, -0.135, 0, 0, 1.0),
 
     # Psalm text (non-bold base; bold applied per-verse for responsive readings)
     ("Psalm", FONT_BODY, 12, False, False,
@@ -226,7 +235,15 @@ _RS_STYLE_DEFS = [
 
     # Scripture reading poetry
     ("Reading (Poetry)", FONT_BODY, 16, False, False,
-     WD_ALIGN_PARAGRAPH.LEFT, 0.455, -0.135, 0, 0, 1.0),
+     WD_ALIGN_PARAGRAPH.LEFT, 0.705, -0.135, 0, 0, 1.0),
+
+    # Poetry indent level 1
+    ("Reading (Poetry Indent 1)", FONT_BODY, 16, False, False,
+     WD_ALIGN_PARAGRAPH.LEFT, 0.955, -0.135, 0, 0, 1.0),
+
+    # Poetry indent level 2
+    ("Reading (Poetry Indent 2)", FONT_BODY, 16, False, False,
+     WD_ALIGN_PARAGRAPH.LEFT, 1.205, -0.135, 0, 0, 1.0),
 
     # Psalm text
     ("Psalm", FONT_BODY, 16, False, False,

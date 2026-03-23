@@ -302,7 +302,20 @@ def _add_reading_text(doc: Document, reading):
                 add_scripture_text(doc, seg["text"])
             elif seg["type"] == "poetry":
                 for line in seg["lines"]:
-                    add_scripture_text(doc, line, style="Reading (Poetry)")
+                    # Lines can be plain strings (legacy) or dicts with indent
+                    if isinstance(line, dict):
+                        indent_level = line.get("indent", 0)
+                        text = line["text"]
+                    else:
+                        indent_level = 0
+                        text = line
+                    if indent_level == 0:
+                        style = "Reading (Poetry)"
+                    elif indent_level == 1:
+                        style = "Reading (Poetry Indent 1)"
+                    else:
+                        style = "Reading (Poetry Indent 2)"
+                    add_scripture_text(doc, text, style=style)
     elif hasattr(reading, "paragraphs"):
         for i, para in enumerate(reading.paragraphs):
             add_scripture_text(doc, para, indent=(i > 0))

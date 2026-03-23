@@ -94,39 +94,72 @@
   },
   "Matthew 21:1-11": {
     "has_poetry": true,
+    "paragraphs": [
+      "\u00011\u0001 When they had come near Jerusalem and had reached Bethphage, at the Mount of Olives, Jesus sent two disciples, \u00012\u0001 saying to them, ‘Go into the village ahead of you, and immediately you will find a donkey tied, and a colt with her; untie them and bring them to me. \u00013\u0001 If anyone says anything to you, just say this, “The Lord needs them.” And he will send them immediately.’*\u00014\u0001 This took place to fulfill what had been spoken through the prophet, saying,",
+      "\u00016\u0001 The disciples went and did as Jesus had directed them; \u00017\u0001 they brought the donkey and the colt, and put their cloaks on them, and he sat on them. \u00018\u0001 A very large crowd* spread their cloaks on the road, and others cut branches from the trees and spread them on the road. \u00019\u0001 The crowds that went ahead of him and that followed were shouting,",
+      "\u000110\u0001 When he entered Jerusalem, the whole city was in turmoil, asking, ‘Who is this?’ \u000111\u0001 The crowds were saying, ‘This is the prophet Jesus from Nazareth in Galilee.’"
+    ],
+    "poetry_lines": [
+      "\u00015\u0001 ‘Tell the daughter of Zion,",
+      "Look, your king is coming to you,",
+      "humble, and mounted on a donkey,",
+      "and on a colt, the foal of a donkey.’",
+      "‘Hosanna to the Son of David!",
+      "Blessed is the one who comes in the name of the Lord!",
+      "Hosanna in the highest heaven!’"
+    ],
     "segments": [
       {
-        "type": "prose",
-        "text": "\u00011\u0001 When they had come near Jerusalem and had reached Bethphage, at the Mount of Olives, Jesus sent two disciples, \u00012\u0001 saying to them, ‘Go into the village ahead of you, and immediately you will find a donkey tied, and a colt with her; untie them and bring them to me. \u00013\u0001 If anyone says anything to you, just say this, “The Lord needs them.” And he will send them immediately.’ \u00014\u0001 This took place to fulfill what had been spoken through the prophet, saying,"
+        "text": "\u00011\u0001 When they had come near Jerusalem and had reached Bethphage, at the Mount of Olives, Jesus sent two disciples, \u00012\u0001 saying to them, ‘Go into the village ahead of you, and immediately you will find a donkey tied, and a colt with her; untie them and bring them to me. \u00013\u0001 If anyone says anything to you, just say this, “The Lord needs them.” And he will send them immediately.’*\u00014\u0001 This took place to fulfill what had been spoken through the prophet, saying,",
+        "type": "prose"
       },
       {
-        "type": "poetry",
         "lines": [
-          "\u00015\u0001 ‘Tell the daughter of Zion,",
-          "Look, your king is coming to you,",
-          "humble, and mounted on a donkey,",
-          "and on a colt, the foal of a donkey.’"
-        ]
+          {
+            "indent": 0,
+            "text": "\u00015\u0001 ‘Tell the daughter of Zion,"
+          },
+          {
+            "indent": 0,
+            "text": "Look, your king is coming to you,"
+          },
+          {
+            "indent": 1,
+            "text": "humble, and mounted on a donkey,"
+          },
+          {
+            "indent": 1,
+            "text": "and on a colt, the foal of a donkey.’"
+          }
+        ],
+        "type": "poetry"
       },
       {
-        "type": "prose",
-        "text": "\u00016\u0001 The disciples went and did as Jesus had directed them; \u00017\u0001 they brought the donkey and the colt, and put their cloaks on them, and he sat on them. \u00018\u0001 A very large crowd spread their cloaks on the road, and others cut branches from the trees and spread them on the road. \u00019\u0001 The crowds that went ahead of him and that followed were shouting,"
+        "text": "\u00016\u0001 The disciples went and did as Jesus had directed them; \u00017\u0001 they brought the donkey and the colt, and put their cloaks on them, and he sat on them. \u00018\u0001 A very large crowd* spread their cloaks on the road, and others cut branches from the trees and spread them on the road. \u00019\u0001 The crowds that went ahead of him and that followed were shouting,",
+        "type": "prose"
       },
       {
-        "type": "poetry",
         "lines": [
-          "‘Hosanna to the Son of David!",
-          "Blessed is the one who comes in the name of the Lord!",
-          "Hosanna in the highest heaven!’"
-        ]
+          {
+            "indent": 0,
+            "text": "‘Hosanna to the Son of David!"
+          },
+          {
+            "indent": 1,
+            "text": "Blessed is the one who comes in the name of the Lord!"
+          },
+          {
+            "indent": 0,
+            "text": "Hosanna in the highest heaven!’"
+          }
+        ],
+        "type": "poetry"
       },
       {
-        "type": "prose",
-        "text": "\u000110\u0001 When he entered Jerusalem, the whole city was in turmoil, asking, ‘Who is this?’ \u000111\u0001 The crowds were saying, ‘This is the prophet Jesus from Nazareth in Galilee.’"
+        "text": "\u000110\u0001 When he entered Jerusalem, the whole city was in turmoil, asking, ‘Who is this?’ \u000111\u0001 The crowds were saying, ‘This is the prophet Jesus from Nazareth in Galilee.’",
+        "type": "prose"
       }
-    ],
-    "paragraphs": [],
-    "poetry_lines": []
+    ]
   },
   "Matthew 26:14-27:66": {
     "has_poetry": false,
@@ -187,6 +220,98 @@
       "\u000111\u0001 and every tongue should confess",
       "that Jesus Christ is Lord,",
       "to the glory of God the Father."
+    ],
+    "segments": [
+      {
+        "text": "\u00015\u0001 Let the same mind be in you that was* in Christ Jesus,",
+        "type": "prose"
+      },
+      {
+        "lines": [
+          {
+            "indent": 0,
+            "text": "\u00016\u0001 who, though he was in the form of God,"
+          },
+          {
+            "indent": 1,
+            "text": "did not regard equality with God"
+          },
+          {
+            "indent": 1,
+            "text": "as something to be exploited,"
+          },
+          {
+            "indent": 0,
+            "text": "\u00017\u0001 but emptied himself,"
+          },
+          {
+            "indent": 1,
+            "text": "taking the form of a slave,"
+          },
+          {
+            "indent": 1,
+            "text": "being born in human likeness."
+          },
+          {
+            "indent": 0,
+            "text": "And being found in human form,"
+          },
+          {
+            "indent": 0,
+            "text": "\u00018\u0001 he humbled himself"
+          },
+          {
+            "indent": 1,
+            "text": "and became obedient to the point of death—"
+          },
+          {
+            "indent": 1,
+            "text": "even death on a cross."
+          }
+        ],
+        "type": "poetry"
+      },
+      {
+        "lines": [
+          {
+            "indent": 0,
+            "text": "\u00019\u0001 Therefore God also highly exalted him"
+          },
+          {
+            "indent": 1,
+            "text": "and gave him the name"
+          },
+          {
+            "indent": 1,
+            "text": "that is above every name,"
+          },
+          {
+            "indent": 0,
+            "text": "\u000110\u0001 so that at the name of Jesus"
+          },
+          {
+            "indent": 1,
+            "text": "every knee should bend,"
+          },
+          {
+            "indent": 1,
+            "text": "in heaven and on earth and under the earth,"
+          },
+          {
+            "indent": 0,
+            "text": "\u000111\u0001 and every tongue should confess"
+          },
+          {
+            "indent": 1,
+            "text": "that Jesus Christ is Lord,"
+          },
+          {
+            "indent": 1,
+            "text": "to the glory of God the Father."
+          }
+        ],
+        "type": "poetry"
+      }
     ]
   }
 }

@@ -50,11 +50,14 @@ def _save_cache(cache: dict):
 
 def _reading_to_cache(reading: "ScriptureReading") -> dict:
     """Serialize a ScriptureReading for JSON storage."""
-    return {
+    data = {
         "paragraphs": reading.paragraphs,
         "poetry_lines": reading.poetry_lines,
         "has_poetry": reading.has_poetry,
     }
+    if reading.segments:
+        data["segments"] = reading.segments
+    return data
 
 
 def _reading_from_cache(reference: str, data: dict) -> "ScriptureReading":
@@ -89,7 +92,14 @@ class ScriptureReading:
 
 
 def fetch_reading(reference: str) -> ScriptureReading:
-    """Fetch a scripture reading from the Oremus Bible Browser."""
+    """Fetch a scripture reading from the Oremus Bible Browser.
+
+    Poetry structure (indent levels, line breaks) is extracted directly
+    from Oremus HTML using <br> tag classes:
+      - <br class="ii/kk/oo"> = new line at indent 0
+      - <br> (bare)           = continuation at indent 1
+      - <br class="uu/plus-b"> = end of poetry section
+    """
     params = dict(OREMUS_PARAMS)
     params["passage"] = reference
 
@@ -153,14 +163,30 @@ def _parse_oremus_response(soup: BeautifulSoup, reference: str) -> ScriptureRead
                     tokens.append(("verse", num))
                 continue
 
-            # <br/> = line break, but only inside blockquotes (poetry).
-            # Prose <br/> tags are just visual wrapping and should be ignored.
+            # <br/> = line break in poetry sections.
+            # The CSS class on the <br> encodes the indent level:
+            #   "ii", "kk", "oo" = new line at indent 0 (verse/stanza start)
+            #   no class          = continuation at indent 1
+            #   "uu"              = end of poetry, return to prose
+            #   "plus-b"          = end of stanza
             if desc.name == "br":
-                if desc.find_parent("blockquote"):
-                    tokens.append(("poetry_br", None))
+                br_classes = set(classes)
+                if br_classes & {"uu"}:
+                    # End of poetry section — return to prose
+                    tokens.append(("poetry_end", None))
+                elif br_classes & {"plus-b"}:
+                    # End of stanza (may be followed by more poetry)
+                    tokens.append(("poetry_end", None))
+                elif br_classes & {"ii", "kk", "oo"}:
+                    # New poetry line at indent 0
+                    tokens.append(("poetry_br", 0))
+                elif not br_classes:
+                    # Bare <br/> = continuation at indent 1
+                    tokens.append(("poetry_br", 1))
+                # Other classes: ignore
                 continue
 
-            # <blockquote> = start of poetry section
+            # <blockquote> = start of poetry section (some passages use this)
             if desc.name == "blockquote":
                 tokens.append(("para", None))
                 continue
@@ -208,59 +234,102 @@ def _parse_oremus_response(soup: BeautifulSoup, reference: str) -> ScriptureRead
     # for t in tokens:
     #     print(t)
 
-    # Now assemble tokens into paragraphs
-    paragraphs = []
-    poetry_lines = []
+    # Now assemble tokens into segments (prose/poetry interleaved)
+    segments = []
+    paragraphs = []      # Flat list of all paragraphs (for backward compat)
     has_poetry = False
     current = []
+    in_poetry = False
+    current_poetry_lines = []  # list of {"text": str, "indent": int}
+    current_indent = 0
+
+    def _flush_prose():
+        """Flush current text buffer as prose."""
+        text = "".join(current).strip()
+        if text:
+            text = text.replace('\xa0', ' ')
+            text = text.replace('\n', ' ')
+            text = re.sub(r'  +', ' ', text)
+            text = _americanize_text(text)
+            paragraphs.append(text)
+            if segments and segments[-1]["type"] == "prose":
+                segments[-1]["text"] += " " + text
+            else:
+                segments.append({"type": "prose", "text": text})
+
+    def _flush_poetry_line():
+        """Flush current text buffer as a poetry line."""
+        text = "".join(current).strip()
+        if text:
+            # Replace non-breaking spaces with regular spaces, then collapse
+            text = text.replace('\xa0', ' ')
+            text = re.sub(r'  +', ' ', text)
+            text = _americanize_text(text)
+            current_poetry_lines.append({"text": text, "indent": current_indent})
+
+    def _flush_poetry_block():
+        """Flush accumulated poetry lines as a poetry segment."""
+        nonlocal current_poetry_lines
+        if current_poetry_lines:
+            segments.append({"type": "poetry", "lines": list(current_poetry_lines)})
+            current_poetry_lines = []
 
     for ttype, tval in tokens:
         if ttype == "para":
-            text = "".join(current).strip()
-            if text:
-                paragraphs.append(text)
-            current = []
+            if in_poetry:
+                _flush_poetry_line()
+                current = []
+            else:
+                _flush_prose()
+                current = []
+
         elif ttype == "verse":
-            # Mark verse numbers with \x01 delimiters so the formatter
-            # can reliably detect them without heuristic regex.
             current.append(f"\x01{tval}\x01 ")
+
         elif ttype == "text":
             current.append(tval)
+
         elif ttype == "poetry_br":
             has_poetry = True
-            # Save current line and start new one
-            line = "".join(current).strip()
-            if line:
-                poetry_lines.append(line)
-            current = []
+            if not in_poetry:
+                # Entering poetry: flush any accumulated prose first
+                _flush_prose()
+                current = []
+                in_poetry = True
+            else:
+                # Already in poetry: flush current line
+                _flush_poetry_line()
+                current = []
+            current_indent = tval  # 0 or 1
 
-    # Flush remaining
-    text = "".join(current).strip()
-    if text:
-        if has_poetry and poetry_lines:
-            poetry_lines.append(text)
-        paragraphs.append(text)
+        elif ttype == "poetry_end":
+            if in_poetry:
+                _flush_poetry_line()
+                current = []
+                _flush_poetry_block()
+                in_poetry = False
+                current_indent = 0
 
-    # Clean up whitespace in paragraphs
-    cleaned = []
-    for p in paragraphs:
-        # Collapse multiple spaces
-        p = re.sub(r'  +', ' ', p).strip()
-        if p:
-            cleaned.append(p)
+    # Flush remaining content
+    if in_poetry:
+        _flush_poetry_line()
+        _flush_poetry_block()
+    else:
+        _flush_prose()
 
-    # Americanize British spellings (NRSV from Oremus uses British English)
-    cleaned = [_americanize_text(p) for p in cleaned]
-    poetry_cleaned = [
-        _americanize_text(re.sub(r'  +', ' ', l).strip())
-        for l in poetry_lines if l.strip()
-    ]
+    # Build backward-compatible flat paragraphs and poetry_lines
+    all_poetry_lines = []
+    for seg in segments:
+        if seg["type"] == "poetry":
+            for line in seg["lines"]:
+                all_poetry_lines.append(line["text"])
 
     return ScriptureReading(
         reference=reference,
-        paragraphs=cleaned,
-        poetry_lines=poetry_cleaned,
+        paragraphs=paragraphs,
+        poetry_lines=all_poetry_lines,
         has_poetry=has_poetry,
+        segments=segments if has_poetry else None,
     )
 
 
