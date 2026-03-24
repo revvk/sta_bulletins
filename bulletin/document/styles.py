@@ -182,7 +182,7 @@ _STYLE_DEFS = [
 _PASSION_GOSPEL_PARTS = [
     # Matthew (Year A)
     "Narrator", "Jesus", "Pilate", "Wife", "Soldier",
-    "Servant 1", "Servant 2", "Passerby 1", "Passerby 2",
+    "Crowd",
     "Chief Priest", "Scribe", "Elder", "Bystander 1", "Bystander 2",
     "Centurion",
     # John (Good Friday) — additional parts
@@ -381,9 +381,12 @@ def _create_passion_gospel_styles(doc: Document):
         except KeyError:
             style = doc.styles.add_style(style_name, 1)  # PARAGRAPH
 
-        style.font.name = FONT_BODY
+        if part_name == "Crowd":
+            style.font.name = FONT_BODY_BOLD
+            style.font.bold = True
+        else:
+            style.font.name = FONT_BODY
         style.font.size = Pt(11)
-        style.font.bold = False
         style.font.italic = False
         style.font.color.rgb = RGBColor(0, 0, 0)
 
