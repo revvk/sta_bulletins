@@ -112,9 +112,14 @@ def add_liturgy_of_the_palms(doc: Document, rules: SeasonalRules,
     add_introductory_rubric(doc, procession["rubric"])
 
     # Processional hymn(s)
-    add_spacer(doc)
-    processional = wog_data.get("processional")
-    add_song_smart(doc, processional)
+    processional_songs = wog_data.get("processional_songs", [])
+    if processional_songs:
+        for i, song in enumerate(processional_songs):
+            add_spacer(doc)
+            add_song_smart(doc, song)
+    else:
+        add_spacer(doc)
+        add_song_smart(doc, wog_data.get("processional"))
 
 
 def add_palm_sunday_word_of_god(doc: Document, rules: SeasonalRules,

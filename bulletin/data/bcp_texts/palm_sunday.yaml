@@ -64,7 +64,7 @@ liturgy_of_the_palms:
 passion_gospel:
   # Rubric before the passion reading
   seating_rubric: >-
-    The congregation may be seated for the first part of the Passion.
+    The congregation may be seated for the first part of the Passion and will say the part of the "Crowd" in unison.
     At the verse which mentions the arrival at Golgotha all stand.
   announcement: "The Passion of our Lord Jesus Christ according to {gospel_book}."
   omission_rubric: "The customary responses before and after the Gospel are omitted."

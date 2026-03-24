@@ -300,13 +300,19 @@ class BulletinBuilder:
 
         # Palm Sunday processional is sung outside without hymnals,
         # so always print full lyrics (even for 11am).
-        if service_time == "11 am" and wog_data.get("processional"):
-            proc = wog_data["processional"]
-            if not proc.get("sections"):
-                # Re-lookup with full lyrics
-                full_song = self.song_lookup(proc.get("title", ""), self.service_time)
-                if full_song and full_song.get("sections"):
-                    wog_data["processional"] = self._apply_canonical_title(full_song)
+        if service_time == "11 am" and wog_data.get("processional_songs"):
+            refreshed = []
+            for proc in wog_data["processional_songs"]:
+                if not proc.get("sections"):
+                    full_song = self.song_lookup(proc.get("title", ""), self.service_time)
+                    if full_song and full_song.get("sections"):
+                        refreshed.append(self._apply_canonical_title(full_song))
+                    else:
+                        refreshed.append(proc)
+                else:
+                    refreshed.append(proc)
+            wog_data["processional_songs"] = refreshed
+            wog_data["processional"] = refreshed[0] if refreshed else None
 
         # Liturgy of the Palms
         add_liturgy_of_the_palms(doc, self.rules, wog_data, ps_data)
@@ -577,7 +583,19 @@ class BulletinBuilder:
     def _prepare_word_of_god_data(self) -> dict:
         """Prepare the data dict for add_word_of_god."""
         # Look up songs from music data
-        processional = self._lookup_slot("Processional")
+        # Look up processional(s) — may be "Processional" or "Processional 1"/"Processional 2"
+        processional_songs = []
+        for slot_name in ["Processional 1", "Processional 2", "Processional 3"]:
+            song = self._lookup_slot(slot_name)
+            if song:
+                processional_songs.append(song)
+        if not processional_songs:
+            single = self._lookup_slot("Processional")
+            if single:
+                processional_songs = [single]
+        # For backward compatibility, also provide single processional
+        processional = processional_songs[0] if processional_songs else None
+
         song_of_praise = self._lookup_slot("Song of Praise")
         sequence = self._lookup_slot("Sequence")
 
@@ -628,6 +646,7 @@ class BulletinBuilder:
         return {
             "service_time": self.service_time,
             "processional": processional,
+            "processional_songs": processional_songs,
             "song_of_praise": song_of_praise,
             "sequence_hymn": sequence,
             "collect_text": self._get_collect_text(),

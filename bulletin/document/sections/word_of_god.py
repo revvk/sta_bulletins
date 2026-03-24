@@ -20,6 +20,7 @@ Covers everything from the processional hymn through The Peace:
 """
 
 from docx import Document
+from docx.shared import Pt
 
 from bulletin.config import CROSS_SYMBOL, FONT_BODY_BOLD
 from bulletin.data.loader import load_common_prayers
@@ -377,10 +378,19 @@ def add_psalm(doc: Document, reference: str, rubric: str, lines):
             if "\n" in verse_text:
                 sub_lines = verse_text.split("\n")
                 for i, sub in enumerate(sub_lines):
-                    if i > 0:
+                    if sub.startswith("\v"):
+                        # First-half continuation: new paragraph so it
+                        # starts at the left like the first line
+                        p.paragraph_format.space_after = Pt(0)
+                        p = doc.add_paragraph(style="Psalm")
+                        p.paragraph_format.space_before = Pt(0)
+                        _add_text_runs(p, sub[1:], bold=bold_verse)
+                    elif i > 0:
                         run = p.add_run()
                         run.add_break()
-                    _add_text_runs(p, sub, bold=bold_verse)
+                        _add_text_runs(p, sub, bold=bold_verse)
+                    else:
+                        _add_text_runs(p, sub, bold=bold_verse)
             else:
                 _add_text_runs(p, verse_text, bold=bold_verse)
     elif hasattr(lines, "paragraphs"):

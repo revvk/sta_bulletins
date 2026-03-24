@@ -642,7 +642,7 @@ def _add_qr_code(doc: Document, paragraph):
         f'    <wp:posOffset>{pos_h}</wp:posOffset>'
         f'  </wp:positionH>'
         f'  <wp:positionV relativeFrom="paragraph">'
-        f'    <wp:posOffset>0</wp:posOffset>'
+        f'    <wp:posOffset>45720</wp:posOffset>'
         f'  </wp:positionV>'
         f'  <wp:extent cx="{cx}" cy="{cy}"/>'
         f'  <wp:effectExtent l="0" t="0" r="0" b="0"/>'

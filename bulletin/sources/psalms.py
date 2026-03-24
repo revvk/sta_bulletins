@@ -58,7 +58,11 @@ class PsalmSelection:
             parts = []
             if verse.first_half:
                 if isinstance(verse.first_half, list):
-                    parts.extend(verse.first_half)
+                    # Mark first-half continuation lines with \v prefix
+                    # so the renderer knows they should be left-aligned
+                    parts.append(verse.first_half[0])
+                    for fh_line in verse.first_half[1:]:
+                        parts.append(f"\v{fh_line}")
                 else:
                     parts.append(verse.first_half)
             for sh_line in verse.second_half:
