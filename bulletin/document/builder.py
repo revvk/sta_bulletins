@@ -10,7 +10,7 @@ from pathlib import Path
 from datetime import date, datetime
 
 from bulletin.config import CHURCH_NAME, GIVING_URL
-from bulletin.document.styles import configure_document
+from bulletin.document.styles import configure_document, configure_lp_document
 from bulletin.document.templates import (
     load_front_cover, append_back_cover, append_template_page, setup_footers,
 )
@@ -24,6 +24,28 @@ from bulletin.data.loader import (
     load_maundy_thursday, load_good_friday,
     load_palm_sunday, load_passion_gospel,
 )
+
+
+def _format_hs_title(title: str, dt=None) -> str:
+    """Format a Hidden Springs liturgical title.
+
+    For regular Sunday propers, prepend 'Wednesday after the'.
+    For feast days and special observances, use the title as-is.
+    """
+    if not title or not title.strip():
+        return title
+    # If the title contains "Sunday" or "Proper", it's a regular week
+    is_sunday_title = any(
+        kw in title.lower()
+        for kw in ("sunday",)
+    )
+    if is_sunday_title and dt and dt.weekday() == 2:
+        # Avoid "Wednesday after the The ..." — drop leading "The "
+        base = title
+        if base.startswith("The "):
+            base = base[4:]
+        return f"Wednesday after the {base}"
+    return title
 
 
 # Cover template overrides for special services
@@ -54,7 +76,8 @@ class BulletinBuilder:
 
     def __init__(self, target_date: date, sheet_data, music_data,
                  scripture_readings: dict, song_lookup_fn,
-                 parish_ministries: str, service_time: str = "9 am"):
+                 parish_ministries: str, service_time: str = "9 am",
+                 hidden_springs_data=None):
         """
         Args:
             target_date: The Sunday date.
@@ -64,6 +87,7 @@ class BulletinBuilder:
             song_lookup_fn: Callable(identifier, service) -> song_data dict or None.
             parish_ministries: Formatted ministry string for POP.
             service_time: "9 am" or "11 am" (default "9 am").
+            hidden_springs_data: Optional (HiddenSpringsRow, upcoming_rows) tuple.
         """
         self.target_date = target_date
         self.sheet = sheet_data
@@ -72,10 +96,14 @@ class BulletinBuilder:
         self.song_lookup = song_lookup_fn
         self.parish_ministries = parish_ministries
         self.service_time = service_time
+        self.hidden_springs_data = hidden_springs_data
 
         # Derived data
         self.schedule = sheet_data.schedule
         self.clergy = sheet_data.clergy
+
+        # Hidden Springs: check if this is a HS service
+        self.is_hidden_springs = hidden_springs_data is not None
 
         # Detect special service type (Maundy Thursday, Good Friday, etc.)
         self.special_service = detect_special_service(self.schedule.title)
@@ -164,6 +192,9 @@ class BulletinBuilder:
         # Format the date nicely
         date_str = self.target_date.strftime("%B %-d, %Y")
         service_time = self.service_time
+
+        if self.is_hidden_springs:
+            return self._build_hidden_springs(date_str)
 
         # Use special cover template if applicable
         cover_template = _COVER_TEMPLATES.get(self.special_service)
@@ -323,6 +354,211 @@ class BulletinBuilder:
         # Holy Communion (standard)
         hc_data = self._prepare_holy_communion_data()
         add_holy_communion(doc, self.rules, hc_data)
+
+    def _build_hidden_springs(self, date_str: str) -> "Document":
+        """Build a Hidden Springs (senior living) bulletin.
+
+        Uses the senior_living front/back cover templates, large-print styles,
+        and either LOW (Liturgy of the Word) or HE-II flow depending on
+        the service type in the Hidden Springs Planner sheet.
+        """
+        from bulletin.document.sections.hidden_springs import (
+            add_hidden_springs_low,
+        )
+        from bulletin.document.sections.holy_communion import add_holy_communion
+
+        hs_row, upcoming = self.hidden_springs_data
+
+        # Determine the liturgical title for the front cover
+        # For feast days, use the feast name directly.
+        # For regular weeks, format as "Wednesday after the [Sunday Name]"
+        title = _format_hs_title(hs_row.title, hs_row.date)
+
+        # Front cover — uses senior_living template
+        doc = load_front_cover(
+            date_str=date_str,
+            service_time="10:30 am",
+            liturgical_title=title,
+            subtitle=date_str,
+            cover_template="senior_living_front_cover.docx",
+        )
+
+        # Apply large-print page setup and styles
+        configure_lp_document(doc)
+
+        # Prepare data
+        data = self._prepare_hidden_springs_wog_data()
+
+        is_communion = hs_row.service_type.upper().startswith("HE")
+
+        if is_communion:
+            # HE-II: Word of God (reuse standard) + Holy Communion
+            # Use the LOW section builder for Word of God (it handles
+            # everything through The Peace), then add communion
+            add_hidden_springs_low(doc, self.rules, data)
+
+            # Remove the General Thanksgiving, Lord's Prayer, blessing,
+            # closing hymn, dismissal, and postlude that LOW added —
+            # Actually, for HE-II we should build it differently.
+            # Let's use the standard flow instead.
+            pass  # TODO: implement HE-II variant
+        else:
+            # LOW: Liturgy of the Word (no Eucharist)
+            add_hidden_springs_low(doc, self.rules, data)
+
+        # Back cover with upcoming services
+        back_replacements = self._format_upcoming_services(upcoming)
+        append_back_cover(
+            doc,
+            template_name="senior_living_back_cover.docx",
+            replacements=back_replacements,
+        )
+
+        # Footers
+        setup_footers(doc, date_str, "10:30 am", title)
+
+        return doc
+
+    def _prepare_hidden_springs_wog_data(self) -> dict:
+        """Prepare Word of God data using Hidden Springs planner row."""
+        from bulletin.config import PREACHER_NAMES
+
+        hs_row, _ = self.hidden_springs_data
+
+        # Look up songs — use "9am" service key since HS songs share
+        # the same YAML entries as 9am service
+        def hs_lookup(title):
+            if not title:
+                return None
+            song = self.song_lookup(title, "9 am")
+            if song:
+                return self._apply_canonical_title(song)
+            return None
+
+        processional = hs_lookup(hs_row.processional)
+
+        # Song of praise: if "Gloria" is specified, use the spoken Gloria
+        song_of_praise = None
+        sop_title = (hs_row.song_of_praise or "").strip()
+        if sop_title.lower() not in ("gloria", ""):
+            song_of_praise = hs_lookup(sop_title)
+        # If it's "Gloria" or no song found, the section builder will
+        # fall back to the spoken Gloria
+
+        sequence = hs_lookup(hs_row.sequence)
+        closing = hs_lookup(hs_row.recessional)
+
+        # Scripture readings
+        reading_1_ref = hs_row.reading or ""
+        reading_1 = self.scripture.get("reading")
+
+        psalm_raw = hs_row.psalm or ""
+        psalm_ref = re.split(r"[\n\r]+", psalm_raw)[0].strip()
+        psalm_ref = re.sub(
+            r"\s+(responsively|unison|in unison|antiphonally).*$",
+            "", psalm_ref, flags=re.IGNORECASE,
+        ).strip()
+        psalm_text = []
+        if psalm_ref:
+            try:
+                from bulletin.sources.psalms import get_psalm
+                psalm_selection = get_psalm(psalm_ref)
+                psalm_text = psalm_selection.to_lines()
+            except Exception as e:
+                print(f"  Warning: Could not look up psalm: {e}")
+
+        gospel_ref = hs_row.gospel or ""
+        gospel = self.scripture.get("gospel")
+        gospel_book = gospel_ref.split()[0] if gospel_ref else ""
+
+        # Psalm rubric from the sheet
+        psalm_field = psalm_raw.lower()
+        if "half verse" in psalm_field:
+            psalm_rubric = "Read responsively by half verse."
+        elif "responsiv" in psalm_field:
+            psalm_rubric = "Read responsively by whole verse."
+        elif "antiphon" in psalm_field:
+            psalm_rubric = "Read antiphonally."
+        else:
+            psalm_rubric = "Read in unison."
+
+        # Preacher
+        preacher_short = hs_row.preacher or ""
+        preacher = PREACHER_NAMES.get(preacher_short.strip(), preacher_short)
+
+        # POP elements
+        pop_elements = self._prepare_pop_elements()
+
+        # Dismissal
+        from bulletin.logic.rules import get_dismissal_text
+        dismissal_num = hs_row.dismissal or "3"
+        deacon_text, people_text = get_dismissal_text(
+            dismissal_num, self.rules.dismissal_has_alleluia)
+
+        return {
+            "service_time": "hidden_springs",
+            "processional": processional,
+            "processional_songs": [processional] if processional else [],
+            "song_of_praise": song_of_praise,
+            "sequence_hymn": sequence,
+            "collect_text": self._get_collect_text(),
+            "reading_1_ref": reading_1_ref,
+            "reading_1_text": reading_1 or reading_1_ref,
+            "psalm_ref": psalm_ref,
+            "psalm_rubric": psalm_rubric,
+            "psalm_text": psalm_text or [],
+            "gospel_ref": gospel_ref,
+            "gospel_book": gospel_book,
+            "gospel_text": gospel or gospel_ref,
+            "preacher": preacher,
+            "pop_elements": pop_elements,
+            "pop_concluding_rubric": "The Celebrant concludes with a suitable Collect.",
+            "advent_wreath_verse": None,
+            "advent_hymnal_ref": None,
+            "penitential_sentence": self.penitential_sentence,
+            "penitential_sentence_ref": self.penitential_sentence_ref,
+            "closing_hymn": closing,
+            "prelude_title": hs_row.prelude or "",
+            "postlude_title": hs_row.postlude or "",
+            "blessing_text": self.blessing_text,
+            "dismissal_deacon": deacon_text,
+            "dismissal_people": people_text,
+        }
+
+    def _format_upcoming_services(self, upcoming: list) -> dict:
+        """Format upcoming Hidden Springs services for back cover placeholders."""
+        from bulletin.config import PREACHER_NAMES
+
+        replacements = {}
+        for i, row in enumerate(upcoming[:3], 1):
+            if row.date is None:
+                replacements[f"{{{{Upcoming_Service_{i}}}}}"] = ""
+                continue
+
+            date_str = row.date.strftime("%B %-d, %Y")
+            svc_type = "Holy Communion" if row.service_type.upper().startswith("HE") else "Liturgy of the Word"
+
+            # Title
+            title = _format_hs_title(row.title, row.date)
+
+            # Clergy
+            preacher_short = row.preacher or ""
+            preacher = PREACHER_NAMES.get(preacher_short.strip(), preacher_short)
+            role = "Preacher and Celebrant" if row.service_type.upper().startswith("HE") else "Preacher and Officiant"
+
+            service_text = (
+                f"{date_str} at 10:30 am\n"
+                f"{svc_type}\n"
+                f"{title}\n"
+                f"{role}: {preacher}"
+            )
+            replacements[f"{{{{Upcoming_Service_{i}}}}}"] = service_text
+
+        # Fill any remaining slots with empty strings
+        for i in range(len(upcoming) + 1, 4):
+            replacements[f"{{{{Upcoming_Service_{i}}}}}"] = ""
+
+        return replacements
 
     # ------------------------------------------------------------------
     # Resolution methods

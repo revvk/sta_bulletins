@@ -3176,6 +3176,9 @@
     - Glory, glory to his name!
 - title: I the Lord of Sea and Sky
   services: 9am
+  identifiers:
+    - "Here I Am, Lord"
+    - "Here I am, Lord"
   sections:
   - type: verse
     lines:

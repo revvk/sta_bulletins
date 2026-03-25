@@ -32,6 +32,9 @@ from bulletin.config import (
     PAGE_WIDTH_INCHES,
     PAGE_HEIGHT_INCHES,
     MARGIN_INCHES,
+    LP_PAGE_WIDTH_INCHES,
+    LP_PAGE_HEIGHT_INCHES,
+    LP_MARGIN_INCHES,
 )
 
 
@@ -455,3 +458,110 @@ def _setup_reading_sheet_page(doc: Document):
     settings_elem = doc.settings.element
     mirror = parse_xml(f'<w:mirrorMargins {nsdecls("w")}/>')
     settings_elem.append(mirror)
+
+
+# ---------------------------------------------------------------------------
+# Large-print (Hidden Springs / Senior Living) styles
+# ---------------------------------------------------------------------------
+# Same style names as the bulletin but with larger fonts for readability.
+# Tab stop positions adjusted for the wider US Letter page.
+
+_LP_TAB_LEFT_INCHES = 1.75
+_LP_TAB_RIGHT_INCHES = LP_PAGE_WIDTH_INCHES - 2 * LP_MARGIN_INCHES  # 7.5"
+
+_LP_STYLE_DEFS = [
+    # Major section dividers (centered): "The Word of God", "The Holy Communion"
+    ("Heading", FONT_HEADING, 21, True, False,
+     WD_ALIGN_PARAGRAPH.CENTER, 0, 0, 0, 0, 0.9),
+
+    # Section headers: "Processional", "Sermon", etc.
+    ("Heading 2", FONT_HEADING2, 18, False, False,
+     WD_ALIGN_PARAGRAPH.LEFT, 0, 0, 0, 0, 1.0),
+
+    # Main body text
+    ("Body", FONT_BODY, 16, False, False,
+     WD_ALIGN_PARAGRAPH.LEFT, 0.32, 0, 0, 0, 1.0),
+
+    # Celebrant/People dialogue with hanging indent
+    ("Body - Dialogue", FONT_BODY, 16, False, False,
+     WD_ALIGN_PARAGRAPH.LEFT, 1.75, -1.43, 0, 0, 1.0),
+
+    # Rubrics
+    ("Body - Rubric", FONT_BODY, 14, False, True,
+     WD_ALIGN_PARAGRAPH.LEFT, 0.32, 0, 2, 0, 1.0),
+
+    # Introductory rubrics
+    ("Body - Introductory Rubric", FONT_BODY, 14, False, True,
+     WD_ALIGN_PARAGRAPH.LEFT, 0.004, 0, 0, 0, 1.0),
+
+    # Song lyrics
+    ("Body - Lyrics", FONT_LYRICS, 16, False, False,
+     WD_ALIGN_PARAGRAPH.LEFT, 0.5, -0.18, 0, 0, 1.0),
+
+    # Right-column lyrics
+    ("Body - Lyrics Right", FONT_LYRICS, 16, False, False,
+     WD_ALIGN_PARAGRAPH.LEFT, 0.5, -0.38, 0, 0, 1.0),
+
+    # Scripture reading prose
+    ("Reading/Gospel Text", FONT_BODY, 16, False, False,
+     WD_ALIGN_PARAGRAPH.LEFT, 0.32, 0, 0, 0, 1.0),
+
+    # Scripture poetry (base indent)
+    ("Reading (Poetry)", FONT_BODY, 16, False, False,
+     WD_ALIGN_PARAGRAPH.LEFT, 0.705, -0.135, 0, 0, 1.0),
+
+    # Poetry indent level 1
+    ("Reading (Poetry Indent 1)", FONT_BODY, 16, False, False,
+     WD_ALIGN_PARAGRAPH.LEFT, 0.955, -0.135, 0, 0, 1.0),
+
+    # Poetry indent level 2
+    ("Reading (Poetry Indent 2)", FONT_BODY, 16, False, False,
+     WD_ALIGN_PARAGRAPH.LEFT, 1.205, -0.135, 0, 0, 1.0),
+
+    # Psalm text
+    ("Psalm", FONT_BODY, 16, False, False,
+     WD_ALIGN_PARAGRAPH.LEFT, 0.455, -0.13, 3, 0, 1.0),
+
+    # People's recitation
+    ("Body - People Recitation", FONT_BODY, 16, False, False,
+     WD_ALIGN_PARAGRAPH.LEFT, 0.32, 0, 6, 0, 1.0),
+
+    # Nicene Creed
+    ("Body - People Recitation (Creed)", FONT_BODY, 16, False, False,
+     WD_ALIGN_PARAGRAPH.LEFT, 0.455, -0.18, 6, 0, 1.0),
+
+    # Cover page text
+    ("Cover Note", FONT_BODY, 14, False, False,
+     WD_ALIGN_PARAGRAPH.JUSTIFY, 0, 0, 0, 0, 1.0),
+
+    # Spacer
+    ("Spacer - Small", FONT_BODY, 12, False, False,
+     WD_ALIGN_PARAGRAPH.LEFT, 0, 0, 0, 0, 1.0),
+
+    # Header & Footer
+    ("Header & Footer", FONT_HEADER_FOOTER, 11, False, False,
+     WD_ALIGN_PARAGRAPH.LEFT, 0, 0, 0, 0, 1.0),
+]
+
+
+def configure_lp_document(doc: Document):
+    """Set up page layout and styles for a large-print (Hidden Springs) bulletin.
+
+    Uses US Letter page size (8.5" x 11") and larger fonts throughout.
+    """
+    _setup_lp_page(doc)
+    _create_styles(doc, style_defs=_LP_STYLE_DEFS)
+
+
+def _setup_lp_page(doc: Document):
+    """Configure US Letter page size with 0.5" margins."""
+    section = doc.sections[0]
+    section.page_width = Inches(LP_PAGE_WIDTH_INCHES)
+    section.page_height = Inches(LP_PAGE_HEIGHT_INCHES)
+    section.left_margin = Inches(LP_MARGIN_INCHES)
+    section.right_margin = Inches(LP_MARGIN_INCHES)
+    section.top_margin = Inches(LP_MARGIN_INCHES)
+    section.bottom_margin = Inches(LP_MARGIN_INCHES)
+    section.header_distance = Inches(LP_MARGIN_INCHES)
+    section.footer_distance = Inches(0.25)
+    section.different_first_page_header_footer = True

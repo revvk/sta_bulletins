@@ -34,6 +34,11 @@ OREMUS_PARAMS = {
 # Service times that generate separate bulletins
 SERVICE_TIMES = ["8 am", "9 am", "11 am"]
 
+# Hidden Springs (senior living) page dimensions (US Letter)
+LP_PAGE_WIDTH_INCHES = 8.5
+LP_PAGE_HEIGHT_INCHES = 11.0
+LP_MARGIN_INCHES = 0.5
+
 # Church info
 CHURCH_NAME = "St. Andrew's Episcopal Church"
 CHURCH_CITY = "McKinney, Texas"

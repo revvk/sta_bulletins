@@ -259,6 +259,117 @@ def fetch_clergy_rota() -> list[ClergyRotaRow]:
     return results
 
 
+@dataclass
+class HiddenSpringsRow:
+    """One row from the Hidden Springs Planner sheet."""
+    service_type: str           # "LOW" or "HE-II"
+    date: Optional[date]
+    title: str                  # e.g., "Third Sunday in Lent"
+    proper: str
+    color: str
+    eucharistic_prayer: str
+    preface: str
+    reading: str
+    psalm: str
+    gospel: str
+    pop_form: str
+    special_blessing: str
+    closing_prayer: str
+    dismissal: str
+    preacher: str = ""          # Hidden Springs preacher
+    celebrant: str = ""         # Hidden Springs celebrant
+    notes: str = ""
+
+    # Music slots
+    prelude: str = ""
+    processional: str = ""
+    song_of_praise: str = ""
+    sequence: str = ""
+    offertory: str = ""
+    doxology: str = ""
+    communion: str = ""
+    recessional: str = ""
+    postlude: str = ""
+
+    # Whether the service is actually at St. Andrew's (not Hidden Springs)
+    at_st_andrews: bool = False
+
+
+def fetch_hidden_springs_planner() -> list[HiddenSpringsRow]:
+    """Fetch and parse the Hidden Springs Planner sheet."""
+    rows = _fetch_sheet_csv(SHEET_GIDS["hidden_springs"])
+    results = []
+    for row in rows:
+        dt = _parse_date(_get(row, "date"))
+        at_sta = _get(row, "check if service at st. andrew's",
+                       "check if service at st. andrew\u2019s").upper()
+        results.append(HiddenSpringsRow(
+            service_type=_get(row, "service type"),
+            date=dt,
+            title=_get(row, "sunday/commemoration title", "title"),
+            proper=_get(row, "proper"),
+            color=_get(row, "color"),
+            eucharistic_prayer=_get(row, "eucharistic prayer"),
+            preface=_get(row, "preface"),
+            reading=_get(row, "reading"),
+            psalm=_get(row, "psalm"),
+            gospel=_get(row, "gospel"),
+            pop_form=_get(row, "pop"),
+            special_blessing=_get(row, "special blessing"),
+            closing_prayer=_get(row, "clsing prayer", "closing prayer"),
+            dismissal=_get(row, "dismissal"),
+            preacher=_get(row, "hidden springs preacher"),
+            celebrant=_get(row, "hidden springs celebrant"),
+            notes=_get(row, "notes"),
+            prelude=_get(row, "prelude"),
+            processional=_get(row, "processional"),
+            song_of_praise=_get(row, "song of praise"),
+            sequence=_get(row, "sequence"),
+            offertory=_get(row, "offertory"),
+            doxology=_get(row, "doxology"),
+            communion=_get(row, "communion"),
+            recessional=_get(row, "recessional"),
+            postlude=_get(row, "postlude"),
+            at_st_andrews=(at_sta == "TRUE"),
+        ))
+    return results
+
+
+def get_hidden_springs_data(
+    target_date: date,
+) -> tuple[HiddenSpringsRow, list[HiddenSpringsRow]]:
+    """Look up the Hidden Springs row for a date + next 3 upcoming services.
+
+    Returns:
+        (target_row, upcoming_rows) where upcoming_rows has up to 3 future
+        services after the target date.
+    Raises ValueError if target_date not found.
+    """
+    all_rows = fetch_hidden_springs_planner()
+
+    target_row = None
+    for row in all_rows:
+        if row.date == target_date:
+            target_row = row
+            break
+
+    if target_row is None:
+        available = sorted(set(r.date.isoformat() for r in all_rows if r.date))
+        raise ValueError(
+            f"Date {target_date.isoformat()} not found in Hidden Springs Planner. "
+            f"Available: {available[0]} to {available[-1]}."
+        )
+
+    # Find next 3 services after target_date
+    upcoming = [
+        r for r in all_rows
+        if r.date and r.date > target_date
+    ]
+    upcoming.sort(key=lambda r: r.date)
+
+    return target_row, upcoming[:3]
+
+
 def fetch_service_music() -> list[ServiceMusicRow]:
     """Fetch and parse the Service Music sheet."""
     rows = _fetch_sheet_csv(SHEET_GIDS["service_music"])

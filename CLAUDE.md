@@ -34,8 +34,29 @@ Holy Week bulletins - in progress.
 ## Both Maundy Thursday and Good Friday - Resolved
 * Inside back covers inserted before back cover (inside_back_cover_maundy_thursday.docx, inside_back_cover_good_friday.docx)
 
-## Project Pieces Outstanding (detailed notes for next piece to work on are below):
-* Hidden Springs Bulletins (not started)
+## Hidden Springs Bulletins - In Progress
+* Basic LOW (Liturgy of the Word) bulletin generates for March 25 Annunciation
+* Uses `--service hidden_springs` flag: `python generate.py 2026-03-25 --service hidden_springs`
+* Data fetched from Hidden Springs Planner sheet (GID 2077691139)
+* Large-print styles (LP_) on US Letter paper (8.5"x11") with 16pt body text
+* Front/back cover templates: senior_living_front_cover.docx / senior_living_back_cover.docx
+* Back cover auto-populates next 3 upcoming Wednesday services from the planner
+* Song lyrics reuse the existing songs.yaml (9am service entries)
+* Title formatting: feast days use title as-is; regular weeks prepend "Wednesday after the [Sunday Name]"
+
+### Hidden Springs Outstanding:
+* HE-II (Holy Eucharist) service type — needs separate builder for communion section
+* Canticle support (e.g., Canticle 15 for Annunciation) — psalm parser doesn't handle canticles
+* Hidden Springs-specific POP forms (custom prayers referencing HS ministries)
+* Music file management (AAC/MIDI files, verse count matching)
+* Missing song lyrics for some HS-specific songs not in songs.yaml
+* Front cover template has typo: "Chruch" → "Church" (needs template .docx fix)
+* Special BOS blessings not rendering (e.g., Easter Season, Pentecost blessings from BOS)
+
+## Project Pieces Outstanding:
+* Hidden Springs HE-II services
+* Hidden Springs song lyrics completion
+* Hidden Springs-specific POP forms
 
 # Remember:
 All the the propers (which is the Episcopal word for the readings and prayers that are assigned for that day) and all the formatting styles are consistent across the 8 am, 9 am, and 11 am bulletins, as well as special service bulletins.

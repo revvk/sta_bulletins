@@ -19,7 +19,7 @@ from pathlib import Path
 
 from bulletin.config import CHURCH_NAME, SERVICE_TIMES, get_lectionary_year
 from bulletin.logic.rules import get_short_liturgical_title, detect_special_service
-from bulletin.sources.google_sheet import get_bulletin_data
+from bulletin.sources.google_sheet import get_bulletin_data, get_hidden_springs_data
 from bulletin.sources.music_9am import fetch_9am_music
 from bulletin.sources.music_11am import get_11am_music_slots
 from bulletin.sources.scripture import fetch_readings
@@ -58,7 +58,7 @@ def main():
     parser.add_argument("date",
                         help="Target date in YYYY-MM-DD format")
     parser.add_argument("--service", "-s",
-                        choices=SERVICE_TIMES + ["7 pm", "all"],
+                        choices=SERVICE_TIMES + ["7 pm", "hidden_springs", "all"],
                         default="all",
                         help="Which service to generate (default: all)")
     parser.add_argument("--output", "-o",
@@ -81,15 +81,56 @@ def main():
 
     print(f"Generating bulletin for {target_date.strftime('%B %-d, %Y')}...")
 
-    # Step 1: Fetch Google Sheet data (shared across all services)
-    print("  Fetching liturgical schedule from Google Sheets...")
-    try:
-        sheet_data = get_bulletin_data(target_date)
-    except ValueError as e:
-        print(f"Error: {e}")
-        sys.exit(1)
+    # Determine if this is a Hidden Springs request
+    is_hidden_springs = args.service == "hidden_springs"
 
-    schedule = sheet_data.schedule
+    # Step 1: Fetch data from Google Sheets
+    hs_data = None
+    if is_hidden_springs:
+        # Hidden Springs: fetch HS planner first, then build a synthetic
+        # BulletinData from the HS row for compatibility with the builder
+        print("  Fetching Hidden Springs planner data...")
+        try:
+            hs_row, hs_upcoming = get_hidden_springs_data(target_date)
+            hs_data = (hs_row, hs_upcoming)
+            print(f"  Found: {hs_row.title} ({hs_row.service_type})")
+            print(f"  Upcoming services: {len(hs_upcoming)}")
+        except ValueError as e:
+            print(f"Error: {e}")
+            sys.exit(1)
+
+        # Build a synthetic BulletinData from the HS row
+        from bulletin.sources.google_sheet import LiturgicalScheduleRow, BulletinData
+        synth_schedule = LiturgicalScheduleRow(
+            service_type=hs_row.service_type,
+            date=hs_row.date,
+            title=hs_row.title,
+            proper=hs_row.proper,
+            color=hs_row.color,
+            eucharistic_prayer=hs_row.eucharistic_prayer,
+            preface=hs_row.preface,
+            reading=hs_row.reading,
+            psalm=hs_row.psalm,
+            gospel=hs_row.gospel,
+            pop_form=hs_row.pop_form,
+            special_blessing=hs_row.special_blessing,
+            closing_prayer=hs_row.closing_prayer,
+            dismissal=hs_row.dismissal,
+            notes=hs_row.notes,
+        )
+        sheet_data = BulletinData(
+            schedule=synth_schedule, clergy=None, music=None)
+        schedule = synth_schedule
+        services = ["hidden_springs"]
+    else:
+        print("  Fetching liturgical schedule from Google Sheets...")
+        try:
+            sheet_data = get_bulletin_data(target_date)
+        except ValueError as e:
+            print(f"Error: {e}")
+            sys.exit(1)
+        schedule = sheet_data.schedule
+
     print(f"  Found: {schedule.title} ({schedule.color})")
     if schedule.eucharistic_prayer:
         print(f"  Eucharistic Prayer: {schedule.eucharistic_prayer}")
@@ -98,23 +139,30 @@ def main():
     special = detect_special_service(schedule.title)
     is_weekday_special = special in ("maundy_thursday", "good_friday")
 
-    # Determine which services to generate
-    if args.service != "all":
-        services = [args.service]
-    elif is_weekday_special:
-        # Weekday special services → one bulletin at "7 pm"
-        services = ["7 pm"]
-        print(f"  Detected weekday special service: generating 7 pm bulletin")
-    else:
-        services = list(SERVICE_TIMES)
+    # Determine which services to generate (if not already set for HS)
+    if not is_hidden_springs:
+        if args.service != "all":
+            services = [args.service]
+        elif is_weekday_special:
+            services = ["7 pm"]
+            print(f"  Detected weekday special service: generating 7 pm bulletin")
+        else:
+            services = list(SERVICE_TIMES)
 
-    # Step 2: Fetch scripture readings (shared across all services)
+    # Step 2: Fetch scripture readings
     print("  Fetching scripture readings...")
     refs_to_fetch = {}
-    if schedule.reading:
-        refs_to_fetch["reading"] = schedule.reading
-    if schedule.gospel:
-        refs_to_fetch["gospel"] = schedule.gospel
+    if is_hidden_springs and hs_data:
+        hs_row = hs_data[0]
+        if hs_row.reading:
+            refs_to_fetch["reading"] = hs_row.reading
+        if hs_row.gospel:
+            refs_to_fetch["gospel"] = hs_row.gospel
+    else:
+        if schedule.reading:
+            refs_to_fetch["reading"] = schedule.reading
+        if schedule.gospel:
+            refs_to_fetch["gospel"] = schedule.gospel
 
     # Palm Sunday: also fetch the Palm Gospel (triumphal entry reading)
     if special == "palm_sunday":
@@ -186,7 +234,9 @@ def main():
         print(f"\n  === Assembling {service_time} bulletin ===")
 
         # Select the appropriate music data for this service
-        if service_time == "9 am":
+        if service_time == "hidden_springs":
+            music_data = None  # HS music is in the HS planner row
+        elif service_time == "9 am":
             music_data = music_9am
         elif service_time in ("11 am", "7 pm"):
             # Weekday services use the same Service Music tab as 11am
@@ -202,6 +252,7 @@ def main():
             song_lookup_fn=song_lookup_fn,
             parish_ministries=parish_ministries,
             service_time=service_time,
+            hidden_springs_data=hs_data if service_time == "hidden_springs" else None,
         )
 
         builder.resolve_all(prompt_fn=prompt_fn,
@@ -216,6 +267,12 @@ def main():
         # Determine output path
         if args.output and len(services) == 1:
             output_path = Path(args.output)
+        elif service_time == "hidden_springs":
+            date_str = target_date.strftime("%Y-%m-%d")
+            hs_row = hs_data[0]
+            hs_title = hs_row.title or "Hidden Springs"
+            svc_type = hs_row.service_type or "LOW"
+            output_path = output_dir / f"{date_str} - Hidden Springs - {hs_title} ({svc_type}).docx"
         else:
             date_str = target_date.strftime("%Y-%m-%d")
             short_title = get_short_liturgical_title(schedule.title, schedule.proper)

@@ -70,19 +70,30 @@ def load_front_cover(
     return doc
 
 
-def append_back_cover(doc: Document):
+def append_back_cover(doc: Document, template_name: str = "back_cover.docx",
+                      replacements: dict = None):
     """Append the back-cover template as a new page section at the end.
 
     Inserts a section break (next-page) after the existing content, then
     copies all content and page setup from the back-cover template into
     the new section.  Images and hyperlinks are properly transferred so
     the resulting document is valid.
+
+    Args:
+        doc: The Document to append to.
+        template_name: Filename of the back cover template.
+        replacements: Optional dict of placeholder replacements.
     """
-    template_path = _TEMPLATES_DIR / "back_cover.docx"
+    template_path = _TEMPLATES_DIR / template_name
     if not template_path.exists():
         raise FileNotFoundError(f"Back cover template not found: {template_path}")
 
     back_doc = Document(str(template_path))
+
+    # Replace placeholders if provided
+    if replacements:
+        _replace_all_placeholders(back_doc, replacements)
+
     body = doc.element.body
     back_body = back_doc.element.body
 
