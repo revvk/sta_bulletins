@@ -78,7 +78,7 @@ def add_hidden_springs_low(doc: Document, rules: SeasonalRules, data: dict):
     add_spacer(doc)
     add_introductory_rubric(doc, "Please stand.")
     add_heading2(doc, "Sequence Hymn")
-    add_song_smart(doc, data.get("sequence_hymn"))
+    add_song_smart(doc, data.get("sequence_hymn"), force_single_column=True)
 
     # --- Gospel ---
     add_gospel(doc, data["gospel_ref"], data["gospel_book"],
@@ -153,7 +153,7 @@ def add_hidden_springs_low(doc: Document, rules: SeasonalRules, data: dict):
     # --- Closing Hymn ---
     add_spacer(doc)
     add_heading2(doc, "Closing Hymn")
-    add_song_smart(doc, data.get("closing_hymn"))
+    add_song_smart(doc, data.get("closing_hymn"), force_single_column=True)
 
     # --- Dismissal ---
     add_spacer(doc)
@@ -177,7 +177,7 @@ def _add_hs_standard_opening(doc: Document, rules: SeasonalRules,
     # Processional
     add_introductory_rubric(doc, "Please stand.")
     add_heading2(doc, "Processional")
-    add_song_smart(doc, data.get("processional"))
+    add_song_smart(doc, data.get("processional"), force_single_column=True)
 
     # Opening Acclamation
     add_spacer(doc)
@@ -202,7 +202,7 @@ def _add_hs_standard_opening(doc: Document, rules: SeasonalRules,
         # Try to use the song from the sheet; fall back to spoken Gloria
         sop = data.get("song_of_praise")
         if sop and sop.get("sections"):
-            add_song_smart(doc, sop)
+            add_song_smart(doc, sop, force_single_column=True)
         else:
             _add_gloria_spoken(doc, prayers)
 
@@ -216,7 +216,7 @@ def _add_hs_penitential_opening(doc: Document, rules: SeasonalRules,
     # Processional
     add_introductory_rubric(doc, "Please stand.")
     add_heading2(doc, "Processional")
-    add_song_smart(doc, data.get("processional"))
+    add_song_smart(doc, data.get("processional"), force_single_column=True)
 
     # Opening Acclamation
     add_spacer(doc)

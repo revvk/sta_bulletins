@@ -14,12 +14,20 @@ from typing import Optional
 import yaml
 
 _PSALMS_PATH = Path(__file__).parent.parent / "data" / "bcp_texts" / "psalms.yaml"
+_CANTICLES_PATH = Path(__file__).parent.parent / "data" / "bcp_texts" / "canticles.yaml"
 
 
 @lru_cache(maxsize=1)
 def _load_psalms() -> dict:
     """Load and cache the psalms YAML file."""
     with open(_PSALMS_PATH, "r", encoding="utf-8") as f:
+        return yaml.safe_load(f)
+
+
+@lru_cache(maxsize=1)
+def _load_canticles() -> dict:
+    """Load and cache the canticles YAML file."""
+    with open(_CANTICLES_PATH, "r", encoding="utf-8") as f:
         return yaml.safe_load(f)
 
 
@@ -145,17 +153,22 @@ def parse_psalm_reference(reference: str) -> tuple[int, list[tuple[int, Optional
 # ---------------------------------------------------------------------------
 
 def get_psalm(reference: str) -> PsalmSelection:
-    """Look up psalm verses by reference string.
+    """Look up psalm or canticle verses by reference string.
 
     Args:
-        reference: e.g., "Psalm 72:1-7,10-14" or "Psalm 23"
+        reference: e.g., "Psalm 72:1-7,10-14" or "Psalm 23" or "Canticle 15"
 
     Returns:
         PsalmSelection with the requested verses.
 
     Raises:
-        ValueError if psalm not found.
+        ValueError if psalm/canticle not found.
     """
+    # Check for canticle reference
+    canticle_match = re.match(r"Canticle\s+(\d+)", reference.strip(), re.IGNORECASE)
+    if canticle_match:
+        return _get_canticle(int(canticle_match.group(1)))
+
     psalms = _load_psalms()
     psalm_num, verse_specs = parse_psalm_reference(reference)
 
@@ -203,6 +216,39 @@ def get_psalm(reference: str) -> PsalmSelection:
 
     return PsalmSelection(
         psalm_number=psalm_num,
+        latin=latin,
+        verses=selected,
+    )
+
+
+def _get_canticle(canticle_num: int) -> PsalmSelection:
+    """Look up a canticle by number, returning it as a PsalmSelection.
+
+    Canticles use the same verse structure as psalms (first_half/second_half)
+    and render identically in the bulletin.
+    """
+    canticles = _load_canticles()
+    canticle_data = canticles.get(canticle_num)
+    if canticle_data is None:
+        raise ValueError(
+            f"Canticle {canticle_num} not found in canticles data. "
+            f"Available: {sorted(canticles.keys())}"
+        )
+
+    all_verses = canticle_data.get("verses", {})
+    latin = canticle_data.get("latin", "")
+
+    selected = [
+        PsalmVerse(
+            number=vnum,
+            first_half=v["first_half"],
+            second_half=v.get("second_half", []),
+        )
+        for vnum, v in sorted(all_verses.items())
+    ]
+
+    return PsalmSelection(
+        psalm_number=canticle_num,
         latin=latin,
         verses=selected,
     )

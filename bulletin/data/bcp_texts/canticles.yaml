@@ -1,0 +1,305 @@
+# Canticles from the Book of Common Prayer (pp. 47-52, 85-96)
+# Formatted like psalms: each verse has first_half and second_half
+# so they render identically to psalm text in the bulletin.
+#
+# Canticles 1-7 are Rite I (pp. 47-52)
+# Canticles 8-21 are Rite II (pp. 85-96)
+
+# Canticle 9: The First Song of Isaiah (Ecce, Deus)
+# Isaiah 12:2-6 — BCP p. 86
+9:
+  title: "The First Song of Isaiah"
+  latin: "Ecce, Deus"
+  reference: "Isaiah 12:2-6"
+  verses:
+    1:
+      first_half: "Surely, it is God who saves me;"
+      second_half:
+        - "I will trust in him and not be afraid."
+    2:
+      first_half: "For the Lord is my stronghold and my sure defense,"
+      second_half:
+        - "and he will be my Savior."
+    3:
+      first_half: "Therefore you shall draw water with rejoicing"
+      second_half:
+        - "from the springs of salvation."
+    4:
+      first_half: "And on that day you shall say,"
+      second_half:
+        - "Give thanks to the Lord and call upon his Name;"
+    5:
+      first_half: "Make his deeds known among the peoples;"
+      second_half:
+        - "see that they remember that his Name is exalted."
+    6:
+      first_half: "Sing the praises of the Lord, for he has done great things,"
+      second_half:
+        - "and this is known in all the world."
+    7:
+      first_half: "Cry aloud, inhabitants of Zion, ring out your joy,"
+      second_half:
+        - "for the great one in the midst of you is the Holy One of Israel."
+
+# Canticle 13: A Song of Praise (Benedictus es, Domine)
+# Song of the Three Young Men, 29-34 — BCP p. 90
+13:
+  title: "A Song of Praise"
+  latin: "Benedictus es, Domine"
+  reference: "Song of the Three Young Men, 29-34"
+  verses:
+    1:
+      first_half:
+        - "Glory to you, Lord God of our fathers;"
+        - "you are worthy of praise; glory to you."
+      second_half:
+        - "Glory to you for the radiance of your holy Name;"
+        - "we will praise you and highly exalt you for ever."
+    2:
+      first_half: "Glory to you in the splendor of your temple;"
+      second_half:
+        - "on the throne of your majesty, glory to you."
+    3:
+      first_half: "Glory to you, seated between the Cherubim;"
+      second_half:
+        - "we will praise you and highly exalt you for ever."
+    4:
+      first_half: "Glory to you, beholding the depths;"
+      second_half:
+        - "in the high vault of heaven, glory to you."
+    5:
+      first_half:
+        - "Glory to you, Father, Son, and Holy Spirit;"
+        - "we will praise you and highly exalt you for ever."
+      second_half: []
+
+# Canticle 15: The Song of Mary (Magnificat)
+# Luke 1:46-55 — BCP p. 91
+15:
+  title: "The Song of Mary"
+  latin: "Magnificat"
+  reference: "Luke 1:46-55"
+  verses:
+    1:
+      first_half: "My soul proclaims the greatness of the Lord,"
+      second_half:
+        - "my spirit rejoices in God my Savior;"
+    2:
+      first_half: "for he has looked with favor on his lowly servant."
+      second_half:
+        - "From this day all generations will call me blessed:"
+    3:
+      first_half: "the Almighty has done great things for me,"
+      second_half:
+        - "and holy is his Name."
+    4:
+      first_half: "He has mercy on those who fear him"
+      second_half:
+        - "in every generation."
+    5:
+      first_half: "He has shown the strength of his arm,"
+      second_half:
+        - "he has scattered the proud in their conceit."
+    6:
+      first_half: "He has cast down the mighty from their thrones,"
+      second_half:
+        - "and has lifted up the lowly."
+    7:
+      first_half: "He has filled the hungry with good things,"
+      second_half:
+        - "and the rich he has sent away empty."
+    8:
+      first_half: "He has come to the help of his servant Israel,"
+      second_half:
+        - "for he has remembered his promise of mercy,"
+    9:
+      first_half: "The promise he made to our fathers,"
+      second_half:
+        - "to Abraham and his children for ever."
+
+# Canticle 16: The Song of Zechariah (Benedictus Dominus Deus)
+# Luke 1:68-79 — BCP p. 92
+16:
+  title: "The Song of Zechariah"
+  latin: "Benedictus Dominus Deus"
+  reference: "Luke 1:68-79"
+  verses:
+    1:
+      first_half: "Blessed be the Lord, the God of Israel;"
+      second_half:
+        - "he has come to his people and set them free."
+    2:
+      first_half: "He has raised up for us a mighty savior,"
+      second_half:
+        - "born of the house of his servant David."
+    3:
+      first_half: "Through his holy prophets he promised of old,"
+      second_half:
+        - "that he would save us from our enemies,"
+        - "from the hands of all who hate us."
+    4:
+      first_half: "He promised to show mercy to our fathers"
+      second_half:
+        - "and to remember his holy covenant."
+    5:
+      first_half: "This was the oath he swore to our father Abraham,"
+      second_half:
+        - "to set us free from the hands of our enemies,"
+    6:
+      first_half: "Free to worship him without fear,"
+      second_half:
+        - "holy and righteous in his sight"
+        - "all the days of our life."
+    7:
+      first_half: "You, my child, shall be called the prophet of the Most High,"
+      second_half:
+        - "for you will go before the Lord to prepare his way,"
+    8:
+      first_half: "To give his people knowledge of salvation"
+      second_half:
+        - "by the forgiveness of their sins."
+    9:
+      first_half: "In the tender compassion of our God"
+      second_half:
+        - "the dawn from on high shall break upon us,"
+    10:
+      first_half: "To shine on those who dwell in darkness and the shadow of death,"
+      second_half:
+        - "and to guide our feet into the way of peace."
+
+# Canticle 17: The Song of Simeon (Nunc Dimittis)
+# Luke 2:29-32 — BCP p. 93
+17:
+  title: "The Song of Simeon"
+  latin: "Nunc dimittis"
+  reference: "Luke 2:29-32"
+  verses:
+    1:
+      first_half: "Lord, you now have set your servant free"
+      second_half:
+        - "to go in peace as you have promised;"
+    2:
+      first_half: "For these eyes of mine have seen the Savior,"
+      second_half:
+        - "whom you have prepared for all the world to see:"
+    3:
+      first_half: "A Light to enlighten the nations,"
+      second_half:
+        - "and the glory of your people Israel."
+
+# Canticle 18: A Song to the Lamb (Dignus es)
+# Revelation 4:11; 5:9-10,13 — BCP p. 93
+18:
+  title: "A Song to the Lamb"
+  latin: "Dignus es"
+  reference: "Revelation 4:11; 5:9-10,13"
+  verses:
+    1:
+      first_half: "Splendor and honor and kingly power"
+      second_half:
+        - "are yours by right, O Lord our God,"
+    2:
+      first_half: "For you created everything that is,"
+      second_half:
+        - "and by your will they were created and have their being;"
+    3:
+      first_half: "And yours by right, O Lamb that was slain,"
+      second_half:
+        - "for with your blood you have redeemed for God,"
+    4:
+      first_half: "From every family, language, people, and nation,"
+      second_half:
+        - "a kingdom of priests to serve our God."
+    5:
+      first_half: "And so, to him who sits upon the throne,"
+      second_half:
+        - "and to Christ the Lamb,"
+    6:
+      first_half: "Be worship and praise, dominion and splendor,"
+      second_half:
+        - "for ever and for evermore."
+
+# Canticle 19: The Song of the Redeemed (Magna et mirabilia)
+# Revelation 15:3-4 — BCP p. 94
+19:
+  title: "The Song of the Redeemed"
+  latin: "Magna et mirabilia"
+  reference: "Revelation 15:3-4"
+  verses:
+    1:
+      first_half: "O ruler of the universe, Lord God,"
+      second_half:
+        - "great deeds are they that you have done,"
+        - "surpassing human understanding."
+    2:
+      first_half: "Your ways are ways of righteousness and truth,"
+      second_half:
+        - "O King of all the ages."
+    3:
+      first_half: "Who can fail to do you homage, Lord,"
+      second_half:
+        - "and sing the praises of your Name?"
+    4:
+      first_half: "for you only are the Holy One."
+      second_half:
+        - "All nations will draw near and fall down before you,"
+        - "because your just and holy works have been revealed."
+
+# Canticle 21: You are God (Te Deum laudamus)
+# BCP p. 95
+21:
+  title: "You are God"
+  latin: "Te Deum laudamus"
+  reference: ""
+  verses:
+    1:
+      first_half: "You are God: we praise you;"
+      second_half:
+        - "You are the Lord: we acclaim you;"
+    2:
+      first_half: "You are the eternal Father:"
+      second_half:
+        - "All creation worships you."
+    3:
+      first_half: "To you all angels, all the powers of heaven,"
+      second_half:
+        - "Cherubim and Seraphim, sing in endless praise:"
+    4:
+      first_half:
+        - "Holy, holy, holy Lord, God of power and might,"
+        - "heaven and earth are full of your glory."
+      second_half: []
+    5:
+      first_half: "The glorious company of apostles praise you."
+      second_half:
+        - "The noble fellowship of prophets praise you."
+    6:
+      first_half: "The white-robed army of martyrs praise you."
+      second_half:
+        - "Throughout the world the holy Church acclaims you;"
+    7:
+      first_half: "Father, of majesty unbounded,"
+      second_half:
+        - "your true and only Son, worthy of all worship,"
+        - "and the Holy Spirit, advocate and guide."
+    8:
+      first_half: "You, Christ, are the king of glory,"
+      second_half:
+        - "the eternal Son of the Father."
+    9:
+      first_half: "When you became man to set us free"
+      second_half:
+        - "you did not shun the Virgin\u2019s womb."
+    10:
+      first_half: "You overcame the sting of death"
+      second_half:
+        - "and opened the kingdom of heaven to all believers."
+    11:
+      first_half: "You are seated at God\u2019s right hand in glory."
+      second_half:
+        - "We believe that you will come and be our judge."
+    12:
+      first_half: "Come then, Lord, and help your people,"
+      second_half:
+        - "bought with the price of your own blood,"
+        - "and bring us with your saints to glory everlasting."
