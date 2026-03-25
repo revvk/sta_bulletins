@@ -550,9 +550,9 @@ def add_song_smart(doc: Document, song_data: dict | None,
     line (title + hymnal reference) without wrapping in a lyric table.
 
     Args:
-        force_single_column: If True, always use single-column layout.
-            Use for liturgical service music (fraction anthem, Sanctus)
-            that should not be split across columns.
+        force_single_column: If True, always use single-column layout
+            with one row per section (multi-row table).  Use for
+            large-print bulletins and liturgical service music.
     """
     if not song_data:
         add_body(doc, "[Song lyrics not found]")
@@ -580,7 +580,7 @@ def add_song_smart(doc: Document, song_data: dict | None,
     if not force_single_column and len(sections) >= 2 and max_line_len <= 52:
         add_song_two_column(doc, song_data)
     else:
-        add_song(doc, song_data)
+        add_song(doc, song_data, multi_row=force_single_column)
 
 
 def add_body_with_amen(doc: Document, text: str):
@@ -616,13 +616,27 @@ def add_celebrant_with_cross(doc: Document, label: str, text: str):
 def _add_gloria_spoken(doc: Document, prayers: dict):
     """Add the Gloria as spoken bold text (People recitation) for 8am.
 
-    Joins the Gloria lines into a single flowing paragraph rendered in bold
-    using the People character style, matching the Nicene Creed pattern.
+    Renders each section as a separate bold paragraph with line breaks
+    within, so the poetic structure is visible while remaining bold.
     """
-    text = " ".join(line.strip() for line in prayers["gloria"])
-    p = doc.add_paragraph(style="Body - People Recitation")
-    run = p.add_run(text)
-    run.style = doc.styles["People"]
+    gloria = prayers["gloria"]
+    # Support both old format (list of strings) and new (dict with sections)
+    if isinstance(gloria, dict):
+        sections = gloria.get("sections", [])
+    else:
+        # Legacy: flat list → one section
+        sections = [gloria]
+
+    for section_lines in sections:
+        text = "\n".join(line.strip() for line in section_lines)
+        p = doc.add_paragraph(style="Body - People Recitation")
+        # Use add_break() for line breaks within the paragraph
+        for i, line in enumerate(section_lines):
+            if i > 0:
+                run = p.runs[-1] if p.runs else p.add_run("")
+                run.add_break()
+            run = p.add_run(line.strip())
+            run.style = doc.styles["People"]
 
 
 def _add_kyrie_spoken(doc: Document):

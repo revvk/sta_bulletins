@@ -238,14 +238,17 @@ def _get_canticle(canticle_num: int) -> PsalmSelection:
     all_verses = canticle_data.get("verses", {})
     latin = canticle_data.get("latin", "")
 
-    selected = [
-        PsalmVerse(
+    selected = []
+    for vnum, v in sorted(all_verses.items()):
+        sh = v.get("second_half", [])
+        # Normalize: if second_half is a plain string, wrap in a list
+        if isinstance(sh, str):
+            sh = [sh]
+        selected.append(PsalmVerse(
             number=vnum,
             first_half=v["first_half"],
-            second_half=v.get("second_half", []),
-        )
-        for vnum, v in sorted(all_verses.items())
-    ]
+            second_half=sh,
+        ))
 
     return PsalmSelection(
         psalm_number=canticle_num,

@@ -407,12 +407,11 @@ class BulletinBuilder:
             add_hidden_springs_low(doc, self.rules, data)
 
         # Back cover with upcoming services
-        back_replacements = self._format_upcoming_services(upcoming)
         append_back_cover(
             doc,
             template_name="senior_living_back_cover.docx",
-            replacements=back_replacements,
         )
+        self._fill_upcoming_services(doc, upcoming)
 
         # Footers
         setup_footers(doc, date_str, "10:30 am", title)
@@ -525,40 +524,122 @@ class BulletinBuilder:
             "dismissal_people": people_text,
         }
 
-    def _format_upcoming_services(self, upcoming: list) -> dict:
-        """Format upcoming Hidden Springs services for back cover placeholders."""
-        from bulletin.config import PREACHER_NAMES
+    def _fill_upcoming_services(self, doc, upcoming: list):
+        """Fill upcoming services on the back cover with formatted paragraphs.
 
-        replacements = {}
-        for i, row in enumerate(upcoming[:3], 1):
+        Finds {{Upcoming_Service_N}} placeholder paragraphs in the document
+        and replaces them with properly formatted content:
+          Line 1: Month DD, YYYY: HH:MM am - Service Type  (bold)
+          Line 2: Name of the day
+          Line 3: Clergy Name  Role (role in italics)
+        """
+        from docx.shared import Pt
+        from bulletin.config import PREACHER_NAMES, FONT_BODY_BOLD
+
+        # Build data for each slot
+        service_info = []
+        for row in upcoming[:3]:
             if row.date is None:
-                replacements[f"{{{{Upcoming_Service_{i}}}}}"] = ""
+                service_info.append(None)
                 continue
 
             date_str = row.date.strftime("%B %-d, %Y")
-            svc_type = "Holy Communion" if row.service_type.upper().startswith("HE") else "Liturgy of the Word"
-
-            # Title
+            svc_type = ("Holy Communion"
+                        if row.service_type.upper().startswith("HE")
+                        else "Liturgy of the Word")
             title = _format_hs_title(row.title, row.date)
 
-            # Clergy
             preacher_short = row.preacher or ""
-            preacher = PREACHER_NAMES.get(preacher_short.strip(), preacher_short)
-            role = "Preacher and Celebrant" if row.service_type.upper().startswith("HE") else "Preacher and Officiant"
+            preacher = PREACHER_NAMES.get(
+                preacher_short.strip(), preacher_short)
+            role = ("Preacher and Celebrant"
+                    if row.service_type.upper().startswith("HE")
+                    else "Preacher and Officiant")
 
-            service_text = (
-                f"{date_str} at 10:30 am\n"
-                f"{svc_type}\n"
-                f"{title}\n"
-                f"{role}: {preacher}"
+            service_info.append({
+                "header": f"{date_str}: 10:30 am \u2013 {svc_type}",
+                "title": title,
+                "clergy_name": preacher,
+                "clergy_role": role,
+            })
+
+        # Pad to 3 slots
+        while len(service_info) < 3:
+            service_info.append(None)
+
+        # Find and replace placeholder paragraphs
+        body = doc.element.body
+        from docx.oxml.ns import qn
+        for p_elem in list(body.iter(qn("w:p"))):
+            full_text = "".join(
+                (t.text or "")
+                for t in p_elem.iter(qn("w:t"))
             )
-            replacements[f"{{{{Upcoming_Service_{i}}}}}"] = service_text
+            for i in range(3):
+                placeholder = f"{{{{Upcoming_Service_{i+1}}}}}"
+                if placeholder in full_text:
+                    info = service_info[i]
+                    if info is None:
+                        # Clear the placeholder
+                        for t in p_elem.iter(qn("w:t")):
+                            t.text = ""
+                    else:
+                        self._replace_with_formatted_service(
+                            p_elem, doc, info)
+                    break
 
-        # Fill any remaining slots with empty strings
-        for i in range(len(upcoming) + 1, 4):
-            replacements[f"{{{{Upcoming_Service_{i}}}}}"] = ""
+    @staticmethod
+    def _replace_with_formatted_service(p_elem, doc, info: dict):
+        """Replace a placeholder paragraph with formatted service info.
 
-        return replacements
+        Clears all existing runs, then adds:
+          Line 1 (bold): date/time - service type
+          Line 2: liturgical title
+          Line 3: clergy name + role (italic)
+        """
+        from docx.oxml.ns import qn, nsdecls
+        from docx.oxml import parse_xml
+        from docx.shared import Pt
+        from bulletin.config import FONT_BODY, FONT_BODY_BOLD
+
+        # Clear existing runs
+        for r in list(p_elem.findall(qn("w:r"))):
+            p_elem.remove(r)
+
+        def _add_run(text, bold=False, italic=False, break_before=False):
+            """Add a formatted run to the paragraph."""
+            r = parse_xml(f'<w:r {nsdecls("w")}><w:t xml:space="preserve">{{}}</w:t></w:r>')
+            rPr = parse_xml(f'<w:rPr {nsdecls("w")}/>')
+            if bold:
+                rPr.append(parse_xml(f'<w:b {nsdecls("w")}/>'))
+                font_name = FONT_BODY_BOLD
+            else:
+                font_name = FONT_BODY
+            if italic:
+                rPr.append(parse_xml(f'<w:i {nsdecls("w")}/>'))
+            # Set font
+            rFonts = parse_xml(
+                f'<w:rFonts {nsdecls("w")} w:ascii="{font_name}" '
+                f'w:hAnsi="{font_name}"/>'
+            )
+            rPr.append(rFonts)
+            r.insert(0, rPr)
+            # Set text
+            t_elem = r.find(qn("w:t"))
+            t_elem.text = text
+            if break_before:
+                br = parse_xml(f'<w:br {nsdecls("w")}/>')
+                r.insert(list(r).index(t_elem), br)
+            p_elem.append(r)
+
+        # Line 1: bold header
+        _add_run(info["header"], bold=True)
+        # Line 2: title
+        _add_run(info["title"], break_before=True)
+        # Line 3: clergy name + role (italic)
+        if info["clergy_name"]:
+            _add_run(info["clergy_name"] + "  ", break_before=True)
+            _add_run(info["clergy_role"], italic=True)
 
     # ------------------------------------------------------------------
     # Resolution methods

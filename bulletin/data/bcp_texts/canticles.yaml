@@ -81,38 +81,36 @@
   reference: "Luke 1:46-55"
   verses:
     1:
-      first_half: "My soul proclaims the greatness of the Lord,"
-      second_half:
+      first_half: 
+        - "My soul proclaims the greatness of the Lord,"
         - "my spirit rejoices in God my Savior;"
+      second_half: "for he has looked with favor on his lowly servant."
     2:
-      first_half: "for he has looked with favor on his lowly servant."
+      first_half: "From this day all generations will call me blessed:"
       second_half:
-        - "From this day all generations will call me blessed:"
-    3:
-      first_half: "the Almighty has done great things for me,"
-      second_half:
+        - "the Almighty has done great things for me,"
         - "and holy is his Name."
-    4:
+    3:
       first_half: "He has mercy on those who fear him"
       second_half:
         - "in every generation."
-    5:
+    4:
       first_half: "He has shown the strength of his arm,"
       second_half:
         - "he has scattered the proud in their conceit."
-    6:
+    5:
       first_half: "He has cast down the mighty from their thrones,"
       second_half:
         - "and has lifted up the lowly."
-    7:
+    6:
       first_half: "He has filled the hungry with good things,"
       second_half:
         - "and the rich he has sent away empty."
-    8:
+    7:
       first_half: "He has come to the help of his servant Israel,"
       second_half:
         - "for he has remembered his promise of mercy,"
-    9:
+    8:
       first_half: "The promise he made to our fathers,"
       second_half:
         - "to Abraham and his children for ever."

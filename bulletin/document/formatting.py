@@ -184,11 +184,10 @@ def add_no_split_block(doc: Document, add_content_fn):
     add_content_fn(cell)
 
 
-def add_song(doc: Document, song_data: dict):
+def add_song(doc: Document, song_data: dict, multi_row: bool = False):
     """Add a complete song (header + all verses/choruses).
 
-    Lyrics are placed in a 1×1 borderless table so that Word keeps the
-    song together on one page whenever possible.
+    Lyrics are placed in a borderless table to prevent page splits.
 
     Args:
         song_data: dict with keys:
@@ -199,6 +198,10 @@ def add_song(doc: Document, song_data: dict):
             - sections: list of dicts with:
                 - type: "verse" | "chorus"
                 - lines: list[str]
+        multi_row: If True, each section (verse/chorus) gets its own
+            table row.  Word keeps each row together on one page but
+            allows page breaks between rows.  Better for large-print
+            bulletins where a tall 1×1 cell may not fit on a single page.
     """
     add_hymn_header(
         doc,
@@ -208,17 +211,31 @@ def add_song(doc: Document, song_data: dict):
         song_data.get("hymnal_name"),
     )
 
-    # Wrap lyrics in a 1x1 borderless table to prevent page splits
-    table = doc.add_table(rows=1, cols=1)
-    table.autofit = True
-    _remove_table_borders(table)
-    _prevent_row_split(table)
+    sections = song_data.get("sections", [])
+    if not sections:
+        return
 
-    # Remove default cell margins for a seamless look
-    _remove_cell_margins(table)
+    if multi_row:
+        # 1×N table: one row per section (verse/chorus)
+        table = doc.add_table(rows=len(sections), cols=1)
+        table.autofit = True
+        _remove_table_borders(table)
+        _prevent_row_split(table)
+        _remove_cell_margins(table)
 
-    cell = table.cell(0, 0)
-    _fill_lyric_cell(cell, song_data["sections"])
+        for i, section in enumerate(sections):
+            cell = table.cell(i, 0)
+            _fill_lyric_cell(cell, [section])
+    else:
+        # 1×1 table: all sections in one cell
+        table = doc.add_table(rows=1, cols=1)
+        table.autofit = True
+        _remove_table_borders(table)
+        _prevent_row_split(table)
+        _remove_cell_margins(table)
+
+        cell = table.cell(0, 0)
+        _fill_lyric_cell(cell, sections)
 
 
 def add_song_two_column(doc: Document, song_data: dict):

@@ -11,6 +11,7 @@ All songs get full lyrics printed (no hymnals available).
 """
 
 from docx import Document
+from docx.shared import Pt
 
 from bulletin.config import CROSS_SYMBOL, FONT_BODY_BOLD, PREACHER_NAMES
 from bulletin.data.loader import load_common_prayers
@@ -196,15 +197,15 @@ def _add_hs_standard_opening(doc: Document, rules: SeasonalRules,
     add_spacer(doc)
     add_heading2(doc, rules.song_of_praise_label)
     if rules.is_advent:
-        # No Advent wreath at Hidden Springs — spoken Gloria
-        _add_gloria_spoken(doc, prayers)
+        # No Advent wreath at Hidden Springs — use Gloria as lyrics
+        _add_gloria_as_lyrics(doc, prayers)
     else:
-        # Try to use the song from the sheet; fall back to spoken Gloria
+        # Try to use the song from the sheet; fall back to Gloria as lyrics
         sop = data.get("song_of_praise")
         if sop and sop.get("sections"):
             add_song_smart(doc, sop, force_single_column=True)
         else:
-            _add_gloria_spoken(doc, prayers)
+            _add_gloria_as_lyrics(doc, prayers)
 
 
 def _add_hs_penitential_opening(doc: Document, rules: SeasonalRules,
@@ -254,6 +255,35 @@ def _add_hs_penitential_opening(doc: Document, rules: SeasonalRules,
         add_song_smart(doc, sop)
     else:
         _add_kyrie_spoken(doc)
+
+
+def _add_gloria_as_lyrics(doc: Document, prayers: dict):
+    """Render the Gloria as lyrics for Hidden Springs (large print).
+
+    Each section of the Gloria gets its own row in a multi-row table,
+    rendered as bold People text with line breaks within each section.
+    """
+    from bulletin.document.formatting import (
+        add_no_split_block,
+    )
+    from bulletin.config import FONT_BODY_BOLD
+
+    gloria = prayers["gloria"]
+    if isinstance(gloria, dict):
+        sections = gloria.get("sections", [])
+    else:
+        sections = [gloria]
+
+    for section_lines in sections:
+        def _add_section(cell, lines=section_lines):
+            p = cell.add_paragraph(style="Body - People Recitation")
+            p.paragraph_format.space_before = Pt(0)
+            for i, line in enumerate(lines):
+                if i > 0:
+                    p.runs[-1].add_break()
+                run = p.add_run(line.strip())
+                run.style = doc.styles["People"]
+        add_no_split_block(doc, _add_section)
 
 
 def _add_hs_blessing(doc: Document, rules: SeasonalRules, data: dict,
