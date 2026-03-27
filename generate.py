@@ -300,6 +300,14 @@ def main():
             for s in builder._missing_songs:
                 print(f"    - {s}")
 
+        # Print AAC file manifest for Hidden Springs services
+        aac_manifest = builder.get_aac_manifest()
+        if aac_manifest:
+            print(f"\n  === AAC Files for Upload ===")
+            max_slot = max(len(slot) for slot, _ in aac_manifest)
+            for slot, filename in aac_manifest:
+                print(f"  {slot + ':':<{max_slot + 1}} {filename}")
+
     # Step 6: Generate reading sheets (if requested, not for weekday services)
     if args.reading_sheets and not is_weekday_special:
         print("\n  === Generating reading sheets ===")

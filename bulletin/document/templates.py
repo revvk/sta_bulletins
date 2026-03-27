@@ -187,7 +187,7 @@ def append_template_page(doc: Document, template_filename: str):
 
 
 def setup_footers(doc: Document, date_str: str, service_time: str,
-                  liturgical_title: str):
+                  liturgical_title: str, page_width: float = None):
     """Add odd/even page footers to the bulletin body section.
 
     The document has two sections:
@@ -224,6 +224,9 @@ def setup_footers(doc: Document, date_str: str, service_time: str,
     else:
         pg_num.set(qn("w:start"), "0")
 
+    # Resolve text width for tab stop
+    text_width = page_width if page_width else (PAGE_WIDTH_INCHES - 2 * MARGIN_INCHES)
+
     # ---- Odd footer (default footer when even/odd is enabled) --------
     footer_odd = section.footer
     footer_odd.is_linked_to_previous = False
@@ -231,6 +234,7 @@ def setup_footers(doc: Document, date_str: str, service_time: str,
         footer_odd.paragraphs[0], doc,
         left_field="page",
         right_text=f"{date_str} | {service_time}",
+        text_width=text_width,
     )
 
     # ---- Even footer ---------------------------------------------------
@@ -240,6 +244,7 @@ def setup_footers(doc: Document, date_str: str, service_time: str,
         footer_even.paragraphs[0], doc,
         left_text=liturgical_title,
         right_field="page",
+        text_width=text_width,
     )
 
     # ---- First-page footer (front cover): empty -------------------------
@@ -260,7 +265,8 @@ def _build_footer_paragraph(paragraph, doc, *,
                             left_text: str = "",
                             left_field: str = "",
                             right_text: str = "",
-                            right_field: str = ""):
+                            right_field: str = "",
+                            text_width: float = None):
     """Configure a footer paragraph with left and right-aligned content.
 
     Args:
@@ -268,11 +274,12 @@ def _build_footer_paragraph(paragraph, doc, *,
         doc: The Document (for style access).
         left_text/left_field: Content for the left side ("page" = PAGE field).
         right_text/right_field: Content for the right side.
+        text_width: Text width in inches for the right tab stop.
     """
     paragraph.style = doc.styles["Header & Footer"]
 
     # Add a right tab stop at the full text width (page width − margins)
-    tab_pos = Inches(PAGE_WIDTH_INCHES - 2 * MARGIN_INCHES)
+    tab_pos = Inches(text_width if text_width else (PAGE_WIDTH_INCHES - 2 * MARGIN_INCHES))
     paragraph.paragraph_format.tab_stops.add_tab_stop(
         tab_pos, WD_TAB_ALIGNMENT.RIGHT
     )

@@ -126,6 +126,11 @@ class BulletinBuilder:
         self.post_communion_prayer = self._resolve_closing_prayer()
         self.pop_form_key = None  # Resolved in resolve_all()
         self._missing_songs = []
+        self._aac_manifest = []  # (slot_name, aac_filename) for HS services
+
+    def get_aac_manifest(self) -> list[tuple[str, str]]:
+        """Return the list of (slot_name, aac_filename) pairs for HS services."""
+        return self._aac_manifest
 
     def resolve_all(self, prompt_fn=None, shared_resolutions=None):
         """Resolve all data that might need user input.
@@ -377,7 +382,7 @@ class BulletinBuilder:
         # Front cover — uses senior_living template
         doc = load_front_cover(
             date_str=date_str,
-            service_time="10:30 am",
+            service_time="11:00 am",
             liturgical_title=title,
             subtitle=date_str,
             cover_template="senior_living_front_cover.docx",
@@ -413,39 +418,58 @@ class BulletinBuilder:
         )
         self._fill_upcoming_services(doc, upcoming)
 
-        # Footers
-        setup_footers(doc, date_str, "10:30 am", title)
+        # Footers — LP page is 8.5" with 0.5" margins = 7.5" text width
+        from bulletin.config import LP_PAGE_WIDTH_INCHES, LP_MARGIN_INCHES
+        lp_text_width = LP_PAGE_WIDTH_INCHES - 2 * LP_MARGIN_INCHES
+        setup_footers(doc, date_str, "11:00 am", title, page_width=lp_text_width)
 
         return doc
 
     def _prepare_hidden_springs_wog_data(self) -> dict:
         """Prepare Word of God data using Hidden Springs planner row."""
         from bulletin.config import PREACHER_NAMES
+        from bulletin.sources.songs import (
+            hs_lookup_song, resolve_aac_file, slice_song_verses,
+        )
 
         hs_row, _ = self.hidden_springs_data
 
-        # Look up songs — use "9am" service key since HS songs share
-        # the same YAML entries as 9am service
-        def hs_lookup(title):
+        # Look up songs from HS catalog (with AAC tracking), falling back
+        # to songs.yaml for lyrics only
+        def hs_lookup(title, slot_name=""):
             if not title:
                 return None
-            song = self.song_lookup(title, "9 am")
+            song = hs_lookup_song(title)
             if song:
+                # Resolve AAC file and add to manifest
+                vc = song.get("_hs_verse_count")
+                inst = song.get("_hs_instrument")
+                aac = resolve_aac_file(song, vc, inst)
+                if aac:
+                    self._aac_manifest.append((slot_name, aac))
+                elif not song.get("_hs_fallback"):
+                    self._aac_manifest.append(
+                        (slot_name, "[NO AAC FILE FOUND]"))
+
+                # Slice verses if a count was specified
+                if vc is not None and song.get("sections"):
+                    song = slice_song_verses(song, vc)
+
                 return self._apply_canonical_title(song)
             return None
 
-        processional = hs_lookup(hs_row.processional)
+        processional = hs_lookup(hs_row.processional, "Processional")
 
         # Song of praise: if "Gloria" is specified, use the spoken Gloria
         song_of_praise = None
         sop_title = (hs_row.song_of_praise or "").strip()
         if sop_title.lower() not in ("gloria", ""):
-            song_of_praise = hs_lookup(sop_title)
+            song_of_praise = hs_lookup(sop_title, "Song of Praise")
         # If it's "Gloria" or no song found, the section builder will
         # fall back to the spoken Gloria
 
-        sequence = hs_lookup(hs_row.sequence)
-        closing = hs_lookup(hs_row.recessional)
+        sequence = hs_lookup(hs_row.sequence, "Sequence")
+        closing = hs_lookup(hs_row.recessional, "Closing")
 
         # Scripture readings
         reading_1_ref = hs_row.reading or ""
@@ -493,6 +517,20 @@ class BulletinBuilder:
         dismissal_num = hs_row.dismissal or "3"
         deacon_text, people_text = get_dismissal_text(
             dismissal_num, self.rules.dismissal_has_alleluia)
+
+        # Resolve AAC files for prelude/postlude (no lyrics needed)
+        if hs_row.prelude:
+            pre_song = hs_lookup_song(hs_row.prelude)
+            if pre_song:
+                aac = resolve_aac_file(pre_song)
+                if aac:
+                    self._aac_manifest.append(("Prelude", aac))
+        if hs_row.postlude:
+            post_song = hs_lookup_song(hs_row.postlude)
+            if post_song:
+                aac = resolve_aac_file(post_song)
+                if aac:
+                    self._aac_manifest.append(("Postlude", aac))
 
         return {
             "service_time": "hidden_springs",
@@ -557,7 +595,7 @@ class BulletinBuilder:
                     else "Preacher and Officiant")
 
             service_info.append({
-                "header": f"{date_str}: 10:30 am \u2013 {svc_type}",
+                "header": f"{date_str}: 11:00 am \u2013 {svc_type}",
                 "title": title,
                 "clergy_name": preacher,
                 "clergy_role": role,
