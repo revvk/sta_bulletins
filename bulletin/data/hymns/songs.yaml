@@ -1300,6 +1300,15 @@
     - One with Christ, our Lord and our Head.
     - Everyone who loves is born of God.
     - Jesus is our life. God is love.
+- title: Come and Fill Our Hearts
+  hymnal_name: Communauté de Taizé
+  sections:
+  - type: verse
+    lines:
+    - Come and fill our hearts with your peace.
+    - You alone, O Lord, are holy.
+    - Come and fill our hearts with your peace.
+    - Amen.
 - title: Come Behold The Wondrous Mystery
   services: 9am
   sections:
@@ -3482,6 +3491,13 @@
     - pushing every hindrance aside
     - out of my way,
     - ‘cause I want to know you more.
+- title: Jesus, remember me
+  hymnal_name: Communauté de Taizé
+  sections:
+  - type: verse
+    lines:
+    - Jesus, remember me,
+    - when you come into your kingdom.
 - title: Jesus Christ is risen today, Alleluia!
   services: 9am
   hymnal_number: '207'

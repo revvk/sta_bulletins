@@ -1126,7 +1126,9 @@ class BulletinBuilder:
         constructs a minimal stub dict for header-only rendering.
         """
         slots = self._get_music_slots()
+        # Special weekday services (7 pm) use the 11am music pool
         service_key = self.service_time
+        uses_hymnals = self.service_time in ("11 am",)
 
         for slot in slots:
             if slot.service_part and slot.service_part.lower() == slot_name.lower():
@@ -1134,7 +1136,7 @@ class BulletinBuilder:
                     song = self.song_lookup(slot.song_title, service_key)
                     if song:
                         # For 11am: regular hymns → header only
-                        if self.service_time == "11 am":
+                        if uses_hymnals:
                             hymnal_num = str(song.get("hymnal_number", "") or "")
                             hymnal_name = song.get("hymnal_name")
                             # If the song dict doesn't carry a hymnal number,
@@ -1157,7 +1159,7 @@ class BulletinBuilder:
                             # S-prefix or no number → keep full lyrics
                         return self._apply_canonical_title(song)
                     # For 11am: construct a hymnal-only stub if it has a hymnal number
-                    if self.service_time == "11 am":
+                    if uses_hymnals:
                         from bulletin.sources.music_11am import parse_11am_identifier
                         parsed = parse_11am_identifier(slot.song_title)
                         if parsed["hymnal_number"]:

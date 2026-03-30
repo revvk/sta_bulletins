@@ -31,6 +31,20 @@ _TEMPLATES_DIR = Path(__file__).resolve().parent.parent.parent / "templates"
 _W_NS = "http://schemas.openxmlformats.org/wordprocessingml/2006/main"
 
 
+def _get_body_sectPr(body):
+    """Find the last direct-child <w:sectPr> of <w:body>.
+
+    IMPORTANT: Do NOT use body.find(qn('w:sectPr')) — that searches all
+    descendants and will find sectPr elements nested inside pPr, which
+    must not be moved.  This function only looks at direct children.
+    """
+    result = None
+    for child in body:
+        if child.tag == qn("w:sectPr"):
+            result = child
+    return result
+
+
 def load_front_cover(
     date_str: str,
     service_time: str,
@@ -101,7 +115,7 @@ def append_back_cover(doc: Document, template_name: str = "back_cover.docx",
     rid_map = _copy_related_parts(back_doc, doc)
 
     # --- Step 2: close the current section (next-page break) ------------
-    main_sect_pr = body.find(qn("w:sectPr"))
+    main_sect_pr = _get_body_sectPr(body)
     if main_sect_pr is not None:
         body.remove(main_sect_pr)
 
@@ -136,54 +150,21 @@ def append_back_cover(doc: Document, template_name: str = "back_cover.docx",
 def append_template_page(doc: Document, template_filename: str):
     """Append a template .docx as a new page section at the end.
 
-    Works exactly like append_back_cover but for any template file.
-    Used for inside back covers on special services.
+    Uses docxcompose to properly merge documents, which handles styles,
+    images, fonts, and other package-level parts correctly — unlike raw
+    XML element copying which can produce invalid documents when templates
+    contain complex content (text boxes, anchored drawings, etc.).
     """
+    from docxcompose.composer import Composer
+
     template_path = _TEMPLATES_DIR / template_filename
     if not template_path.exists():
         print(f"  Warning: Template not found: {template_path}")
         return
 
     tmpl_doc = Document(str(template_path))
-    body = doc.element.body
-    tmpl_body = tmpl_doc.element.body
-
-    # Copy images & hyperlinks, build rId remapping
-    rid_map = _copy_related_parts(tmpl_doc, doc)
-
-    # Close the current section (next-page break)
-    main_sect_pr = body.find(qn("w:sectPr"))
-    if main_sect_pr is not None:
-        body.remove(main_sect_pr)
-
-        sect_type = main_sect_pr.find(qn("w:type"))
-        if sect_type is not None:
-            sect_type.set(qn("w:val"), "nextPage")
-        else:
-            main_sect_pr.insert(
-                0, parse_xml(f'<w:type {nsdecls("w")} w:val="nextPage"/>')
-            )
-
-        paragraphs = list(body.iterchildren(qn("w:p")))
-        if paragraphs:
-            last_p = paragraphs[-1]
-            pPr = last_p.find(qn("w:pPr"))
-            if pPr is None:
-                pPr = parse_xml(f'<w:pPr {nsdecls("w")}/>')
-                last_p.insert(0, pPr)
-            pPr.append(main_sect_pr)
-
-    # Append template elements with remapped rIds, but skip the
-    # template's own <w:sectPr> — having multiple direct-child sectPr
-    # elements in the body produces invalid XML that triggers Word's
-    # "unreadable content" recovery dialog.
-    for element in list(tmpl_body):
-        if element.tag == qn("w:sectPr"):
-            continue
-        elem_copy = deepcopy(element)
-        if rid_map:
-            _remap_rids(elem_copy, rid_map)
-        body.append(elem_copy)
+    composer = Composer(doc)
+    composer.append(tmpl_doc)
 
 
 def setup_footers(doc: Document, date_str: str, service_time: str,

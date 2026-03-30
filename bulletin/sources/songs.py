@@ -43,6 +43,19 @@ def _load_all_songs() -> list[dict]:
     return _all_songs
 
 
+def _normalize_service(service: str) -> str:
+    """Normalize service identifiers for song filtering.
+
+    Maps all service times to "9am" or "11am" for song lookup.
+    Special weekday services (7 pm, etc.) use the 11am music pool.
+    """
+    svc = service.replace(" ", "").lower()
+    if svc in ("9am",):
+        return "9am"
+    # 11am, 7pm, and any other special service → 11am pool
+    return "11am"
+
+
 def _get_songs(service: str = "9am") -> list[dict]:
     """Get songs available for the given service.
 
@@ -50,8 +63,7 @@ def _get_songs(service: str = "9am") -> list[dict]:
       - It has no 'services' field (available for both), or
       - Its 'services' field matches the requested service
     """
-    # Normalize: "9 am" -> "9am", "11 am" -> "11am"
-    service = service.replace(" ", "")
+    service = _normalize_service(service)
     all_songs = _load_all_songs()
     return [
         s for s in all_songs
@@ -142,10 +154,22 @@ def lookup_song(identifier: str, service: str = "9am",
         if id_lower in song["title"].lower():
             return song
 
+    # Try punctuation-stripped match (handles "Bless the Lord my Soul"
+    # matching "Bless the Lord, my soul")
+    def _strip_punct(s):
+        return re.sub(r'[,;:!?\'".\-]', '', s).lower()
+
+    id_stripped = _strip_punct(clean)
+    for song in songs:
+        if _strip_punct(song["title"]) == id_stripped:
+            return song
+        if id_stripped in _strip_punct(song["title"]):
+            return song
+
     # Cross-service fallback: if not found in the primary service,
     # try the other service's songs (lyrics are shared when needed)
     if not _in_fallback:
-        svc = service.replace(" ", "")  # normalize "11 am" → "11am"
+        svc = _normalize_service(service)
         fallback = "9am" if svc == "11am" else "11am"
         result = lookup_song(identifier, service=fallback, _in_fallback=True)
         if result:

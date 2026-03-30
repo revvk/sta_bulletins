@@ -361,6 +361,7 @@ def get_seasonal_rules(title: str, color: str, notes: str,
         use_penitential = False
         acc_cel = "Blessed be God: Father, Son, and Holy Spirit."
         acc_ppl = "And blessed be his kingdom, now and for ever. Amen."
+        sop_label = "Song of Praise"
     elif special == "good_friday":
         # Good Friday has its own unique acclamation and no penitential order
         use_penitential = False
