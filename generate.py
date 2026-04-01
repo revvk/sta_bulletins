@@ -58,7 +58,8 @@ def main():
     parser.add_argument("date",
                         help="Target date in YYYY-MM-DD format")
     parser.add_argument("--service", "-s",
-                        choices=SERVICE_TIMES + ["7 pm", "hidden_springs", "all"],
+                        choices=SERVICE_TIMES + ["7 pm", "sunrise",
+                                                 "hidden_springs", "all"],
                         default="all",
                         help="Which service to generate (default: all)")
     parser.add_argument("--output", "-o",
@@ -81,8 +82,9 @@ def main():
 
     print(f"Generating bulletin for {target_date.strftime('%B %-d, %Y')}...")
 
-    # Determine if this is a Hidden Springs request
+    # Determine special service modes
     is_hidden_springs = args.service == "hidden_springs"
+    is_sunrise = args.service == "sunrise"
 
     # Step 1: Fetch data from Google Sheets
     hs_data = None
@@ -125,7 +127,9 @@ def main():
     else:
         print("  Fetching liturgical schedule from Google Sheets...")
         try:
-            sheet_data = get_bulletin_data(target_date)
+            svc_filter = "sunrise" if is_sunrise else None
+            sheet_data = get_bulletin_data(target_date,
+                                           service_type_filter=svc_filter)
         except ValueError as e:
             print(f"Error: {e}")
             sys.exit(1)
@@ -141,7 +145,10 @@ def main():
 
     # Determine which services to generate (if not already set for HS)
     if not is_hidden_springs:
-        if args.service != "all":
+        if is_sunrise:
+            # Sunrise service uses the 9am pipeline with Service Music data
+            services = ["sunrise"]
+        elif args.service != "all":
             services = [args.service]
         elif is_weekday_special:
             services = ["7 pm"]
@@ -208,7 +215,7 @@ def main():
             print(f"  Warning: Could not fetch 9am music: {e}")
 
     music_11am_slots = None
-    if "11 am" in services or "7 pm" in services:
+    if "11 am" in services or "7 pm" in services or "sunrise" in services:
         # 11am and weekday services use the Service Music tab
         if sheet_data.music:
             music_11am_slots = get_11am_music_slots(sheet_data.music)
@@ -236,6 +243,9 @@ def main():
         # Select the appropriate music data for this service
         if service_time == "hidden_springs":
             music_data = None  # HS music is in the HS planner row
+        elif service_time == "sunrise":
+            # Sunrise uses Service Music tab but 9am pipeline (full lyrics)
+            music_data = music_11am_slots
         elif service_time == "9 am":
             music_data = music_9am
         elif service_time in ("11 am", "7 pm"):
@@ -278,15 +288,17 @@ def main():
             short_title = get_short_liturgical_title(schedule.title, schedule.proper)
             year_letter = get_lectionary_year(target_date.year)
             ep_letter = builder.eucharistic_prayer
+            # Use original service_time for filename (not remapped)
+            file_svc = service_time
 
             if builder.special_service == "good_friday":
                 # Good Friday has no Eucharist → no EP designation
-                output_path = output_dir / f"{date_str} - {short_title}{year_letter} - {service_time} - Bulletin.docx"
+                output_path = output_dir / f"{date_str} - {short_title}{year_letter} - {file_svc} - Bulletin.docx"
             elif builder.special_service:
                 # Other special weekday services (Maundy Thursday)
-                output_path = output_dir / f"{date_str} - {short_title}{year_letter} - {service_time} (HEII-{ep_letter}) - Bulletin.docx"
+                output_path = output_dir / f"{date_str} - {short_title}{year_letter} - {file_svc} (HEII-{ep_letter}) - Bulletin.docx"
             else:
-                output_path = output_dir / f"{date_str} - {short_title}{year_letter} - {service_time} (HEII-{ep_letter}) - Bulletin.docx"
+                output_path = output_dir / f"{date_str} - {short_title}{year_letter} - {file_svc} (HEII-{ep_letter}) - Bulletin.docx"
 
         # Remove old file first (macOS quarantine attribute workaround)
         if output_path.exists():
@@ -308,8 +320,8 @@ def main():
             for slot, filename in aac_manifest:
                 print(f"  {slot + ':':<{max_slot + 1}} {filename}")
 
-    # Step 6: Generate reading sheets (if requested, not for weekday services)
-    if args.reading_sheets and not is_weekday_special:
+    # Step 6: Generate reading sheets (if requested)
+    if args.reading_sheets and not is_hidden_springs:
         print("\n  === Generating reading sheets ===")
 
         # Build a reference builder to get the shared reading/POP data.

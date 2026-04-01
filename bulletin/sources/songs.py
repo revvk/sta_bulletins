@@ -48,9 +48,10 @@ def _normalize_service(service: str) -> str:
 
     Maps all service times to "9am" or "11am" for song lookup.
     Special weekday services (7 pm, etc.) use the 11am music pool.
+    Sunrise services use the 9am pool (full lyrics, same song catalog).
     """
     svc = service.replace(" ", "").lower()
-    if svc in ("9am",):
+    if svc in ("9am", "sunrise"):
         return "9am"
     # 11am, 7pm, and any other special service → 11am pool
     return "11am"

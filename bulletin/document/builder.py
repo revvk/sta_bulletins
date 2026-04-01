@@ -98,6 +98,14 @@ class BulletinBuilder:
         self.service_time = service_time
         self.hidden_springs_data = hidden_springs_data
 
+        # Sunrise services use the 9am pipeline but display their own time
+        self.is_sunrise = service_time == "sunrise"
+        if self.is_sunrise:
+            self.service_time = "9 am"  # pipeline behavior
+            self._display_time = "6:30 am"  # shown on cover/footer
+        else:
+            self._display_time = service_time
+
         # Derived data
         self.schedule = sheet_data.schedule
         self.clergy = sheet_data.clergy
@@ -197,6 +205,7 @@ class BulletinBuilder:
         # Format the date nicely
         date_str = self.target_date.strftime("%B %-d, %Y")
         service_time = self.service_time
+        display_time = self._display_time
 
         if self.is_hidden_springs:
             return self._build_hidden_springs(date_str)
@@ -207,7 +216,7 @@ class BulletinBuilder:
         # Start from the front-cover template (replaces placeholders)
         doc = load_front_cover(
             date_str=date_str,
-            service_time=service_time,
+            service_time=display_time,
             liturgical_title=self.schedule.title,
             subtitle=" ",  # single space to preserve spacing when unused
             cover_template=cover_template,
@@ -235,7 +244,7 @@ class BulletinBuilder:
         append_back_cover(doc)
 
         # Footers — added after back cover so both sections exist
-        setup_footers(doc, date_str, service_time, self.schedule.title)
+        setup_footers(doc, date_str, display_time, self.schedule.title)
 
         return doc
 
@@ -1128,7 +1137,7 @@ class BulletinBuilder:
         slots = self._get_music_slots()
         # Special weekday services (7 pm) use the 11am music pool
         service_key = self.service_time
-        uses_hymnals = self.service_time in ("11 am",)
+        uses_hymnals = self.service_time in ("11 am", "7 pm")
 
         for slot in slots:
             if slot.service_part and slot.service_part.lower() == slot_name.lower():

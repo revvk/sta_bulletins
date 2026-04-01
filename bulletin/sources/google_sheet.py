@@ -409,8 +409,18 @@ class BulletinData:
     music: Optional[ServiceMusicRow]
 
 
-def get_bulletin_data(target_date: date) -> BulletinData:
+def get_bulletin_data(target_date: date,
+                      service_type_filter: str = None) -> BulletinData:
     """Fetch all sheet data and look up the row for the target date.
+
+    Args:
+        target_date: The date to look up.
+        service_type_filter: Optional filter for the service_type column.
+            When set (e.g., "sunrise"), selects the row whose title
+            contains this string (case-insensitive) instead of preferring
+            "Sunday" rows.  This allows multiple services on the same
+            date (e.g., Easter Sunrise + Easter Day) to each generate
+            their own bulletin.
 
     Raises ValueError if the target date is not found in the Liturgical Schedule.
     """
@@ -420,10 +430,20 @@ def get_bulletin_data(target_date: date) -> BulletinData:
 
     # Find the matching row in liturgical schedule
     schedule = None
-    for row in schedule_rows:
-        if row.date == target_date and row.service_type.lower().strip() == "sunday":
-            schedule = row
-            break
+
+    if service_type_filter:
+        # Look for a row whose title contains the filter string
+        filt = service_type_filter.lower()
+        for row in schedule_rows:
+            if row.date == target_date and filt in row.title.lower():
+                schedule = row
+                break
+    else:
+        # Default: prefer "Sunday" rows
+        for row in schedule_rows:
+            if row.date == target_date and row.service_type.lower().strip() == "sunday":
+                schedule = row
+                break
 
     if schedule is None:
         # Also try non-Sunday service types (feasts, etc.)
@@ -448,11 +468,25 @@ def get_bulletin_data(target_date: date) -> BulletinData:
             clergy = row
             break
 
-    # Find matching music
+    # Find matching music — match by title when filtering
     music = None
-    for row in music_rows:
-        if row.date == target_date:
-            music = row
-            break
+    if service_type_filter:
+        filt = service_type_filter.lower()
+        for row in music_rows:
+            if row.date == target_date and filt in row.title.lower():
+                music = row
+                break
+    else:
+        # Default: prefer "Sunday" rows to avoid picking up sunrise/vigil music
+        for row in music_rows:
+            if row.date == target_date and row.service_type.lower().strip() == "sunday":
+                music = row
+                break
+    if music is None:
+        # Fallback: any row with matching date
+        for row in music_rows:
+            if row.date == target_date:
+                music = row
+                break
 
     return BulletinData(schedule=schedule, clergy=clergy, music=music)

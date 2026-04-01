@@ -27,6 +27,7 @@ from bulletin.document.formatting import (
     add_spacer, add_rubric,
     add_body, add_scripture_text,
     add_celebrant_line, add_people_line,
+    _add_text_runs,
 )
 from bulletin.document.sections.word_of_god import add_pop
 from bulletin.sources.psalms import parse_psalm_reference
@@ -196,10 +197,10 @@ def _add_psalm_for_reader(doc: Document, psalm_ref: str,
     add_spacer(doc)
 
     # Determine bold pattern for the psalm:
-    #   - Unison: no bold (everyone reads together)
+    #   - Unison: all bold (everyone reads together)
     #   - Responsive/antiphonal/alternating by whole verse: alternating bold
     #   - Responsive by half-verse: alternating bold by half-verse
-    all_bold = False  # Reading sheets never use all-bold for unison
+    all_bold = mode_key == "unison"
     alternating = mode_key in (
         "responsive_whole_verse", "antiphonal", "men_and_women"
     )
@@ -210,47 +211,69 @@ def _add_psalm_for_reader(doc: Document, psalm_ref: str,
             if half_verse:
                 # Bold the second half of each verse
                 _add_psalm_verse_half_bold(doc, verse_text)
+            elif all_bold:
+                _add_psalm_verse(doc, verse_text, bold=True)
             else:
                 bold_verse = alternating and (verse_idx % 2 == 1)
                 _add_psalm_verse(doc, verse_text, bold_verse)
 
 
 def _add_psalm_verse(doc: Document, verse_text: str, bold: bool):
-    """Add a single psalm verse, optionally all bold."""
+    """Add a single psalm verse, optionally all bold.
+
+    Uses _add_text_runs to properly render LORD as small-caps Lord.
+    Handles \\v (vertical tab) as a first-half continuation line that
+    starts a new paragraph at the left margin (no hanging indent).
+    """
+    from docx.shared import Pt
+
     p = doc.add_paragraph(style="Psalm")
     if "\n" in verse_text:
         sub_lines = verse_text.split("\n")
         for i, sub in enumerate(sub_lines):
-            if i > 0:
+            if sub.startswith("\v"):
+                # First-half continuation: new paragraph at left margin
+                p.paragraph_format.space_after = Pt(0)
+                p = doc.add_paragraph(style="Psalm")
+                p.paragraph_format.space_before = Pt(0)
+                _add_text_runs(p, sub[1:], bold=bold)
+            elif i > 0:
                 run = p.add_run()
                 run.add_break()
-            run = p.add_run(sub)
-            if bold:
-                run.bold = True
-                run.font.name = FONT_BODY_BOLD
+                _add_text_runs(p, sub, bold=bold)
+            else:
+                _add_text_runs(p, sub, bold=bold)
     else:
-        run = p.add_run(verse_text)
-        if bold:
-            run.bold = True
-            run.font.name = FONT_BODY_BOLD
+        _add_text_runs(p, verse_text, bold=bold)
 
 
 def _add_psalm_verse_half_bold(doc: Document, verse_text: str):
-    """Add a psalm verse with the second half bold (responsive by half-verse)."""
+    """Add a psalm verse with the second half bold (responsive by half-verse).
+
+    Uses _add_text_runs to properly render LORD as small-caps Lord.
+    Handles \\v (vertical tab) as a first-half continuation line.
+    """
+    from docx.shared import Pt
+
     p = doc.add_paragraph(style="Psalm")
     if "\n" in verse_text:
         sub_lines = verse_text.split("\n")
         for i, sub in enumerate(sub_lines):
-            if i > 0:
+            if sub.startswith("\v"):
+                p.paragraph_format.space_after = Pt(0)
+                p = doc.add_paragraph(style="Psalm")
+                p.paragraph_format.space_before = Pt(0)
+                _add_text_runs(p, sub[1:], bold=False)
+            elif i > 0:
                 run = p.add_run()
                 run.add_break()
-            run = p.add_run(sub)
-            # Tab-indented lines are the second half → bold
-            if sub.startswith("\t"):
-                run.bold = True
-                run.font.name = FONT_BODY_BOLD
+                # Tab-indented lines are the second half → bold
+                is_bold = sub.startswith("\t")
+                _add_text_runs(p, sub, bold=is_bold)
+            else:
+                _add_text_runs(p, sub, bold=False)
     else:
-        run = p.add_run(verse_text)
+        _add_text_runs(p, verse_text)
 
 
 def _add_pop_section(doc: Document, data: dict):
