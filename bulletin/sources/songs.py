@@ -72,6 +72,19 @@ def _get_songs(service: str = "9am") -> list[dict]:
     ]
 
 
+def _hint_matches(song_title: str, hint_lower: str) -> bool:
+    """Check if a song title contains the parenthetical hint words.
+
+    Used to disambiguate when multiple songs match a short identifier.
+    e.g. hint "give thanks to the risen lord" matches
+    "Alleluia, alleluia! Give thanks to the risen Lord"
+    """
+    # Strip punctuation from both for flexible matching
+    title_clean = re.sub(r'[,;:!?\'".\-]', '', song_title).lower()
+    hint_clean = re.sub(r'[,;:!?\'".\-]', '', hint_lower).lower()
+    return hint_clean in title_clean
+
+
 def _clean_identifier(identifier: str) -> str:
     """Strip parenthetical notes and hymnal refs for title matching.
 
@@ -122,6 +135,21 @@ def lookup_song(identifier: str, service: str = "9am",
             if song.get("hymnal_number") == hymnal_num:
                 return song
 
+    # Try exact title match against the raw identifier first (before
+    # stripping parentheticals), so that "Forever (We Sing Hallelujah)"
+    # matches before being reduced to just "Forever".
+    raw_lower = identifier.strip().lower()
+    for song in songs:
+        if song["title"].lower() == raw_lower:
+            return song
+
+    # Extract parenthetical content for disambiguation.
+    # e.g. "Alleluia (Give Thanks to the Risen Lord)" → hint="give thanks to the risen lord"
+    # When fuzzy matching produces candidates, prefer one whose title
+    # contains the hint text.
+    paren_match = re.search(r'\(([^)]+)\)', identifier)
+    hint_lower = paren_match.group(1).strip().lower() if paren_match else ""
+
     # Clean identifier for title matching: strip parenthetical notes
     # and hymnal references (H###, S###)
     clean = _clean_identifier(identifier)
@@ -143,14 +171,27 @@ def lookup_song(identifier: str, service: str = "9am",
             if alias.lower() == id_lower:
                 return song
 
-    # Try starts-with match
+    # Try starts-with match — if there's a hint, use it to disambiguate
     for song in songs:
         if song["title"].lower().startswith(id_lower):
-            return song
+            if not hint_lower or _hint_matches(song["title"], hint_lower):
+                return song
         if title_part and song["title"].lower().startswith(title_part.lower()):
-            return song
+            if not hint_lower or _hint_matches(song["title"], hint_lower):
+                return song
+    # If hint filtering excluded all starts-with matches, try without hint
+    if hint_lower:
+        for song in songs:
+            if song["title"].lower().startswith(id_lower):
+                return song
+            if title_part and song["title"].lower().startswith(title_part.lower()):
+                return song
 
-    # Try substring match
+    # Try substring match — prefer hint-matching candidates
+    if hint_lower:
+        for song in songs:
+            if id_lower in song["title"].lower() and _hint_matches(song["title"], hint_lower):
+                return song
     for song in songs:
         if id_lower in song["title"].lower():
             return song
@@ -161,6 +202,13 @@ def lookup_song(identifier: str, service: str = "9am",
         return re.sub(r'[,;:!?\'".\-]', '', s).lower()
 
     id_stripped = _strip_punct(clean)
+    # Also try matching with the hint included
+    if hint_lower:
+        full_stripped = _strip_punct(identifier.strip())
+        for song in songs:
+            if _strip_punct(song["title"]) == full_stripped:
+                return song
+
     for song in songs:
         if _strip_punct(song["title"]) == id_stripped:
             return song

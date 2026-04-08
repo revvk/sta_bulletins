@@ -41,8 +41,8 @@ def load_pop_forms() -> dict:
     return _load_yaml("prayers/pop_forms.yaml")
 
 
-def load_staff() -> dict:
-    return _load_yaml("staff.yaml")
+def load_placeholders() -> dict:
+    return _load_yaml("placeholders.yaml")
 
 
 def load_reading_introductions() -> dict:

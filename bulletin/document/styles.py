@@ -45,6 +45,75 @@ _TAB_LEFT_INCHES = 1.5
 _TAB_RIGHT_INCHES = PAGE_WIDTH_INCHES - 2 * MARGIN_INCHES  # 6.0"
 
 
+def prune_unused_styles(doc: Document) -> int:
+    """Remove styles from *doc* that are not referenced anywhere.
+
+    Scans the main document body, headers, and footers for style references
+    (pStyle, rStyle, tblStyle), then chases basedOn/link/next chains to
+    preserve transitive dependencies. Removes any other w:style elements
+    from the styles part. Always keeps "Normal".
+
+    Returns the number of styles removed.
+    """
+    W = "http://schemas.openxmlformats.org/wordprocessingml/2006/main"
+    PSTYLE = f"{{{W}}}pStyle"
+    RSTYLE = f"{{{W}}}rStyle"
+    TBLSTYLE = f"{{{W}}}tblStyle"
+    STYLE = f"{{{W}}}style"
+    STYLE_ID = f"{{{W}}}styleId"
+    VAL = f"{{{W}}}val"
+    BASED_ON = f"{{{W}}}basedOn"
+    LINK = f"{{{W}}}link"
+    NEXT = f"{{{W}}}next"
+
+    # Collect element trees to scan: main body + each header/footer part.
+    elements = [doc.element]
+    for section in doc.sections:
+        for hf in (section.header, section.footer,
+                   section.first_page_header, section.first_page_footer,
+                   section.even_page_header, section.even_page_footer):
+            try:
+                elements.append(hf.part.element)
+            except Exception:
+                pass
+
+    used = set()
+    for el in elements:
+        for tag in (PSTYLE, RSTYLE, TBLSTYLE):
+            for ref in el.iter(tag):
+                v = ref.get(VAL)
+                if v:
+                    used.add(v)
+
+    styles_el = doc.styles.element
+    by_id = {s.get(STYLE_ID): s for s in styles_el.findall(STYLE)
+             if s.get(STYLE_ID)}
+
+    # Chase basedOn/link/next dependencies.
+    queue = list(used)
+    while queue:
+        sid = queue.pop()
+        s = by_id.get(sid)
+        if s is None:
+            continue
+        for tag in (BASED_ON, LINK, NEXT):
+            for ref in s.findall(tag):
+                v = ref.get(VAL)
+                if v and v not in used:
+                    used.add(v)
+                    queue.append(v)
+
+    # Always keep Normal.
+    used.add("Normal")
+
+    removed = 0
+    for sid, s in by_id.items():
+        if sid not in used:
+            styles_el.remove(s)
+            removed += 1
+    return removed
+
+
 def create_document() -> Document:
     """Create a new Document with all bulletin styles and page setup."""
     doc = Document()
@@ -329,9 +398,13 @@ def _create_styles(doc: Document, style_defs=None):
         if name.startswith("Heading"):
             pf.keep_with_next = True
 
-        # Tab stops for body-text styles
+        # Tab stops for body-text styles — use LP tab positions for the
+        # large-print (Hidden Springs) styles, which use a wider page.
         if name in _STYLES_WITH_TABS:
-            _add_tab_stops(pf)
+            if style_defs is _LP_STYLE_DEFS:
+                _add_tab_stops(pf, _LP_TAB_LEFT_INCHES, _LP_TAB_RIGHT_INCHES)
+            else:
+                _add_tab_stops(pf)
 
     # --- Passion Gospel part styles ---
     if style_defs is _STYLE_DEFS:
@@ -361,11 +434,19 @@ def _strip_theme_fonts(style):
             del rFonts.attrib[attr]
 
 
-def _add_tab_stops(pf):
-    """Add left (1.5") and right (6") tab stops to a paragraph format."""
+def _add_tab_stops(pf, left_in=None, right_in=None):
+    """Add left and right tab stops to a paragraph format.
+
+    Defaults to the standard bulletin tab positions; pass explicit values
+    for large-print (Hidden Springs) styles which use a wider page.
+    """
+    if left_in is None:
+        left_in = _TAB_LEFT_INCHES
+    if right_in is None:
+        right_in = _TAB_RIGHT_INCHES
     tab_stops = pf.tab_stops
-    tab_stops.add_tab_stop(Inches(_TAB_LEFT_INCHES), WD_TAB_ALIGNMENT.LEFT)
-    tab_stops.add_tab_stop(Inches(_TAB_RIGHT_INCHES), WD_TAB_ALIGNMENT.RIGHT)
+    tab_stops.add_tab_stop(Inches(left_in), WD_TAB_ALIGNMENT.LEFT)
+    tab_stops.add_tab_stop(Inches(right_in), WD_TAB_ALIGNMENT.RIGHT)
 
 
 def _create_passion_gospel_styles(doc: Document):

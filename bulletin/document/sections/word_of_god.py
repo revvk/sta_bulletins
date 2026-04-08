@@ -177,15 +177,34 @@ def add_standard_opening(doc: Document, rules: SeasonalRules,
     if rules.include_collect_for_purity:
         add_body_with_amen(doc, prayers["collect_for_purity"])
 
-    # Song of Praise / Kyrie / Advent Wreath
+    # Song of Praise / Kyrie / Advent Wreath / Gloria
     add_spacer(doc)
-    add_heading2(doc, rules.song_of_praise_label)
+    sop = data.get("song_of_praise") if service_time != "8 am" else None
+    use_gloria_lyrics = (
+        service_time != "8 am"
+        and not rules.is_advent
+        and not (sop and sop.get("sections"))
+        and _is_gloria_sop(sop, rules)
+    )
+    if service_time == "8 am" or use_gloria_lyrics:
+        add_heading2(doc, "Gloria")
+    else:
+        add_heading2(doc, rules.song_of_praise_label)
+
     if rules.is_advent:
         _add_advent_wreath(doc, data)
     elif service_time == "8 am":
         _add_gloria_spoken(doc, prayers)
     else:
-        add_song_smart(doc, data.get("song_of_praise"))
+        if sop and sop.get("sections"):
+            add_song_smart(doc, sop)
+        elif use_gloria_lyrics:
+            # Gloria with no full lyrics in songs.yaml: render the BCP
+            # text as lyrics (Gill Sans Nova Light), one section per row.
+            _add_gloria_as_song(doc, prayers, sop)
+        else:
+            # Fallback: render as spoken text with hanging indent (8 am style).
+            _add_gloria_spoken(doc, prayers)
 
 
 def add_penitential_order(doc: Document, rules: SeasonalRules,
@@ -501,6 +520,13 @@ def add_pop(doc: Document, elements: list[dict]):
         # Add spacer between petitions (but not after the last one)
         if etype in ("people", "both") and i + 1 < len(elements):
             add_spacer(doc)
+        # Add spacer after a Silence rubric so the next petition is set off
+        # (matters for Form II, where Silence is followed directly by the
+        # next leader petition with no people response in between).
+        elif (etype == "rubric"
+              and "silence" in text.lower()
+              and i + 1 < len(elements)):
+            add_spacer(doc)
 
 
 def _add_advent_wreath(doc: Document, data: dict):
@@ -616,27 +642,135 @@ def add_celebrant_with_cross(doc: Document, label: str, text: str):
 def _add_gloria_spoken(doc: Document, prayers: dict):
     """Add the Gloria as spoken bold text (People recitation) for 8am.
 
-    Renders each section as a separate bold paragraph with line breaks
-    within, so the poetic structure is visible while remaining bold.
+    Uses hanging-indent formatting (0.694" left, 0.25" hanging) so that
+    continuation lines within a paragraph wrap indented from the first line.
+    Paragraphs are grouped into sections; the last paragraph of each section
+    (except the final section) gets 6pt space after for a stanza break.
     """
+    from docx.shared import Inches, Pt
+
     gloria = prayers["gloria"]
-    # Support both old format (list of strings) and new (dict with sections)
     if isinstance(gloria, dict):
         sections = gloria.get("sections", [])
     else:
-        # Legacy: flat list → one section
         sections = [gloria]
 
-    for section_lines in sections:
-        text = "\n".join(line.strip() for line in section_lines)
-        p = doc.add_paragraph(style="Body - People Recitation")
-        # Use add_break() for line breaks within the paragraph
-        for i, line in enumerate(section_lines):
-            if i > 0:
-                run = p.runs[-1] if p.runs else p.add_run("")
-                run.add_break()
-            run = p.add_run(line.strip())
-            run.style = doc.styles["People"]
+    for sec_idx, section in enumerate(sections):
+        # New format: section is a dict with 'paragraphs' key
+        if isinstance(section, dict):
+            paragraphs = section.get("paragraphs", [])
+        else:
+            # Legacy: section is a flat list of strings → one paragraph
+            paragraphs = [section]
+
+        is_last_section = sec_idx == len(sections) - 1
+
+        for para_idx, para_data in enumerate(paragraphs):
+            # Each paragraph entry is either a string or a list of strings
+            if isinstance(para_data, str):
+                lines = [para_data]
+            else:
+                lines = para_data
+
+            p = doc.add_paragraph(style="Body - People Recitation")
+            # Apply Gloria hanging indent
+            p.paragraph_format.left_indent = Inches(0.694)
+            p.paragraph_format.first_line_indent = Inches(-0.25)
+
+            # Space after: 6pt on last paragraph of each section (stanza break),
+            # 0pt on all other paragraphs
+            is_last_para = para_idx == len(paragraphs) - 1
+            if is_last_para and not is_last_section:
+                p.paragraph_format.space_after = Pt(6)
+            else:
+                p.paragraph_format.space_after = Pt(0)
+            p.paragraph_format.space_before = Pt(0)
+
+            for i, line in enumerate(lines):
+                if i > 0:
+                    run = p.runs[-1] if p.runs else p.add_run("")
+                    run.add_break()
+                run = p.add_run(line.strip())
+                run.style = doc.styles["People"]
+
+
+def _is_gloria_sop(sop: dict | None, rules: SeasonalRules) -> bool:
+    """Detect whether the Song of Praise slot is the Gloria.
+
+    The planning sheet's Song-of-Praise slot title typically reads
+    "Glory to God" or "Gloria in excelsis" (often with an S-number).
+    Outside Advent and Lent, when no entry was found in songs.yaml, the
+    default Song of Praise is the Gloria.
+    """
+    if rules.is_advent or rules.song_of_praise_label == "Kyrie":
+        return False
+    title = ((sop or {}).get("title") or "").lower()
+    if "gloria" in title or "glory to god" in title:
+        return True
+    # No slot at all → fall back to BCP Gloria for non-penitential seasons.
+    return sop is None
+
+
+def _add_gloria_as_song(doc: Document, prayers: dict, sop: dict | None):
+    """Render the Gloria as sung lyrics (Gill Sans Nova Light).
+
+    Renders the BCP Gloria from common_prayers.yaml as paragraphs in the
+    "Body - Lyrics" style (Gill Sans Nova Light) so it visually reads as
+    sung text rather than spoken recitation, while preserving the BCP
+    hanging-indent layout (continuation lines indented under the first
+    line of each paragraph) and stanza spacing between sections. The
+    block is wrapped in a no-split table cell so it does not break across
+    pages. The hymn header (title + hymnal reference, e.g. S280) from the
+    planning sheet is rendered above the block.
+    """
+    from docx.shared import Inches, Pt
+    from bulletin.document.formatting import (
+        _remove_table_borders, _prevent_row_split, _remove_cell_margins,
+    )
+
+    gloria = prayers.get("gloria") or {}
+    if isinstance(gloria, dict):
+        gloria_sections = gloria.get("sections", [])
+    else:
+        gloria_sections = [gloria]
+
+    if not gloria_sections:
+        return
+
+    table = doc.add_table(rows=len(gloria_sections), cols=1)
+    table.autofit = True
+    _remove_table_borders(table)
+    _prevent_row_split(table)
+    _remove_cell_margins(table)
+
+    for sec_idx, section in enumerate(gloria_sections):
+        if isinstance(section, dict):
+            paragraphs = section.get("paragraphs", [])
+        else:
+            paragraphs = [section]
+
+        cell = table.cell(sec_idx, 0)
+        for p in list(cell.paragraphs):
+            p._element.getparent().remove(p._element)
+
+        for para_idx, para_data in enumerate(paragraphs):
+            if isinstance(para_data, str):
+                lines = [para_data]
+            else:
+                lines = list(para_data)
+            p = cell.add_paragraph(style="Body - Lyrics")
+            p.paragraph_format.left_indent = Inches(0.694)
+            p.paragraph_format.first_line_indent = Inches(-0.25)
+            p.paragraph_format.space_before = Pt(0)
+            p.paragraph_format.space_after = Pt(0)
+            for i, line in enumerate(lines):
+                if i > 0:
+                    (p.runs[-1] if p.runs else p.add_run("")).add_break()
+                p.add_run(line.strip())
+
+        # Stanza spacer between rows (not after the final row)
+        if sec_idx < len(gloria_sections) - 1:
+            cell.add_paragraph("", style="Spacer - Small")
 
 
 def _add_kyrie_spoken(doc: Document):

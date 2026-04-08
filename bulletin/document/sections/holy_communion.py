@@ -68,11 +68,14 @@ def add_holy_communion(doc: Document, rules: SeasonalRules, data: dict):
 
     # --- Offertory ---
     add_spacer(doc)
-    add_introductory_rubric(doc, "Be seated.")
+    be_seated_p = add_introductory_rubric(doc, "Be seated.")
     add_heading2(doc, "Offertory")
     service_time = data.get("service_time", "9 am")
     if service_time in ("8 am", "11 am"):
         add_short_offertory_rubric(doc)
+        # Anchor the same QR code that 9am uses, but to the "Be seated."
+        # rubric just above the Offertory heading.
+        _add_qr_code(doc, be_seated_p)
     else:
         add_offertory_rubric(doc)
     add_spacer(doc)
@@ -796,19 +799,29 @@ def _add_agnus_dei_images(doc: Document):
 
 
 def add_blessing_line(doc: Document, text: str):
-    """Add a Celebrant blessing line, rendering ✠ as a bold cross."""
-    p = doc.add_paragraph(style="Body - Dialogue")
-    p.add_run("Celebrant")
-    p.add_run("\t")
-    if CROSS_SYMBOL in text:
-        parts = text.split(CROSS_SYMBOL)
+    """Add a blessing as body text (no Celebrant label), with ✠ cross symbol.
+
+    The final 'Amen.' is rendered bold (spoken by all the people in unison).
+    """
+    # Ensure the text ends with "Amen."
+    if not text.rstrip().endswith("Amen."):
+        text = text.rstrip() + " Amen."
+
+    # Split off the trailing "Amen." to bold it
+    body = text.rstrip()[:-5]  # everything before "Amen."
+    p = doc.add_paragraph(style="Body")
+    if CROSS_SYMBOL in body:
+        parts = body.split(CROSS_SYMBOL)
         for i, part in enumerate(parts):
             if i > 0:
                 add_cross_symbol(p)
             if part:
                 p.add_run(part)
     else:
-        p.add_run(text)
+        p.add_run(body)
+    run = p.add_run("Amen.")
+    run.bold = True
+    run.font.name = FONT_BODY_BOLD
 
 
 def add_short_offertory_rubric(doc: Document):

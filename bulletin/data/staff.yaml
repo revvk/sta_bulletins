@@ -1,5 +1,17 @@
-# Staff and Vestry listing for the back page of the bulletin.
-# Update this file when staff or vestry changes.
+# Staff and Vestry listing.
+#
+# NOTE: This file is not currently read by the bulletin generator. The
+# back cover is appended from a saved Word template, so staff/vestry
+# changes today require editing the template document directly.
+#
+# Future improvement: the back cover templates could include placeholder
+# tokens (e.g. {rector_name}, {vestry_members}) that the generator fills
+# in from this file at build time. Then keeping the bulletin up to date
+# would only require editing staff.yaml — no template edits needed.
+#
+# Liturgical names (presiding bishop, bishop, clergy first names, etc.)
+# used by the Prayers of the People have moved to
+# bulletin/data/placeholders.yaml.
 
 clergy:
   - name: "The Rev. Andrew Van Kirk"
@@ -52,19 +64,3 @@ vestry:
     - "Ned Searles"
     - "Peter Stringer"
     - "Syd Verinder"
-
-# Names used in liturgy (first names for POP forms, etc.)
-# presiding_bishop and bishop are used in Form VI and other POP forms
-liturgical_names:
-  presiding_bishop: "Sean"
-  bishop: "Rob"
-  president: "Donald"
-  governor: "Greg"
-  mayor: "George"
-  clergy_first_names:
-    - "Andrew"
-    - "Logan"
-    - "Paulette"
-    - "Katie"
-    - "Mike"
-    - "Gene"

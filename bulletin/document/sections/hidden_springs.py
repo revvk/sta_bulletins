@@ -65,7 +65,6 @@ def add_hidden_springs_low(doc: Document, rules: SeasonalRules, data: dict):
 
     # --- Be seated for readings ---
     add_spacer(doc)
-    add_introductory_rubric(doc, "Be seated.")
 
     # --- First Reading ---
     add_reading(doc, data["reading_1_ref"], data["reading_1_text"])
@@ -77,7 +76,6 @@ def add_hidden_springs_low(doc: Document, rules: SeasonalRules, data: dict):
 
     # --- Sequence Hymn ---
     add_spacer(doc)
-    add_introductory_rubric(doc, "Please stand.")
     add_heading2(doc, "Sequence Hymn")
     add_song_smart(doc, data.get("sequence_hymn"), force_single_column=True)
 
@@ -87,13 +85,11 @@ def add_hidden_springs_low(doc: Document, rules: SeasonalRules, data: dict):
 
     # --- Sermon ---
     add_spacer(doc)
-    add_introductory_rubric(doc, "Be seated.")
     add_heading2(doc, "Sermon")
     add_body(doc, data.get("preacher", ""))
 
     # --- Nicene Creed ---
     add_spacer(doc)
-    add_introductory_rubric(doc, "Please stand.")
     add_heading2(doc, "The Nicene Creed")
     add_nicene_creed(doc, prayers)
 
@@ -112,7 +108,6 @@ def add_hidden_springs_low(doc: Document, rules: SeasonalRules, data: dict):
 
     # --- The Peace ---
     add_spacer(doc)
-    add_introductory_rubric(doc, "Please stand.")
     add_heading2(doc, "The Peace")
     add_celebrant_line(doc, "Celebrant",
                        "The peace of the Lord be always with you.")
@@ -176,13 +171,11 @@ def _add_hs_standard_opening(doc: Document, rules: SeasonalRules,
     add_spacer(doc)
 
     # Processional
-    add_introductory_rubric(doc, "Please stand.")
     add_heading2(doc, "Processional")
     add_song_smart(doc, data.get("processional"), force_single_column=True)
 
     # Opening Acclamation
     add_spacer(doc)
-    add_introductory_rubric(doc, "Remain standing.")
     add_heading2(doc, "Opening Acclamation")
     cel_text = rules.acclamation_celebrant.replace("{cross}", CROSS_SYMBOL)
     add_celebrant_with_cross(doc, "Celebrant", cel_text)
@@ -215,13 +208,11 @@ def _add_hs_penitential_opening(doc: Document, rules: SeasonalRules,
     add_spacer(doc)
 
     # Processional
-    add_introductory_rubric(doc, "Please stand.")
     add_heading2(doc, "Processional")
     add_song_smart(doc, data.get("processional"), force_single_column=True)
 
     # Opening Acclamation
     add_spacer(doc)
-    add_introductory_rubric(doc, "Remain standing.")
     add_heading2(doc, "Opening Acclamation")
     cel_text = rules.acclamation_celebrant.replace("{cross}", CROSS_SYMBOL)
     add_celebrant_with_cross(doc, "Celebrant", cel_text)
@@ -240,7 +231,6 @@ def _add_hs_penitential_opening(doc: Document, rules: SeasonalRules,
 
     # Confession
     add_spacer(doc)
-    add_introductory_rubric(doc, "Please kneel or remain standing.")
     add_confession(doc, prayers)
 
     # Then "The Word of God" section heading
@@ -248,7 +238,6 @@ def _add_hs_penitential_opening(doc: Document, rules: SeasonalRules,
 
     # Kyrie
     add_spacer(doc)
-    add_introductory_rubric(doc, "Please stand.")
     add_heading2(doc, "Kyrie")
     sop = data.get("song_of_praise")
     if sop and sop.get("sections"):
@@ -274,15 +263,31 @@ def _add_gloria_as_lyrics(doc: Document, prayers: dict):
     else:
         sections = [gloria]
 
-    for section_lines in sections:
-        def _add_section(cell, lines=section_lines):
-            p = cell.add_paragraph(style="Body - People Recitation")
-            p.paragraph_format.space_before = Pt(0)
-            for i, line in enumerate(lines):
-                if i > 0:
-                    p.runs[-1].add_break()
-                run = p.add_run(line.strip())
-                run.style = doc.styles["People"]
+    for section in sections:
+        # New format: section is a dict with 'paragraphs' key
+        if isinstance(section, dict):
+            paragraphs = section.get("paragraphs", [])
+        else:
+            # Legacy: section is a flat list of strings → one paragraph
+            paragraphs = [section]
+
+        def _add_section(cell, paras=paragraphs):
+            from docx.shared import Inches
+            for para_data in paras:
+                if isinstance(para_data, str):
+                    lines = [para_data]
+                else:
+                    lines = para_data
+                p = cell.add_paragraph(style="Body - People Recitation")
+                p.paragraph_format.space_before = Pt(0)
+                # Hanging indent (matches 8am _add_gloria_spoken)
+                p.paragraph_format.left_indent = Inches(0.694)
+                p.paragraph_format.first_line_indent = Inches(-0.25)
+                for i, line in enumerate(lines):
+                    if i > 0:
+                        p.runs[-1].add_break()
+                    run = p.add_run(line.strip())
+                    run.style = doc.styles["People"]
         add_no_split_block(doc, _add_section)
 
 

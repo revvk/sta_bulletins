@@ -1329,7 +1329,7 @@
     - In his living, in his suffering,
     - never trace, nor stain of sin.
     - See the true and better Adam,
-    - come to save the hellhound man.
+    - come to save the hellbound man.
     - Christ, the great and sure fulfillment
     - of the law, in him we stand.
   - type: verse
@@ -1337,7 +1337,7 @@
     - Come behold the wondrous mystery,
     - Christ the Lord upon the tree.
     - In the stead of ruined sinners
-    - hands the Lamb in victory.
+    - hangs the Lamb in victory.
     - See the price of our redemption,
     - see the Father’s plan unfold.
     - Bringing many sons to glory;
@@ -1346,8 +1346,8 @@
     lines:
     - Come behold the wondrous mystery,
     - slain by death, the God of life.
-    - But no grace could e’er restrain him.
-    - Praise the Lord, he is a live!
+    - But no grave could e’er restrain him.
+    - Praise the Lord, he is alive!
     - What a foretaste of deliverance,
     - how unwavering our hope.
     - Christ in power resurrected,
@@ -1862,6 +1862,51 @@
     - his love endures forever.
     - Sing praise, sing praise.
     - Sing praise, sing praise.
+- title: Forever (We Sing Hallelujah)
+  services: 9am
+  sections:
+  - type: verse
+    lines:
+    - The moon and stars, they wept,
+    - the morning sun was dead;
+    - the Savior of the world was fallen.
+    - His body on the cross,
+    - his blood poured out for us;
+    - the weight of every curse upon him.
+  - type: verse
+    lines:
+    - One final breath he gave
+    - as heaven looked away;
+    - the Son of God was laid in darkness.
+    - A battle in the grave,
+    - the war on death was waged;
+    - the power of hell forever broken.
+  - type: verse
+    lines:
+    - The ground began to shake,
+    - the stone was rolled away;
+    - his perfect love could not be overcome.
+    - Now, death, where is your sting?
+    - Our resurrected King
+    - has rendered you defeated.
+  - type: chorus
+    lines:
+    - Now, forever he is glorified;
+    - forever he is lifted high.
+    - And forever he is risen;
+    - he is alive, and he is alive.
+  - type: chorus
+    lines:
+    - We sing hallelujah,
+    - we sing hallelujah,
+    - we sing hallelujah;
+    - the Lamb has overcome.
+  - type: tag
+    lines:
+    - And now, death, where is your sting?
+    - Our resurrected King
+    - has overcome.
+    - He's overcome.
 - title: Fraction Anthem
   services: 9am
   sections:
@@ -4208,6 +4253,29 @@
     - till in heaven we take our place,
     - till we cast our crowns before thee,
     - lost in wonder, love, and praise.
+- title: Love’s redeeming work is done
+  services: 9am
+  hymnal_number: '188'
+  hymnal_name: Hymnal 1982
+  sections:
+  - type: verse
+    lines:
+    - Love’s redeeming work is done,
+    - fought the fight, the battle won.
+    - Death in vain forbids him rise;
+    - Christ has opened paradise.
+  - type: verse
+    lines:
+    - Lives again our glorious King;
+    - where, O death, is now thy sting?
+    - Once he died our souls to save,
+    - where thy victory, O grave?
+  - type: verse
+    lines:
+    - Soar we now where Christ has led,
+    - following our exalted Head;
+    - made like him, like him we rise,
+    - ours the cross, the grave, the skies.
 - title: More Love More Power
   services: 9am
   sections:

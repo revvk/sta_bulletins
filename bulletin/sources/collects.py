@@ -77,6 +77,19 @@ def proper_from_date(target: date) -> int | None:
     return best_proper
 
 
+def _split_title_alternatives(title: str) -> list[str]:
+    """Split a liturgical title into alternative names for matching.
+
+    Handles patterns like "The Sunday of the Resurrection, or Easter Day"
+    → ["the sunday of the resurrection", "easter day"]
+    """
+    import re
+    # Split on ", or " or " or " (case-insensitive, already lowered)
+    parts = re.split(r',?\s+or\s+', title)
+    # Strip and filter empty
+    return [p.strip() for p in parts if p.strip()]
+
+
 def get_collect(liturgical_title: str, target_date: date | None = None) -> str | None:
     """Look up the Collect of the Day for a liturgical title.
 
@@ -109,6 +122,24 @@ def get_collect(liturgical_title: str, target_date: date | None = None) -> str |
     for key, val in collects.items():
         if title_lower in key.lower() or key.lower() in title_lower:
             return val
+
+    # 3b. Extract a recognisable day name from a longer title and re-try.
+    #     e.g. "The Sunday of the Resurrection, or Easter Day" contains
+    #     "Easter Day" which is a substring of "Easter Day - Principal Service".
+    #     Split on ", or " / " or " to try each alternative name.
+    #     When multiple keys match, prefer "Principal Service" over others.
+    for alt in _split_title_alternatives(title_lower):
+        matches = []
+        for key, val in collects.items():
+            kl = key.lower()
+            if alt in kl or kl in alt:
+                matches.append((key, val))
+        if matches:
+            # Prefer "Principal Service" variant if available
+            for key, val in matches:
+                if "principal" in key.lower():
+                    return val
+            return matches[0][1]
 
     # 4. Date-based Proper lookup for Ordinary Time
     #    Titles like "Third Sunday after Pentecost" or any unmatched

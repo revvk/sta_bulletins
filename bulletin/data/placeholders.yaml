@@ -1,0 +1,40 @@
+# Placeholder values for Prayers of the People substitutions.
+#
+# Tokens reference these entries from any POP form text in
+# bulletin/data/prayers/pop_forms.yaml. Update only this file when names
+# or lists change — every form that uses the token will pick up the new
+# value automatically.
+#
+# Available tokens:
+#   {presiding_bishop}     - Presiding Bishop's first name
+#   {bishop}               - Diocesan Bishop's first name
+#   {bishop_coadjutor}     - Bishop Coadjutor's first name (if any)
+#   {clergy_names}         - comma-joined list of parish clergy first names
+#   {president}            - U.S. President's first name
+#   {governor}             - Governor's first name
+#   {mayor}                - Mayor's first name
+#   {immigration_detainees}- shared list of names used in every
+#                            immigration-focused petition
+#
+# Two more tokens are populated dynamically and not defined here:
+#   {parish_ministries}    - computed each week from the ministry rotation
+#   {departed}             - left blank; filled in by hand after generation
+
+# Names of those currently holding the offices named in the POP forms
+liturgical_names:
+  presiding_bishop: "Sean"
+  bishop: "Rob"
+  bishop_coadjutor: ""
+  president: "Donald"
+  governor: "Greg"
+  mayor: "George"
+  clergy_first_names:
+    - "Andrew"
+    - "Logan"
+    - "Paulette"
+    - "Katie"
+    - "Mike"
+    - "Gene"
+
+# Shared list of names used by every immigration-focused petition.
+immigration_detainees: "Juan, Jose, Pedro, Omar, Dina and her father, Mo, Barbod, Milad, Sahel, Asra, Amir, Hana, Saeed, Farshid"

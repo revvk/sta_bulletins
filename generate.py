@@ -27,6 +27,7 @@ from bulletin.sources.songs import lookup_song
 from bulletin.sources.parish_prayers import get_ministries_for_date, format_ministries
 from bulletin.document.builder import BulletinBuilder
 from bulletin.document.reading_sheet import build_reading_sheet
+from bulletin.document.styles import prune_unused_styles
 
 
 def prompt_choice(question: str, options: list[str]) -> str:
@@ -304,6 +305,7 @@ def main():
         if output_path.exists():
             output_path.unlink()
 
+        prune_unused_styles(doc)
         doc.save(str(output_path))
         print(f"  Saved: {output_path}")
 
@@ -354,6 +356,7 @@ def main():
             rs_path = output_dir / f"{date_str} - {title_tag} - Readings and Prayers.docx"
             if rs_path.exists():
                 rs_path.unlink()
+            prune_unused_styles(doc)
             doc.save(str(rs_path))
             print(f"  Saved: {rs_path}")
         else:
@@ -362,6 +365,7 @@ def main():
             rs_path_8 = output_dir / f"{date_str} - {title_tag} - Readings and Prayers - 8am.docx"
             if rs_path_8.exists():
                 rs_path_8.unlink()
+            prune_unused_styles(doc_8)
             doc_8.save(str(rs_path_8))
             print(f"  Saved: {rs_path_8}")
 
@@ -369,6 +373,7 @@ def main():
             rs_path_9_11 = output_dir / f"{date_str} - {title_tag} - Readings and Prayers - 9 and 11.docx"
             if rs_path_9_11.exists():
                 rs_path_9_11.unlink()
+            prune_unused_styles(doc_9_11)
             doc_9_11.save(str(rs_path_9_11))
             print(f"  Saved: {rs_path_9_11}")
 

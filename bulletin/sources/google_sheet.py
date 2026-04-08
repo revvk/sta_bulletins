@@ -462,11 +462,26 @@ def get_bulletin_data(target_date: date,
         )
 
     # Find matching clergy rota (may not exist)
+    # Apply the same service_type filtering as schedule and music
     clergy = None
-    for row in clergy_rows:
-        if row.date == target_date:
-            clergy = row
-            break
+    if service_type_filter:
+        filt = service_type_filter.lower()
+        for row in clergy_rows:
+            if row.date == target_date and filt in row.title.lower():
+                clergy = row
+                break
+    else:
+        # Default: prefer "Sunday" rows (avoids sunrise/vigil rows)
+        for row in clergy_rows:
+            if row.date == target_date and row.service_type.lower().strip() == "sunday":
+                clergy = row
+                break
+    if clergy is None:
+        # Fallback: any row with matching date
+        for row in clergy_rows:
+            if row.date == target_date:
+                clergy = row
+                break
 
     # Find matching music — match by title when filtering
     music = None

@@ -20,7 +20,7 @@ from bulletin.logic.rules import get_seasonal_rules, get_dismissal_text, detect_
 from bulletin.data.loader import (
     load_common_prayers, load_pop_forms, load_blessings,
     get_proper_preface_text, get_preface_option_labels,
-    load_staff, get_canonical_hymn_title,
+    load_placeholders, get_canonical_hymn_title,
     load_maundy_thursday, load_good_friday,
     load_palm_sunday, load_passion_gospel,
 )
@@ -558,7 +558,7 @@ class BulletinBuilder:
             "gospel_text": gospel or gospel_ref,
             "preacher": preacher,
             "pop_elements": pop_elements,
-            "pop_concluding_rubric": "The Celebrant concludes with a suitable Collect.",
+            "pop_concluding_rubric": self._get_pop_concluding_rubric(),
             "advent_wreath_verse": None,
             "advent_hymnal_ref": None,
             "penitential_sentence": self.penitential_sentence,
@@ -1024,7 +1024,7 @@ class BulletinBuilder:
             "gospel_text": gospel or gospel_ref,
             "preacher": preacher,
             "pop_elements": pop_elements,
-            "pop_concluding_rubric": "The Celebrant concludes with a suitable Collect.",
+            "pop_concluding_rubric": self._get_pop_concluding_rubric(),
             "advent_wreath_verse": self.advent_wreath_verse,
             "advent_hymnal_ref": "#56 (Hymnal 1982)",
             "penitential_sentence": self.penitential_sentence,
@@ -1045,7 +1045,7 @@ class BulletinBuilder:
 
         # Communion songs
         comm_songs = []
-        for slot_name in ["Communion 1", "Communion 2", "Communion 3"]:
+        for slot_name in ["Communion 1", "Communion 2", "Communion 3", "Communion 4"]:
             song = self._lookup_slot(slot_name)
             if song:
                 comm_songs.append(song)
@@ -1218,11 +1218,21 @@ class BulletinBuilder:
             print(f"  Warning: Could not look up collect: {e}")
         return "[Collect of the Day]"
 
+    def _get_pop_concluding_rubric(self) -> str:
+        """Get the concluding rubric for the resolved POP form."""
+        pop_forms = load_pop_forms()
+        form_key = self.pop_form_key or self._get_pop_form_key()
+        form = pop_forms.get(form_key, {})
+        return form.get(
+            "concluding_rubric",
+            "The Celebrant concludes with a suitable Collect.",
+        )
+
     def _prepare_pop_elements(self) -> list[dict]:
         """Build POP elements from the appropriate form."""
         pop_forms = load_pop_forms()
-        staff = load_staff()
-        liturgical_names = staff.get("liturgical_names", {})
+        placeholders = load_placeholders()
+        liturgical_names = placeholders.get("liturgical_names", {})
 
         # Use the version resolved during resolve_all(), or fall back
         form_key = self.pop_form_key or self._get_pop_form_key()
@@ -1234,7 +1244,9 @@ class BulletinBuilder:
 
         elements = form.get("elements", [])
 
-        # Substitute placeholders
+        # Substitute placeholders. Static name/role values come from
+        # placeholders.yaml; {parish_ministries} is computed weekly and
+        # {departed} is left blank for hand-editing.
         subs = {
             "{presiding_bishop}": liturgical_names.get("presiding_bishop", "N."),
             "{bishop}": liturgical_names.get("bishop", "N."),
@@ -1245,6 +1257,8 @@ class BulletinBuilder:
             "{mayor}": liturgical_names.get("mayor", "N."),
             "{parish_ministries}": self.parish_ministries,
             "{departed}": "",  # Left blank; filled in manually
+            "{immigration_detainees}": placeholders.get(
+                "immigration_detainees", ""),
         }
 
         result = []
@@ -1293,6 +1307,14 @@ class BulletinBuilder:
                 return "advent_III"
             elif "fourth" in title_lower or "4" in title_lower.replace(" ", ""):
                 return "advent_IV"
+
+        # Named (non-numbered) forms: "Easter", etc.
+        named_map = {
+            "easter": "easter",
+        }
+        form_lower = form.lower()
+        if form_lower in named_map:
+            return named_map[form_lower]
 
         # Standard forms: "I", "II", "III", "IV", "V", "VI"
         roman_map = {

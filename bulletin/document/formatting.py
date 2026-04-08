@@ -48,7 +48,7 @@ def add_rubric(doc: Document, text: str):
 
 def add_introductory_rubric(doc: Document, text: str):
     """Add an introductory rubric ('Please stand.', 'Be seated.', etc.)."""
-    doc.add_paragraph(text, style="Body - Introductory Rubric")
+    return doc.add_paragraph(text, style="Body - Introductory Rubric")
 
 
 def add_body(doc: Document, text: str):
@@ -226,6 +226,10 @@ def add_song(doc: Document, song_data: dict, multi_row: bool = False):
         for i, section in enumerate(sections):
             cell = table.cell(i, 0)
             _fill_lyric_cell(cell, [section])
+            # Add a small trailing spacer in every row except the last,
+            # so consecutive rows don't visually touch on the page.
+            if i < len(sections) - 1:
+                cell.add_paragraph("", style="Spacer - Small")
     else:
         # 1×1 table: all sections in one cell
         table = doc.add_table(rows=1, cols=1)
@@ -381,6 +385,9 @@ def add_scripture_text(doc: Document, text: str, style: str = "Reading/Gospel Te
     text = text.replace("*", " ")
     # Collapse any resulting multiple spaces
     text = re.sub(r"  +", " ", text)
+    # Drop the inserted space when it ends up immediately before closing
+    # punctuation (e.g. "Twin*)" → "Twin )" → "Twin)").
+    text = re.sub(r" +([)\],.;:!?])", r"\1", text)
 
     paragraphs = text.strip().split("\n\n")  # Double newline = new paragraph
 

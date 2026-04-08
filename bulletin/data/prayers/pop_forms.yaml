@@ -11,17 +11,8 @@
 #   both    - leader line immediately followed by people response
 #             (leader_text + people_text on consecutive lines)
 #
-# Placeholder tokens:
-#   {parish_ministries}  - weekly featured ministry
-#   {presiding_bishop}   - Presiding Bishop's first name
-#   {bishop}             - Diocesan Bishop's first name
-#   {clergy_names}       - list of clergy first names
-#   {president}          - President's first name
-#   {governor}           - Governor's first name
-#   {mayor}              - Mayor's first name
-#   {departed}           - names of recently departed (inserted at ✠)
-#   {sick_list}          - names of those who are sick
-#   {community_partner}  - community outreach partner name(s)
+# Placeholder tokens used in form text are defined in
+# bulletin/data/placeholders.yaml. Update names and lists there.
 #
 # Note: Form VI "(w/ confession)" is handled separately using BCP text.
 
@@ -152,6 +143,78 @@ form_II:
         I ask your prayers for the refugees being ministered to at
         Gateway of Grace, and for all refugees. Pray that they may
         find sanctuary and solace.
+    - type: rubric
+      text: "Silence"
+
+    - type: leader
+      text: >-
+        I ask your prayers for all who seek God, or a deeper
+        knowledge of him. Pray that they may find and be found by
+        him.
+    - type: rubric
+      text: "Silence"
+
+    - type: leader
+      text: >-
+        I ask your prayers for the departed ✠ {departed}. Pray for
+        those who have died.
+    - type: rubric
+      text: "Silence"
+
+    - type: leader
+      text: >-
+        Praise God for those in every generation in whom Christ has
+        been honored. Pray that we may have grace to glorify Christ
+        in our own day.
+    - type: rubric
+      text: "Silence"
+
+# ==========================================================================
+# Form II Immigration (based on BCP Form V, p.385)
+# ==========================================================================
+form_II_immigration:
+  title: "Prayers of the People Form II (Immigration Focus)"
+  elements:
+    - type: leader
+      text: >-
+        I ask your prayers for God's people throughout the world;
+        for our Presiding Bishop {presiding_bishop}, our Bishop
+        {bishop}; for our clergy, {clergy_names}; for this
+        gathering; for all ministers and people; and for the
+        ministries of this parish, especially the
+        {parish_ministries}. Pray for the Church.
+    - type: rubric
+      text: "Silence"
+
+    - type: leader
+      text: >-
+        I ask your prayers for peace; for goodwill among nations;
+        and for the well-being of all people. Pray for justice and
+        peace.
+    - type: rubric
+      text: "Silence"
+
+    - type: leader
+      text: >-
+        I ask your prayers for the poor, the sick, the hungry, the
+        oppressed, and those in prison. Pray for those in any need
+        or trouble.
+    - type: rubric
+      text: "Silence"
+
+    - type: leader
+      text: >-
+        I ask your prayers for the refugees being ministered to at
+        Gateway of Grace, and for all refugees. Pray that they may
+        find sanctuary and solace.
+    - type: rubric
+      text: "Silence"
+
+    - type: leader
+      text: >-
+        I ask your prayers for the members of our diocesan family
+        currently held in immigration detention: {immigration_detainees}. 
+        Pray for their families.
     - type: rubric
       text: "Silence"
 
@@ -547,9 +610,8 @@ form_V_immigration:
 
     - type: people
       leader_text: >-
-        For the members of our diocesan family currently held in immigration 
-        detention: Juan, Jose, Pedro, Omar, Dina and her father, Mo, Barbod, 
-        Milad, Sahel, Asra, Amir, Hana, Saeed, Farshid and their families, 
+        For the members of our diocesan family currently held in immigration
+        detention: {immigration_detainees} and their families,
         we pray to you, O Lord.
       people_text: "Lord, have mercy."
 
@@ -710,9 +772,8 @@ form_VI_immigration:
 
     - type: both
       leader_text: >-
-        For the members of our diocesan family currently held in immigration 
-        detention: Juan, Jose, Pedro, Omar, Dina and her father, Mo, Barbod, 
-        Milad, Sahel, Asra, Amir, Hana, Saeed, Farshid and their families
+        For the members of our diocesan family currently held in immigration
+        detention: {immigration_detainees} and their families
       people_text: >-
         For wisdom, discipline, and protection for officers and agents.
 
@@ -1314,3 +1375,113 @@ mothers_day:
       text: >-
         The Celebrant adds a concluding Collect and Blessing of the
         Women of the Church.
+
+# ==========================================================================
+# Easter  (custom form for Easter Day / Easter Season)
+# ==========================================================================
+easter:
+  title: "Prayers of the People for Easter"
+  concluding_rubric: "The Celebrant concludes with a suitable Collect."
+  elements:
+    - type: leader
+      text: >-
+        Risen Lord, we pray to you in peace and joy: Alleluia! Amen!
+
+    - type: leader
+      text: >-
+        Fill us with grace, not for what we deserve in our sin but as
+        you loved us unto death, and call us to new life as your people.
+    - type: rubric
+      text: "Silence"
+    - type: both
+      leader_text: "We pray to you in peace and joy."
+      people_text: "Alleluia! Amen!"
+
+    - type: leader
+      text: >-
+        Triumph again over destructive and violent political forces,
+        and guide our President {president}, our nation, and all the
+        nations of the world to peace and prosperity.
+    - type: rubric
+      text: "Silence"
+    - type: both
+      leader_text: "We pray to you in peace and joy."
+      people_text: "Alleluia! Amen!"
+
+    - type: leader
+      text: >-
+        Bring your power of life to those places in our broken world 
+        where the power of death seems to rule, especially to the 
+        wars in Iran, Ukraine, and conflicts around the world. 
+    - type: rubric
+      text: "Silence"
+    - type: both
+      leader_text: "We pray to you in peace and joy."
+      people_text: "Alleluia! Amen!"
+
+    - type: leader
+      text: >-
+        Help your holy Church hold fast to the gospel preached to us
+        and to proclaim the angel's message, "He is risen!" to all
+        the world.
+    - type: rubric
+      text: "Silence"
+    - type: both
+      leader_text: "We pray to you in peace and joy."
+      people_text: "Alleluia! Amen!"
+
+    - type: leader
+      text: >-
+        Grant us wisdom to take care of this created world, which
+        once served as your tomb until you burst forth at sunrise in
+        the garden.
+    - type: rubric
+      text: "Silence"
+    - type: both
+      leader_text: "We pray to you in peace and joy."
+      people_text: "Alleluia! Amen!"
+
+    - type: leader
+      text: >-
+        Encourage and protect those who must kindle hope in the
+        darkness of despair, especially the members of our diocese
+        currently in immigration detention: {immigration_detainees}
+        and their families.
+    - type: rubric
+      text: "Silence"
+    - type: both
+      leader_text: "We pray to you in peace and joy."
+      people_text: "Alleluia! Amen!"
+      
+    - type: leader
+      text: >-
+        Roll away the heavy stones in our lives that try to stop your
+        power: depression, fear, self-doubt, and despair.
+    - type: rubric
+      text: "Silence"
+    - type: both
+      leader_text: "We pray to you in peace and joy."
+      people_text: "Alleluia! Amen!"
+
+    - type: leader
+      text: >-
+        Take those who have been rejected by the builders of this
+        world—the poor, the oppressed, the suffering, and the
+        imprisoned—and use them as living stones in the building of
+        your kingdom.
+    - type: rubric
+      text: "Silence"
+    - type: both
+      leader_text: "We pray to you in peace and joy."
+      people_text: "Alleluia! Amen!"
+
+    - type: leader
+      text: >-
+        Raise those who have died {departed}, and sustain us who mourn
+        their passing with confident hope in the good news that you
+        have swallowed up death forever.
+    - type: rubric
+      text: "Silence"
+    - type: both
+      leader_text: "We pray to you in peace and joy."
+      people_text: "Alleluia! Amen!"
