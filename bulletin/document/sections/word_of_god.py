@@ -525,7 +525,8 @@ def add_pop(doc: Document, elements: list[dict]):
         # next leader petition with no people response in between).
         elif (etype == "rubric"
               and "silence" in text.lower()
-              and i + 1 < len(elements)):
+              and i + 1 < len(elements)
+              and elements[i + 1].get("type") != "people"):
             add_spacer(doc)
 
 
@@ -690,8 +691,30 @@ def _add_gloria_spoken(doc: Document, prayers: dict):
                 if i > 0:
                     run = p.runs[-1] if p.runs else p.add_run("")
                     run.add_break()
-                run = p.add_run(line.strip())
-                run.style = doc.styles["People"]
+                _add_gloria_line_runs(
+                    p, line.strip(), doc.styles["People"])
+
+
+def _add_gloria_line_runs(paragraph, text: str, run_style):
+    """Add Gloria text runs, rendering ✠ as a bold cross symbol.
+
+    Used for both the spoken and sung Gloria so the Jerusalem cross in
+    the last line of the BCP Gloria renders as a cross glyph rather
+    than as a literal ✠ character in the People/lyrics run style.
+    """
+    if CROSS_SYMBOL not in text:
+        run = paragraph.add_run(text)
+        if run_style is not None:
+            run.style = run_style
+        return
+    parts = text.split(CROSS_SYMBOL)
+    for i, part in enumerate(parts):
+        if i > 0:
+            add_cross_symbol(paragraph)
+        if part:
+            run = paragraph.add_run(part)
+            if run_style is not None:
+                run.style = run_style
 
 
 def _is_gloria_sop(sop: dict | None, rules: SeasonalRules) -> bool:
@@ -766,7 +789,7 @@ def _add_gloria_as_song(doc: Document, prayers: dict, sop: dict | None):
             for i, line in enumerate(lines):
                 if i > 0:
                     (p.runs[-1] if p.runs else p.add_run("")).add_break()
-                p.add_run(line.strip())
+                _add_gloria_line_runs(p, line.strip(), run_style=None)
 
         # Stanza spacer between rows (not after the final row)
         if sec_idx < len(gloria_sections) - 1:

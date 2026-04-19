@@ -286,8 +286,11 @@ def _add_gloria_as_lyrics(doc: Document, prayers: dict):
                 for i, line in enumerate(lines):
                     if i > 0:
                         p.runs[-1].add_break()
-                    run = p.add_run(line.strip())
-                    run.style = doc.styles["People"]
+                    from bulletin.document.sections.word_of_god import (
+                        _add_gloria_line_runs,
+                    )
+                    _add_gloria_line_runs(
+                        p, line.strip(), doc.styles["People"])
         add_no_split_block(doc, _add_section)
 
 

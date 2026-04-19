@@ -413,6 +413,107 @@ form_IV:
       people_text: "Hear our prayer."
 
 # ==========================================================================
+# Form IV Immigration  (based on BCP Form IV, p.388)
+# ==========================================================================
+form_IV_immigration:
+  title: "Prayers of the People Form IV (Immigration Focus)"
+  elements:
+    - type: leader
+      text: "Let us pray for the Church and for the world."
+
+    - type: leader
+      text: >-
+        Grant, Almighty God, that all who confess your Name may be
+        united in your truth, live together in your love, and
+        reveal your glory in the world.
+    - type: rubric
+      text: "Silence"
+    - type: people
+      leader_text: "Lord, in your mercy,"
+      people_text: "Hear our prayer."
+
+    - type: leader
+      text: >-
+        Encourage and inspire our ministries, especially the
+        {parish_ministries}, that our labor would bear fruit in our
+        common life and in your eternal kingdom.
+    - type: rubric
+      text: "Silence"
+    - type: people
+      leader_text: "Lord, in your mercy,"
+      people_text: "Hear our prayer."
+
+    - type: leader
+      text: >-
+        Guide the people of this land, and of all the nations, in
+        the ways of justice and peace; that we may honor one
+        another and serve the common good.
+    - type: rubric
+      text: "Silence"
+    - type: people
+      leader_text: "Lord, in your mercy,"
+      people_text: "Hear our prayer."
+
+    - type: leader
+      text: >-
+        Give us all a reverence for the earth as your own creation,
+        that we may use its resources rightly in the service of
+        others and to your honor and glory.
+    - type: rubric
+      text: "Silence"
+    - type: people
+      leader_text: "Lord, in your mercy,"
+      people_text: "Hear our prayer."
+
+    - type: leader
+      text: >-
+        Strengthen, guide, and protect those in our community
+        struggling to put their lives together after deep
+        suffering, especially the women and children at Shiloh
+        Place and the families served by Ragan's Hope, and all
+        those who visit the McKinney Little Free Pantry, and the 
+        members of our diocesan family currently held in immigration 
+        detention: {immigration_detainees} and their families.
+    - type: rubric
+      text: "Silence"
+    - type: people
+      leader_text: "Lord, in your mercy,"
+      people_text: "Hear our prayer."
+
+    - type: leader
+      text: >-
+        Bless all whose lives are closely linked with ours, and
+        grant that we may serve Christ in them, and love one
+        another as he loves us.
+    - type: rubric
+      text: "Silence"
+    - type: people
+      leader_text: "Lord, in your mercy,"
+      people_text: "Hear our prayer."
+
+    - type: leader
+      text: >-
+        Comfort and heal all those who suffer in body, mind, or
+        spirit; give them courage and hope in their troubles, and
+        bring them the joy of your salvation.
+    - type: rubric
+      text: "Silence"
+    - type: people
+      leader_text: "Lord, in your mercy,"
+      people_text: "Hear our prayer."
+
+    - type: leader
+      text: >-
+        We commend to your mercy all who have died ✠ {departed}, that
+        your will for them may be fulfilled; and we pray that we
+        may share with all your saints in your eternal kingdom.
+    - type: rubric
+      text: "Silence"
+    - type: people
+      leader_text: "Lord, in your mercy,"
+      people_text: "Hear our prayer."
+
+# ==========================================================================
 # Form V  (based on BCP Form V, p.389)
 # ==========================================================================
 form_V:
@@ -1477,7 +1578,7 @@ easter:
 
     - type: leader
       text: >-
-        Raise those who have died {departed}, and sustain us who mourn
+        Raise those who have died ✠ {departed}, and sustain us who mourn
         their passing with confident hope in the good news that you
         have swallowed up death forever.
     - type: rubric

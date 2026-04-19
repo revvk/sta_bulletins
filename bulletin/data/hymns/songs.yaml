@@ -470,6 +470,48 @@
     - thunder like a mighty flood;
     - Jesus out of every nation
     - hath redeemed us by his blood.
+- title: Alleluia, alleluia, alleluia, The strife is o’er
+  services: 9am
+  hymnal_number: '208'
+  hymnal_name: Hymnal 1982
+  sections:
+  - type: verse
+    lines:
+    - Alleluia, alleluia, alleluia!
+  - type: verse
+    lines:
+    - The strife is o’er, the battle done;
+    - the victory of life is won;
+    - the song of triumph has begun.
+    - Alleluia!
+  - type: verse
+    lines:
+    - The powers of death have done their worst,
+    - but Christ their legions hath dispersed:
+    - let shout of holy joy outburst.
+    - Alleluia!
+  - type: verse
+    lines:
+    - The three sad days are quickly sped;
+    - he rises glorious from the dead:
+    - all glory to our risen Head!
+    - Alleluia!
+  - type: verse
+    lines:
+    - He closed the yawning gates of hell,
+    - the bars from heaven’s high portals fell;
+    - let hymns of praise his triumph tell!
+    - Alleluia!
+  - type: verse
+    lines:
+    - Lord! by the stripes which wounded thee,
+    - from death’s dread sting thy servants free,
+    - that we may live and sing to thee.
+    - Alleluia!
+  - type: verse
+    lines:
+    - Alleluia, alleluia, alleluia!
+
 - title: Alleluia, alleluia! Give thanks to the risen Lord
   services: 9am
   sections:
@@ -4080,8 +4122,8 @@
     - He lifted us to solid ground, to freedom from our sin.
   - type: chorus
     lines:
-    - Oh sing my souland tell all he’s done
-    - ’til the earth and heavensare filled with his glory.
+    - Oh sing my soul and tell all he’s done
+    - ’til the earth and heavens are filled with his glory.
   - type: verse
     lines:
     - Lift high the name of Jesus, of Jesus our Lord.
