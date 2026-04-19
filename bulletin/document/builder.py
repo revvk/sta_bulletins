@@ -77,7 +77,7 @@ class BulletinBuilder:
     def __init__(self, target_date: date, sheet_data, music_data,
                  scripture_readings: dict, song_lookup_fn,
                  parish_ministries: str, service_time: str = "9 am",
-                 hidden_springs_data=None):
+                 hidden_springs_data=None, report=None):
         """
         Args:
             target_date: The Sunday date.
@@ -88,6 +88,9 @@ class BulletinBuilder:
             parish_ministries: Formatted ministry string for POP.
             service_time: "9 am" or "11 am" (default "9 am").
             hidden_springs_data: Optional (HiddenSpringsRow, upcoming_rows) tuple.
+            report: Optional bulletin.report.RunReport that this builder
+                will record warnings/blockers/manual TODOs to. None
+                preserves the legacy "print to stdout only" behavior.
         """
         self.target_date = target_date
         self.sheet = sheet_data
@@ -97,6 +100,7 @@ class BulletinBuilder:
         self.parish_ministries = parish_ministries
         self.service_time = service_time
         self.hidden_springs_data = hidden_springs_data
+        self.report = report
 
         # Sunrise services use the 9am pipeline but display their own time
         self.is_sunrise = service_time == "sunrise"
@@ -139,6 +143,29 @@ class BulletinBuilder:
     def get_aac_manifest(self) -> list[tuple[str, str]]:
         """Return the list of (slot_name, aac_filename) pairs for HS services."""
         return self._aac_manifest
+
+    # ------------------------------------------------------------------
+    # Warning helpers — print AND (optionally) record to the report.
+    # Each builder method that catches an exception should use one of
+    # these instead of bare print() so the web UI's TODO list sees the
+    # same content the CLI does.
+    # ------------------------------------------------------------------
+
+    def _warn(self, message: str, *, category: str = "lookup",
+              fix_hint: str | None = None) -> None:
+        """Emit a recoverable warning (placeholder used)."""
+        print(f"  Warning: {message}")
+        if self.report is not None:
+            self.report.warning(category=category, message=message,
+                                fix_hint=fix_hint)
+
+    def _block(self, message: str, *, category: str,
+               fix_hint: str | None = None) -> None:
+        """Emit a blocker (something the user must fix before printing)."""
+        print(f"  Warning: {message}")
+        if self.report is not None:
+            self.report.blocker(category=category, message=message,
+                                fix_hint=fix_hint)
 
     def resolve_all(self, prompt_fn=None, shared_resolutions=None):
         """Resolve all data that might need user input.
@@ -497,7 +524,11 @@ class BulletinBuilder:
                 psalm_selection = get_psalm(psalm_ref)
                 psalm_text = psalm_selection.to_lines()
             except Exception as e:
-                print(f"  Warning: Could not look up psalm: {e}")
+                self._warn(f"Could not look up psalm: {e}",
+                           category="psalm",
+                           fix_hint=f"Check that '{psalm_ref}' is a valid "
+                                    "psalm reference; bulletin contains "
+                                    "no psalm text.")
 
         gospel_ref = hs_row.gospel or ""
         gospel = self.scripture.get("gospel")
@@ -860,6 +891,24 @@ class BulletinBuilder:
                         continue  # hymnal song — no lyrics expected
                 self._missing_songs.append(
                     f"{slot.service_part}: {slot.song_title}")
+                if self.report is not None:
+                    # URL-encode just enough for the deep-link query string
+                    from urllib.parse import urlencode
+                    qs = urlencode({"title": slot.song_title})
+                    self.report.warning(
+                        category="song",
+                        message=(
+                            f"Missing lyrics for \"{slot.song_title}\" "
+                            f"({self.service_time}, {slot.service_part})"
+                        ),
+                        fix_hint=(
+                            "Bulletin will print the title only — paste "
+                            "the lyrics into the .docx by hand, or add "
+                            "the song to songs.yaml so future bulletins "
+                            "include them automatically."
+                        ),
+                        link=f"/songs/new?{qs}",
+                    )
 
         if self._missing_songs and prompt_fn:
             prompt_fn(
@@ -983,7 +1032,11 @@ class BulletinBuilder:
                 psalm_selection = get_psalm(psalm_ref)
                 psalm_text = psalm_selection.to_lines()
             except (ValueError, Exception) as e:
-                print(f"  Warning: Could not look up psalm: {e}")
+                self._warn(f"Could not look up psalm: {e}",
+                           category="psalm",
+                           fix_hint=f"Check that '{psalm_ref}' is a valid "
+                                    "psalm reference; bulletin contains "
+                                    "no psalm text.")
                 psalm_text = []
 
         gospel_ref = self.schedule.gospel or ""
@@ -1215,7 +1268,13 @@ class BulletinBuilder:
             if collect:
                 return collect
         except Exception as e:
-            print(f"  Warning: Could not look up collect: {e}")
+            self._block(f"Could not look up collect: {e}",
+                        category="collect",
+                        fix_hint=f"No matching collect found for "
+                                 f"'{self.schedule.title}'. Bulletin shows "
+                                 "'[Collect of the Day]' placeholder — "
+                                 "either fix the title in the schedule or "
+                                 "add the collect to collects.yaml.")
         return "[Collect of the Day]"
 
     def _get_pop_concluding_rubric(self) -> str:
@@ -1349,7 +1408,10 @@ class BulletinBuilder:
             ps = get_psalm("Psalm 22")
             psalm_22_text = ps.to_lines()
         except Exception as e:
-            print(f"  Warning: Could not look up Psalm 22: {e}")
+            self._warn(f"Could not look up Psalm 22: {e}",
+                       category="psalm",
+                       fix_hint="Stripping of the Altar text will be missing "
+                                "the psalm; check psalms.yaml.")
 
         # Post-communion hymn uses the Recessional slot
         post_comm = self._lookup_slot("Recessional")
@@ -1391,7 +1453,12 @@ class BulletinBuilder:
             passion_data = load_passion_gospel("john")
             passion_lines = passion_data.get("lines", [])
         except Exception as e:
-            print(f"  Warning: Could not load Good Friday passion gospel: {e}")
+            self._block(
+                f"Could not load Good Friday passion gospel: {e}",
+                category="passion_gospel",
+                fix_hint="Check passion_gospel_john.yaml exists and is "
+                         "well-formed; the bulletin's Veneration section "
+                         "will be missing the Passion narrative.")
 
         return {
             "entrance_rubric": gf_texts.get("entrance_rubric", ""),
@@ -1425,7 +1492,11 @@ class BulletinBuilder:
             passion_data = load_passion_gospel(year)
             passion_lines = passion_data.get("lines", [])
         except Exception as e:
-            print(f"  Warning: Could not load passion gospel for year {year}: {e}")
+            self._block(
+                f"Could not load passion gospel for year {year}: {e}",
+                category="passion_gospel",
+                fix_hint=f"Check passion_gospel_{year}.yaml exists; "
+                         "the Palm Sunday Passion narrative will be missing.")
             passion_lines = []
 
         return {

@@ -19,6 +19,7 @@ from pathlib import Path
 
 from bulletin.config import CHURCH_NAME, SERVICE_TIMES, get_lectionary_year
 from bulletin.logic.rules import get_short_liturgical_title, detect_special_service
+from bulletin.report import RunReport
 from bulletin.sources.google_sheet import get_bulletin_data, get_hidden_springs_data
 from bulletin.sources.music_9am import fetch_9am_music
 from bulletin.sources.music_11am import get_11am_music_slots
@@ -82,6 +83,11 @@ def main():
         sys.exit(1)
 
     print(f"Generating bulletin for {target_date.strftime('%B %-d, %Y')}...")
+
+    # Single report shared across all data fetches and builders for this
+    # run. After all bulletins are saved we render it as a console "todo
+    # list" so the user has one place to see what still needs hand-fixing.
+    report = RunReport()
 
     # Determine special service modes
     is_hidden_springs = args.service == "hidden_springs"
@@ -187,10 +193,15 @@ def main():
     if refs_to_fetch:
         try:
             scripture_readings = fetch_readings(
-                refs_to_fetch, force_fetch=args.force_fetch)
+                refs_to_fetch, force_fetch=args.force_fetch, report=report)
             print(f"  Fetched {len(scripture_readings)} readings")
         except Exception as e:
             print(f"  Warning: Could not fetch scriptures: {e}")
+            report.blocker(
+                category="scripture",
+                message=f"Could not fetch any scripture readings: {e}",
+                fix_hint="Check your network connection and try again "
+                         "with --force-fetch.")
 
     # Step 3: Parish ministries (shared across all services)
     print("  Looking up parish cycle of prayers...")
@@ -200,6 +211,12 @@ def main():
         print(f"  Ministries: {parish_ministries}")
     except Exception as e:
         print(f"  Warning: Could not fetch ministries: {e}")
+        report.warning(
+            category="ministry",
+            message=f"Could not fetch parish ministry rotation: {e}",
+            fix_hint="Bulletin uses '[ministries]' placeholder in the "
+                     "Prayers of the People — fill it in by hand in the "
+                     "saved .docx.")
         parish_ministries = "[ministries]"
 
     # Step 4: Fetch service-specific music data
@@ -212,8 +229,19 @@ def main():
                 print(f"  Found {len(music_9am.slots)} music slots")
             else:
                 print("  Warning: No 9am music data found for this date")
+                report.warning(
+                    category="music",
+                    message="No 9 am music data found for this date",
+                    fix_hint="Check the 9am Music Planning Sheet — the row "
+                             "for this date may be missing or the date "
+                             "header may be misformatted.")
         except Exception as e:
             print(f"  Warning: Could not fetch 9am music: {e}")
+            report.warning(
+                category="music",
+                message=f"Could not fetch 9 am music: {e}",
+                fix_hint="9 am bulletin will have empty song slots; check "
+                         "your network and the 9am Music Planning Sheet.")
 
     music_11am_slots = None
     if "11 am" in services or "7 pm" in services or "sunrise" in services:
@@ -225,6 +253,11 @@ def main():
         else:
             label = "7 pm" if "7 pm" in services else "11am"
             print(f"  Warning: No {label} music data found for this date")
+            report.warning(
+                category="music",
+                message=f"No {label} music data found for this date",
+                fix_hint="Check the Service Music tab — the row for this "
+                         "date may be missing.")
 
     prompt_fn = None if args.no_prompt else prompt_choice
 
@@ -264,6 +297,7 @@ def main():
             parish_ministries=parish_ministries,
             service_time=service_time,
             hidden_springs_data=hs_data if service_time == "hidden_springs" else None,
+            report=report,
         )
 
         builder.resolve_all(prompt_fn=prompt_fn,
@@ -376,6 +410,10 @@ def main():
             prune_unused_styles(doc_9_11)
             doc_9_11.save(str(rs_path_9_11))
             print(f"  Saved: {rs_path_9_11}")
+
+    # Unified post-generation TODO report. Prints nothing if the run had
+    # no warnings/blockers/manual items, so clean runs stay quiet.
+    report.print_console()
 
     print("\nDone.")
 

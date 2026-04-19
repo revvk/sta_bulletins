@@ -479,7 +479,8 @@ def _get_start_verse(reference: str) -> str:
 
 def fetch_readings(references: dict[str, str],
                    delay: float = 0.5,
-                   force_fetch: bool = False) -> dict[str, ScriptureReading]:
+                   force_fetch: bool = False,
+                   report=None) -> dict[str, ScriptureReading]:
     """Fetch multiple readings, using a local cache when available.
 
     On first fetch, readings are saved to scripture_cache.json. Subsequent
@@ -518,6 +519,16 @@ def fetch_readings(references: dict[str, str],
             fetched_new = True
         except Exception as e:
             print(f"Warning: Could not fetch {label} ({ref}): {e}")
+            if report is not None:
+                report.blocker(
+                    category="scripture",
+                    message=f"Scripture missing: {label} ({ref})",
+                    fix_hint=(
+                        f"oremus.org fetch failed: {e}. "
+                        "Bulletin contains a placeholder; re-run with "
+                        "--force-fetch once the network is available."
+                    ),
+                )
             results[label] = ScriptureReading(
                 reference=ref,
                 paragraphs=[f"[Reading text not available: {ref}]"],
