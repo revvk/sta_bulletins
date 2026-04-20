@@ -25,6 +25,8 @@ hand-written entries keep their comments, key order, and quote style.
 from __future__ import annotations
 
 import io
+import uuid
+from datetime import date, datetime, timedelta
 from pathlib import Path
 from typing import Optional
 
@@ -35,6 +37,8 @@ from fastapi.templating import Jinja2Templates
 
 from ruamel.yaml import YAML
 
+from bulletin.report import RunReport
+from bulletin.runner import RunAborted, RunOptions, run_generation
 from web.song_parser import parse_markdown, parse_paste
 
 
@@ -109,11 +113,142 @@ templates = Jinja2Templates(directory=str(WEB_DIR / "templates"))
 # Routes
 # ---------------------------------------------------------------------------
 
+# --------------------------------------------------------------------------
+# In-memory store of recent runs. Single-user app, so a dict keyed by a
+# uuid is fine — no persistence needed across restarts.
+# --------------------------------------------------------------------------
+
+_RECENT_RUNS: "dict[str, dict]" = {}
+_RECENT_RUN_ORDER: list[str] = []
+_MAX_RECENT_RUNS = 20
+
+_SERVICE_LABELS = {
+    "all":            "All Sunday services",
+    "8 am":           "8 am",
+    "9 am":           "9 am",
+    "11 am":          "11 am",
+    "sunrise":        "Easter sunrise",
+    "hidden_springs": "Hidden Springs",
+    "7 pm":           "Special weekday (7 pm)",
+}
+
+
+def _next_sunday(today: Optional[date] = None) -> date:
+    today = today or date.today()
+    # weekday(): Mon=0, …, Sun=6
+    days_ahead = (6 - today.weekday()) % 7
+    if days_ahead == 0:
+        days_ahead = 7
+    return today + timedelta(days=days_ahead)
+
+
+def _store_run(run: dict) -> str:
+    run_id = uuid.uuid4().hex[:12]
+    run["run_id"] = run_id
+    _RECENT_RUNS[run_id] = run
+    _RECENT_RUN_ORDER.insert(0, run_id)
+    while len(_RECENT_RUN_ORDER) > _MAX_RECENT_RUNS:
+        old = _RECENT_RUN_ORDER.pop()
+        _RECENT_RUNS.pop(old, None)
+    return run_id
+
+
+def _recent_runs() -> list[dict]:
+    return [_RECENT_RUNS[r] for r in _RECENT_RUN_ORDER if r in _RECENT_RUNS]
+
+
+# ---------------------------------------------------------------------------
+# Routes
+# ---------------------------------------------------------------------------
+
 @app.get("/", response_class=HTMLResponse, name="home")
-def home(request: Request) -> HTMLResponse:
+def home(request: Request, error: Optional[str] = Query(None)) -> HTMLResponse:
     return templates.TemplateResponse(
         request, "generate.html",
-        {"active": "home"},
+        {
+            "active": "home",
+            "default_date": _next_sunday().isoformat(),
+            "recent_runs": _recent_runs(),
+            "error": error,
+        },
+    )
+
+
+@app.post("/run", name="run_bulletin")
+def run_bulletin(
+    request: Request,
+    target_date: str = Form(...),
+    service: str = Form("all"),
+    reading_sheets: Optional[str] = Form(None),
+    force_fetch: Optional[str] = Form(None),
+):
+    try:
+        parsed_date = datetime.strptime(target_date, "%Y-%m-%d").date()
+    except ValueError:
+        url = request.url_for("home").include_query_params(
+            error=f"Invalid date '{target_date}'. Use YYYY-MM-DD.")
+        return RedirectResponse(url=str(url), status_code=303)
+
+    options = RunOptions(
+        target_date=parsed_date,
+        service=service,
+        output_dir=REPO_ROOT / "output",
+        reading_sheets=bool(reading_sheets),
+        force_fetch=bool(force_fetch),
+    )
+
+    # Capture all progress lines into a buffer so the report page can
+    # show them (collapsed by default). Web runs are non-interactive —
+    # the CLI's prompt_choice() is replaced with None, so any
+    # disambiguation falls through to the song-list defaults.
+    console_lines: list[str] = []
+    def progress(line: str) -> None:
+        console_lines.append(str(line))
+
+    report = RunReport()
+    try:
+        result = run_generation(
+            options,
+            prompt_fn=None,
+            progress_fn=progress,
+            report=report,
+        )
+    except RunAborted as e:
+        url = request.url_for("home").include_query_params(error=str(e))
+        return RedirectResponse(url=str(url), status_code=303)
+    except Exception as e:  # pragma: no cover — surface unexpected errors
+        url = request.url_for("home").include_query_params(
+            error=f"Unexpected error: {e}")
+        return RedirectResponse(url=str(url), status_code=303)
+
+    run_id = _store_run({
+        "target_date":      result.target_date,
+        "service":          service,
+        "service_label":    _SERVICE_LABELS.get(service, service),
+        "bulletins":        result.bulletins,
+        "reading_sheets":   result.reading_sheets,
+        "report":           result.report,
+        "console":          "\n".join(console_lines),
+    })
+
+    url = request.url_for("run_report", run_id=run_id)
+    return RedirectResponse(url=str(url), status_code=303)
+
+
+@app.get("/report/{run_id}", response_class=HTMLResponse, name="run_report")
+def run_report(request: Request, run_id: str) -> HTMLResponse:
+    run = _RECENT_RUNS.get(run_id)
+    if run is None:
+        url = request.url_for("home").include_query_params(
+            error="That report has expired. Generate again to see fresh output.")
+        return RedirectResponse(url=str(url), status_code=303)
+    return templates.TemplateResponse(
+        request, "report.html",
+        {
+            "active": "home",
+            "run": run,
+            "output_dir": str(REPO_ROOT / "output"),
+        },
     )
 
 

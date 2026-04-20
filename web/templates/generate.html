@@ -4,23 +4,106 @@
 {% block content %}
     <h1>Generate a bulletin</h1>
     <p class="help" style="font-size: 1rem;">
-        This page is the eventual landing for date pickers and service
-        checkboxes. For now, the song library is the live page &mdash; use
-        the <a href="{{ url_for('songs_list') }}">Songs</a> tab to add or
-        edit hymns.
+        Pick a date and the services you need. The generator pulls the
+        liturgical schedule, music plan, scripture, and parish ministries
+        from Google Sheets, fills in the BCP texts, and saves one
+        <code>.docx</code> per service.
     </p>
 
+    {% if error %}
+        <div class="flash error">
+            <strong>Could not generate:</strong> {{ error }}
+        </div>
+    {% endif %}
+
     <div class="panel">
-        <h2>Coming soon</h2>
-        <p>
-            Date picker, service selector (8&nbsp;am, 9&nbsp;am, 11&nbsp;am,
-            sunrise, Hidden Springs, reading sheets), &ldquo;Generate&rdquo;
-            button, and a post-generation Todo list backed by the new
-            <code>RunReport</code>.
-        </p>
-        <p class="help">
-            The CLI (<code>python generate.py YYYY-MM-DD</code>) keeps working
-            unchanged in the meantime.
-        </p>
+        <form method="post" action="{{ url_for('run_bulletin') }}">
+
+            <div class="form-row-inline">
+                <div>
+                    <label for="target_date">Service date</label>
+                    <input type="date" id="target_date" name="target_date"
+                           value="{{ default_date }}" required>
+                    <p class="help">Defaults to next Sunday.</p>
+                </div>
+                <div>
+                    <label for="service">Service</label>
+                    <select id="service" name="service">
+                        <option value="all">All Sunday services (8 / 9 / 11 am)</option>
+                        <option value="8 am">8 am only</option>
+                        <option value="9 am">9 am only</option>
+                        <option value="11 am">11 am only</option>
+                        <option value="sunrise">Easter sunrise</option>
+                        <option value="hidden_springs">Hidden Springs (Wednesday)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <label style="display: flex; align-items: center; gap: 0.6rem;
+                              text-transform: none; letter-spacing: 0;
+                              font-family: var(--sta-font-serif); font-size: 1rem;
+                              color: var(--sta-text);">
+                    <input type="checkbox" name="reading_sheets" value="1"
+                           style="width: auto;">
+                    Also generate reading sheets for lay readers
+                </label>
+            </div>
+
+            <div class="form-row">
+                <label style="display: flex; align-items: center; gap: 0.6rem;
+                              text-transform: none; letter-spacing: 0;
+                              font-family: var(--sta-font-serif); font-size: 1rem;
+                              color: var(--sta-text);">
+                    <input type="checkbox" name="force_fetch" value="1"
+                           style="width: auto;">
+                    Force re-fetch scripture readings (skip cache)
+                </label>
+            </div>
+
+            <div class="btn-row">
+                <button type="submit" class="btn">Generate bulletins</button>
+                <span class="help" style="margin-left: auto;">
+                    Generation usually takes 5&ndash;15&nbsp;seconds.
+                    Page will refresh when ready.
+                </span>
+            </div>
+        </form>
+    </div>
+
+    <div class="panel">
+        <h2>Recent runs</h2>
+        {% if recent_runs %}
+            <table class="songs">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Service</th>
+                        <th>Files</th>
+                        <th>Issues</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for run in recent_runs %}
+                    <tr>
+                        <td>{{ run.target_date }}</td>
+                        <td>{{ run.service_label }}</td>
+                        <td>{{ run.bulletins|length }} {{ "bulletin" if run.bulletins|length == 1 else "bulletins" }}</td>
+                        <td>
+                            {% set blockers = run.report.items | selectattr("severity", "equalto", "blocker") | list | length %}
+                            {% set warnings = run.report.items | selectattr("severity", "equalto", "warning") | list | length %}
+                            {% if blockers %}<span class="badge" style="background: #b21f1f;">{{ blockers }} blocker{% if blockers != 1 %}s{% endif %}</span>{% endif %}
+                            {% if warnings %}<span class="badge">{{ warnings }} warning{% if warnings != 1 %}s{% endif %}</span>{% endif %}
+                            {% if not blockers and not warnings %}<span class="muted">none</span>{% endif %}
+                        </td>
+                        <td><a href="{{ url_for('run_report', run_id=run.run_id) }}">Open report &rarr;</a></td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p class="muted">No runs yet this session.</p>
+        {% endif %}
     </div>
 {% endblock %}

@@ -1,0 +1,150 @@
+{% extends "base.html" %}
+{% block title %}Report &mdash; St. Andrew's Bulletin{% endblock %}
+
+{% block content %}
+    <h1>Generation report</h1>
+    <p class="subhead">
+        {{ run.target_date.strftime("%A, %B %-d, %Y") }} &middot;
+        {{ run.service_label }}
+    </p>
+
+    {# ---------- Generated files ---------- #}
+    <div class="panel">
+        <h2>Generated files</h2>
+        {% if run.bulletins or run.reading_sheets %}
+            <table class="songs">
+                <thead>
+                    <tr>
+                        <th>Service</th>
+                        <th>File</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for b in run.bulletins %}
+                        <tr>
+                            <td>{{ b.service_time }}</td>
+                            <td>{{ b.output_path.name }}</td>
+                            <td>
+                                <a href="file://{{ b.output_path.parent }}"
+                                   target="_blank">Reveal in Finder</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    {% for rs_path in run.reading_sheets %}
+                        <tr>
+                            <td>Reading sheet</td>
+                            <td>{{ rs_path.name }}</td>
+                            <td>
+                                <a href="file://{{ rs_path.parent }}"
+                                   target="_blank">Reveal in Finder</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <p class="help" style="margin-top: 0.75rem;">
+                Output directory:
+                <code>{{ output_dir }}</code>
+            </p>
+        {% else %}
+            <p class="muted">No files generated.</p>
+        {% endif %}
+    </div>
+
+    {# ---------- AAC manifests (Hidden Springs) ---------- #}
+    {% set manifests = run.bulletins | selectattr("aac_manifest") | list %}
+    {% if manifests %}
+        <div class="panel">
+            <h2>AAC files to upload</h2>
+            <p class="help">
+                Drag these files from the Hidden Springs music folder into the
+                Squarespace audio block, in this order.
+            </p>
+            {% for b in manifests %}
+                <h3 style="margin-top: 1.25rem;">{{ b.service_time }}</h3>
+                <pre class="preview-yaml">{% for slot, fname in b.aac_manifest -%}
+{{ "%-20s"|format(slot + ":") }} {{ fname }}
+{% endfor %}</pre>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    {# ---------- Todo list ---------- #}
+    {% set blockers = run.report.items | selectattr("severity", "equalto", "blocker") | list %}
+    {% set warnings = run.report.items | selectattr("severity", "equalto", "warning") | list %}
+    {% set manuals  = run.report.items | selectattr("severity", "equalto", "manual")  | list %}
+
+    {% if blockers or warnings or manuals %}
+        <div class="panel">
+            <h2>Todo list</h2>
+
+            {% macro item_row(item) %}
+                <li style="margin-bottom: 0.85rem;">
+                    <strong>{{ item.message }}</strong>
+                    {% if item.fix_hint %}
+                        <div class="help" style="margin-top: 0.15rem;">
+                            &rarr; {{ item.fix_hint }}
+                        </div>
+                    {% endif %}
+                    {% if item.link %}
+                        <div style="margin-top: 0.25rem;">
+                            <a href="{{ item.link }}" class="btn-secondary btn">
+                                {% if item.category == "song" %}Add this song{% else %}Open{% endif %}
+                            </a>
+                        </div>
+                    {% endif %}
+                </li>
+            {% endmacro %}
+
+            {% if blockers %}
+                <h3 style="color: #b21f1f;">
+                    Blockers ({{ blockers|length }})
+                </h3>
+                <ul style="padding-left: 1.25rem;">
+                    {% for item in blockers %}{{ item_row(item) }}{% endfor %}
+                </ul>
+            {% endif %}
+
+            {% if warnings %}
+                <h3 style="color: var(--sta-blue);">
+                    Warnings ({{ warnings|length }})
+                </h3>
+                <ul style="padding-left: 1.25rem;">
+                    {% for item in warnings %}{{ item_row(item) }}{% endfor %}
+                </ul>
+            {% endif %}
+
+            {% if manuals %}
+                <h3 style="color: var(--sta-light-blue);">
+                    Manual TODOs ({{ manuals|length }})
+                </h3>
+                <ul style="padding-left: 1.25rem;">
+                    {% for item in manuals %}{{ item_row(item) }}{% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+    {% else %}
+        <div class="panel">
+            <h2>Todo list</h2>
+            <p class="muted">
+                Nothing flagged for this run &mdash; everything resolved
+                cleanly.
+            </p>
+        </div>
+    {% endif %}
+
+    {# ---------- Console output ---------- #}
+    {% if run.console %}
+        <details class="panel">
+            <summary style="cursor: pointer;">
+                <span class="subhead">Console output</span>
+            </summary>
+            <pre class="preview-yaml" style="margin-top: 1rem;">{{ run.console }}</pre>
+        </details>
+    {% endif %}
+
+    <div class="btn-row">
+        <a href="{{ url_for('home') }}" class="btn">Generate again</a>
+    </div>
+{% endblock %}
