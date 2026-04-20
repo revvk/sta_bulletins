@@ -114,13 +114,10 @@ h3 { font-size: 1.2rem; }
 .brand:hover { border-bottom-color: transparent; }
 
 .brand-logo {
-    /* Horizontal lockup is dark navy on transparent — sit it on a
-       white pill so the wordmark reads against the dark header. */
-    height: 44px;
+    /* Reversed horizontal lockup — white wordmark + color ichthys,
+       designed to sit on the dark royal header bar. */
+    height: 48px;
     width: auto;
-    background: #fff;
-    padding: 4px 10px;
-    border-radius: 6px;
     display: block;
 }
 
