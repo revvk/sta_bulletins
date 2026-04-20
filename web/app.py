@@ -507,134 +507,80 @@ async def song_save(
 # variant — that matters because the CLI used to resolve ambiguity with
 # an interactive prompt that the web runner can't answer.
 
-# Base-form keys in their natural display order.
-_FORM_GROUP_ORDER = [
-    "form_I", "form_II", "form_III", "form_IV", "form_V", "form_VI",
-]
-_FORM_ROMAN = {
-    "form_I": "I",   "form_II": "II",  "form_III": "III",
-    "form_IV": "IV", "form_V":  "V",   "form_VI": "VI",
-}
-
-# Human labels for the seasonal / special groups.
-_SEASONAL_GROUPS = [
-    # (group_id, label, member_prefix_or_keys)
-    ("advent",  "Advent",            ("advent_",)),
-    ("easter",  "Easter",            ("easter",)),   # easter, easter_II, easter_III
-    ("special", "Special occasions", ("mothers_day",)),
-]
+# Every field the page needs — group membership, display label, and the
+# exact sheet values that pick each form — is read out of pop_forms.yaml.
+# Adding a new form is purely a YAML edit; no code changes required.
+#
+# YAML shape per entry:
+#     group:         short id shared by every variant in a family
+#                    (e.g. "form_II", "advent", "easter", "special")
+#     group_label:   human label for the panel header. Only the "base"
+#                    entry in a group needs to set this; variants inherit.
+#     sheet_values:  list of strings the planner can type in the POP
+#                    column to select this exact form. Matching is
+#                    case-insensitive.
 
 
-def _form_group(key: str) -> tuple[str, str]:
-    """Return (group_id, base_key) for a POP form key.
-
-    base_key is the "unversioned" entry inside the group — for
-    ``form_II_immigration`` it's ``form_II``; for seasonal forms it's
-    the key itself.
-    """
-    for base in _FORM_GROUP_ORDER:
-        if key == base or key.startswith(base + "_"):
-            return (base, base)
-    for group_id, _label, prefixes in _SEASONAL_GROUPS:
-        for p in prefixes:
-            if key == p or key.startswith(p):
-                return (group_id, key)
-    return ("other", key)
-
-
-def _planner_hint(key: str) -> dict:
+def _planner_hint(form: dict) -> dict:
     """Return info describing how to select this form from the planner.
 
-    Shape:
+    Shape::
+
         {"sheet_value": "II (immigration)", "note": None}
-        or
-        {"sheet_value": None, "note": "Selected automatically on …"}
+        # or, if sheet_values is empty:
+        {"sheet_value": None, "note": "…explanation…"}
     """
-    # Standard forms (I–VI) — POP column takes the Roman numeral, plus
-    # an optional parenthetical for variants. Must be lowercase inside
-    # the parens to match _get_pop_form_key's comparison.
-    for base in _FORM_GROUP_ORDER:
-        roman = _FORM_ROMAN[base]
-        if key == base:
-            return {"sheet_value": roman, "note": None}
-        if key.startswith(base + "_"):
-            suffix = key[len(base) + 1:].replace("_", " ")
-            return {
-                "sheet_value": f"{roman} ({suffix})",
-                "note": None,
-            }
-
-    # Advent: advent_I / II / III / IV — picked automatically when
-    # is_advent is True and the service title contains the ordinal.
-    # The POP column is ignored on Advent Sundays.
-    if key.startswith("advent_"):
-        roman = key.split("_", 1)[1]
-        return {
-            "sheet_value": None,
-            "note": (
-                f"Selected automatically on Advent {roman}. The POP "
-                "column is ignored during Advent."
-            ),
-        }
-
-    # Easter: all three (easter, easter_II, easter_III) are keyed
-    # explicitly by the POP column — the base form takes "easter" and
-    # the numbered variants take "easter (II)" / "easter (III)".
-    if key == "easter":
-        return {
-            "sheet_value": "easter",
-            "note": None,
-        }
-    if key.startswith("easter_"):
-        roman = key.split("_", 1)[1]
-        return {
-            "sheet_value": f"easter ({roman})",
-            "note": None,
-        }
-
-    # Fallback for anything else (currently: mothers_day).
+    values = [str(v) for v in (form.get("sheet_values") or [])]
+    if values:
+        note = None
+        if len(values) > 1:
+            aliases = ", ".join(f'"{v}"' for v in values[1:])
+            note = f"Also accepts: {aliases}"
+        return {"sheet_value": values[0], "note": note}
     return {
         "sheet_value": None,
         "note": (
-            "No automatic trigger — this form is not currently wired to "
-            "the POP column. Edit pop_forms.yaml or add a rule to select it."
+            "No POP-column selector is configured for this form. Add a "
+            "`sheet_values:` list to its entry in pop_forms.yaml."
         ),
     }
 
 
 def _prayer_catalog() -> list[dict]:
-    """Build the grouped catalog of POP forms for the list page."""
+    """Build the grouped catalog of POP forms for the list page.
+
+    Entries are grouped by their YAML ``group`` field. The first entry
+    that declares ``group_label`` supplies the panel header. Display
+    order preserves the order of appearance in pop_forms.yaml — so the
+    YAML itself is the knob for reordering the page.
+    """
     forms = load_pop_forms() or {}
     groups: dict[str, dict] = {}
 
-    # Pre-create groups in display order.
-    for base in _FORM_GROUP_ORDER:
-        groups[base] = {
-            "id": base,
-            "label": f"Form {_FORM_ROMAN[base]}",
-            "entries": [],
-        }
-    for gid, label, _prefixes in _SEASONAL_GROUPS:
-        groups[gid] = {"id": gid, "label": label, "entries": []}
-    groups["other"] = {"id": "other", "label": "Other", "entries": []}
-
     for key, form in forms.items():
-        group_id, base_key = _form_group(key)
-        is_base = (key == base_key)
-        groups[group_id]["entries"].append({
+        gid = form.get("group") or key
+        if gid not in groups:
+            groups[gid] = {
+                "id":      gid,
+                "label":   form.get("group_label") or gid.replace("_", " ").title(),
+                "entries": [],
+            }
+        elif form.get("group_label") and not groups[gid].get("_label_set"):
+            groups[gid]["label"] = form["group_label"]
+            groups[gid]["_label_set"] = True
+
+        groups[gid]["entries"].append({
             "key":        key,
             "title":      form.get("title", key),
-            "is_base":    is_base,
-            "hint":       _planner_hint(key),
+            "hint":       _planner_hint(form),
             "element_ct": len(form.get("elements", []) or []),
         })
 
-    # Sort each group: base form first, then variants alphabetically.
+    # Drop the internal bookkeeping flag before handing groups to the view.
     for g in groups.values():
-        g["entries"].sort(key=lambda e: (not e["is_base"], e["key"]))
+        g.pop("_label_set", None)
 
-    # Drop empty groups (e.g., "other" when unused).
-    return [g for g in groups.values() if g["entries"]]
+    return list(groups.values())
 
 
 @app.get("/prayers", response_class=HTMLResponse, name="prayers_list")
@@ -661,6 +607,6 @@ def prayer_view(request: Request, key: str = Query(...)) -> HTMLResponse:
             "active": "prayers",
             "key":    key,
             "form":   form,
-            "hint":   _planner_hint(key),
+            "hint":   _planner_hint(form),
         },
     )

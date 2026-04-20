@@ -1339,71 +1339,29 @@ class BulletinBuilder:
     def _get_pop_form_key(self) -> str:
         """Map the sheet's POP form designation to a YAML key.
 
-        Handles:
-          - "VI (w/ confession)" → form_VI (special case via rules)
-          - "III" → form_III
-          - "III (immigration)" → form_III_immigration (versioned form)
-          - Advent forms detected by season
+        Lookup is pure data-driven: each entry in ``pop_forms.yaml``
+        declares its own ``sheet_values:`` list — the strings a
+        planner can type in the POP column to select it (for example
+        ``["II", "2"]`` or ``["mother's day", "mothers day"]``).
+        Matching is case-insensitive and ignores surrounding
+        whitespace.
 
-        Versioned forms use a suffix: form_III_immigration,
-        form_V_hidden_springs, etc. The version name is derived from
-        any parenthetical in the sheet that isn't "w/ confession".
+        To add a new prayer form, add a YAML entry with its own
+        ``sheet_values``. No Python change required.
         """
-        form = (self.schedule.pop_form or "").strip()
+        form = (self.schedule.pop_form or "").strip().lower()
+        if not form:
+            return "form_I"
 
-        # Check for BCP Form VI w/ confession (handled in YAML under form_VI)
-        if self.rules.pop_use_bcp_form_vi:
-            return "form_VI"
+        pop_forms = load_pop_forms()
+        for key, entry in pop_forms.items():
+            for sv in entry.get("sheet_values", []) or []:
+                if str(sv).strip().lower() == form:
+                    return key
 
-        # Check for Advent forms
-        if self.rules.is_advent:
-            title_lower = self.schedule.title.lower()
-            if "first" in title_lower or "1" in title_lower.replace(" ", ""):
-                return "advent_I"
-            elif "second" in title_lower or "2" in title_lower.replace(" ", ""):
-                return "advent_II"
-            elif "third" in title_lower or "3" in title_lower.replace(" ", ""):
-                return "advent_III"
-            elif "fourth" in title_lower or "4" in title_lower.replace(" ", ""):
-                return "advent_IV"
-
-        # Extract base form and optional version from parenthetical.
-        # Roman-numeral parentheticals keep their case so keys like
-        # easter_II / form_II_immigration resolve against the YAML —
-        # everything else is lowercased + underscored.
-        paren_match = re.search(r'\(([^)]+)\)', form)
-        version_suffix = ""
-        if paren_match:
-            paren_raw = paren_match.group(1).strip()
-            paren_lower = paren_raw.lower()
-            # "w/ confession" and "with confession" are handled by rules
-            if paren_lower not in ("w/ confession", "with confession"):
-                if re.fullmatch(r"[IVXLCDMivxlcdm]+", paren_raw):
-                    version_suffix = "_" + paren_raw.upper()
-                else:
-                    version_suffix = "_" + paren_lower.replace(" ", "_")
-
-        form_clean = form.split("(")[0].strip()
-        form_clean_lower = form_clean.lower()
-
-        # Named (non-numbered) forms: "easter", "easter (II)", etc.
-        named_map = {
-            "easter": "easter",
-        }
-        if form_clean_lower in named_map:
-            return named_map[form_clean_lower] + version_suffix
-
-        # Standard forms: "I", "II", "III", "IV", "V", "VI"
-        roman_map = {
-            "I": "form_I", "II": "form_II", "III": "form_III",
-            "IV": "form_IV", "V": "form_V", "VI": "form_VI",
-            "1": "form_I", "2": "form_II", "3": "form_III",
-            "4": "form_IV", "5": "form_V", "6": "form_VI",
-        }
-
-        base_key = roman_map.get(form_clean, "form_I")
-
-        return base_key + version_suffix
+        # Unrecognized POP value — fall back to Form I.
+        # _resolve_pop_version emits a warning when the key is absent.
+        return "form_I"
 
     def _prepare_maundy_thursday_data(self) -> dict:
         """Prepare the Maundy-Thursday-specific data dict."""

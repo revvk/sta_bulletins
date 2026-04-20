@@ -21,6 +21,11 @@
 # ==========================================================================
 form_I:
   title: "Prayers of the People Form I"
+  group: form_I
+  group_label: Form I
+  sheet_values:
+    - I
+    - '1'
   elements:
     - type: leader
       text: >-
@@ -110,6 +115,11 @@ form_I:
 # ==========================================================================
 form_II:
   title: "Prayers of the People Form II"
+  group: form_II
+  group_label: Form II
+  sheet_values:
+    - II
+    - '2'
   elements:
     - type: leader
       text: >-
@@ -174,6 +184,9 @@ form_II:
 # ==========================================================================
 form_II_immigration:
   title: "Prayers of the People Form II (Immigration Focus)"
+  group: form_II
+  sheet_values:
+    - II (immigration)
   elements:
     - type: leader
       text: >-
@@ -213,8 +226,8 @@ form_II_immigration:
     - type: leader
       text: >-
         I ask your prayers for the members of our diocesan family
-        currently held in immigration detention: {immigration_detainees}. 
-        Pray for their families.
+        currently held in immigration detention: {immigration_detainees}.  Pray
+        for their families.
     - type: rubric
       text: "Silence"
 
@@ -246,6 +259,11 @@ form_II_immigration:
 # ==========================================================================
 form_III:
   title: "Prayers of the People Form III"
+  group: form_III
+  group_label: Form III
+  sheet_values:
+    - III
+    - '3'
   elements:
     - type: both
       leader_text: "Father, we pray for your holy catholic Church;"
@@ -318,6 +336,11 @@ form_III:
 # ==========================================================================
 form_IV:
   title: "Prayers of the People Form IV"
+  group: form_IV
+  group_label: Form IV
+  sheet_values:
+    - IV
+    - '4'
   elements:
     - type: leader
       text: "Let us pray for the Church and for the world."
@@ -417,6 +440,9 @@ form_IV:
 # ==========================================================================
 form_IV_immigration:
   title: "Prayers of the People Form IV (Immigration Focus)"
+  group: form_IV
+  sheet_values:
+    - IV (immigration)
   elements:
     - type: leader
       text: "Let us pray for the Church and for the world."
@@ -471,9 +497,9 @@ form_IV_immigration:
         struggling to put their lives together after deep
         suffering, especially the women and children at Shiloh
         Place and the families served by Ragan's Hope, and all
-        those who visit the McKinney Little Free Pantry, and the 
-        members of our diocesan family currently held in immigration 
-        detention: {immigration_detainees} and their families.
+        those who visit the McKinney Little Free Pantry, and the  members
+        of our diocesan family currently held in immigration  detention: {immigration_detainees}
+        and their families.
     - type: rubric
       text: "Silence"
     - type: people
@@ -518,6 +544,11 @@ form_IV_immigration:
 # ==========================================================================
 form_V:
   title: "Prayers of the People Form V"
+  group: form_V
+  group_label: Form V
+  sheet_values:
+    - V
+    - '5'
   elements:
     - type: leader
       text: >-
@@ -632,6 +663,9 @@ form_V:
 # ==========================================================================
 form_V_immigration:
   title: "Prayers of the People Form V (Immigration Focus)"
+  group: form_V
+  sheet_values:
+    - V (immigration)
   elements:
     - type: leader
       text: >-
@@ -670,7 +704,8 @@ form_V_immigration:
     - type: people
       leader_text: >-
         For the mission of the Church and the ministries of this
-        parish, especially the Stretching Our Our Arms of Love campaign, that in
+        parish, especially the Stretching Our Our Arms of Love campaign, that
+        in
         faithful witness we may preach the Gospel to the ends of
         the earth, we pray to you, O Lord.
       people_text: "Lord, have mercy."
@@ -753,6 +788,13 @@ form_V_immigration:
 # ==========================================================================
 form_VI:
   title: "Prayers of the People Form VI"
+  group: form_VI
+  group_label: Form VI
+  sheet_values:
+    - VI
+    - '6'
+    - VI (w/ confession)
+    - VI (with confession)
   elements:
     - type: leader
       text: "In peace, we pray to you, Lord God."
@@ -843,6 +885,9 @@ form_VI:
 # ==========================================================================
 form_VI_immigration:
   title: "Prayers of the People Form VI (Immigration Focus)"
+  group: form_VI
+  sheet_values:
+    - VI (immigration)
   elements:
     - type: leader
       text: "In peace, we pray to you, Lord God."
@@ -940,6 +985,11 @@ form_VI_immigration:
 # ==========================================================================
 advent_I:
   title: "Prayers of the People - Advent I"
+  group: advent
+  group_label: Advent
+  sheet_values:
+    - advent (I)
+    - advent (1)
   season: "advent"
   theme: "hope"
   elements:
@@ -1025,6 +1075,10 @@ advent_I:
 # ==========================================================================
 advent_II:
   title: "Prayers of the People - Advent II"
+  group: advent
+  sheet_values:
+    - advent (II)
+    - advent (2)
   season: "advent"
   theme: "peace"
   elements:
@@ -1110,6 +1164,10 @@ advent_II:
 # ==========================================================================
 advent_III:
   title: "Prayers of the People - Advent III"
+  group: advent
+  sheet_values:
+    - advent (III)
+    - advent (3)
   season: "advent"
   theme: "joy"
   elements:
@@ -1186,6 +1244,10 @@ advent_III:
 # ==========================================================================
 advent_IV:
   title: "Prayers of the People - Advent IV"
+  group: advent
+  sheet_values:
+    - advent (IV)
+    - advent (4)
   season: "advent"
   theme: "love"
   elements:
@@ -1263,6 +1325,10 @@ advent_IV:
 # ==========================================================================
 easter_II:
   title: "Prayers of the People - The Second Sunday of Easter"
+  group: easter
+  sheet_values:
+    - easter (II)
+    - easter (2)
   season: "easter"
   elements:
     - type: leader
@@ -1335,6 +1401,10 @@ easter_II:
 # ==========================================================================
 easter_III:
   title: "Prayers of the People - The Third Sunday of Easter"
+  group: easter
+  sheet_values:
+    - easter (III)
+    - easter (3)
   season: "easter"
   elements:
     - type: leader
@@ -1409,6 +1479,12 @@ easter_III:
 # ==========================================================================
 mothers_day:
   title: "Prayers of the People - Mother's Day"
+  group: special
+  group_label: Special Occasions
+  sheet_values:
+    - mother's day
+    - mothers day
+    - mothers_day
   season: "special"
   elements:
     - type: leader
@@ -1482,6 +1558,10 @@ mothers_day:
 # ==========================================================================
 easter:
   title: "Prayers of the People for Easter"
+  group: easter
+  group_label: Easter
+  sheet_values:
+    - easter
   concluding_rubric: "The Celebrant concludes with a suitable Collect."
   elements:
     - type: leader
@@ -1511,9 +1591,9 @@ easter:
 
     - type: leader
       text: >-
-        Bring your power of life to those places in our broken world 
-        where the power of death seems to rule, especially to the 
-        wars in Iran, Ukraine, and conflicts around the world. 
+        Bring your power of life to those places in our broken world  where
+        the power of death seems to rule, especially to the  wars in Iran,
+        Ukraine, and conflicts around the world. 
     - type: rubric
       text: "Silence"
     - type: both
@@ -1553,7 +1633,6 @@ easter:
     - type: both
       leader_text: "We pray to you in peace and joy."
       people_text: "Alleluia! Amen!"
-      
     - type: leader
       text: >-
         Roll away the heavy stones in our lives that try to stop your
