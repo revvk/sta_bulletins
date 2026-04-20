@@ -1,0 +1,54 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "st-andrews-bulletin"
+version = "0.2.0"
+description = "Bulletin generator for St. Andrew's Episcopal Church, McKinney TX"
+requires-python = ">=3.11"
+authors = [
+    { name = "Andrew Van Kirk" },
+]
+readme = "INSTALL.md"
+
+# Runtime dependencies — both the CLI and the local web UI need these.
+# bs4, python-docx, docxcompose, pyyaml, requests have always been
+# required (the bulletin/ package imports them); fastapi, uvicorn,
+# jinja2, ruamel.yaml, python-multipart are added for the web UI.
+dependencies = [
+    "beautifulsoup4>=4.12",
+    "python-docx>=1.1",
+    "docxcompose>=1.4",
+    "pyyaml>=6.0",
+    "requests>=2.31",
+    "fastapi>=0.109",
+    "uvicorn[standard]>=0.27",
+    "jinja2>=3.1",
+    "ruamel.yaml>=0.18",
+    "python-multipart>=0.0.9",
+]
+
+[project.optional-dependencies]
+# Test-only — pulled in via `pip install -e .[dev]`.
+dev = [
+    "httpx>=0.26",   # FastAPI TestClient
+]
+
+[project.scripts]
+# `bulletin-ui` (installed into .venv/bin) launches uvicorn on
+# localhost:8765 and opens the default browser. The Bulletin.command
+# Desktop shim that install.command drops just runs this.
+bulletin-ui = "web.launcher:main"
+
+[tool.setuptools.packages.find]
+# Pick up bulletin/ + web/ and their subpackages. The data/ subtree
+# under bulletin/ is loaded via relative file paths (bulletin/data/loader.py),
+# not as an importable namespace, so it's intentionally not listed —
+# pip install -e . keeps the source layout in place anyway.
+include = ["bulletin*", "web*"]
+exclude = ["tests*", "output*", "samples*", "scripts*",
+           "source_documents*", "templates*", "tools*"]
+
+[tool.setuptools]
+include-package-data = true
