@@ -486,12 +486,17 @@ table.prayers th {
     font-style: normal;
 }
 
+/* Monospace is visually chunky next to EB Garamond; drop it ~25% so
+   it reads as inline annotation rather than a typographic shout. */
+code {
+    font-size: 0.78em;
+}
+
 code.planner-code {
     background: var(--sta-bg-panel);
     border: 1px solid var(--sta-border);
     border-radius: 4px;
-    padding: 0.1rem 0.45rem;
-    font-size: 0.95em;
+    padding: 0.1rem 0.4rem;
     color: var(--sta-dark-royal);
 }
 
@@ -548,7 +553,10 @@ code.planner-code {
 .pop-body code {
     background: rgba(64, 177, 229, 0.12);
     border-radius: 3px;
-    padding: 0.02rem 0.2rem;
+    padding: 0.02rem 0.25rem;
+    /* Slightly larger than the global 0.78em so the highlighted
+       placeholders still read clearly in the body text. */
+    font-size: 0.82em;
 }
 
 .badge {
