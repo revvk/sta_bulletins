@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}Prayers of the People &mdash; St. Andrew's Bulletin{% endblock %}
+
+{% block content %}
+    <h1>Prayers of the People</h1>
+
+    <p class="lede">
+        Every form of the Prayers of the People that the generator knows
+        about. Click a title to read the full text. Variants of the same
+        form (for example Form II and Form II with an immigration focus)
+        are grouped together, along with the exact wording to put in the
+        planner&rsquo;s <strong>pop</strong> column to pick each one.
+    </p>
+
+    {% for g in groups %}
+        <div class="panel prayers-group">
+            <h2 class="prayers-group-label">{{ g.label }}</h2>
+            <table class="prayers">
+                <thead>
+                    <tr>
+                        <th style="width: 55%;">Form</th>
+                        <th>Planner entry</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for e in g.entries %}
+                    <tr>
+                        <td>
+                            <a href="{{ url_for('prayer_view') }}?key={{ e.key }}"
+                               class="song-link">{{ e.title }}</a>
+                            <div class="muted prayers-key">
+                                key: <code>{{ e.key }}</code>
+                                &middot;
+                                {{ e.element_ct }} element{% if e.element_ct != 1 %}s{% endif %}
+                            </div>
+                        </td>
+                        <td>
+                            {% if e.hint.sheet_value %}
+                                <div>
+                                    Enter <code class="planner-code">{{ e.hint.sheet_value }}</code>
+                                    in the <em>pop</em> column.
+                                </div>
+                            {% endif %}
+                            {% if e.hint.note %}
+                                <div class="muted" style="margin-top: 0.25rem;">
+                                    {{ e.hint.note }}
+                                </div>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endfor %}
+{% endblock %}

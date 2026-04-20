@@ -24,7 +24,9 @@ hand-written entries keep their comments, key order, and quote style.
 
 from __future__ import annotations
 
+import html
 import io
+import re
 import uuid
 from datetime import date, datetime, timedelta
 from pathlib import Path
@@ -34,9 +36,11 @@ from fastapi import FastAPI, Form, Query, Request, UploadFile, File
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
+from markupsafe import Markup
 
 from ruamel.yaml import YAML
 
+from bulletin.data.loader import load_pop_forms
 from bulletin.report import RunReport
 from bulletin.runner import RunAborted, RunOptions, run_generation
 from web.song_parser import parse_markdown, parse_paste
@@ -107,6 +111,24 @@ app.mount(
 )
 
 templates = Jinja2Templates(directory=str(WEB_DIR / "templates"))
+
+
+# Jinja filter: wrap {placeholder} tokens in the POP form text with
+# <code> so they stand out visually. Anything outside the braces is
+# escaped as normal; the replacement itself is also HTML-safe.
+_PLACEHOLDER_RE = re.compile(r"\{[a-zA-Z0-9_]+\}")
+
+
+def _highlight_placeholders(text: str) -> Markup:
+    if text is None:
+        return Markup("")
+    escaped = html.escape(str(text))
+    out = _PLACEHOLDER_RE.sub(
+        lambda m: f"<code>{m.group(0)}</code>", escaped)
+    return Markup(out)
+
+
+templates.env.filters["highlight_placeholders"] = _highlight_placeholders
 
 
 # ---------------------------------------------------------------------------
@@ -472,3 +494,178 @@ async def song_save(
 
     url = request.url_for("songs_list").include_query_params(library=library)
     return RedirectResponse(url=str(url), status_code=303)
+
+
+# ---------------------------------------------------------------------------
+# Prayers of the People (POP forms)
+# ---------------------------------------------------------------------------
+#
+# The pop_forms.yaml catalog stores one entry per form variant. We group
+# them for display so that (for example) Form II and Form II (Immigration
+# Focus) sit next to each other. The grouping also tells the user what
+# text to drop into the Google Sheet's "pop" column to pick a specific
+# variant — that matters because the CLI used to resolve ambiguity with
+# an interactive prompt that the web runner can't answer.
+
+# Base-form keys in their natural display order.
+_FORM_GROUP_ORDER = [
+    "form_I", "form_II", "form_III", "form_IV", "form_V", "form_VI",
+]
+_FORM_ROMAN = {
+    "form_I": "I",   "form_II": "II",  "form_III": "III",
+    "form_IV": "IV", "form_V":  "V",   "form_VI": "VI",
+}
+
+# Human labels for the seasonal / special groups.
+_SEASONAL_GROUPS = [
+    # (group_id, label, member_prefix_or_keys)
+    ("advent",  "Advent",            ("advent_",)),
+    ("easter",  "Easter",            ("easter",)),   # easter, easter_II, easter_III
+    ("special", "Special occasions", ("mothers_day",)),
+]
+
+
+def _form_group(key: str) -> tuple[str, str]:
+    """Return (group_id, base_key) for a POP form key.
+
+    base_key is the "unversioned" entry inside the group — for
+    ``form_II_immigration`` it's ``form_II``; for seasonal forms it's
+    the key itself.
+    """
+    for base in _FORM_GROUP_ORDER:
+        if key == base or key.startswith(base + "_"):
+            return (base, base)
+    for group_id, _label, prefixes in _SEASONAL_GROUPS:
+        for p in prefixes:
+            if key == p or key.startswith(p):
+                return (group_id, key)
+    return ("other", key)
+
+
+def _planner_hint(key: str) -> dict:
+    """Return info describing how to select this form from the planner.
+
+    Shape:
+        {"sheet_value": "II (immigration)", "note": None}
+        or
+        {"sheet_value": None, "note": "Selected automatically on …"}
+    """
+    # Standard forms (I–VI) — pop column takes the Roman numeral, plus
+    # an optional parenthetical for variants. Must be lowercase inside
+    # the parens to match _get_pop_form_key's comparison.
+    for base in _FORM_GROUP_ORDER:
+        roman = _FORM_ROMAN[base]
+        if key == base:
+            return {"sheet_value": roman, "note": None}
+        if key.startswith(base + "_"):
+            suffix = key[len(base) + 1:].replace("_", " ")
+            return {
+                "sheet_value": f"{roman} ({suffix})",
+                "note": None,
+            }
+
+    # Advent: advent_I / II / III / IV — picked automatically when
+    # is_advent is True and the service title contains the ordinal.
+    if key.startswith("advent_"):
+        roman = key.split("_", 1)[1]
+        return {
+            "sheet_value": None,
+            "note": (
+                f"Selected automatically on Advent {roman} — no entry "
+                "needed in the planner's pop column."
+            ),
+        }
+
+    # Easter: easter_II / easter_III selected automatically; bare
+    # "easter" is a force-override keyed by the pop column.
+    if key == "easter":
+        return {
+            "sheet_value": "easter",
+            "note": (
+                "Used when the pop column explicitly says “easter”. "
+                "Otherwise the numbered Easter Sunday forms are picked "
+                "automatically."
+            ),
+        }
+    if key.startswith("easter_"):
+        roman = key.split("_", 1)[1]
+        return {
+            "sheet_value": None,
+            "note": (
+                f"Selected automatically on the {roman} Sunday of Easter "
+                "when no specific form is named in the pop column."
+            ),
+        }
+
+    # Fallback for anything else (currently: mothers_day).
+    return {
+        "sheet_value": None,
+        "note": (
+            "No automatic trigger — this form is not currently wired to "
+            "the planner. Edit pop_forms.yaml or add a rule to select it."
+        ),
+    }
+
+
+def _prayer_catalog() -> list[dict]:
+    """Build the grouped catalog of POP forms for the list page."""
+    forms = load_pop_forms() or {}
+    groups: dict[str, dict] = {}
+
+    # Pre-create groups in display order.
+    for base in _FORM_GROUP_ORDER:
+        groups[base] = {
+            "id": base,
+            "label": f"Form {_FORM_ROMAN[base]}",
+            "entries": [],
+        }
+    for gid, label, _prefixes in _SEASONAL_GROUPS:
+        groups[gid] = {"id": gid, "label": label, "entries": []}
+    groups["other"] = {"id": "other", "label": "Other", "entries": []}
+
+    for key, form in forms.items():
+        group_id, base_key = _form_group(key)
+        is_base = (key == base_key)
+        groups[group_id]["entries"].append({
+            "key":        key,
+            "title":      form.get("title", key),
+            "is_base":    is_base,
+            "hint":       _planner_hint(key),
+            "element_ct": len(form.get("elements", []) or []),
+        })
+
+    # Sort each group: base form first, then variants alphabetically.
+    for g in groups.values():
+        g["entries"].sort(key=lambda e: (not e["is_base"], e["key"]))
+
+    # Drop empty groups (e.g., "other" when unused).
+    return [g for g in groups.values() if g["entries"]]
+
+
+@app.get("/prayers", response_class=HTMLResponse, name="prayers_list")
+def prayers_list(request: Request) -> HTMLResponse:
+    return templates.TemplateResponse(
+        request, "prayers/list.html",
+        {
+            "active": "prayers",
+            "groups": _prayer_catalog(),
+        },
+    )
+
+
+@app.get("/prayers/view", response_class=HTMLResponse, name="prayer_view")
+def prayer_view(request: Request, key: str = Query(...)) -> HTMLResponse:
+    forms = load_pop_forms() or {}
+    form = forms.get(key)
+    if form is None:
+        url = request.url_for("prayers_list")
+        return RedirectResponse(url=str(url), status_code=303)
+    return templates.TemplateResponse(
+        request, "prayers/view.html",
+        {
+            "active": "prayers",
+            "key":    key,
+            "form":   form,
+            "hint":   _planner_hint(key),
+        },
+    )

@@ -433,6 +433,124 @@ a.song-link:hover {
     font-style: italic;
 }
 
+/* --------------------------------------------------------------------- */
+/* Prayers of the People                                                 */
+/* --------------------------------------------------------------------- */
+
+.lede {
+    max-width: 46rem;
+    margin-bottom: 1.25rem;
+    color: var(--sta-text);
+}
+
+.prayers-group {
+    margin-bottom: 1.5rem;
+}
+.prayers-group-label {
+    margin: 0 0 0.85rem 0;
+    font-family: var(--sta-font-sans);
+    font-size: 0.85rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--sta-text-muted);
+    font-weight: 400;
+}
+
+table.prayers {
+    width: 100%;
+    border-collapse: collapse;
+}
+table.prayers th,
+table.prayers td {
+    padding: 0.65rem 0.85rem;
+    text-align: left;
+    border-bottom: 1px solid var(--sta-border);
+    vertical-align: top;
+}
+table.prayers tr:last-child td { border-bottom: none; }
+table.prayers th {
+    font-family: var(--sta-font-sans);
+    font-size: 0.7rem;
+    font-weight: 400;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--sta-text-muted);
+    background: transparent;
+}
+.prayers-key {
+    font-size: 0.8rem;
+    margin-top: 0.15rem;
+    font-style: normal;
+}
+.prayers-key code {
+    font-style: normal;
+}
+
+code.planner-code {
+    background: var(--sta-bg-panel);
+    border: 1px solid var(--sta-border);
+    border-radius: 4px;
+    padding: 0.1rem 0.45rem;
+    font-size: 0.95em;
+    color: var(--sta-dark-royal);
+}
+
+/* --------------------------------------------------------------------- */
+/* POP form detail view — roughly bulletin-style                         */
+/* --------------------------------------------------------------------- */
+
+.pop-view-header {
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.9rem;
+    border-bottom: 1px solid var(--sta-border);
+}
+.pop-view-header h1 { margin: 0 0 0.4rem 0; }
+.pop-view-meta {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    flex-wrap: wrap;
+    font-size: 0.95rem;
+}
+.pop-view-meta code {
+    font-style: normal;
+}
+.pop-placeholder-note {
+    margin-top: 0.75rem;
+    font-size: 0.9rem;
+    max-width: 44rem;
+}
+
+.pop-body {
+    max-width: 42rem;
+    font-family: var(--sta-font-serif);
+    font-size: 1.05rem;
+    line-height: 1.55;
+}
+.pop-body p { margin: 0 0 0.65rem 0; }
+.pop-leader { /* default serif paragraph */ }
+.pop-people {
+    font-weight: 600;
+}
+.pop-rubric {
+    font-style: italic;
+    color: var(--sta-text-muted);
+    font-size: 0.95rem;
+}
+.pop-both {
+    margin-bottom: 0.65rem;
+}
+.pop-both p {
+    margin-bottom: 0;
+}
+/* Placeholder tokens like {presiding_bishop} — subtle highlight so
+   they're easy to spot inside the prose. */
+.pop-body code {
+    background: rgba(64, 177, 229, 0.12);
+    border-radius: 3px;
+    padding: 0.02rem 0.2rem;
+}
+
 .badge {
     display: inline-block;
     font-family: var(--sta-font-sans);

@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}{{ form.title }} &mdash; St. Andrew's Bulletin{% endblock %}
+
+{% block content %}
+    <p class="muted" style="margin-bottom: 0.5rem;">
+        <a href="{{ url_for('prayers_list') }}">&larr; Back to Prayers</a>
+    </p>
+
+    <div class="panel pop-view">
+        <header class="pop-view-header">
+            <h1>{{ form.title }}</h1>
+            <div class="pop-view-meta">
+                <span class="muted">key: <code>{{ key }}</code></span>
+                {% if hint.sheet_value %}
+                    <span>Planner: <code class="planner-code">{{ hint.sheet_value }}</code></span>
+                {% endif %}
+            </div>
+            {% if hint.note %}
+                <div class="muted" style="margin-top: 0.35rem;">
+                    {{ hint.note }}
+                </div>
+            {% endif %}
+            <p class="muted pop-placeholder-note">
+                Placeholders like <code>{presiding_bishop}</code> or
+                <code>{parish_ministries}</code> are filled in by the
+                generator from <code>placeholders.yaml</code> and the
+                planning sheet. They&rsquo;re shown here untouched so
+                you can see the source text.
+            </p>
+        </header>
+
+        <div class="pop-body">
+        {% for el in form.elements %}
+            {% set kind = el.type or 'leader' %}
+            {% if kind == 'leader' %}
+                <p class="pop-leader">{{ el.text | highlight_placeholders }}</p>
+            {% elif kind == 'people' %}
+                <p class="pop-people">{{ el.text | highlight_placeholders }}</p>
+            {% elif kind == 'rubric' %}
+                <p class="pop-rubric">{{ el.text | highlight_placeholders }}</p>
+            {% elif kind == 'both' %}
+                <div class="pop-both">
+                    <p class="pop-leader">{{ el.leader_text | highlight_placeholders }}</p>
+                    <p class="pop-people">{{ el.people_text | highlight_placeholders }}</p>
+                </div>
+            {% else %}
+                <p class="pop-leader">{{ el.text | highlight_placeholders }}</p>
+            {% endif %}
+        {% endfor %}
+        </div>
+    </div>
+{% endblock %}

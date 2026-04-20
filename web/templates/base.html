@@ -36,6 +36,8 @@
                class="{% if active == 'home' %}active{% endif %}">Generate</a>
             <a href="{{ url_for('songs_list') }}"
                class="{% if active == 'songs' %}active{% endif %}">Songs</a>
+            <a href="{{ url_for('prayers_list') }}"
+               class="{% if active == 'prayers' %}active{% endif %}">Prayers</a>
         </nav>
     </div>
 </header>
