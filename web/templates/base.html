@@ -26,12 +26,10 @@
 <header class="site-header">
     <div class="site-header-inner">
         <a href="{{ url_for('home') }}" class="brand">
-            <img src="{{ url_for('static', path='logo.svg') }}"
-                 alt="" class="brand-logo">
-            <div>
-                <div class="brand-name">St. Andrew&rsquo;s</div>
-                <div class="brand-tagline">A faith for all ages</div>
-            </div>
+            <img src="{{ url_for('static', path='logo.png') }}"
+                 alt="St. Andrew&rsquo;s Episcopal Church"
+                 class="brand-logo">
+            <span class="brand-tagline">A faith for all ages</span>
         </a>
         <nav class="site-nav">
             <a href="{{ url_for('home') }}"
