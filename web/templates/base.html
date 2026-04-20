@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}St. Andrew's Bulletin Generator{% endblock %}</title>
+
+    {# EB Garamond per brand guide. Self-hosting is simple later if we
+       want offline support; for v1 the user already has internet when
+       running the app on their Mac. #}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,600&display=swap"
+          rel="stylesheet">
+
+    <link rel="stylesheet" href="{{ url_for('static', path='styles.css') }}">
+
+    {# HTMX from CDN — vendored later if/when we ship a Bulletin.command
+       that should work offline. #}
+    <script src="https://unpkg.com/htmx.org@1.9.12"
+            integrity="sha384-ujb1lZYygJmzgSwoxRggbCHcjc0rB2XoQrxeTUQyRjrOnlCoYta87iKBWq3EsdM2"
+            crossorigin="anonymous"></script>
+</head>
+<body>
+
+<header class="site-header">
+    <div class="site-header-inner">
+        <a href="{{ url_for('home') }}" class="brand">
+            <img src="{{ url_for('static', path='logo.svg') }}"
+                 alt="" class="brand-logo">
+            <div>
+                <div class="brand-name">St. Andrew&rsquo;s</div>
+                <div class="brand-tagline">A faith for all ages</div>
+            </div>
+        </a>
+        <nav class="site-nav">
+            <a href="{{ url_for('home') }}"
+               class="{% if active == 'home' %}active{% endif %}">Generate</a>
+            <a href="{{ url_for('songs_list') }}"
+               class="{% if active == 'songs' %}active{% endif %}">Songs</a>
+        </nav>
+    </div>
+</header>
+
+<main>
+    {% block content %}{% endblock %}
+</main>
+
+<footer class="site-footer">
+    Bulletin Generator &mdash; St. Andrew&rsquo;s Episcopal Church &middot;
+    McKinney, Texas
+</footer>
+
+</body>
+</html>

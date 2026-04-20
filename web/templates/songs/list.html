@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% block title %}Songs &mdash; St. Andrew's Bulletin{% endblock %}
+
+{% block content %}
+    <h1>Song library</h1>
+
+    <div class="panel">
+        <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+            <span class="subhead">Library</span>
+            <a href="{{ url_for('songs_list') }}?library=main"
+               class="btn-secondary btn"
+               style="{% if library == 'main' %}background: var(--sta-dark-royal); color: #fff;{% endif %}">
+                Sunday (8/9/11 am)
+            </a>
+            <a href="{{ url_for('songs_list') }}?library=hidden_springs"
+               class="btn-secondary btn"
+               style="{% if library == 'hidden_springs' %}background: var(--sta-dark-royal); color: #fff;{% endif %}">
+                Hidden Springs
+            </a>
+            <a href="{{ url_for('song_new') }}?library={{ library }}"
+               class="btn" style="margin-left: auto;">
+                + Add a song
+            </a>
+        </div>
+
+        <div class="song-search">
+            <input type="search"
+                   id="songFilter"
+                   placeholder="Filter by title or hymnal number…"
+                   autofocus
+                   oninput="filterSongs(this.value)">
+            <span class="muted" id="songCount">{{ songs|length }} songs</span>
+        </div>
+
+        {% if songs %}
+            <table class="songs">
+                <thead>
+                    <tr>
+                        <th style="width: 5rem;">Hymnal</th>
+                        <th>Title</th>
+                        <th style="width: 10rem;">Service</th>
+                        <th style="width: 6rem;">Sections</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for s in songs %}
+                    <tr class="song-row"
+                        data-search="{{ (s.title ~ ' ' ~ (s.hymnal_number or '')) | lower }}">
+                        <td>
+                            {% if s.hymnal_number %}
+                                <span class="badge">#{{ s.hymnal_number }}</span>
+                            {% else %}
+                                <span class="muted">&mdash;</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ s.title }}</td>
+                        <td>
+                            {% if s.services %}
+                                {{ s.services }}
+                            {% else %}
+                                <span class="muted">all</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% set verses = s.sections | selectattr('type', 'equalto', 'verse') | list | length %}
+                            {% set choruses = s.sections | selectattr('type', 'equalto', 'chorus') | list | length %}
+                            {% if verses %}{{ verses }}v{% endif %}{% if choruses %} + {{ choruses }}c{% endif %}
+                            {% if not verses and not choruses %}<span class="muted">&mdash;</span>{% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p class="muted">No songs in this library yet.</p>
+        {% endif %}
+    </div>
+
+    <script>
+    // Tiny client-side filter — no framework, no fetch. The whole table
+    // is in the DOM already; we just hide rows that don't match.
+    function filterSongs(query) {
+        const q = query.trim().toLowerCase();
+        const rows = document.querySelectorAll(".song-row");
+        let shown = 0;
+        rows.forEach(r => {
+            const match = !q || r.dataset.search.includes(q);
+            r.style.display = match ? "" : "none";
+            if (match) shown++;
+        });
+        document.getElementById("songCount").textContent =
+            shown + (shown === 1 ? " song" : " songs");
+    }
+    </script>
+{% endblock %}

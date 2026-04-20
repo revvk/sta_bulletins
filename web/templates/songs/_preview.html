@@ -1,0 +1,40 @@
+{# Preview pane — included by songs/new.html when ?preview is set.
+
+   Shows two columns:
+     - The parsed song dict, rendered as it will appear in the bulletin
+     - The raw YAML that will be appended to songs.yaml on save
+#}
+<div class="panel">
+    <h2>Preview</h2>
+    <p class="help">
+        This is what will be saved. If anything looks wrong, edit the
+        lyrics or markdown above and preview again before saving.
+    </p>
+
+    <div style="display: flex; gap: 1rem; align-items: baseline; margin-bottom: 0.5rem;">
+        <h3 style="margin: 0;">{{ preview.title or "(untitled)" }}</h3>
+        {% if preview.hymnal_number %}
+            <span class="badge">{{ preview.hymnal_name or "Hymnal 1982" }} #{{ preview.hymnal_number }}</span>
+        {% endif %}
+        {% if preview.services %}
+            <span class="badge dim">{{ preview.services }}</span>
+        {% endif %}
+    </div>
+
+    <div class="preview-grid">
+        <div class="preview-rendered">
+            {% for section in preview.sections %}
+                <div class="section {{ section.type }}">
+                    <span class="section-label">{{ section.type }}</span>
+                    {% for line in section.lines %}
+                        <span class="lyric-line">{{ line }}</span>
+                    {% endfor %}
+                </div>
+            {% endfor %}
+            {% if not preview.sections %}
+                <p class="muted">No sections detected.</p>
+            {% endif %}
+        </div>
+        <pre class="preview-yaml">{{ preview_yaml }}</pre>
+    </div>
+</div>

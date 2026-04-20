@@ -1,0 +1,440 @@
+/*
+ * St. Andrew's Bulletin Generator — web UI styles.
+ *
+ * Conforms to the parish brand guide
+ * (source_documents/ST.ANDREW_S_LOGO_GUIDE_WITH_TYPE.pdf):
+ *
+ *   - 4-color palette (variables below)
+ *   - EB Garamond for body / headlines (loaded from Google Fonts)
+ *   - System "Gill Sans" / "Gill Sans MT" / "Seravek" stack for labels
+ *     and small caps (the brand calls for Gill Sans Light specifically;
+ *     we fall back to whichever sans-serif a parishioner's Mac has)
+ *   - Body text 87% black on white (the guide says 85-90%, never pure)
+ *   - Left-justified text, generous whitespace, single-column forms
+ */
+
+:root {
+    --sta-dark-royal:  #0F145B;   /* primary headers, page chrome */
+    --sta-royal:       #24338A;   /* secondary buttons, accents */
+    --sta-blue:        #006FBA;   /* links, info badges */
+    --sta-light-blue:  #40B1E5;   /* hover states, subtle highlights */
+
+    --sta-text:        #232323;   /* ~87% black, per brand guide */
+    --sta-text-muted:  #6e6e6e;
+    --sta-bg:          #fdfdfb;   /* warm off-white, easier on the eye */
+    --sta-bg-panel:    #ffffff;
+    --sta-border:      #e3e2dc;
+
+    --sta-font-serif:  "EB Garamond", Garamond, "Adobe Garamond Pro",
+                       Georgia, serif;
+    --sta-font-sans:   "Gill Sans", "Gill Sans MT", "Seravek",
+                       "Helvetica Neue", Helvetica, Arial, sans-serif;
+
+    --radius: 4px;
+    --max-width: 1100px;
+}
+
+/* --------------------------------------------------------------------- */
+/* Base                                                                  */
+/* --------------------------------------------------------------------- */
+
+* { box-sizing: border-box; }
+
+html, body {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: var(--sta-font-serif);
+    font-size: 18px;
+    line-height: 1.5;
+    color: var(--sta-text);
+    background: var(--sta-bg);
+    -webkit-font-smoothing: antialiased;
+}
+
+a {
+    color: var(--sta-blue);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: border-color 120ms ease;
+}
+a:hover { border-bottom-color: var(--sta-light-blue); }
+
+p { margin: 0 0 1em 0; }
+
+h1, h2, h3, h4 {
+    font-family: var(--sta-font-serif);
+    color: var(--sta-dark-royal);
+    font-weight: 600;
+    line-height: 1.2;
+    margin: 0 0 0.6em 0;
+}
+h1 { font-size: 2.1rem; }
+h2 { font-size: 1.5rem; }
+h3 { font-size: 1.2rem; }
+
+/* Small-caps subhead style — brand guide pairs Gill Sans Light with
+ * Garamond body. Used for section labels and table headers. */
+.subhead {
+    font-family: var(--sta-font-sans);
+    font-weight: 300;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    color: var(--sta-royal);
+}
+
+/* --------------------------------------------------------------------- */
+/* Page chrome                                                           */
+/* --------------------------------------------------------------------- */
+
+.site-header {
+    background: var(--sta-dark-royal);
+    color: #fff;
+    padding: 0.9rem 1.5rem;
+    border-bottom: 4px solid var(--sta-blue);
+}
+
+.site-header-inner {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    color: #fff;
+}
+.brand:hover { border-bottom-color: transparent; }
+
+.brand-logo {
+    width: 42px;
+    height: 42px;
+}
+
+.brand-name {
+    font-family: var(--sta-font-serif);
+    font-size: 1.35rem;
+    line-height: 1;
+    letter-spacing: 0.04em;
+}
+.brand-tagline {
+    font-family: var(--sta-font-serif);
+    font-style: italic;
+    font-size: 0.95rem;
+    color: var(--sta-light-blue);
+    margin-top: 2px;
+}
+
+.site-nav {
+    margin-left: auto;
+    display: flex;
+    gap: 1.5rem;
+}
+.site-nav a {
+    color: #fff;
+    font-family: var(--sta-font-sans);
+    font-weight: 300;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    border-bottom: 2px solid transparent;
+    padding-bottom: 2px;
+}
+.site-nav a:hover,
+.site-nav a.active { border-bottom-color: var(--sta-light-blue); }
+
+main {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 2rem 1.5rem 4rem 1.5rem;
+}
+
+.site-footer {
+    border-top: 1px solid var(--sta-border);
+    padding: 1rem 1.5rem;
+    color: var(--sta-text-muted);
+    font-size: 0.85rem;
+    font-family: var(--sta-font-sans);
+    text-align: center;
+}
+
+/* --------------------------------------------------------------------- */
+/* Cards / panels                                                        */
+/* --------------------------------------------------------------------- */
+
+.panel {
+    background: var(--sta-bg-panel);
+    border: 1px solid var(--sta-border);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.panel h2 { margin-top: 0; }
+
+/* --------------------------------------------------------------------- */
+/* Forms                                                                 */
+/* --------------------------------------------------------------------- */
+
+label {
+    display: block;
+    font-family: var(--sta-font-sans);
+    font-weight: 400;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    color: var(--sta-royal);
+    margin-bottom: 0.35rem;
+}
+
+input[type="text"],
+input[type="search"],
+input[type="date"],
+select,
+textarea {
+    width: 100%;
+    font-family: var(--sta-font-serif);
+    font-size: 1rem;
+    color: var(--sta-text);
+    background: #fff;
+    border: 1px solid var(--sta-border);
+    border-radius: var(--radius);
+    padding: 0.55rem 0.7rem;
+    transition: border-color 120ms ease, box-shadow 120ms ease;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+    border-color: var(--sta-blue);
+    box-shadow: 0 0 0 3px rgba(0, 111, 186, 0.15);
+}
+
+textarea {
+    min-height: 18rem;
+    line-height: 1.45;
+    font-family: var(--sta-font-serif);
+    resize: vertical;
+}
+textarea.lyrics {
+    /* For pasted lyrics we want the columns to stay readable */
+    min-height: 22rem;
+}
+
+.form-row {
+    margin-bottom: 1.1rem;
+}
+
+.form-row-inline {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.1rem;
+}
+.form-row-inline > div { flex: 1; }
+
+.help {
+    color: var(--sta-text-muted);
+    font-size: 0.85rem;
+    margin-top: 0.3rem;
+    font-style: italic;
+}
+
+/* --------------------------------------------------------------------- */
+/* Buttons                                                               */
+/* --------------------------------------------------------------------- */
+
+.btn {
+    display: inline-block;
+    font-family: var(--sta-font-sans);
+    font-weight: 400;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    padding: 0.6rem 1.2rem;
+    border-radius: var(--radius);
+    border: 1px solid var(--sta-dark-royal);
+    background: var(--sta-dark-royal);
+    color: #fff;
+    cursor: pointer;
+    transition: background 120ms ease, border-color 120ms ease;
+    text-decoration: none;
+}
+.btn:hover { background: var(--sta-royal); border-color: var(--sta-royal); }
+.btn:focus { outline: 2px solid var(--sta-light-blue); outline-offset: 2px; }
+
+.btn-secondary {
+    background: transparent;
+    color: var(--sta-dark-royal);
+    border-color: var(--sta-dark-royal);
+}
+.btn-secondary:hover {
+    background: var(--sta-dark-royal);
+    color: #fff;
+}
+
+.btn-row {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+    margin-top: 1.25rem;
+}
+
+/* --------------------------------------------------------------------- */
+/* Tabs (for paste / upload switcher on the new-song form)               */
+/* --------------------------------------------------------------------- */
+
+.tabs {
+    display: flex;
+    gap: 0;
+    border-bottom: 2px solid var(--sta-border);
+    margin-bottom: 1.25rem;
+}
+.tab-btn {
+    background: transparent;
+    border: none;
+    border-bottom: 3px solid transparent;
+    margin-bottom: -2px;
+    padding: 0.6rem 1.1rem;
+    font-family: var(--sta-font-sans);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    color: var(--sta-text-muted);
+    cursor: pointer;
+}
+.tab-btn.active {
+    color: var(--sta-dark-royal);
+    border-bottom-color: var(--sta-dark-royal);
+}
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+/* --------------------------------------------------------------------- */
+/* Songs table                                                           */
+/* --------------------------------------------------------------------- */
+
+.song-search {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+.song-search input { flex: 1; }
+
+table.songs {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--sta-bg-panel);
+    border: 1px solid var(--sta-border);
+    border-radius: var(--radius);
+    overflow: hidden;
+}
+table.songs th,
+table.songs td {
+    padding: 0.55rem 0.85rem;
+    text-align: left;
+    border-bottom: 1px solid var(--sta-border);
+    vertical-align: top;
+}
+table.songs th {
+    background: var(--sta-dark-royal);
+    color: #fff;
+    font-family: var(--sta-font-sans);
+    font-weight: 400;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+}
+table.songs tr:last-child td { border-bottom: none; }
+table.songs tr:hover td { background: rgba(64, 177, 229, 0.08); }
+
+.muted {
+    color: var(--sta-text-muted);
+    font-style: italic;
+}
+
+.badge {
+    display: inline-block;
+    font-family: var(--sta-font-sans);
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    background: var(--sta-light-blue);
+    color: #fff;
+    border-radius: 999px;
+    padding: 0.1rem 0.55rem;
+    margin-right: 0.3rem;
+}
+.badge.dim { background: var(--sta-border); color: var(--sta-text); }
+
+/* --------------------------------------------------------------------- */
+/* Preview pane (song parser output)                                     */
+/* --------------------------------------------------------------------- */
+
+.preview-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+    margin-top: 1.25rem;
+}
+@media (max-width: 800px) {
+    .preview-grid { grid-template-columns: 1fr; }
+}
+
+.preview-yaml {
+    background: #1b1f3d;
+    color: #e8eaf3;
+    font-family: "SF Mono", "Menlo", "Consolas", monospace;
+    font-size: 0.85rem;
+    border-radius: var(--radius);
+    padding: 1rem;
+    white-space: pre;
+    overflow-x: auto;
+}
+
+.preview-rendered .section {
+    margin-bottom: 1.1rem;
+    padding-left: 0.85rem;
+    border-left: 3px solid var(--sta-border);
+}
+.preview-rendered .section.chorus {
+    border-left-color: var(--sta-blue);
+    font-style: italic;
+}
+.preview-rendered .section.tag {
+    border-left-color: var(--sta-light-blue);
+}
+.preview-rendered .section-label {
+    font-family: var(--sta-font-sans);
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--sta-text-muted);
+    display: block;
+    margin-bottom: 0.25rem;
+}
+.preview-rendered .lyric-line {
+    display: block;
+}
+
+/* --------------------------------------------------------------------- */
+/* Flash messages                                                        */
+/* --------------------------------------------------------------------- */
+
+.flash {
+    border-left: 4px solid var(--sta-blue);
+    background: rgba(64, 177, 229, 0.08);
+    padding: 0.75rem 1rem;
+    margin-bottom: 1.5rem;
+    border-radius: 0 var(--radius) var(--radius) 0;
+}
+.flash.error  { border-left-color: #b21f1f; background: rgba(178, 31, 31, 0.06); }
+.flash.success { border-left-color: var(--sta-blue); }

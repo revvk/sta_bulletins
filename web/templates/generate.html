@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Generate &mdash; St. Andrew's Bulletin{% endblock %}
+
+{% block content %}
+    <h1>Generate a bulletin</h1>
+    <p class="help" style="font-size: 1rem;">
+        This page is the eventual landing for date pickers and service
+        checkboxes. For now, the song library is the live page &mdash; use
+        the <a href="{{ url_for('songs_list') }}">Songs</a> tab to add or
+        edit hymns.
+    </p>
+
+    <div class="panel">
+        <h2>Coming soon</h2>
+        <p>
+            Date picker, service selector (8&nbsp;am, 9&nbsp;am, 11&nbsp;am,
+            sunrise, Hidden Springs, reading sheets), &ldquo;Generate&rdquo;
+            button, and a post-generation Todo list backed by the new
+            <code>RunReport</code>.
+        </p>
+        <p class="help">
+            The CLI (<code>python generate.py YYYY-MM-DD</code>) keeps working
+            unchanged in the meantime.
+        </p>
+    </div>
+{% endblock %}
