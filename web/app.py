@@ -503,7 +503,7 @@ async def song_save(
 # The pop_forms.yaml catalog stores one entry per form variant. We group
 # them for display so that (for example) Form II and Form II (Immigration
 # Focus) sit next to each other. The grouping also tells the user what
-# text to drop into the Google Sheet's "pop" column to pick a specific
+# text to drop into the Google Sheet's POP column to pick a specific
 # variant — that matters because the CLI used to resolve ambiguity with
 # an interactive prompt that the web runner can't answer.
 
@@ -550,7 +550,7 @@ def _planner_hint(key: str) -> dict:
         or
         {"sheet_value": None, "note": "Selected automatically on …"}
     """
-    # Standard forms (I–VI) — pop column takes the Roman numeral, plus
+    # Standard forms (I–VI) — POP column takes the Roman numeral, plus
     # an optional parenthetical for variants. Must be lowercase inside
     # the parens to match _get_pop_form_key's comparison.
     for base in _FORM_GROUP_ORDER:
@@ -566,35 +566,30 @@ def _planner_hint(key: str) -> dict:
 
     # Advent: advent_I / II / III / IV — picked automatically when
     # is_advent is True and the service title contains the ordinal.
+    # The POP column is ignored on Advent Sundays.
     if key.startswith("advent_"):
         roman = key.split("_", 1)[1]
         return {
             "sheet_value": None,
             "note": (
-                f"Selected automatically on Advent {roman} — no entry "
-                "needed in the planner's pop column."
+                f"Selected automatically on Advent {roman}. The POP "
+                "column is ignored during Advent."
             ),
         }
 
-    # Easter: easter_II / easter_III selected automatically; bare
-    # "easter" is a force-override keyed by the pop column.
+    # Easter: all three (easter, easter_II, easter_III) are keyed
+    # explicitly by the POP column — the base form takes "easter" and
+    # the numbered variants take "easter (II)" / "easter (III)".
     if key == "easter":
         return {
             "sheet_value": "easter",
-            "note": (
-                "Used when the pop column explicitly says “easter”. "
-                "Otherwise the numbered Easter Sunday forms are picked "
-                "automatically."
-            ),
+            "note": None,
         }
     if key.startswith("easter_"):
         roman = key.split("_", 1)[1]
         return {
-            "sheet_value": None,
-            "note": (
-                f"Selected automatically on the {roman} Sunday of Easter "
-                "when no specific form is named in the pop column."
-            ),
+            "sheet_value": f"easter ({roman})",
+            "note": None,
         }
 
     # Fallback for anything else (currently: mothers_day).
@@ -602,7 +597,7 @@ def _planner_hint(key: str) -> dict:
         "sheet_value": None,
         "note": (
             "No automatic trigger — this form is not currently wired to "
-            "the planner. Edit pop_forms.yaml or add a rule to select it."
+            "the POP column. Edit pop_forms.yaml or add a rule to select it."
         ),
     }
 

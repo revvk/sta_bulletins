@@ -1367,13 +1367,31 @@ class BulletinBuilder:
             elif "fourth" in title_lower or "4" in title_lower.replace(" ", ""):
                 return "advent_IV"
 
-        # Named (non-numbered) forms: "Easter", etc.
+        # Extract base form and optional version from parenthetical.
+        # Roman-numeral parentheticals keep their case so keys like
+        # easter_II / form_II_immigration resolve against the YAML —
+        # everything else is lowercased + underscored.
+        paren_match = re.search(r'\(([^)]+)\)', form)
+        version_suffix = ""
+        if paren_match:
+            paren_raw = paren_match.group(1).strip()
+            paren_lower = paren_raw.lower()
+            # "w/ confession" and "with confession" are handled by rules
+            if paren_lower not in ("w/ confession", "with confession"):
+                if re.fullmatch(r"[IVXLCDMivxlcdm]+", paren_raw):
+                    version_suffix = "_" + paren_raw.upper()
+                else:
+                    version_suffix = "_" + paren_lower.replace(" ", "_")
+
+        form_clean = form.split("(")[0].strip()
+        form_clean_lower = form_clean.lower()
+
+        # Named (non-numbered) forms: "easter", "easter (II)", etc.
         named_map = {
             "easter": "easter",
         }
-        form_lower = form.lower()
-        if form_lower in named_map:
-            return named_map[form_lower]
+        if form_clean_lower in named_map:
+            return named_map[form_clean_lower] + version_suffix
 
         # Standard forms: "I", "II", "III", "IV", "V", "VI"
         roman_map = {
@@ -1383,16 +1401,6 @@ class BulletinBuilder:
             "4": "form_IV", "5": "form_V", "6": "form_VI",
         }
 
-        # Extract base form and optional version from parenthetical
-        paren_match = re.search(r'\(([^)]+)\)', form)
-        version_suffix = ""
-        if paren_match:
-            paren_content = paren_match.group(1).strip().lower()
-            # "w/ confession" and "with confession" are handled by rules
-            if paren_content not in ("w/ confession", "with confession"):
-                version_suffix = "_" + paren_content.replace(" ", "_")
-
-        form_clean = form.split("(")[0].strip()
         base_key = roman_map.get(form_clean, "form_I")
 
         return base_key + version_suffix
