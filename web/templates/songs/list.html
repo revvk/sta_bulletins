@@ -44,6 +44,7 @@
                 </thead>
                 <tbody>
                 {% for s in songs %}
+                    {% set lyrics_ok = has_lyrics(s) %}
                     <tr class="song-row"
                         data-search="{{ (s.title ~ ' ' ~ (s.hymnal_number or '')) | lower }}">
                         <td>
@@ -53,7 +54,18 @@
                                 <span class="muted">&mdash;</span>
                             {% endif %}
                         </td>
-                        <td>{{ s.title }}</td>
+                        <td>
+                            {% if lyrics_ok %}
+                                <a href="{{ url_for('song_view') }}?library={{ library }}&amp;i={{ loop.index0 }}"
+                                   class="song-link">{{ s.title }}</a>
+                            {% else %}
+                                {{ s.title }}
+                                <span class="muted"
+                                      title="No lyrics stored for this entry">
+                                    &nbsp;(no lyrics)
+                                </span>
+                            {% endif %}
+                        </td>
                         <td>
                             {% if s.services %}
                                 {{ s.services }}

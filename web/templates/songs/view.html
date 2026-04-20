@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block title %}{{ song.title }} &mdash; St. Andrew's Bulletin{% endblock %}
+
+{% block content %}
+    <p class="muted" style="margin-bottom: 0.5rem;">
+        <a href="{{ url_for('songs_list') }}?library={{ library }}">
+            &larr; Back to song library
+        </a>
+    </p>
+
+    <div class="panel song-view">
+        <header class="song-view-header">
+            <h1>{{ song.title }}</h1>
+            <div class="song-view-meta">
+                {% if song.hymnal_number %}
+                    <span class="badge">
+                        {% if song.hymnal_name %}{{ song.hymnal_name }} {% endif %}#{{ song.hymnal_number }}
+                    </span>
+                {% endif %}
+                {% if song.services %}
+                    <span class="muted">Service: {{ song.services }}</span>
+                {% endif %}
+            </div>
+        </header>
+
+        {% if has_lyrics %}
+            <div class="song-sections">
+            {% for sec in song.sections %}
+                {% set kind = sec.type or 'verse' %}
+                <section class="song-section song-section-{{ kind }}">
+                    {% if kind == 'verse' %}
+                        {# Number verses by their appearance, skipping non-verse sections. #}
+                        {% set vnum = namespace(n=0) %}
+                        {% for prev in song.sections[:loop.index0 + 1] %}
+                            {% if (prev.type or 'verse') == 'verse' %}{% set vnum.n = vnum.n + 1 %}{% endif %}
+                        {% endfor %}
+                        <div class="song-section-label">Verse {{ vnum.n }}</div>
+                    {% elif kind == 'chorus' %}
+                        <div class="song-section-label">Chorus</div>
+                    {% elif kind == 'refrain' %}
+                        <div class="song-section-label">Refrain</div>
+                    {% elif kind == 'antiphon' %}
+                        <div class="song-section-label">Antiphon</div>
+                    {% elif kind == 'tag' %}
+                        <div class="song-section-label">Tag</div>
+                    {% else %}
+                        <div class="song-section-label">{{ kind|capitalize }}</div>
+                    {% endif %}
+                    <div class="song-lines">
+                    {% for line in sec.lines or [] %}
+                        <div class="song-line">{{ line if line else '&nbsp;'|safe }}</div>
+                    {% endfor %}
+                    </div>
+                </section>
+            {% endfor %}
+            </div>
+        {% else %}
+            <p class="muted">
+                No lyrics are stored for this entry yet.
+                <a href="{{ url_for('song_new') }}?library={{ library }}&amp;title={{ song.title | urlencode }}">
+                    Add lyrics &rarr;
+                </a>
+            </p>
+        {% endif %}
+    </div>
+{% endblock %}

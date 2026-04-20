@@ -252,6 +252,21 @@ def run_report(request: Request, run_id: str) -> HTMLResponse:
     )
 
 
+def _has_lyrics(song: dict) -> bool:
+    """True if the song carries any lines we could render.
+
+    Some entries (especially in ``hidden_springs_songs.yaml``) are
+    title-only stubs for instrumentals or songs still missing lyrics.
+    A song counts as having lyrics as long as at least one section has
+    at least one non-blank line.
+    """
+    for sec in (song.get("sections") or []):
+        for line in (sec.get("lines") or []):
+            if str(line).strip():
+                return True
+    return False
+
+
 @app.get("/songs", response_class=HTMLResponse, name="songs_list")
 def songs_list(
     request: Request,
@@ -269,6 +284,38 @@ def songs_list(
             "songs": songs,
             "library": library,
             "library_label": LIBRARY_LABELS[library],
+            "has_lyrics": _has_lyrics,
+        },
+    )
+
+
+@app.get("/songs/view", response_class=HTMLResponse, name="song_view")
+def song_view(
+    request: Request,
+    library: str = Query("main"),
+    i: int = Query(..., ge=0),
+) -> HTMLResponse:
+    """Render a single song's lyrics, addressed by library + list index.
+
+    Using the file position as the key keeps the URL stable for as long
+    as no one edits the YAML out from under the page. Duplicate titles
+    (e.g. 10,000 Reasons at 9 am and 11 am) are disambiguated for free.
+    """
+    if library not in LIBRARY_FILES:
+        library = "main"
+    songs = _load_library(library)
+    if i >= len(songs):
+        url = request.url_for("songs_list").include_query_params(library=library)
+        return RedirectResponse(url=str(url), status_code=303)
+    return templates.TemplateResponse(
+        request, "songs/view.html",
+        {
+            "active": "songs",
+            "library": library,
+            "library_label": LIBRARY_LABELS[library],
+            "song": songs[i],
+            "index": i,
+            "has_lyrics": _has_lyrics(songs[i]),
         },
     )
 

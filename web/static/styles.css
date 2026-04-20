@@ -352,6 +352,76 @@ table.songs th {
 table.songs tr:last-child td { border-bottom: none; }
 table.songs tr:hover td { background: rgba(64, 177, 229, 0.08); }
 
+a.song-link {
+    color: var(--sta-blue);
+    border-bottom-color: transparent;
+}
+a.song-link:hover {
+    color: var(--sta-dark-royal);
+    border-bottom-color: var(--sta-dark-royal);
+}
+
+/* --------------------------------------------------------------------- */
+/* Single-song view                                                      */
+/* --------------------------------------------------------------------- */
+
+.song-view-header {
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.9rem;
+    border-bottom: 1px solid var(--sta-border);
+}
+.song-view-header h1 {
+    margin: 0 0 0.35rem 0;
+}
+.song-view-meta {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    flex-wrap: wrap;
+    font-size: 0.95rem;
+}
+
+.song-sections {
+    /* Wider reading measure than the default panel would give: songs
+       look better when the lines don't wrap mid-phrase. */
+    max-width: 46rem;
+}
+.song-section {
+    margin-bottom: 1.4rem;
+}
+.song-section-label {
+    font-family: var(--sta-font-sans);
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--sta-royal);
+    margin-bottom: 0.35rem;
+}
+.song-lines {
+    font-family: var(--sta-font-serif);
+    font-size: 1.1rem;
+    line-height: 1.55;
+}
+.song-line {
+    /* Preserve blank lines inside a section while keeping natural wrap. */
+    min-height: 1em;
+}
+
+/* Choruses/refrains/antiphons are visually set off — bold + slight
+   indent, matching how they render in the actual printed bulletin. */
+.song-section-chorus .song-lines,
+.song-section-refrain .song-lines,
+.song-section-antiphon .song-lines {
+    font-weight: 600;
+    padding-left: 1rem;
+    border-left: 3px solid var(--sta-light-blue);
+}
+.song-section-tag .song-lines {
+    font-style: italic;
+    padding-left: 1rem;
+    border-left: 2px dashed var(--sta-light-blue);
+}
+
 .muted {
     color: var(--sta-text-muted);
     font-style: italic;
