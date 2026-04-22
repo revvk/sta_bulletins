@@ -768,26 +768,44 @@
   sections:
   - type: verse
     lines:
-    - 'Refrain:        Alleluia, alleluia,'
-    - give thanks to the Risen Lord,
-    - alleluia, alleluia,
-    - give praise to his name.
+    - Come, ye thankful people, come,
+    - raise the song of harvest home;
+    - all is safely gathered in,
+    - ere the winter storms begin.
+    - God, our Maker, doth provide
+    - for our wants to be supplied;
+    - come to God's own temple, come,
+    - raise the song of harvest home.
   - type: verse
     lines:
-    - Jesus is Lord of all the earth,
-    - he is the King of creation. (refrain)
+    - All the world is God's own field,
+    - fruit unto his praise to yield;
+    - wheat and tares together sown
+    - unto joy or sorrow grown;
+    - first the blade and then the ear,
+    - then the full corn shall appear:
+    - Lord of harvest, grant that we
+    - wholesome grain and pure may be.
   - type: verse
     lines:
-    - Spread the good news o’er all the earth,
-    - Jesus has died and has risen. (refrain)
+    - For the Lord our God shall come,
+    - and shall take his harvest home;
+    - from his field shall in that day
+    - all offenses purge away,
+    - giving angels charge at last
+    - in the fire the tares to cast;
+    - but the fruitful ears to store
+    - in his garner evermore.
   - type: verse
     lines:
-    - We have been crucified with Christ.
-    - Now we shall live forever. (refrain)
-  - type: verse
-    lines:
-    - Come let us praise the Living God,
-    - joyfully sing to our Savior. (refrain)
+    - Even so, Lord, quickly come,
+    - bring thy final harvest home;
+    - gather thou thy people in,
+    - free from sorrow, free from sin,
+    - there for ever purified,
+    - in thy presence to abide;
+    - come, with all thine angels come,
+    - raise the glorious harvest home.
 - title: I sing a song of the saints of God
   hymnal_number: '293'
   category: hymnal
