@@ -332,6 +332,89 @@ form_III:
       text: "Silence. The People may add their own petitions."
 
 # ==========================================================================
+# Form III - Immigration (based on BCP Form III, p.387)
+# ==========================================================================
+form_III_immigration:
+  title: "Prayers of the People Form III (Immigration Focus)"
+  group: form_III
+  sheet_values:
+    - III (immigration)
+  elements:
+    - type: both
+      leader_text: "Father, we pray for your holy catholic Church;"
+      people_text: "That we all may be one."
+
+    - type: both
+      leader_text: >-
+        Grant that every member of the Church may truly and humbly
+        serve you;
+      people_text: "That your Name may be glorified by all people."
+
+    - type: both
+      leader_text: >-
+        Make fruitful the work of St. Andrew's ministries,
+        especially the {parish_ministries};
+      people_text: >-
+        That we may be stewards of your grace to the world.
+
+    - type: both
+      leader_text: >-
+        We pray for all bishops, priests, and deacons;
+      people_text: >-
+        That they may be faithful ministers of your Word and
+        Sacraments.
+
+    - type: both
+      leader_text: >-
+        We pray for all who govern and hold authority in the
+        nations of the world;
+      people_text: >-
+        That there may be justice and peace on the earth.
+
+    - type: both
+      leader_text: >-
+        Give us grace to do your will in all that we undertake;
+      people_text: "That our works may find favor in your sight."
+
+    - type: both
+      leader_text: >-
+        Have compassion on those who suffer from any grief or
+        trouble;
+      people_text: >-
+        That they may be delivered from their distress.
+
+    - type: both
+      leader_text: >- 
+        Draw close to the members of our diocesan family currently 
+        held in immigration detention: {immigration_detainees};
+      people_text: >-
+        That justice and wisdom would find a path for them and their
+        families to live fully and fruitfully.
+
+    - type: both
+      leader_text: >-
+        Bless the students, families, and teachers of our partner
+        Schools: Burks Elementary and Christ the King in Belize.
+      people_text: >-
+        That they may grow in true wisdom and knowledge.
+
+    - type: both
+      leader_text: "Give to the departed eternal rest ✠; {departed}"
+      people_text: "Let light perpetual shine upon them."
+
+    - type: both
+      leader_text: >-
+        We praise you for your saints who have entered into joy;
+      people_text: >-
+        May we also come to share in your heavenly kingdom.
+
+    - type: leader
+      text: >-
+        Let us pray for our own needs and those of others.
+    - type: rubric
+      text: "Silence. The People may add their own petitions."
+
+# ==========================================================================
 # Form IV  (based on BCP Form IV, p.388)
 # ==========================================================================
 form_IV:
@@ -396,6 +479,98 @@ form_IV:
         suffering, especially the women and children at Shiloh
         Place and the families served by Ragan's Hope, and all
         those who visit the McKinney Little Free Pantry.
+    - type: rubric
+      text: "Silence"
+    - type: people
+      leader_text: "Lord, in your mercy,"
+      people_text: "Hear our prayer."
+
+    - type: leader
+      text: >-
+        Bless all whose lives are closely linked with ours, and
+        grant that we may serve Christ in them, and love one
+        another as he loves us.
+    - type: rubric
+      text: "Silence"
+    - type: people
+      leader_text: "Lord, in your mercy,"
+      people_text: "Hear our prayer."
+
+    - type: leader
+      text: >-
+        Comfort and heal all those who suffer in body, mind, or
+        spirit; give them courage and hope in their troubles, and
+        bring them the joy of your salvation.
+    - type: rubric
+      text: "Silence"
+    - type: people
+      leader_text: "Lord, in your mercy,"
+      people_text: "Hear our prayer."
+
+    - type: leader
+      text: >-
+        We commend to your mercy all who have died ✠ {departed}, that
+        your will for them may be fulfilled; and we pray that we
+        may share with all your saints in your eternal kingdom.
+    - type: rubric
+      text: "Silence"
+    - type: people
+      leader_text: "Lord, in your mercy,"
+      people_text: "Hear our prayer."
+
+# ==========================================================================
+# Form IV - Hidden Springs (based on BCP Form IV, p.388)
+# ==========================================================================
+form_IV_hidden_springs:
+  title: "Prayers of the People Form IV (Hidden Springs)"
+  group: form_IV
+  sheet_values:
+    - IV (hidden springs)
+    - IV (HS)
+  elements:
+    - type: leader
+      text: "Let us pray for the Church and for the world."
+
+    - type: leader
+      text: >-
+        Grant, Almighty God, that all who confess your Name may be
+        united in your truth, live together in your love, and
+        reveal your glory in the world.
+    - type: rubric
+      text: "Silence"
+    - type: people
+      leader_text: "Lord, in your mercy,"
+      people_text: "Hear our prayer."
+
+    - type: leader
+      text: >-
+        Encourage and inspire our ministries, especially the Memory 
+        Care Bible Stories, the Birthday Fairies, the Jars of Joy, 
+        the Knitwits, and the Hidden Springs Combo; the Altar Guild, 
+        the Ushers and Greeters, the Readers; that our labor would 
+        bear fruit in our common life and in your eternal kingdom.
+    - type: rubric
+      text: "Silence"
+    - type: people
+      leader_text: "Lord, in your mercy,"
+      people_text: "Hear our prayer."
+
+    - type: leader
+      text: >-
+        Guide the people of this land, and of all the nations, in
+        the ways of justice and peace; that we may honor one
+        another and serve the common good.
+    - type: rubric
+      text: "Silence"
+    - type: people
+      leader_text: "Lord, in your mercy,"
+      people_text: "Hear our prayer."
+
+    - type: leader
+      text: >-
+        Give us all a reverence for the earth as your own creation,
+        that we may use its resources rightly in the service of
+        others and to your honor and glory.
     - type: rubric
       text: "Silence"
     - type: people
