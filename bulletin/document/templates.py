@@ -81,7 +81,56 @@ def load_front_cover(
     }
 
     _replace_all_placeholders(doc, replacements)
+    _pin_floating_shapes_to_first_paragraph(doc)
     return doc
+
+
+def _pin_floating_shapes_to_first_paragraph(doc: Document):
+    """Move every floating-shape (``wp:anchor``) drawing in the body to
+    the first paragraph so it always renders on page 1.
+
+    Cover templates use absolutely-positioned text boxes for the
+    decorative chrome ("Invite Involve Instruct Inspire", the title
+    band, the artwork). Each box is anchored to a paragraph; Word
+    renders it on whichever physical page that paragraph lays out on.
+    Standalone, the cover paragraphs all fit on page 1 and the boxes
+    appear where intended. As soon as bulletin content is appended
+    into the same section, late cover paragraphs can reflow onto
+    page 2 and drag their text boxes with them — most visibly the
+    "Invite Involve Instruct Inspire" line at the bottom of the cover.
+
+    Re-anchoring every floating shape to the very first body
+    paragraph guarantees they all stay on page 1, because the first
+    body paragraph is always on page 1. The visible position of each
+    shape is unaffected: every anchor in our cover templates uses
+    ``positionV relativeFrom="page"`` (or ``"margin"``), so the
+    rendered Y coordinate is absolute, not relative to the anchor
+    paragraph itself.
+    """
+    body = doc.element.body
+    first_para = next(body.iterchildren(qn("w:p")), None)
+    if first_para is None:
+        return
+
+    # Collect runs from later paragraphs that contain a floating
+    # drawing (wp:anchor inside w:drawing). Inline drawings
+    # (wp:inline) flow with text and must not be moved. Drawings
+    # are often wrapped in <mc:AlternateContent>/<mc:Choice>, so
+    # iter() (recursive) is required — iterfind() only sees direct
+    # children and would miss them.
+    runs_to_move = []
+    for paragraph in body.iterchildren(qn("w:p")):
+        if paragraph is first_para:
+            continue
+        for run in paragraph.iter(qn("w:r")):
+            for drawing in run.iter(qn("w:drawing")):
+                if drawing.find(qn("wp:anchor")) is not None:
+                    runs_to_move.append(run)
+                    break
+
+    for run in runs_to_move:
+        run.getparent().remove(run)
+        first_para.append(run)
 
 
 def append_back_cover(doc: Document, template_name: str = "back_cover.docx",
