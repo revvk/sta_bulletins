@@ -889,6 +889,27 @@ class BulletinBuilder:
                     parsed = parse_11am_identifier(slot.song_title)
                     if parsed["hymnal_number"]:
                         continue  # hymnal song — no lyrics expected
+
+                # Special-cased slots that always render from BCP/common
+                # prayers when the YAML lookup misses — the bulletin
+                # never prints a hymnal-style title-only stub for them,
+                # so a missing-lyrics warning would be spurious.
+                #   - Sanctus      → 8am/11am hardcode the spoken text;
+                #                    9am falls back to spoken when the
+                #                    YAML lookup returns nothing.
+                #   - Song of Praise titled "Gloria"/"Glory to God"
+                #                  → renders the BCP Gloria as either
+                #                    spoken text or sung lyrics
+                #                    (see word_of_god._is_gloria_sop).
+                part = (slot.service_part or "").lower()
+                title_lower = (slot.song_title or "").lower()
+                if part == "sanctus":
+                    continue
+                if part == "song of praise" and (
+                    "gloria" in title_lower or "glory to god" in title_lower
+                ):
+                    continue
+
                 self._missing_songs.append(
                     f"{slot.service_part}: {slot.song_title}")
                 if self.report is not None:
@@ -918,76 +939,21 @@ class BulletinBuilder:
             )
 
     def _resolve_pop_version(self, prompt_fn):
-        """Resolve which Prayers of the People form version to use.
+        """Resolve which Prayers of the People form to use.
 
-        The Google Sheet may specify a version in parentheses, e.g.,
-        "III (immigration)". If no version is specified and there are
-        alternative versions available in the YAML, the user is prompted
-        to choose.
+        Form selection is fully data-driven from the planner's POP
+        column: each entry in pop_forms.yaml declares its own
+        ``sheet_values:`` list, and ``_get_pop_form_key()`` returns
+        the matching key — already disambiguated. No interactive
+        prompt is needed; the POP cell is the unambiguous selector.
 
-        Versioned forms are stored as separate top-level keys in the YAML:
-          form_III          (default)
-          form_III_immigration
-          form_III_hidden_springs
+        If the POP cell is empty or contains a value no form claims,
+        the lookup falls back to ``form_I`` (handled in
+        ``_get_pop_form_key``). To choose a variant (e.g. Form III
+        Immigration Focus), enter that variant's sheet_value (e.g.
+        ``III (immigration)``) directly in the POP column.
         """
-        pop_forms = load_pop_forms()
-        key = self._get_pop_form_key()
-
-        # If the exact key exists, use it directly
-        if key in pop_forms:
-            self.pop_form_key = key
-        else:
-            # Versioned key doesn't exist in YAML — fall back to base form
-            # Base key is the part before any version suffix (e.g., form_III)
-            base_key = key
-            for prefix in ("form_VI", "form_IV", "form_V", "form_III",
-                           "form_II", "form_I"):
-                if key.startswith(prefix + "_") or key == prefix:
-                    base_key = prefix
-                    break
-            self.pop_form_key = base_key if base_key in pop_forms else "form_I"
-
-        # Check if there are versioned alternatives for the resolved base form
-        # Only applies to standard forms (form_I through form_VI)
-        base = self.pop_form_key
-        # If pop_form_key is itself a version (e.g., form_III_immigration),
-        # extract the base for scanning alternatives
-        for prefix in ("form_VI", "form_IV", "form_V", "form_III",
-                       "form_II", "form_I"):
-            if base.startswith(prefix):
-                base = prefix
-                break
-
-        version_keys = sorted(
-            k for k in pop_forms
-            if k.startswith(base + "_") and k != base
-        )
-
-        if not version_keys or not prompt_fn:
-            return
-
-        # Build options for the user
-        base_title = pop_forms[base].get("title", base)
-        options = [f"{base_title} (default)"]
-        for vk in version_keys:
-            vt = pop_forms[vk].get("title", vk)
-            options.append(vt)
-
-        answer = prompt_fn(
-            f"Multiple versions of {base_title} are available:", options
-        )
-
-        # Match user's answer to a version
-        if answer:
-            if "default" in answer:
-                self.pop_form_key = base
-                return
-            for vk in version_keys:
-                vt = pop_forms[vk].get("title", vk)
-                if vt in answer or vk in answer:
-                    self.pop_form_key = vk
-                    return
-        # Keep current selection (base or sheet-specified version)
+        self.pop_form_key = self._get_pop_form_key()
 
     # ------------------------------------------------------------------
     # Data preparation for section modules
