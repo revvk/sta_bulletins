@@ -394,8 +394,31 @@ def _create_styles(doc: Document, style_defs=None):
             else:
                 pf.line_spacing = Pt(line_spacing)
 
-        # Keep with next for headings (prevents orphaned section headers)
-        if name.startswith("Heading"):
+        # Pagination glue: keep this paragraph on the same page as the
+        # next one. Applies to anything that introduces or anchors
+        # following content, so Word can't orphan it at a page break:
+        #   - Heading / Heading 2  : section headers ("The Word of God",
+        #                            "Processional", "Sermon", …)
+        #   - Body - Dialogue      : Celebrant lines must stay with the
+        #                            People response that answers them.
+        #                            (The People line itself also gets
+        #                            it; harmless since whatever follows
+        #                            is usually a rubric or another
+        #                            dialogue line that benefits from
+        #                            staying close.)
+        #   - Body - Introductory Rubric
+        #                          : "Please stand." / "Be seated." —
+        #                            always immediately followed by the
+        #                            content the rubric refers to.
+        #   - Body - Rubric        : mid-service rubrics ("Silence",
+        #                            "The Celebrant says…") that
+        #                            introduce the next paragraph.
+        _STICK_TO_NEXT = {
+            "Body - Dialogue",
+            "Body - Introductory Rubric",
+            "Body - Rubric",
+        }
+        if name.startswith("Heading") or name in _STICK_TO_NEXT:
             pf.keep_with_next = True
 
         # Tab stops for body-text styles — use LP tab positions for the

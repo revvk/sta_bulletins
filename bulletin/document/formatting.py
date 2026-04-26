@@ -203,7 +203,7 @@ def add_song(doc: Document, song_data: dict, multi_row: bool = False):
             allows page breaks between rows.  Better for large-print
             bulletins where a tall 1×1 cell may not fit on a single page.
     """
-    add_hymn_header(
+    header_p = add_hymn_header(
         doc,
         song_data["title"],
         song_data.get("tune_name"),
@@ -214,6 +214,11 @@ def add_song(doc: Document, song_data: dict, multi_row: bool = False):
     sections = song_data.get("sections", [])
     if not sections:
         return
+
+    # Glue the title to the song table that follows so Word can't
+    # orphan the hymn header at the bottom of a page while the lyrics
+    # spill onto the next one.
+    header_p.paragraph_format.keep_with_next = True
 
     if multi_row:
         # 1×N table: one row per section (verse/chorus)
@@ -249,7 +254,7 @@ def add_song_two_column(doc: Document, song_data: dict):
     Chorus sections are repeated or placed as-is.
     """
     # Add the header normally
-    add_hymn_header(
+    header_p = add_hymn_header(
         doc,
         song_data["title"],
         song_data.get("tune_name"),
@@ -266,6 +271,9 @@ def add_song_two_column(doc: Document, song_data: dict):
             else:
                 add_lyric_verse(doc, section["lines"])
         return
+
+    # Glue the title to the song table that follows.
+    header_p.paragraph_format.keep_with_next = True
 
     # Create a borderless two-column table
     table = doc.add_table(rows=1, cols=2)
