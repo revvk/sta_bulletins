@@ -1,0 +1,546 @@
+# Funeral / Burial liturgical texts from the Book of Common Prayer (1979)
+#
+# Two top-level sub-trees, one per rite. Each is transcribed verbatim from
+# the BCP. The two rites are independent liturgies, not derivations of one
+# another (Rite I uses traditional/thee-and-thou language; Rite II uses
+# contemporary language; the prayer forms themselves are different shapes).
+#
+# Pronoun + name placeholders that the renderer substitutes per service:
+#   {N}        the deceased's preferred name (e.g. "Annette")
+#   {NN}       the names of the bereaved (e.g. "Bill, Sarah, and the
+#              children") — used in the "for those who mourn" collect
+#   {he}       he   / she   / they
+#   {him}      him  / her   / them
+#   {his}      his  / her   / their
+#   {brother}  brother / sister / sibling
+# Substitution of {N} and pronouns/sibling is driven by the deceased.pronoun
+# field in the per-service YAML; {NN} is filled from the bereaved-names
+# field on the for-those-who-mourn flag (see docs/plans/funeral_bulletins.md).
+#
+# All BCP texts are public domain (1979 Book of Common Prayer, Episcopal
+# Church USA).
+
+rite_I:
+  # To be transcribed.
+
+rite_II:
+  # ---------------------------------------------------------------------
+  # Opening Anthems  (BCP pp. 491-492)
+  #
+  # All stand while one or more of the following anthems are sung or
+  # said. A hymn, psalm, or some other suitable anthem may be sung
+  # instead.
+  #
+  # Two anthems are provided. The 'i_am_resurrection' anthem is the
+  # default and overwhelmingly the most common; 'in_the_midst_of_life'
+  # is offered as an alternate.
+  # ---------------------------------------------------------------------
+  opening_anthems:
+
+    i_am_resurrection:
+      label: "Opening Anthem"
+      stanzas:
+        - |
+          I am Resurrection and I am Life, says the Lord.
+          Whoever has faith in me shall have life,
+          even though he die.
+          And everyone who has life,
+          and has committed himself to me in faith,
+          shall not die for ever.
+        - |
+          As for me, I know that my Redeemer lives
+          and that at the last he will stand upon the earth.
+          After my awaking, he will raise me up;
+          and in my body I shall see God.
+          I myself shall see, and my eyes behold him
+          who is my friend and not a stranger.
+        - |
+          For none of us has life in himself,
+          and none becomes his own master when he dies.
+          For if we have life, we are alive in the Lord,
+          and if we die, we die in the Lord.
+          So, then, whether we live or die,
+          we are the Lord's possession.
+        - |
+          Happy from now on
+          are those who die in the Lord!
+          So it is, says the Spirit,
+          for they rest from their labors.
+
+    in_the_midst_of_life:
+      label: "Opening Anthem"
+      # This anthem has a refrain ("Holy God, Holy and Mighty…") sung
+      # after each of the three petitions. The renderer should set the
+      # refrain in italic to match the BCP typography.
+      refrain: |
+        Holy God, Holy and Mighty,
+        Holy and merciful Savior,
+        deliver us not into the bitterness of eternal death.
+      verses:
+        - |
+          In the midst of life we are in death;
+          from whom can we seek help?
+          From you alone, O Lord,
+          who by our sins are justly angered.
+        - |
+          Lord, you know the secrets of our hearts;
+          shut not your ears to our prayers,
+          but spare us, O Lord.
+        - |
+          O worthy and eternal Judge,
+          do not let the pains of death
+          turn us away from you at our last hour.
+
+    # Following either anthem the BCP allows a brief address from the
+    # Celebrant; emit nothing here — that's a per-service decision and
+    # belongs in the schedule, not the static texts.
+
+  # ---------------------------------------------------------------------
+  # The Collect  (BCP pp. 493-494)
+  #
+  # Silence may be kept after the dialogue; then the Celebrant says one
+  # of the Collects below — three adult options (BCP p. 493) or one
+  # child option (BCP p. 494). After any of the four, the Celebrant may
+  # add the optional "for those who mourn" prayer (BCP p. 494) that
+  # addresses the bereaved.
+  # ---------------------------------------------------------------------
+  collect_dialogue:
+    - celebrant: "The Lord be with you."
+      people:    "And also with you."
+    - celebrant: "Let us pray."
+
+  collects:
+    label: "The Collect"
+
+    adult:
+      # Three options, BCP p. 493. Per-service YAML picks one
+      # (default: option_3, the most commonly used at St. Andrew's;
+      # matches the Cox bulletin reference).
+
+      option_1:
+        # Begins: "O God, who by the…"  (BCP p. 493)
+        text: |
+          O God, who by the glorious resurrection of your Son Jesus
+          Christ destroyed death, and brought life and immortality to
+          light: Grant that your servant {N}, being raised with him, may
+          know the strength of his presence, and rejoice in his eternal
+          glory; who with you and the Holy Spirit lives and reigns, one
+          God, for ever and ever.
+        amen: "Amen."
+
+      option_2:
+        # Begins: "O God, whose mercies cannot…"  (BCP p. 493)
+        text: |
+          O God, whose mercies cannot be numbered: Accept our
+          prayers on behalf of your servant {N}, and grant {him} an
+          entrance into the land of light and joy, in the fellowship of
+          your saints; through Jesus Christ our Lord, who lives and
+          reigns with you and the Holy Spirit, one God, now and for
+          ever.
+        amen: "Amen."
+
+      option_3:
+        # Begins: "O God of grace and…"  (BCP p. 493)
+        text: |
+          O God of grace and glory, we remember before you this day
+          our {brother} {N}. We thank you for giving {him} to us, {his}
+          family and friends, to know and to love as a companion on
+          our earthly pilgrimage. In your boundless compassion,
+          console us who mourn. Give us faith to see in death the gate
+          of eternal life, so that in quiet confidence we may continue
+          our course on earth, until, by your call, we are reunited with
+          those who have gone before; through Jesus Christ our Lord.
+        amen: "Amen."
+
+    child:
+      # Begins: "O God, whose beloved Son…"  (BCP p. 494)
+      text: |
+        O God, whose beloved Son took children into his arms and
+        blessed them: Give us grace to entrust {N}, to your never-
+        failing care and love, and bring us all to your heavenly
+        kingdom; through Jesus Christ our Lord, who lives and
+        reigns with you and the Holy Spirit, one God, now and for
+        ever.
+      amen: "Amen."
+
+    for_those_who_mourn:
+      # Optional addendum, BCP p. 494. May be added after any of the
+      # four collects above. Addresses the bereaved (NN. in the BCP);
+      # the renderer fills in {NN} with the family member names.
+      # Begins: "Most merciful God, whose wisdom…"  (BCP p. 494)
+      text: |
+        Most merciful God, whose wisdom is beyond our
+        understanding, deal graciously with {NN} in their grief.
+        Surround them with your love, that they may not be
+        overwhelmed by their loss, but have confidence in your
+        goodness, and strength to meet the days to come; through
+        Jesus Christ our Lord.
+      amen: "Amen."
+
+  # ---------------------------------------------------------------------
+  # Prayers for the Departed  (BCP pp. 497-498)
+  #
+  # When there is a Communion, this serves as the Prayers of the People.
+  # When there is not, it is preceded by the Lord's Prayer.
+  #
+  # Each petition is followed by the people's response "Hear us, Lord."
+  # The two petitions marked optional in the BCP (vertical bar in the
+  # margin, p. 497) reference Baptism and Communion respectively;
+  # they are typically included when the deceased was a baptized
+  # Christian and the service includes Holy Communion.
+  #
+  # After the petitions, silence may be kept; then the Celebrant
+  # concludes with one of the two prayers below ("commend" or
+  # "father_of_all").
+  # ---------------------------------------------------------------------
+  prayers_for_the_departed:
+    label: "Prayers for the Departed"
+
+    bidding: |
+      For our {brother} {N}, let us pray to our Lord Jesus Christ
+      who said, "I am Resurrection and I am Life."
+
+    petitions:
+      - text: |
+          Lord, you consoled Martha and Mary in their distress;
+          draw near to us who mourn for {N}, and dry the tears of
+          those who weep.
+        response: "Hear us, Lord."
+
+      - text: |
+          You wept at the grave of Lazarus, your friend;
+          comfort us in our sorrow.
+        response: "Hear us, Lord."
+
+      - text: |
+          You raised the dead to life; give to our {brother}
+          eternal life.
+        response: "Hear us, Lord."
+
+      - text: |
+          You promised paradise to the thief who repented;
+          bring our {brother} to the joys of heaven.
+        response: "Hear us, Lord."
+
+      - text: |
+          Our {brother} was washed in Baptism and anointed with
+          the Holy Spirit; give {him} fellowship with all your
+          saints.
+        response: "Hear us, Lord."
+        optional: true       # include only if deceased was baptized
+        omit_when: [unbaptized]
+
+      - text: |
+          {he_cap} was nourished with your Body and Blood; grant
+          {him} a place at the table in your heavenly kingdom.
+        response: "Hear us, Lord."
+        optional: true       # include only when there is Holy Communion
+        omit_when: [no_communion]
+
+      - text: |
+          Comfort us in our sorrows at the death of our {brother};
+          let our faith be our consolation, and eternal life our
+          hope.
+        # No "Hear us, Lord" response on this final petition — it
+        # leads directly into the silence and concluding prayer.
+        response: null
+
+    silence_rubric: "Silence may be kept."
+
+    conclusion_rubric: "The Celebrant concludes with one of the following or some other prayer"
+
+    # Two concluding prayer options. The per-service YAML picks one
+    # (default: 'commend'). Both place the deceased in trust to God
+    # and lead into the Eucharist (when present) or the Commendation.
+    conclusions:
+      commend:
+        text: |
+          Lord Jesus Christ, we commend to you our {brother} {N},
+          who was reborn by water and the Spirit in Holy Baptism.
+          Grant that {his} death may recall to us your victory
+          over death, and be an occasion for us to renew our trust
+          in your Father's love. Give us, we pray, the faith to
+          follow where you have led the way; and where you live and
+          reign with the Father and the Holy Spirit, to the ages of
+          ages.
+        amen: "Amen."
+
+      father_of_all:
+        text: |
+          Father of all, we pray to you for {N}, and for all those
+          whom we love but see no longer. Grant to them eternal rest.
+          Let light perpetual shine upon them. May {his} soul and
+          the souls of all the departed, through the mercy of God,
+          rest in peace.
+        amen: "Amen."
+
+    # After the concluding prayer, the BCP rubric says: "When there
+    # is no Communion, the service continues with the Commendation,
+    # or with the Committal." The builder handles that branching.
+
+  # ---------------------------------------------------------------------
+  # Postcommunion Prayer  (BCP p. 498)
+  #
+  # Used in place of the usual postcommunion prayer at funerals with
+  # Holy Communion. The Preface for the Eucharist itself is the
+  # "Preface of the Commemoration of the Dead" (BCP p. 382), which
+  # belongs in the Eucharistic-prayer flow rather than here.
+  # ---------------------------------------------------------------------
+  postcommunion_prayer:
+    label: "Postcommunion Prayer"
+    intro_dialogue:
+      - celebrant: "Let us pray."
+    text: |
+      Almighty God, we thank you that in your great love you have fed us
+      with the spiritual food and drink of the Body and Blood of your Son
+      Jesus Christ, and have given us a foretaste of your heavenly banquet.
+      Grant that this Sacrament may be to us a comfort in affliction, and
+      a pledge of our inheritance in that kingdom where there is no death,
+      neither sorrow nor crying, but the fullness of joy with all your
+      saints; through Jesus Christ our Savior.
+    amen: "Amen."
+
+    # Rubric printed before the body's congregational text:
+    # "In place of the usual postcommunion prayer, the following is said"
+    rubric_before: "In place of the usual postcommunion prayer, the following is said"
+
+    # After the postcommunion prayer the BCP rubric says:
+    # "If the body is not present, the service continues with the
+    #  (blessing and) dismissal."
+    # "Unless the Committal follows immediately in the church, the
+    #  following Commendation is used."
+    # The builder handles that branching.
+
+  # ---------------------------------------------------------------------
+  # The Commendation  (BCP pp. 499-500)
+  #
+  # Used when the body / cremains are present but the Committal is
+  # NOT immediately following in the church (i.e. burial is delayed
+  # or at a separate location). Commends the soul.
+  #
+  # Sequence:
+  #   1. Anthem  ("Give rest, O Christ" with the dust-to-dust verse,
+  #       refrain-verse-refrain shape — refrains italic in the BCP).
+  #   2. Commendation prayer ("Into your hands, O merciful Savior…")
+  #      said by the Celebrant facing the body.
+  #   3. Optional bishop/celebrant blessing of the people.
+  #   4. Dismissal ("Let us go forth in the name of Christ.")
+  #   5. Optional anthem(s) "as the body is borne from the church".
+  # ---------------------------------------------------------------------
+  commendation:
+    label: "The Commendation"
+
+    setup_rubric: "The Celebrant and other ministers take their places at the body."
+
+    anthem:
+      anthem_rubric: "This anthem, or some other suitable anthem, or a hymn, may be sung or said."
+      # Refrain (italic in BCP) is sung before and after the dust-to-
+      # dust verse. The renderer should set the refrain in italic to
+      # match BCP typography.
+      refrain: |
+        Give rest, O Christ, to your servant with your saints,
+        where sorrow and pain are no more,
+        neither sighing, but life everlasting.
+      verse: |
+        You only are immortal, the creator and maker of mankind;
+        and we are mortal, formed of the earth, and to earth shall
+        we return. For so did you ordain when you created me, saying,
+        "You are dust, and to dust you shall return." All of us go
+        down to the dust; yet even at the grave we make our song:
+        Alleluia, alleluia, alleluia.
+      # The Cox bulletin uses "servant" (singular). The BCP itself
+      # writes "servant(s)" to allow joint funerals; we ship singular
+      # by default and the renderer can pluralize for joint services
+      # if/when that comes up.
+
+    prayer:
+      prayer_rubric: "The Celebrant, facing the body, says"
+      text: |
+        Into your hands, O merciful Savior, we commend your servant
+        {N}. Acknowledge, we humbly beseech you, a sheep of your own
+        fold, a lamb of your own flock, a sinner of your own redeeming.
+        Receive {him} into the arms of your mercy, into the blessed rest
+        of everlasting peace, and into the glorious company of the
+        saints in light.
+      amen: "Amen."
+
+    # The Commendation closes with an optional blessing followed by
+    # the dismissal. The blessing text and dismissal exchange come
+    # from the top-level `blessing:` and `dismissal:` sections so
+    # they're shared with the No-Commendation, No-Committal cases.
+    closing_rubric: |
+      The Celebrant, or the Bishop if present, may then bless the people,
+      and a Deacon or other Minister may dismiss them, saying
+
+    # Optional anthems sung "as the body is borne from the church"
+    # (BCP p. 500). Each is a one-sentence acclamation — typically
+    # the Music Director picks one or two; rarely included in the
+    # printed bulletin but available if needed.
+    departure_anthems:
+      anthem_rubric: |
+        As the body is borne from the church, a hymn, or one or more
+        of these anthems may be sung or said
+      anthems:
+        - |
+          Christ is risen from the dead, trampling down death by death,
+          and giving life to those in the tomb.
+        - |
+          The Sun of Righteousness is gloriously risen, giving light to
+          those who sat in darkness and in the shadow of death.
+        - |
+          The Lord will guide our feet into the way of peace, having
+          taken away the sin of the world.
+        - |
+          Christ will open the kingdom of heaven to all who believe in
+          his Name, saying, Come, O blessed of my Father; inherit the
+          kingdom prepared for you.
+        - |
+          Into paradise may the angels lead you. At your coming may the
+          martyrs receive you, and bring you into the holy city
+          Jerusalem.
+
+      # The BCP also lists three Canticles as alternatives to the
+      # anthems above; not transcribed here — they're already in
+      # the existing bcp_texts/canticles.yaml if needed.
+      canticle_alternatives:
+        - "The Song of Zechariah, Benedictus"
+        - "The Song of Simeon, Nunc dimittis"
+        - "Christ our Passover, Pascha nostrum"
+
+  # ---------------------------------------------------------------------
+  # The Committal  (BCP pp. 501-502)
+  #
+  # Used when the body / cremains are interred as part of the same
+  # service flow — typically at the graveside, columbarium, or
+  # memorial garden. Commits the body.
+  #
+  # Sequence:
+  #   1. Anthem  (default: "Everyone the Father gives to me…", BCP
+  #      p. 501; alternates: any of the opening anthems on pp. 491-92).
+  #   2. Earth-cast committal prayer ("In sure and certain hope…").
+  #   3. Lord's Prayer (already in common_prayers.yaml; not repeated).
+  #   4. "Rest eternal" antiphon.
+  #   5. Dismissal blessing ("The God of peace, who brought again…").
+  # ---------------------------------------------------------------------
+  committal:
+    label: "The Committal"
+
+    anthem:
+      anthem_rubric: "The following anthem or one of those on pages 491-492 is sung or said"
+      # Default committal anthem from BCP p. 501. Each stanza is a
+      # separate paragraph; the renderer should preserve stanza
+      # spacing (matches the Cox bulletin layout).
+      stanzas:
+        - |
+          Everyone the Father gives to me will come to me;
+          I will never turn away anyone who believes in me.
+        - |
+          He who raised Jesus Christ from the dead
+          will also give new life to our mortal bodies
+          through his indwelling Spirit.
+        - |
+          My heart, therefore, is glad, and my spirit rejoices;
+          my body also shall rest in hope.
+        - |
+          You will show me the path of life;
+          in your presence there is fullness of joy,
+          and in your right hand are pleasures for evermore.
+
+    prayer:
+      prayer_rubric: "Then, while earth is cast upon the coffin, the Celebrant says these words"
+      # The {location} placeholder corresponds to the BCP footnote on
+      # p. 501: "Or the deep, or the elements, or its resting place."
+      # The renderer substitutes based on the per-service YAML's
+      # service.committal_location field:
+      #   columbarium / cemetery → "ground"
+      #   scattering / sea       → "deep"
+      #   cremation              → "elements"
+      #   indeterminate          → "resting place"
+      text: |
+        In sure and certain hope of the resurrection to eternal life
+        through our Lord Jesus Christ, we commend to Almighty God our
+        {brother} {N}, and we commit {his} body to the {location};
+        earth to earth, ashes to ashes, dust to dust. The Lord bless
+        {him} and keep {him}, the Lord make his face to shine upon
+        {him} and be gracious to {him}, the Lord lift up his
+        countenance upon {him} and give {him} peace.
+      amen: "Amen."
+
+    # The Celebrant introduces the Lord's Prayer with the dialogue
+    # below. The Lord's Prayer text itself lives in
+    # bulletin/data/bcp_texts/common_prayers.yaml; the builder
+    # references that rather than duplicating.
+    lords_prayer_dialogue:
+      - celebrant: "The Lord be with you."
+        people:    "And also with you."
+      - celebrant: "Let us pray."
+
+    # After the Lord's Prayer, "Other prayers may be added" (BCP rubric).
+    # This corresponds to the optional Additional Prayers section on
+    # BCP pp. 503-505. The per-service YAML can list any to include.
+
+    rest_eternal:
+      rubric: "Then may be said"
+      antiphon:
+        - celebrant: "Rest eternal grant to {him}, O Lord;"
+          people:    "And let light perpetual shine upon {him}."
+      conclusion: |
+        May {his} soul, and the souls of all the departed, through
+        the mercy of God, rest in peace.
+      conclusion_amen: "Amen."
+
+    # The Committal closes with the dismissal blessing. The blessing
+    # text and the alternate Easter-season exchange come from the
+    # top-level `blessing:` and `dismissal:` sections; the rubric
+    # below introduces them.
+    dismissal_rubric: "The Celebrant dismisses the people with these words"
+
+  # ---------------------------------------------------------------------
+  # Blessing  (BCP p. 502, "The God of peace…")
+  #
+  # The standard year-round dismissal blessing for the Burial Office.
+  # Used in three contexts — the builder picks based on the
+  # commendation/committal flags in the per-service YAML:
+  #
+  #   • End of the Commendation, when there is NO Committal.
+  #   • End of HC, when there is NO Commendation and NO Committal.
+  #   • End of the Committal itself.
+  #
+  # ---------------------------------------------------------------------
+  blessing:
+    label: "The Blessing"
+    rubric: "The Celebrant blesses the people with these words"
+    god_of_peace:
+      text: |
+        The God of peace, who brought again from the dead our Lord
+        Jesus Christ, the great Shepherd of the sheep, through the
+        blood of the everlasting covenant: Make you perfect in every
+        good work to do his will, working in you that which is
+        well-pleasing in his sight; through Jesus Christ, to whom be
+        glory for ever and ever.
+      amen: "Amen."
+
+  # ---------------------------------------------------------------------
+  # Dismissal  (BCP pp. 500, 502)
+  #
+  # The standard dismissal exchange. Used at the end of the
+  # Commendation (BCP p. 500) and as the closing of the Committal
+  # (BCP p. 502, default form).
+  #
+  # Two forms — the per-service YAML can switch via dismissal_form:
+  #   standard         (year-round, default)
+  #   easter_alleluia  (Easter season, BCP p. 502 alternate)
+  # ---------------------------------------------------------------------
+  dismissal:
+    label: "Dismissal"
+    rubric: "The Deacon, or other Minister, dismisses the people, saying"
+    standard:
+      exchange:
+        - celebrant: "Let us go forth in the name of Christ."
+          people:    "Thanks be to God."
+    easter_alleluia:
+      exchange:
+        - celebrant: "Alleluia. Christ is risen."
+          people:    "The Lord is risen indeed. Alleluia."
+        - celebrant: "Let us go forth in the name of Christ."
+          people:    "Thanks be to God."

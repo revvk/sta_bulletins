@@ -132,3 +132,200 @@ prayer_b:
 prayer_c:
   note: "Prayer C is responsive throughout. See BCP pp. 369-372."
   # Full text to be added when needed
+
+# --- Prayer D (BCP pp. 372-376) ---
+# Prayer D has its own preface (does NOT take a Proper Preface insert
+# like A and B do) and its own Sanctus shape ("Hosanna in the highest"
+# is set on a separate line indented under each Holy line). The post-
+# sanctus thanksgiving is also longer than A or B and includes a
+# distinct intercession block before the doxology — including an
+# optional bracketed section where specific names can be added.
+#
+# All text below is transcribed verbatim from the 1979 BCP (public
+# domain). Built up paragraph-by-paragraph for review.
+prayer_d:
+  preface_rubric: "Then, facing the Holy Table, the Celebrant proceeds"
+
+  preface_1: >-
+    It is truly right to glorify you, Father, and to give you thanks;
+    for you alone are God, living and true, dwelling in light
+    inaccessible from before time and for ever.
+
+  preface_2: >-
+    Fountain of life and source of all goodness, you made all things
+    and fill them with your blessing; you created them to rejoice in
+    the splendor of your radiance.
+
+  # The third preface paragraph is the transition into the Sanctus —
+  # the renderer follows it directly with the Sanctus dialogue, no
+  # spacer between.
+  preface_3: >-
+    Countless throngs of angels stand before you to serve you night
+    and day; and, beholding the glory of your presence, they offer
+    you unceasing praise. Joining with them, and giving voice to
+    every creature under heaven, we acclaim you, and glorify your
+    Name, as we sing (say),
+
+  # Sanctus  (BCP p. 373) — Prayer D specific layout.
+  # "Hosanna in the highest." lines sit on their own line, indented
+  # under the holy/blessed line they follow. The renderer iterates
+  # `lines` and applies an extra indent when `indent: true`.
+  sanctus:
+    rubric: "Celebrant and People"
+    lines:
+      - text: "Holy, holy, holy Lord, God of power and might,"
+      - text: "heaven and earth are full of your glory."
+      - text: "Hosanna in the highest."
+        indent: true
+      - text: "Blessed is he who comes in the name of the Lord."
+      - text: "Hosanna in the highest."
+        indent: true
+
+  post_sanctus_rubric_1: "The people stand or kneel."
+  post_sanctus_rubric_2: "Then the Celebrant continues"
+
+  post_sanctus_1: >-
+    We acclaim you, holy Lord, glorious in power. Your mighty works
+    reveal your wisdom and love. You formed us in your own image,
+    giving the whole world into our care, so that, in obedience to
+    you, our Creator, we might rule and serve all your creatures.
+    When our disobedience took us far from you, you did not abandon
+    us to the power of death. In your mercy you came to our help,
+    so that in seeking you we might find you. Again and again you
+    called us into covenant with you, and through the prophets you
+    taught us to hope for salvation.
+
+  post_sanctus_2: >-
+    Father, you loved the world so much that in the fullness of time
+    you sent your only Son to be our Savior. Incarnate by the Holy
+    Spirit, born of the Virgin Mary, he lived as one of us, yet
+    without sin. To the poor he proclaimed the good news of
+    salvation; to prisoners, freedom; to the sorrowful, joy. To
+    fulfill your purpose he gave himself up to death; and, rising
+    from the grave, destroyed death, and made the whole creation new.
+
+  post_sanctus_3: >-
+    And, that we might live no longer for ourselves, but for him who
+    died and rose for us, he sent the Holy Spirit, his own first
+    gift for those who believe, to complete his work in the world,
+    and to bring to fulfillment the sanctification of all.
+
+  # Hands-on rubric for the institution. Same wording as prayers A/B
+  # (matches what's already rendered in those prayers' flow).
+  institution_rubric: >-
+    At the following words concerning the bread, the Celebrant is to
+    hold it or lay a hand upon it; and at the words concerning the
+    cup, to hold or place a hand upon the cup and any other vessel
+    containing wine to be consecrated.
+
+  # Trailing ✠ matches the prayer_a / prayer_b convention — the
+  # renderer uses the cross symbol as a cue for the celebrant.
+  institution_bread: >-
+    When the hour had come for him to be glorified by you, his
+    heavenly Father, having loved his own who were in the world, he
+    loved them to the end; at supper with them he took bread, and
+    when he had given thanks to you, he broke it, and gave it to his
+    disciples, and said, "Take, eat: This is my Body, which is given
+    for you. Do this for the remembrance of me." ✠
+
+  # Note the punctuation: Prayer D has "Drink this, all of you." (period)
+  # where Prayer A has "Drink this, all of you:" (colon). This is a
+  # genuine BCP difference — preserved verbatim.
+  institution_cup: >-
+    After supper he took the cup of wine; and when he had given
+    thanks, he gave it to them, and said, "Drink this, all of you.
+    This is my Blood of the new Covenant, which is shed for you and
+    for many for the forgiveness of sins. Whenever you drink it, do
+    this for the remembrance of me." ✠
+
+  # The memorial intro flows directly into the people's acclamation
+  # below — the Celebrant ends mid-thought ("we praise you and we
+  # bless you") and the people's lines continue it. The renderer
+  # should set them as one unbroken unit with the acclamation in
+  # bold (per the existing dialogue style).
+  memorial_intro: >-
+    Father, we now celebrate this memorial of our redemption.
+    Recalling Christ's death and his descent among the dead,
+    proclaiming his resurrection and ascension to your right hand,
+    awaiting his coming in glory; and offering to you, from the
+    gifts you have given us, this bread and this cup, we praise you
+    and we bless you.
+
+  memorial_acclamation_rubric: "Celebrant and People"
+  memorial_acclamation:
+    - "We praise you, we bless you,"
+    - "we give thanks to you,"
+    - "and we pray to you, Lord our God."
+
+  epiclesis_rubric: "The Celebrant continues"
+
+  epiclesis_1: >-
+    Lord, we pray that in your goodness and mercy your Holy Spirit
+    may descend upon us, and upon these gifts, sanctifying them and
+    showing them to be holy gifts for your holy people, the bread of
+    life and the cup of salvation, the Body and Blood of your Son
+    Jesus Christ.
+
+  epiclesis_2: >-
+    Grant that all who share this bread and cup may become one body
+    and one spirit, a living sacrifice in Christ, to the praise of
+    your Name.
+
+  # First intercession paragraph (always included).
+  intercession_main: >-
+    Remember, Lord, your one holy catholic and apostolic Church,
+    redeemed by the blood of your Christ. Reveal its unity, guard
+    its faith, and preserve it in peace.
+
+  # Four optional bracketed petitions (BCP p. 375). Each is
+  # independently optional — the brackets in the BCP indicate that
+  # any of these may be omitted. The per-service YAML enables them
+  # via flags like:
+  #   intercession_petitions:
+  #     ministers:  true            # (with names if desired)
+  #     ministers_names: ["Michael", "Sean"]
+  #     people:     true
+  #     specific:   "the residents of Samaritan Inn"   # fills the blank
+  #     departed:   true            # the standard "all who have died"
+  intercession_optional:
+    ministers:
+      # The "(NN. and)" parenthetical is filled with name(s) when
+      # ministers_names is set; collapsed when empty.
+      text_with_names: "Remember {names} and all who minister in your Church."
+      text_without_names: "Remember all who minister in your Church."
+    people:
+      text: "Remember all your people, and those who seek your truth."
+    specific:
+      # The blank (BCP shows "__________") is for any free-form
+      # intercession the celebrant wants to add.
+      text: "Remember {free_text}."
+    departed:
+      text: >-
+        Remember all who have died in the peace of Christ, and
+        those whose faith is known to you alone; bring them into
+        the place of eternal joy and light.
+
+  # Final intercession paragraph. The "saints invocation" middle
+  # section is bracketed in the BCP — optional. Per-service flag
+  # `include_saints_invocation: true|false` picks which variant.
+  # When included, {extra_saints_phrase} can be a parenthetical
+  # like "(with blessed Andrew)" or empty.
+  intercession_close:
+    text_with_saints: >-
+      And grant that we may find our inheritance with the Blessed
+      Virgin Mary, with patriarchs, prophets, apostles, and martyrs,
+      {extra_saints_phrase} and all the saints who have found favor
+      with you in ages past. We praise you in union with them and
+      give you glory through your Son Jesus Christ our Lord.
+    text_without_saints: >-
+      And grant that we may find our inheritance with all the saints
+      who have found favor with you in ages past. We praise you in
+      union with them and give you glory through your Son Jesus
+      Christ our Lord.
+
+  doxology: >-
+    Through Christ, and with Christ, and in Christ, all honor and
+    glory are yours, Almighty God and Father, in the unity of the
+    Holy Spirit, for ever and ever.
+
+  doxology_response: "AMEN."
