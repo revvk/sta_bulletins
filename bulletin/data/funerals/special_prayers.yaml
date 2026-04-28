@@ -1,0 +1,62 @@
+# Special / optional prayers that may be inserted into a funeral or
+# memorial service in addition to the BCP texts in funeral_texts.yaml.
+#
+# The per-service YAML opts in via:
+#
+#   special_prayers:
+#     - key: daughters_of_the_king
+#       reader: "Diane Victor"
+#       reader_role: "President of the St. Andrew's Chapter of the Daughters of the King"
+#
+# Each entry below specifies:
+#   title         the heading printed in the bulletin
+#   placement     where in the service the prayer goes; the builder
+#                 inserts it at that anchor
+#                 (currently only `after_prayers_for_departed`)
+#   credit_format the reader-credit line, with {reader} and {reader_role}
+#                 placeholders (rendered in italic)
+#   text          the prayer text — the placeholder convention matches
+#                 funeral_texts.yaml ({N} for the deceased's preferred
+#                 name; {he}/{him}/{his}/{brother} for pronouns when
+#                 the prayer is gender-neutral). Some prayers are
+#                 specific to one gender and hardcode the pronouns —
+#                 see per-entry notes.
+#   amen          the people's response on its own line (typically "Amen.")
+#
+# All text is verbatim from the source noted in each entry's comment.
+
+# ---------------------------------------------------------------------
+# Daughters of the King — Prayer for a Daughter Who Has Died
+#
+# Used at the funeral of a member of the Order of the Daughters of the
+# King (a women's order). Pronouns are hardcoded feminine since
+# membership is by definition women-only.
+#
+# Source: verified against the Order's official prayers page,
+# https://www.doknational.org/page/DaughtersPrayers (where the prayer
+# is titled "For a Daughter Who has Died"). The bulletin heading
+# below uses the conventional "Prayer for a Daughter Who Has Died"
+# form. The Cox 2026-01-31 bulletin had "we bless to you" — a typo
+# for the canonical "we bless You for" — corrected here.
+# ---------------------------------------------------------------------
+daughters_of_the_king:
+  title: "Prayer for a Daughter Who Has Died"
+  placement: after_prayers_for_departed
+
+  # Reader credit. {reader} is the person reading; {reader_role} is
+  # their title within the chapter (e.g. "President of the St.
+  # Andrew's Chapter of the Daughters of the King").
+  credit_format: "Read by {reader}, {reader_role}"
+
+  # {N} is the deceased's preferred name; the DOK source uses N. as
+  # the placeholder, which matches our convention.
+  text: |
+    Dear Heavenly Father, we bless You for all those who have
+    departed this life in your faith and fear, especially Your
+    Daughter, our sister, {N}, who worked to fulfill Your will on
+    earth through prayer and service in The Order. May her faith
+    and example inspire other women and girls to greater and more
+    faithful labor for You. Grant the light of Your presence and
+    the glory of the life beyond to be her great and everlasting
+    reward.
+  amen: "Amen."

@@ -21,7 +21,491 @@
 # Church USA).
 
 rite_I:
-  # To be transcribed.
+  # ---------------------------------------------------------------------
+  # Opening Anthem  (BCP p. 469)
+  #
+  # All stand while the following anthem is sung or said.
+  #
+  # Rite I provides only ONE opening anthem (the "I am the
+  # resurrection and the life" form, in Coverdale/thee-and-thou
+  # language). The "In the midst of life" alternative was added in
+  # Rite II (BCP pp. 491-492); it does not exist in the Rite I
+  # office.
+  # ---------------------------------------------------------------------
+  opening_anthems:
+
+    i_am_the_resurrection:
+      label: "Opening Anthem"
+      stanzas:
+        - |
+          I am the resurrection and the life, saith the Lord;
+          he that believeth in me, though he were dead, yet shall he live;
+          and whosoever liveth and believeth in me shall never die.
+        - |
+          I know that my Redeemer liveth,
+          and that he shall stand at the latter day upon the earth;
+          and though this body be destroyed, yet shall I see God;
+          whom I shall see for myself and mine eyes shall behold,
+          and not as a stranger.
+        - |
+          For none of us liveth to himself,
+          and no man dieth to himself.
+          For if we live, we live unto the Lord.
+          and if we die, we die unto the Lord.
+          Whether we live, therefore, or die, we are the Lord's.
+        - |
+          Blessed are the dead who die in the Lord;
+          even so saith the Spirit, for they rest from their labors.
+
+  # ---------------------------------------------------------------------
+  # The Collect  (BCP pp. 469-470)
+  #
+  # Silence may be kept after the dialogue; then the Celebrant says
+  # one of the Collects below — Adult (p. 470) or Child (p. 470).
+  #
+  # Note: Rite I provides only two collect options (Adult / Child),
+  # whereas Rite II provides three Adult options plus the optional
+  # "for those who mourn" addendum that may follow any of them. The
+  # third Adult option ("O God of grace and glory…") and the
+  # for-those-who-mourn addendum were added in Rite II and do NOT
+  # exist in Rite I.
+  # ---------------------------------------------------------------------
+  collect_dialogue:
+    - celebrant: "The Lord be with you."
+      people:    "And with thy spirit."
+    - celebrant: "Let us pray."
+
+  collects:
+    label: "The Collect"
+
+    adult:
+      # BCP p. 470. Begins: "O God, whose mercies cannot…"
+      text: |
+        O God, whose mercies cannot be numbered: Accept our prayers
+        on behalf of thy servant {N}, and grant {him} an entrance
+        into the land of light and joy, in the fellowship of thy
+        saints; through Jesus Christ thy Son our Lord, who liveth
+        and reigneth with thee and the Holy Spirit, one God, now
+        and for ever.
+      amen: "Amen."
+
+    child:
+      # BCP p. 470. Begins: "O God, whose beloved Son…"
+      text: |
+        O God, whose beloved Son did take little children into his
+        arms and bless them: Give us grace, we beseech thee, to
+        entrust this child {N} to thy never-failing care and love,
+        and bring us all to thy heavenly kingdom; through the same
+        thy Son Jesus Christ our Lord, who liveth and reigneth
+        with thee and the Holy Spirit, one God, now and for ever.
+      amen: "Amen."
+
+  # ---------------------------------------------------------------------
+  # Prayers for the Departed  (BCP pp. 480-481)
+  #
+  # When there is a Communion, this serves as the Prayers of the People.
+  # When there is not, it is preceded by the Lord's Prayer.
+  #
+  # Different SHAPE from Rite II — in Rite I every petition is
+  # answered with "Amen." (Rite II uses "Hear us, Lord."), and the
+  # petitions are longer thee/thou-style intercessions rather than the
+  # "draw near to us… you wept… you raised the dead" Lazarus litany.
+  #
+  # Petitions 6-9 are marked optional in the BCP (vertical bars in
+  # the margin, p. 481) and may be omitted; the per-service YAML
+  # opts in via per-petition flags.
+  #
+  # The final petition references the parish patron saint via the
+  # {patron_phrase} placeholder, which substitutes to:
+  #   "blessed Andrew and "  (default at St. Andrew's; trailing space)
+  #   ""                     (omit the patron invocation entirely)
+  # ---------------------------------------------------------------------
+  prayers_for_the_departed:
+    label: "Prayers for the Departed"
+
+    response_rubric: "The People respond to every petition with Amen."
+    bidding_rubric: "The Deacon or other leader says"
+    bidding: "In peace, let us pray to the Lord."
+
+    petitions:
+      - text: |
+          Almighty God, who hast knit together thine elect in one
+          communion and fellowship, in the mystical body of thy Son
+          Christ our Lord: Grant, we beseech thee, to thy whole
+          Church in paradise and on earth, thy light and thy peace.
+        amen: "Amen."
+
+      - text: |
+          Grant that all who have been baptized into Christ's death
+          and resurrection may die to sin and rise to newness of
+          life, and that through the grave and gate of death we may
+          pass with him to our joyful resurrection.
+        amen: "Amen."
+
+      - text: |
+          Grant to us who are still in our pilgrimage, and who walk
+          as yet by faith, that thy Holy Spirit may lead us in
+          holiness and righteousness all our days.
+        amen: "Amen."
+
+      - text: |
+          Grant to thy faithful people pardon and peace, that we may
+          be cleansed from all our sins, and serve thee with a quiet
+          mind.
+        amen: "Amen."
+
+      - text: |
+          Grant to all who mourn a sure confidence in thy fatherly
+          care, that, casting all their grief on thee, they may know
+          the consolation of thy love.
+        amen: "Amen."
+
+      - text: |
+          Give courage and faith to those who are bereaved, that
+          they may have strength to meet the days ahead in the
+          comfort of a reasonable and holy hope, in the joyful
+          expectation of eternal life with those they love.
+        amen: "Amen."
+        optional: true
+
+      - text: |
+          Help us, we pray, in the midst of things we cannot
+          understand, to believe and trust in the communion of
+          saints, the forgiveness of sins, and the resurrection to
+          life everlasting.
+        amen: "Amen."
+        optional: true
+
+      - text: |
+          Grant us grace to entrust {N} to thy never-failing love;
+          receive {him} into the arms of thy mercy, and remember
+          {him} according to the favor which thou bearest unto thy
+          people.
+        amen: "Amen."
+        optional: true
+
+      - text: |
+          Grant that, increasing in knowledge and love of thee,
+          {he} may go from strength to strength in the life of
+          perfect service in thy heavenly kingdom.
+        amen: "Amen."
+        optional: true
+
+      - text: |
+          Grant us, with all who have died in the hope of the
+          resurrection, to have our consummation and bliss in thy
+          eternal and everlasting glory, and, with {patron_phrase}all
+          thy saints, to receive the crown of life which thou dost
+          promise to all who share in the victory of thy Son Jesus
+          Christ; who liveth and reigneth with thee and the Holy
+          Spirit, one God, for ever and ever.
+        amen: "Amen."
+
+    # After the petitions, the BCP rubric says: "When there is no
+    # Communion, the service continues with the Commendation, or
+    # with the Committal." The builder handles that branching.
+    conclusion_rubric: "When there is no Communion, the service continues with the Commendation, or with the Committal."
+
+  # ---------------------------------------------------------------------
+  # Postcommunion Prayer  (BCP p. 482)
+  #
+  # Used in place of the usual postcommunion prayer at funerals with
+  # Holy Communion. The Preface for the Eucharist itself is the
+  # "Preface of the Commemoration of the Dead" (BCP p. 349) which
+  # belongs in the Eucharistic-prayer flow rather than here.
+  #
+  # Same structure as Rite II's postcommunion_prayer but in
+  # thee/thou language.
+  # ---------------------------------------------------------------------
+  postcommunion_prayer:
+    label: "Postcommunion Prayer"
+    intro_dialogue:
+      - celebrant: "Let us pray."
+    text: |
+      Almighty God, we thank thee that in thy great love thou hast
+      fed us with the spiritual food and drink of the Body and Blood
+      of thy Son Jesus Christ, and hast given unto us a foretaste of
+      thy heavenly banquet. Grant that this Sacrament may be unto us
+      a comfort in affliction, and a pledge of our inheritance in
+      that kingdom where there is no death, neither sorrow nor
+      crying, but the fullness of joy with all thy saints; through
+      Jesus Christ our Savior.
+    amen: "Amen."
+
+    rubric_before: "In place of the usual postcommunion prayer, the following is said"
+
+    # After the postcommunion prayer the BCP rubric (p. 482) says:
+    # "If the body is not present, the service continues with the
+    #  [blessing and] dismissal."
+    # "Unless the Committal follows immediately in the church, the
+    #  following Commendation is used."
+    # The builder handles that branching.
+
+  # ---------------------------------------------------------------------
+  # The Commendation  (BCP pp. 482-483)
+  #
+  # Used when the body / cremains are present but the Committal is
+  # NOT immediately following in the church (delayed or at a separate
+  # location). Commends the soul.
+  #
+  # Same structure as Rite II's commendation but in thee/thou
+  # language: "Give rest, O Christ, to thy servant(s) with thy saints"
+  # vs Rite II's "Give rest, O Christ, to your servant(s) with your
+  # saints"; "Into thy hands" vs "Into your hands"; etc.
+  # ---------------------------------------------------------------------
+  commendation:
+    label: "The Commendation"
+
+    setup_rubric: "The Celebrant and other ministers take their places at the body."
+
+    anthem:
+      anthem_rubric: "This anthem, or some other suitable anthem, or a hymn, may be sung or said."
+      # Refrain (italic in BCP) is sung before and after the dust-to-
+      # dust verse, matching Rite II's shape.
+      refrain: |
+        Give rest, O Christ, to thy servant with thy saints,
+        where sorrow and pain are no more,
+        neither sighing, but life everlasting.
+      verse: |
+        Thou only art immortal, the creator and maker of mankind;
+        and we are mortal, formed of the earth, and unto earth shall
+        we return. For so thou didst ordain when thou createdst me,
+        saying, "Dust thou art, and unto dust shalt thou return."
+        All of us go down to the dust; yet even at the grave we make
+        our song: Alleluia, alleluia, alleluia.
+      # The BCP has "thy servant(s)" to allow joint funerals; we
+      # ship singular by default and the renderer pluralizes for
+      # joint services if/when that comes up.
+
+    prayer:
+      prayer_rubric: "The Celebrant, facing the body, says"
+      text: |
+        Into thy hands, O merciful Savior, we commend thy servant
+        {N}. Acknowledge, we humbly beseech thee, a sheep of thine
+        own fold, a lamb of thine own flock, a sinner of thine own
+        redeeming. Receive {him} into the arms of thy mercy, into
+        the blessed rest of everlasting peace, and into the glorious
+        company of the saints in light.
+      amen: "Amen."
+
+    # The Commendation closes with an optional blessing followed by
+    # the dismissal. The blessing text and dismissal exchange come
+    # from the top-level `blessing:` and `dismissal:` sections (added
+    # below in the rite_I subtree, mirroring the rite_II pattern).
+    closing_rubric: |
+      The Celebrant, or the Bishop if present, may then bless the people,
+      and a Deacon or other Minister may dismiss them, saying
+
+    # Optional anthems sung "as the body is borne from the church"
+    # (BCP p. 483). One-sentence acclamations; rarely included in the
+    # printed bulletin.
+    departure_anthems:
+      anthem_rubric: |
+        As the body is borne from the church, a hymn, or one or more
+        of these anthems may be sung or said
+      anthems:
+        - |
+          Christ is risen from the dead, trampling down death by death,
+          and giving life to those in the tomb.
+        - |
+          The Sun of Righteousness is gloriously risen, giving light to
+          those who sat in darkness and in the shadow of death.
+        - |
+          The Lord will guide our feet into the way of peace, having
+          taken away the sin of the world.
+        - |
+          Christ will open the kingdom of heaven to all who believe in
+          his Name, saying, Come, O blessed of my Father; inherit the
+          kingdom prepared for you.
+        - |
+          Into paradise may the angels lead thee; and at thy coming
+          may the martyrs receive thee, and bring thee into the holy
+          city Jerusalem.
+
+      # The BCP also lists three Canticles as alternatives.
+      canticle_alternatives:
+        - "The Song of Zechariah, Benedictus"
+        - "The Song of Simeon, Nunc dimittis"
+        - "Christ our Passover, Pascha nostrum"
+
+  # ---------------------------------------------------------------------
+  # The Committal  (BCP pp. 484-486)
+  #
+  # Used when the body / cremains are interred as part of the same
+  # service flow — typically at the graveside, columbarium, or
+  # memorial garden. Commits the body.
+  #
+  # More elaborate than Rite II's committal:
+  #   1. TWO anthem options (in_the_midst_of_life is the default,
+  #      a long penitential text; all_that_the_father_giveth_me is
+  #      the shorter joyful alternative).
+  #   2. Earth-cast committal prayer ("In sure and certain hope…")
+  #      with the same {location} placeholder for "ground / deep /
+  #      elements / resting place".
+  #   3. Lord's Prayer dialogue, then the Lord's Prayer (Rite I
+  #      "Our Father, who art in heaven…" form, lives in
+  #      common_prayers.yaml).
+  #   4. Optional concluding prayer ("O Almighty God, the God of the
+  #      spirits of all flesh…") that does NOT exist in Rite II.
+  #   5. "Rest eternal" antiphon.
+  #   6. Dismissal blessing (top-level `blessing.god_of_peace`).
+  # ---------------------------------------------------------------------
+  committal:
+    label: "The Committal"
+
+    anthem:
+      anthem_rubric: "The following anthem is sung or said"
+
+      # Default committal anthem (BCP p. 484) — longer penitential
+      # form. Per-service YAML can switch via committal_anthem:
+      # "all_that_the_father_giveth_me" to use the shorter alternative.
+      in_the_midst_of_life:
+        stanzas:
+          - |
+            In the midst of life we are in death;
+            of whom may we seek for succor,
+            but of thee, O Lord,
+            who for our sins art justly displeased?
+          - |
+            Yet, O Lord God most holy, O Lord most mighty,
+            O holy and most merciful Savior,
+            deliver us not into the bitter pains of eternal death.
+          - |
+            Thou knowest, Lord, the secrets of our hearts;
+            shut not thy merciful ears to our prayer;
+            but spare us, Lord most holy, O God most mighty,
+            O holy and merciful Savior,
+            thou most worthy Judge eternal.
+            Suffer us not, at our last hour,
+            through any pains of death, to fall from thee.
+
+      alt_rubric: "or this"
+
+      # Alternative committal anthem (BCP p. 484-485) — shorter,
+      # joyful form. The Cox bulletin uses the Rite II equivalent
+      # of this anthem ("Everyone the Father gives to me…"); this
+      # is the Rite I version.
+      all_that_the_father_giveth_me:
+        stanzas:
+          - |
+            All that the Father giveth me shall come to me;
+            and him that cometh to me I will in no wise cast out.
+          - |
+            He that raised up Jesus from the dead
+            will also give life to our mortal bodies,
+            by his Spirit that dwelleth in us.
+          - |
+            Wherefore my heart is glad, and my spirit rejoiceth;
+            my flesh also shall rest in hope.
+          - |
+            Thou shalt show me the path of life;
+            in thy presence is the fullness of joy,
+            and at thy right hand there is pleasure for evermore.
+
+    prayer:
+      prayer_rubric: "Then, while earth is cast upon the coffin, the Celebrant says these words"
+      # Same {location} placeholder convention as Rite II:
+      #   columbarium / cemetery → "ground"
+      #   scattering / sea       → "deep"
+      #   cremation              → "elements"
+      #   indeterminate          → "resting place"
+      text: |
+        In sure and certain hope of the resurrection to eternal life
+        through our Lord Jesus Christ, we commend to Almighty God
+        our {brother} {N}; and we commit {his} body to the
+        {location}; earth to earth, ashes to ashes, dust to dust.
+        The Lord bless {him} and keep {him}, the Lord make his face
+        to shine upon {him} and be gracious unto {him}, the Lord lift
+        up his countenance upon {him} and give {him} peace.
+      amen: "Amen."
+
+    # The Celebrant introduces the Lord's Prayer with the dialogue
+    # below. The Lord's Prayer text itself (Rite I "Our Father, who
+    # art in heaven, hallowed be thy Name…" form) lives in
+    # bulletin/data/bcp_texts/common_prayers.yaml; the builder
+    # references that rather than duplicating.
+    lords_prayer_dialogue:
+      - celebrant: "The Lord be with you."
+        people:    "And with thy spirit."
+      - celebrant: "Let us pray."
+
+    # Optional concluding prayer (BCP p. 486) — the Celebrant MAY say
+    # it after the Lord's Prayer. Does NOT exist in Rite II. The
+    # rubric reads: "In place of this prayer, or in addition to it,
+    # the Celebrant may use any of the Additional Prayers" (BCP
+    # pp. 487-489) — so this prayer can also be replaced or
+    # supplemented at the celebrant's discretion.
+    concluding_prayer:
+      rubric: "Then the Celebrant may say"
+      text: |
+        O Almighty God, the God of the spirits of all flesh, who by
+        a voice from heaven didst proclaim, Blessed are the dead who
+        die in the Lord: Multiply, we beseech thee, to those who
+        rest in Jesus the manifold blessings of thy love, that the
+        good work which thou didst begin in them may be made perfect
+        unto the day of Jesus Christ. And of thy mercy, O heavenly
+        Father, grant that we, who now serve thee on earth, may at
+        last, together with them, be partakers of the inheritance of
+        the saints in light; for the sake of thy Son Jesus Christ
+        our Lord.
+      amen: "Amen."
+
+    rest_eternal:
+      rubric: "Then may be said"
+      antiphon:
+        - celebrant: "Rest eternal grant to {him}, O Lord:"
+          people:    "And let light perpetual shine upon {him}."
+      conclusion: |
+        May {his} soul, and the souls of all the departed, through
+        the mercy of God, rest in peace.
+      conclusion_amen: "Amen."
+
+    # The Committal closes with the dismissal blessing. The blessing
+    # text comes from the top-level `blessing:` section (added below
+    # in the rite_I subtree).
+    dismissal_rubric: "The Celebrant dismisses the people with these words"
+
+  # ---------------------------------------------------------------------
+  # Blessing  (BCP p. 486)
+  #
+  # Same shape as the Rite II blessing (the "God of peace" text is
+  # actually identical between the two rites — it's a New Testament
+  # quotation, not a thee/thou-style composition). Used in the same
+  # three contexts:
+  #   • End of the Commendation, when there is NO Committal.
+  #   • End of HC, when there is NO Commendation and NO Committal.
+  #   • End of the Committal itself.
+  # ---------------------------------------------------------------------
+  blessing:
+    label: "The Blessing"
+    rubric: "The Celebrant blesses the people with these words"
+    god_of_peace:
+      text: |
+        The God of peace, who brought again from the dead our Lord
+        Jesus Christ, the great Shepherd of the sheep, through the
+        blood of the everlasting covenant: Make you perfect in every
+        good work to do his will, working in you that which is well
+        pleasing in his sight; through Jesus Christ, to whom be
+        glory for ever and ever.
+      amen: "Amen."
+
+  # ---------------------------------------------------------------------
+  # Dismissal  (BCP pp. 483, 486)
+  #
+  # The standard "Let us go forth in the name of Christ" exchange.
+  # Used at the end of the Commendation (BCP p. 483).
+  #
+  # Note: Rite I does NOT include the Easter-season "Alleluia. Christ
+  # is risen." dismissal alternative that Rite II provides (BCP
+  # p. 502); Rite I has only the standard form.
+  # ---------------------------------------------------------------------
+  dismissal:
+    label: "Dismissal"
+    rubric: "The Deacon, or other Minister, dismisses the people, saying"
+    standard:
+      exchange:
+        - celebrant: "Let us go forth in the name of Christ."
+          people:    "Thanks be to God."
 
 rite_II:
   # ---------------------------------------------------------------------
