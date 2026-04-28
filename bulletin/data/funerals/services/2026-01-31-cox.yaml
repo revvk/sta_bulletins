@@ -1,0 +1,230 @@
+# Annette Cox — Burial of the Dead, Rite II with Holy Communion
+# Service date: 2026-01-31  •  Reference bulletin under
+# source_documents/funerals_and_memorials/Burial Services/
+#   Burial - Rite II (HC-A) - Annette Cox/
+#
+# Hand-written for step 2 of docs/plans/funeral_bulletins.md — this
+# YAML is the regression target for the funeral builder. Every
+# field below was reconciled against the printed bulletin to make
+# sure the schema covers a real-world Rite II HC case end to end.
+#
+# Schema-extension notes (compared to the v1 schema in the plan):
+#   - collects.adult.choice            : which adult collect option
+#   - collects.add_for_those_who_mourn : addendum opt-in
+#   - prayers_for_the_departed.*       : optional-petition flags +
+#                                        conclusion-prayer choice
+# These should be folded into the plan's per-service schema before
+# the builder is written.
+
+# ====================================================================
+# Service kind, rite, and end-of-service flags (the HC × Commendation
+# × Committal matrix from docs/plans/funeral_bulletins.md).
+# ====================================================================
+
+service_kind: burial            # burial | memorial | committal
+rite: II                        # I | II
+
+holy_eucharist:
+  enabled: true
+  prayer: A                     # A | B | C | D for Rite II
+
+include_commendation: false     # Cox case: committal at the church absorbs the commendation
+include_committal:    true      # processed to the columbarium together
+
+# ====================================================================
+# Deceased
+# ====================================================================
+
+deceased:
+  full_name:      'Dorothy "Annette" Woodall Huddleston Cox'
+  cover_name: |   # multi-line cover-page rendering
+    Dorothy "Annette"
+    Woodall Huddleston Cox
+  preferred_name: Annette       # used in prayers ("for our sister Annette")
+  pronoun:        she           # drives {he}/{him}/{his}/{brother} substitution
+  born:           1932-11-30
+  died:           2026-01-08
+  photo:          photos/cox-annette.jpg
+
+  # Optional inside-front-cover bio. Two-column layout in the
+  # rendered bulletin.
+  bio: |
+    Dorothy "Annette" Woodall Huddleston Cox returned home to be
+    with the Lord on Thursday, January 8, 2026, surrounded by the
+    love and comfort of her family.
+
+    Born on November 30, 1932, in Dallas, Texas, Annette was the
+    daughter of the late Leslie Howard Woodall and Evelyn Sue
+    Stamps. She lived a life rooted in love, faith, and devotion to
+    her family, her greatest joy spending time with those she
+    loved—especially sharing laughter with friends and family and
+    playing video games with her grandchildren. She also delighted
+    in working puzzles, playing bridge, traveling, discovering new
+    recipes, gardening and reading. Annette followed the Episcopal
+    faith starting at 5 years old and was a member of St. Matthew's
+    Cathedral in Dallas, Texas, where she was married at the age of
+    17. She served the Lord faithfully through Bible study and as a
+    dedicated member of St. Andrew's Episcopal Church of McKinney,
+    Texas since 2005, she was honored to serve on the Altar Guild
+    and with The Daughters of the King.
+
+    Annette was preceded in her return to the Lord by her first
+    husband of more than 50 years, Jimmie Lon Huddleson, her Baby
+    Lon Huddleston, and her second husband of 13 years, Jere Louis
+    Cox.
+
+    Annette is loved and remembered by her son, Jefferey Huddleson
+    (Michelle) of Glenwood Springs, Colorado; her daughters, Leslie
+    Huddleson of Savannah, Georgia, Teresa Bouse of Plano, Texas,
+    Denise Taylor (Bill) of Weatherford, Texas, and Laura Herrin
+    (Lee) of Anna, Texas; her sisters, Sandra Whited ("Gabby") of
+    Bella Vista, AR and Donna Floyd (Mark) of Boerne, TX; her
+    sister-in-law Jan Hinton (Sonny) of Shreveport, LA;
+    12 grandchildren – Roland Towery (Jamie), Rachel Sines, William
+    Taylor (Emily), Cody Hutchison (Rob), Beaux Taylor, Travis
+    Porter, Burton Taylor, Brooke Huddleston, Madeline Rector
+    (Will), Brickman Clow, Hayden Clow and Jolie Clow;
+    13 great-grandchildren; and many nieces and nephews.
+
+    Annette is loved and remembered by her extended family, Jere's
+    children, Kere Post (Jack), Kelly McNeely (Scott), Lindy
+    (deceased) (Carol) and Louis; 7 grandchildren; and 10
+    great-grandchildren.
+
+    Annette's warmth, kindness, and gentle spirit will continue to
+    live on in the hearts of all who knew and loved her.
+
+# ====================================================================
+# Service logistics
+# ====================================================================
+
+service:
+  date:        2026-01-31
+  start_time:  '11:00 am'
+  location:    'Great Hall'        # Great Hall | Chapel | <funeral home name>
+
+  # Only meaningful when include_committal: true.
+  committal_location: columbarium  # columbarium | cemetery | scattering | none
+
+# ====================================================================
+# Participants
+# ====================================================================
+
+participants:
+  celebrant: 'Andrew Van Kirk'
+  assisting:
+    - 'Logan Hurst'
+    - 'Paulette Magnuson'
+  deacon:    'Katie Gerber'
+  readers:
+    - 'Lee Herrin'
+    - 'Cody Hutchinson'
+    - 'Roland Towery'
+  crucifer:  'Sandi Krummel'
+  chalice_bearers: []              # not listed individually in this bulletin
+  musician:  'Laura Bray'
+  vocalist:  'Laura Bray'
+  pall_bearers: []                 # not printed in the bulletin
+  words_of_remembrance:
+    - 'Jeffrey Lon Huddleston'
+
+# ====================================================================
+# Readings
+# ====================================================================
+# Cox's family chose two NT readings + Gospel, no OT reading. The BCP
+# allows this ("One or more of the following passages from Holy
+# Scripture is read…"). The actual scripture text comes through the
+# existing scripture cache; only the references live here.
+
+readings:
+  first:      '2 Corinthians 4:16-5:9'
+  psalm:      'Psalm 139:1-11'
+  psalm_mode: unison               # unison | responsive | antiphonal | by_half_verse
+  second:     '1 John 3:1-2'
+  gospel:     'John 14:1-6'
+
+# ====================================================================
+# Music
+# ====================================================================
+
+music:
+  # 'from_bcp' uses the Opening Anthem text from
+  # funeral_texts.yaml.rite_II.opening_anthems.i_am_resurrection.
+  # Could also be a song key in songs.yaml for a sung opening.
+  opening_anthem:   from_bcp
+
+  opening_hymn:     'Love divine, all loves excelling'        # #657 (Hymnal 1982)
+  sequence_hymn:    'Amazing grace! how sweet the sound'      # #671
+
+  # After Words of Remembrance — Cox has a hymn here.
+  remembrance_hymn:   'Great is thy faithfulness'
+  remembrance_anthem: null
+
+  # After the Homily — Cox has neither.
+  homily_hymn:   null
+  homily_anthem: null
+
+  offertory_anthem:
+    title:    'Blessed Assurance'
+    arranger: 'arr. William Cutter'
+    soloist:  'Lexi Johnson, Soprano'
+
+  communion_music:
+    - 'Be thou my vision, O Lord of my heart'                 # #488
+    - 'Just as I am, without one plea'                        # #693
+    - 'It Is Well With My Soul'                               # full lyrics from songs.yaml
+
+  # Procession from the church to the columbarium (only present when
+  # the committal happens at the church). When include_committal is
+  # false, leave this null and use closing_hymn instead.
+  procession_hymn:  'Lift high the cross'                     # #473
+  closing_hymn:     null
+
+# ====================================================================
+# Liturgical choices that the funeral_texts.yaml exposes via flags
+# ====================================================================
+
+# Which Adult collect to use, and whether to add the optional
+# "for those who mourn" addendum after it.
+# (Schema extension — fold into v1 plan.)
+collects:
+  adult:
+    choice: option_3                   # Cox uses "O God of grace and glory…"
+  add_for_those_who_mourn: false
+
+# Which optional prayer-for-the-departed petitions to include + which
+# concluding prayer to use.
+# (Schema extension — fold into v1 plan.)
+prayers_for_the_departed:
+  include_baptism_petition:   true     # Annette was baptized
+  include_communion_petition: true     # service has HC
+  conclusion: commend                  # commend | father_of_all (BCP p. 498)
+
+# ====================================================================
+# Special prayers (entries in special_prayers.yaml)
+# ====================================================================
+
+special_prayers:
+  - key:         daughters_of_the_king
+    reader:      'Diane Victor'
+    reader_role: "President of the St. Andrew's Chapter of the Daughters of the King"
+
+# ====================================================================
+# Reception notice (optional, italic centered text near the back of
+# the bulletin).
+# ====================================================================
+
+reception:
+  shown: true
+  text: |
+    All are invited to join the family in
+    Michie Hall at the reception hosted by
+    The Daughters of the King.
+
+# ====================================================================
+# Optional italic centered notice for No-Committal services telling
+# attendees when/where the remains will be interred separately.
+# Cox is a Committal-at-the-church case, so null.
+# ====================================================================
+
+interment_notice: null

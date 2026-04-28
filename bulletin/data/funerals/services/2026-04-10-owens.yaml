@@ -1,0 +1,162 @@
+# Wanda Owens — Burial of the Dead, Rite II, No Holy Communion
+# Service date: 2026-04-10  •  Reference bulletin under
+# source_documents/funerals_and_memorials/Burial Services/
+#   Burial - Rite II (No HC) - Wanda Owens/
+# (Note: file in source_documents is named 2026-02-08 but the
+# bulletin footer reads "April 10, 2026" — the service was
+# rescheduled after the file was created.)
+#
+# Hand-written for step 2 of docs/plans/funeral_bulletins.md.
+# Exercises a third row of the HC × Commendation × Committal
+# matrix from the Cox / Stuhler cases — specifically a BURIAL
+# (body present) WITHOUT Holy Communion, where the committal is
+# DEFERRED to a later date in a different city. The bulletin
+# therefore includes the Commendation (commend the soul at the
+# church) but NOT the Committal section (that happens separately
+# on April 14 in Canyon, TX). An interment_notice line is printed
+# near the back of the bulletin to inform attendees.
+
+# ====================================================================
+# Service kind, rite, end-of-service flags
+# ====================================================================
+
+service_kind: burial            # body present
+rite: II                        # contemporary language
+
+holy_eucharist:
+  enabled: false                # No HC service
+  prayer:  null
+
+# Body present + committal not at the church + deferred to later →
+# commend at the church (commendation true), do NOT print the
+# Committal section in this bulletin.
+include_commendation: true
+include_committal:    false
+
+# ====================================================================
+# Deceased
+# ====================================================================
+
+deceased:
+  full_name:      'Wanda Owens'
+  cover_name: |
+    Wanda Owens
+  preferred_name: Wanda         # used in commendation: "we commend your servant Wanda"
+  pronoun:        she
+  # TODO(andrew): fill in birth/death dates from records.
+  born:           null
+  died:           null
+  photo:          null          # TODO if applicable
+  bio:            null          # TODO if applicable
+
+# ====================================================================
+# Service logistics
+# ====================================================================
+
+service:
+  date:        2026-04-10
+  start_time:  null             # TODO(andrew): fill in
+  location:    'Great Hall'
+
+  # No Committal section in this bulletin (deferred). The
+  # interment_notice below tells attendees when/where the actual
+  # interment will happen.
+  committal_location: none
+
+# ====================================================================
+# Participants
+# ====================================================================
+
+participants:
+  celebrant: 'Andrew Van Kirk'
+  assisting: []                 # none in this service
+  deacon:    'Katie Gerber'
+  readers:
+    - 'Josh Schrom'
+  crucifer:  null               # not listed
+  chalice_bearers: []           # n/a — no HC
+  musician:  'Emily Potter'
+  vocalist:  'Tim Jenkins'
+  pall_bearers: []              # not printed in this bulletin
+  words_of_remembrance: []      # none in this service
+
+# ====================================================================
+# Readings
+# ====================================================================
+
+readings:
+  # TODO(andrew): the first reading and psalm weren't captured during
+  # the initial read; fill in from the printed bulletin (pages 1-3).
+  first:      null
+  psalm:      null
+  psalm_mode: null
+  second:     null              # may be one-reading + Gospel
+  gospel:     'John 14:1-6'
+
+# ====================================================================
+# Music
+# ====================================================================
+
+music:
+  opening_anthem: from_bcp                         # the "I am Resurrection and I am Life" Rite II anthem
+  opening_hymn:   null                             # TODO(andrew): fill in (pages 1-3 not captured)
+  sequence_hymn:  null                             # TODO(andrew): fill in
+
+  # No Words of Remembrance in this service.
+  remembrance_hymn:   null
+  remembrance_anthem: null
+
+  # Post-homily slot. Owens has an anthem here (no Words of
+  # Remembrance precede it); a service can have either a hymn,
+  # an anthem, or neither in this slot.
+  homily_hymn: null
+  homily_anthem:
+    title:    'Surely It Is God Who Saves Me'
+    arranger: 'Jack Noble White'
+    soloist:  null
+
+  # n/a — no HC service
+  offertory_anthem: null
+  communion_music:  []
+
+  procession_hymn: null                            # no committal-at-church
+  closing_hymn:    'On Eagle''s Wings'             # printed full-lyrics, by Michael Joncas
+
+# ====================================================================
+# Liturgical choices
+# ====================================================================
+
+# TODO(andrew): verify which Adult collect was used (option_1 / 2 / 3).
+collects:
+  adult:
+    choice: option_3            # default; verify
+  add_for_those_who_mourn: false
+
+prayers_for_the_departed:
+  include_baptism_petition:   true     # Wanda was baptized (typical default)
+  include_communion_petition: false    # n/a — no HC in this service
+  conclusion: commend                  # default; verify
+
+# ====================================================================
+# Special prayers (none in this service)
+# ====================================================================
+
+special_prayers: []
+
+# ====================================================================
+# Reception (not shown in this bulletin)
+# ====================================================================
+
+reception:
+  shown: false
+  text:  null
+
+# ====================================================================
+# Interment notice — THE distinguishing feature of this row of the
+# matrix. Printed in italic, centered, near the back of the bulletin
+# to inform attendees when/where the actual committal will happen.
+# ====================================================================
+
+interment_notice: |
+  Wanda's remains will be interred on Tuesday, April 14
+  in Dreamland Cemetery, Canyon, Texas.

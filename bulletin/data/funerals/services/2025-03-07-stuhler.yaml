@@ -1,0 +1,168 @@
+# Bill Stuhler — Memorial Service, Rite I with Holy Communion
+# Service date: 2025-03-07  •  Reference bulletin under
+# source_documents/funerals_and_memorials/Memorial Services/
+#   Memorial - Rite I - Bill Stuhler/
+#
+# Hand-written for step 2 of docs/plans/funeral_bulletins.md.
+# Exercises a different row of the HC × Commendation × Committal
+# matrix from the Cox case — specifically a MEMORIAL (no remains
+# present, so neither commendation nor committal are part of the
+# service) in the Rite I form.
+#
+# Most fields below are populated from the printed bulletin pages
+# read during the planning phase. A few are marked TODO where the
+# detail wasn't captured during the initial read; they don't affect
+# schema validation.
+
+# ====================================================================
+# Service kind, rite, end-of-service flags
+# ====================================================================
+
+service_kind: memorial          # no body / cremains present
+rite: I                         # Rite I (thee/thou)
+
+holy_eucharist:
+  enabled: true
+  prayer: I                     # I | II for Rite I
+                                # TODO(andrew): verify this is Prayer I, not II
+
+# Memorial → no body to commend or commit. Both flags false.
+include_commendation: false
+include_committal:    false
+
+# ====================================================================
+# Deceased
+# ====================================================================
+
+deceased:
+  full_name:      'Bill Stuhler'
+  cover_name: |
+    Bill Stuhler
+  preferred_name: Bill          # used in collect: "thy servant Bill"
+  pronoun:        he
+  # TODO(andrew): fill in birth/death dates from records.
+  born:           null
+  died:           null
+  photo:          null          # bulletin had no photo
+  bio:            null          # bulletin had no inside-cover bio
+
+# ====================================================================
+# Service logistics
+# ====================================================================
+
+service:
+  date:        2025-03-07
+  start_time:  null             # TODO(andrew): fill in
+  location:    'Great Hall'
+
+  # No committal in this service (memorial-only).
+  committal_location: none
+
+# ====================================================================
+# Participants
+# ====================================================================
+# TODO(andrew): the participants page wasn't captured during the
+# initial read; fill in from the printed bulletin's last page.
+
+participants:
+  celebrant: 'Andrew Van Kirk'  # named on the homily line
+  assisting: []                 # TODO
+  deacon:    null               # TODO
+  readers:   []                 # TODO
+  crucifer:  null               # TODO
+  chalice_bearers: []           # TODO
+  musician:  null               # TODO
+  vocalist:  null               # TODO
+  pall_bearers: []              # n/a — no body
+  words_of_remembrance: []      # none in this service
+
+# ====================================================================
+# Readings
+# ====================================================================
+
+readings:
+  first:      'Isaiah 61:1-3'           # OT
+  psalm:      'Psalm 121'
+  psalm_mode: unison
+  second:     '2 Corinthians 4:16-5:9'  # NT
+  gospel:     'John 5:24-27'
+
+# ====================================================================
+# Music
+# ====================================================================
+
+music:
+  opening_anthem:   from_bcp                       # the "I am the resurrection" anthem (Rite I form)
+  opening_hymn:     'Holy, holy, holy! Lord God Almighty'   # #362 (Hymnal 1982), tune Nicaea
+  sequence_hymn:    'Blessed Assurance'
+
+  # No Words of Remembrance in this service.
+  remembrance_hymn:   null
+  remembrance_anthem: null
+
+  # No post-homily piece in this service either.
+  homily_hymn:   null
+  homily_anthem: null
+
+  offertory_anthem:
+    title:    'Amazing grace! how sweet the sound'  # #671, tune New Britain
+    arranger: null                                  # congregational hymn, no arranger credit
+    soloist:  null
+
+  # TODO(andrew): communion music wasn't captured during the initial
+  # read; fill in from the printed bulletin (likely 2-3 hymns or
+  # full-lyric songs).
+  communion_music: []
+
+  procession_hymn:  null                           # no committal-at-church, no procession
+  closing_hymn:     null                           # TODO(andrew): fill in (memorial closes after blessing)
+
+# ====================================================================
+# Liturgical choices
+# ====================================================================
+
+# Rite I has only one Adult collect (no choice between three options
+# like Rite II has), so collects.adult.choice is ignored.
+# Rite I has no for-those-who-mourn addendum either.
+collects:
+  adult:
+    choice: null                # n/a for Rite I
+  add_for_those_who_mourn: false  # n/a for Rite I
+
+# Rite I's Prayers for the Departed have a different shape (10
+# petitions, 4 of them optional, plus the {patron_phrase} at the
+# end of petition 10). The Rite II baptism/communion-petition flags
+# don't apply here.
+prayers_for_the_departed:
+  # Rite I uses the 4 optional petitions in funeral_texts.yaml's
+  # rite_I.prayers_for_the_departed.petitions[5..8] (0-indexed).
+  # Each can be independently included or omitted.
+  # TODO(andrew): verify which optional petitions were used in this
+  # service against the printed bulletin.
+  include_optional_petitions: [6, 7, 8, 9]   # all four — typical default
+  patron_phrase: 'blessed Andrew and '       # St. Andrew's parish patron
+
+  # Rite II's commend / father_of_all conclusion choice doesn't apply
+  # — Rite I's prayers conclude with the bracketed "blessed N. and"
+  # invocation in petition 10, not a separate concluding prayer.
+  conclusion: null
+
+# ====================================================================
+# Special prayers (none in this service)
+# ====================================================================
+
+special_prayers: []
+
+# ====================================================================
+# Reception (none shown in this bulletin)
+# ====================================================================
+
+reception:
+  shown: false
+  text:  null
+
+# ====================================================================
+# Interment notice (n/a — no remains in a memorial service)
+# ====================================================================
+
+interment_notice: null

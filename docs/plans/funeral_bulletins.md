@@ -245,25 +245,62 @@ readings:
   gospel:   'John 14:1-6'
 
 music:
+  # Two slot kinds throughout the music section:
+  #   *_hymn   — congregational, full lyrics printed (or hymnal ref).
+  #              Schema value: a string (the song title).
+  #   *_anthem — soloist or choir, just title + composer/arranger.
+  #              Schema value: { title, arranger, soloist } dict.
+  # The post-Words-of-Remembrance and post-Homily slots support
+  # EITHER kind via paired _hymn / _anthem fields; both are
+  # independently optional, both default to null.
+
   opening_anthem: from_bcp    # 'from_bcp' is the default (renders from funeral_texts.yaml)
                               # could be a song key in songs.yaml for a sung opening
   opening_hymn:    "Love divine, all loves excelling"
   sequence_hymn:   "Amazing grace! how sweet the sound"
-  remembrance_hymn: "Great is thy faithfulness"      # only when words_of_remembrance present
+
+  # After the Words of Remembrance / Eulogy. Both optional and
+  # independent — a service can have either, neither, or both.
+  remembrance_hymn:  "Great is thy faithfulness"     # congregational hymn (Cox case)
+  remembrance_anthem: null                           # OR an anthem (sung by soloist/choir)
+
+  # After the Homily. Same pattern — both optional and independent.
+  # Cox has neither; Owens has the homily_anthem slot ("Surely It Is
+  # God Who Saves Me" by Jack Noble White).
+  homily_hymn:   null
+  homily_anthem: null
+
+  # Offertory anthem — only meaningful when holy_eucharist.enabled.
   offertory_anthem:
     title: "Blessed Assurance"
     arranger: "arr. William Cutter"
     soloist:  "Lexi Johnson, Soprano"
+
   communion_music:
     - "Be thou my vision, O Lord of my heart"
     - "Just as I am, without one plea"
     - "It Is Well With My Soul"
+
   procession_hymn: "Lift high the cross"             # only when committal happens at the church
   closing_hymn:    null                              # No-committal-at-church variants use this
 
-special_prayers:                                     # references entries in special_prayers.yaml
-  - daughters_of_the_king:
-      reader_credit: "Read by Diane Victor, President of the St. Andrew's Chapter of the Daughters of the King"
+collects:
+  adult:
+    choice: option_3                  # option_1 | option_2 | option_3 (Rite II)
+                                      # ignored for Rite I (only one Adult option)
+  add_for_those_who_mourn: false      # Rite II only — append the addendum
+                                      # after whichever collect was chosen
+
+prayers_for_the_departed:
+  include_baptism_petition:   true    # Rite II — include the baptized-person petition?
+  include_communion_petition: true    # Rite II — include the communicant petition?
+  conclusion: commend                 # Rite II — commend | father_of_all
+                                      # (Rite I has no choice here)
+
+special_prayers:                      # references entries in special_prayers.yaml
+  - key:         daughters_of_the_king
+    reader:      'Diane Victor'
+    reader_role: "President of the St. Andrew's Chapter of the Daughters of the King"
 
 reception:
   shown: true
@@ -280,6 +317,33 @@ interment_notice: null         # optional italic centered notice for No-Committa
 Every field has a sensible default, so a minimal funeral YAML can be ten
 lines. The web planner writes the full file; a power user can also
 hand-edit.
+
+Three reference per-service YAMLs are committed under
+`bulletin/data/funerals/services/`:
+
+| File | Case | Distinguishing feature |
+|---|---|---|
+| `2026-01-31-cox.yaml`     | Rite II HC, body present, committal at the church | Words of Remembrance + DOK prayer + procession to columbarium |
+| `2025-03-07-stuhler.yaml` | Rite I HC, Memorial (no body)                    | Memorial form; Rite I `{patron_phrase}` for petition 10 |
+| `2026-04-10-owens.yaml`   | Rite II No-HC, body present, deferred interment  | `interment_notice` populated; post-homily anthem |
+
+These three between them cover the structurally meaningful rows of
+the HC × Commendation × Committal matrix — every other row is just a
+combination of features already exercised here. The exercise of
+writing them surfaced the schema additions called out above:
+
+- `collects.adult.choice` / `collects.add_for_those_who_mourn` (Rite II)
+- `prayers_for_the_departed.include_baptism_petition` /
+  `include_communion_petition` / `conclusion` (Rite II)
+- `prayers_for_the_departed.include_optional_petitions` /
+  `patron_phrase` (Rite I — Stuhler exposed these)
+- `music.remembrance_anthem` and `music.homily_hymn` /
+  `music.homily_anthem` (Owens exposed the post-homily anthem slot;
+  matching paired hymn/anthem fields added for symmetry)
+
+None of the original v1 sketch was wrong; the YAMLs simply revealed
+real decisions families make that the schema needed to express. The
+plan and the per-service YAMLs are now in sync.
 
 ### New code modules
 
