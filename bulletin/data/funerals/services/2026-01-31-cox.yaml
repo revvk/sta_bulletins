@@ -37,9 +37,6 @@ include_committal:    true      # processed to the columbarium together
 
 deceased:
   full_name:      'Dorothy "Annette" Woodall Huddleston Cox'
-  cover_name: |   # multi-line cover-page rendering
-    Dorothy "Annette"
-    Woodall Huddleston Cox
   preferred_name: Annette       # used in prayers ("for our sister Annette")
   pronoun:        she           # drives {he}/{him}/{his}/{brother} substitution
   born:           1932-11-30
@@ -153,8 +150,8 @@ music:
   # Could also be a song key in songs.yaml for a sung opening.
   opening_anthem:   from_bcp
 
-  opening_hymn:     'Love divine, all loves excelling'        # #657 (Hymnal 1982)
-  sequence_hymn:    'Amazing grace! how sweet the sound'      # #671
+  opening_hymn:     '#657 Love divine, all loves excelling'   # Hymnal 1982
+  sequence_hymn:    '#671 Amazing grace! how sweet the sound' # Hymnal 1982
 
   # After Words of Remembrance — Cox has a hymn here.
   remembrance_hymn:   'Great is thy faithfulness'
@@ -170,14 +167,14 @@ music:
     soloist:  'Lexi Johnson, Soprano'
 
   communion_music:
-    - 'Be thou my vision, O Lord of my heart'                 # #488
-    - 'Just as I am, without one plea'                        # #693
+    - '#488 Be thou my vision, O Lord of my heart'            # Hymnal 1982
+    - '#693 Just as I am, without one plea'                   # Hymnal 1982
     - 'It Is Well With My Soul'                               # full lyrics from songs.yaml
 
   # Procession from the church to the columbarium (only present when
   # the committal happens at the church). When include_committal is
   # false, leave this null and use closing_hymn instead.
-  procession_hymn:  'Lift high the cross'                     # #473
+  procession_hymn:  '#473 Lift high the cross'                # Hymnal 1982
   closing_hymn:     null
 
 # ====================================================================

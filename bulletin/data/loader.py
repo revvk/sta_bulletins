@@ -73,6 +73,26 @@ def load_palm_sunday() -> dict:
     return _load_yaml("bcp_texts/palm_sunday.yaml")
 
 
+def load_funeral_texts() -> dict:
+    """Load the funeral / burial-office texts (both rites).
+
+    Returns a dict keyed by `rite_I` and `rite_II`, each containing the
+    nine top-level sections (opening_anthems, collect_dialogue, collects,
+    prayers_for_the_departed, postcommunion_prayer, commendation,
+    committal, blessing, dismissal). See
+    bulletin/data/funerals/funeral_texts.yaml for the structure.
+    """
+    return _load_yaml("funerals/funeral_texts.yaml")
+
+
+def load_special_prayers() -> dict:
+    """Load the optional add-on prayers library (e.g. Daughters of the
+    King). Each entry is keyed by a short id; see
+    bulletin/data/funerals/special_prayers.yaml.
+    """
+    return _load_yaml("funerals/special_prayers.yaml")
+
+
 def load_passion_gospel(year: str) -> dict:
     """Load the Passion Gospel for a given liturgical year (A, B, or C).
 

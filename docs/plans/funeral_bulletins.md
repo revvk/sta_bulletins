@@ -200,9 +200,6 @@ include_committal: true       # see matrix above
 
 deceased:
   full_name: 'Dorothy "Annette" Woodall Huddleston Cox'
-  cover_name: |               # how the name lays out on the cover (line breaks)
-    Dorothy "Annette"
-    Woodall Huddleston Cox
   preferred_name: Annette     # used in prayers ("for our sister Annette")
   pronoun: she                # she / he / they — drives commendation/committal pronouns
   born:  1932-11-30
@@ -353,8 +350,7 @@ plan and the per-service YAMLs are now in sync.
 | `bulletin/document/builder.py` | Two new branches: `is_funeral` flag set when input is a funeral YAML, `_build_funeral(doc)` calls into `burial.py` analogous to `_build_maundy_thursday(doc)`. Front cover template selection and back cover assembly already follow the existing pattern. |
 | `bulletin/sources/funeral_data.py` | Loader for the per-service YAML. Validates the schema, resolves date strings to `datetime`, expands defaults, returns a typed dataclass. |
 | `bulletin/data/loader.py` | Add `load_funeral_texts()` and `load_special_prayers()` mirrors of the existing loader functions. |
-| `templates/front_cover_funeral.docx` | New cover. Same layout family as the Sunday cover but with the deceased name + dates as the visual anchor instead of the service title. The "Alleluia" italic treatment in light gray, ichthys mark, vertical date strip, "Invite Involve Instruct Inspire" footer. Placeholders: `{{DATE}}`, `{{NAME}}` (multi-line), `{{LIFE_DATES}}`, `{{SUBTITLE}}` ("The Burial of the Dead" / "Memorial Service" / "Graveside Service"). |
-| `templates/inside_front_cover_funeral.docx` | Optional bio + photo template. Placeholders: `{{PHOTO}}`, `{{BIO}}`. Generator skips this section entirely if `deceased.bio` and `deceased.photo` are both unset. |
+| `templates/front_cover_funeral.docx` | **Two-page** template — outer cover on page 1, inner photo+bio cover on page 2. Same layout family as the Sunday cover but with the deceased name + dates as the visual anchor. Outer page has the "Alleluia" italic treatment in light gray, ichthys mark, vertical date strip, "Invite Involve Instruct Inspire" footer; inner page has the photo above and a two-column bio below. Text placeholders: `{{DATE}}`, `{{SUBTITLE}}` ("The Burial of the Dead" / "Memorial Service" / "Graveside Service"), `{{NAME}}` (single string — text frame wraps long names automatically), `{{LIFE_DATES}}`, `{{BIO}}`. The photo is an embedded image whose binary the builder swaps out at generation time (no `{{PHOTO}}` text placeholder needed). For services with neither bio nor photo, the user deletes the inner page in the post-generation hand-edit pass — simpler than conditionally assembling a one-page-or-two-page document. |
 
 ### CLI
 
@@ -431,10 +427,14 @@ Each step ships independently and leaves the existing system untouched:
    forces the schema to be complete and gives us a fixed regression
    target for step 4.
 
-3. **Funeral cover template + inside cover template**. Hand-built
-   `.docx` files in `templates/`. Verified by opening in Word and
-   checking the placeholder substitution path with the existing
-   `_replace_all_placeholders` machinery.
+3. **Funeral cover template** (single two-page `.docx` —
+   `templates/front_cover_funeral.docx`). Page 1 outer cover, page 2
+   inner photo+bio cover. Verified by loading through python-docx
+   and substituting all five placeholders via the existing
+   `_replace_all_placeholders` machinery (already shown to handle
+   the run-split tags Word inserts when the spell-checker has
+   touched the placeholder text). For services with no bio/photo,
+   the inner page is deleted in the post-generation hand-edit pass.
 
 4. **`bulletin/document/sections/burial.py` + builder hook**. The
    funeral builder. Generate the Cox bulletin from the YAML and diff

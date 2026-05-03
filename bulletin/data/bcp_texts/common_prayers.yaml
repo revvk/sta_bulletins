@@ -122,6 +122,69 @@ nicene_creed:
   - "    and the life of the world to come. Amen."
 
 # ---------------------------------------------------------------------------
+# Apostles' Creed — used at funerals in both rites in place of the
+# Nicene Creed. Lines preserve the BCP's hanging-indent layout via
+# leading spaces.
+#
+# Rite I  (BCP p. 41 / p. 481): traditional language, "Holy Ghost,"
+#         "He descended into hell," "the quick and the dead."
+# Rite II (BCP p. 53 / p. 496): contemporary language, "Holy Spirit,"
+#         "He descended to the dead," "the living and the dead."
+# ---------------------------------------------------------------------------
+
+apostles_creed_rite_i:
+  intro: >-
+    In the assurance of eternal life given at Baptism, let us proclaim
+    our faith and say,
+  lines:
+    - "I believe in God, the Father almighty,"
+    - "  maker of heaven and earth;"
+    - ""
+    - "And in Jesus Christ his only Son our Lord;"
+    - "  who was conceived by the Holy Ghost,"
+    - "  born of the Virgin Mary,"
+    - "  suffered under Pontius Pilate,"
+    - "  was crucified, dead, and buried."
+    - "  He descended into hell."
+    - "  The third day he rose again from the dead."
+    - "  He ascended into heaven,"
+    - "  and sitteth on the right hand of God the Father almighty."
+    - "  From thence he shall come to judge the quick and the dead."
+    - ""
+    - "I believe in the Holy Ghost,"
+    - "  the holy catholic Church,"
+    - "  the communion of saints,"
+    - "  the forgiveness of sins,"
+    - "  the resurrection of the body,"
+    - "  and the life everlasting. Amen."
+
+apostles_creed_rite_ii:
+  intro: >-
+    In the assurance of eternal life given at Baptism, let us proclaim
+    our faith and say,
+  lines:
+    - "I believe in God, the Father almighty,"
+    - "  creator of heaven and earth."
+    - ""
+    - "I believe in Jesus Christ, his only Son, our Lord."
+    - "  He was conceived by the power of the Holy Spirit"
+    - "    and born of the Virgin Mary."
+    - "  He suffered under Pontius Pilate,"
+    - "    was crucified, died, and was buried."
+    - "  He descended to the dead."
+    - "  On the third day he rose again."
+    - "  He ascended into heaven,"
+    - "    and is seated at the right hand of the Father."
+    - "  He will come again to judge the living and the dead."
+    - ""
+    - "I believe in the Holy Spirit,"
+    - "  the holy catholic Church,"
+    - "  the communion of saints,"
+    - "  the forgiveness of sins,"
+    - "  the resurrection of the body,"
+    - "  and the life everlasting. Amen."
+
+# ---------------------------------------------------------------------------
 # Confession and Absolution (BCP pp.359-360)
 # ---------------------------------------------------------------------------
 

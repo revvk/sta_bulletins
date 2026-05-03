@@ -36,8 +36,6 @@ include_committal:    false
 
 deceased:
   full_name:      'Bill Stuhler'
-  cover_name: |
-    Bill Stuhler
   preferred_name: Bill          # used in collect: "thy servant Bill"
   pronoun:        he
   # TODO(andrew): fill in birth/death dates from records.
@@ -93,7 +91,7 @@ readings:
 
 music:
   opening_anthem:   from_bcp                       # the "I am the resurrection" anthem (Rite I form)
-  opening_hymn:     'Holy, holy, holy! Lord God Almighty'   # #362 (Hymnal 1982), tune Nicaea
+  opening_hymn:     '#362 Holy, holy, holy! Lord God Almighty'   # Hymnal 1982, tune Nicaea
   sequence_hymn:    'Blessed Assurance'
 
   # No Words of Remembrance in this service.
@@ -105,7 +103,7 @@ music:
   homily_anthem: null
 
   offertory_anthem:
-    title:    'Amazing grace! how sweet the sound'  # #671, tune New Britain
+    title:    '#671 Amazing grace! how sweet the sound'   # Hymnal 1982, tune New Britain
     arranger: null                                  # congregational hymn, no arranger credit
     soloist:  null
 

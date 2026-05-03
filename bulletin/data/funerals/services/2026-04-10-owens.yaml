@@ -39,8 +39,6 @@ include_committal:    false
 
 deceased:
   full_name:      'Wanda Owens'
-  cover_name: |
-    Wanda Owens
   preferred_name: Wanda         # used in commendation: "we commend your servant Wanda"
   pronoun:        she
   # TODO(andrew): fill in birth/death dates from records.
