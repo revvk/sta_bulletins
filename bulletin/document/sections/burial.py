@@ -23,6 +23,7 @@ from bulletin.data.loader import (
     load_common_prayers,
     load_eucharistic_prayers,
     load_funeral_texts,
+    load_proper_prefaces,
     load_special_prayers,
 )
 from bulletin.document.formatting import (
@@ -55,31 +56,49 @@ def add_burial_service(doc: Document, fd: FuneralData,
     rite_texts = load_funeral_texts()[f"rite_{fd.rite}"]
     common = load_common_prayers()
 
+    # Each section helper handles its own internal spacing; we insert
+    # a separating spacer between major sections here so the bulletin
+    # has visible breathing room at every section boundary (matches
+    # the Sunday bulletin conventions).
+
     # ----- Liturgy of the Word ----------------------------------------
     _add_seating_and_prelude(doc)
+    add_spacer(doc)
     _add_opening(doc, fd, rite_texts, song_lookup_fn)
+    add_spacer(doc)
     _add_collect(doc, fd, rite_texts)
+    add_spacer(doc)
     _add_readings_block(doc, fd, rite_texts, scripture_readings,
                          song_lookup_fn)
+    add_spacer(doc)
     _add_homily_block(doc, fd, song_lookup_fn)
+    add_spacer(doc)
     _add_apostles_creed(doc, fd, common)
+    add_spacer(doc)
     _add_prayers_for_departed(doc, fd, rite_texts)
+    add_spacer(doc)
     _add_special_prayers_block(doc, fd)
+    add_spacer(doc)
     _add_peace(doc, fd)
 
     # ----- End-of-service: HC × Commendation × Committal matrix -------
     if fd.holy_eucharist["enabled"]:
+        add_spacer(doc)
         _add_holy_communion(doc, fd, rite_texts, common, song_lookup_fn)
 
     if fd.include_commendation:
+        add_spacer(doc)
         _add_commendation(doc, fd, rite_texts)
 
     if fd.include_committal:
+        add_spacer(doc)
         _add_procession_hymn_if_present(doc, fd, song_lookup_fn)
+        add_spacer(doc)
         _add_committal(doc, fd, rite_texts, common)
     else:
         # No committal in this bulletin — close with the standard
         # blessing/closing-hymn/dismissal block.
+        add_spacer(doc)
         _add_blessing_close(doc, fd, rite_texts, song_lookup_fn)
 
     _add_postlude(doc)
@@ -115,6 +134,18 @@ def _flow(text: str) -> str:
     if not text:
         return ""
     return " ".join(text.split())
+
+
+def _add_unison_prayer(doc: Document, text: str) -> None:
+    """Render a prayer said in unison by Celebrant + People — bold, in
+    the Body - People Recitation style. Matches the Sunday pattern
+    used for the Lord's Prayer and Post-communion Prayer.
+    """
+    if not text:
+        return
+    p = doc.add_paragraph(style="Body - People Recitation")
+    run = p.add_run(text)
+    run.style = doc.styles["People"]
 
 
 def _add_creed_lines(doc: Document, lines: list[str]) -> None:
@@ -261,6 +292,7 @@ def _add_readings_block(doc: Document, fd: FuneralData, rite_texts: dict,
     # Psalm
     psalm_ref = fd.readings.get("psalm")
     if psalm_ref:
+        add_spacer(doc)
         psalm = scripture.get(psalm_ref)
         rubric = _psalm_rubric(fd.readings.get("psalm_mode") or "unison")
         if psalm is not None:
@@ -273,12 +305,14 @@ def _add_readings_block(doc: Document, fd: FuneralData, rite_texts: dict,
     # Second Reading (optional)
     second_ref = fd.readings.get("second")
     if second_ref:
+        add_spacer(doc)
         _add_funeral_reading(doc, scripture, second_ref,
                               label_prefix + "Second Reading", rite_i)
 
     # Sequence Hymn
     seq = fd.music.get("sequence_hymn")
     if seq:
+        add_spacer(doc)
         add_introductory_rubric(doc, "Please stand.")
         add_heading2(doc, "Sequence Hymn")
         song = song_lookup_fn(seq, "11 am")
@@ -287,6 +321,7 @@ def _add_readings_block(doc: Document, fd: FuneralData, rite_texts: dict,
     # Gospel
     gospel_ref = fd.readings.get("gospel")
     if gospel_ref:
+        add_spacer(doc)
         _add_funeral_gospel(doc, scripture, gospel_ref, rite_i)
 
 
@@ -372,13 +407,16 @@ def _add_homily_block(doc: Document, fd: FuneralData, song_lookup_fn) -> None:
     rh = fd.music.get("remembrance_hymn")
     ra = fd.music.get("remembrance_anthem")
     if rh:
+        add_spacer(doc)
         add_heading2(doc, "Hymn")
         song = song_lookup_fn(rh, "11 am")
         add_song_smart(doc, song)
     elif ra:
+        add_spacer(doc)
         _add_anthem_block(doc, "Anthem", ra)
 
     # Homily
+    add_spacer(doc)
     add_heading2(doc, "Homily")
     homilist = fd.participants.get("celebrant", "")
     if homilist:
@@ -389,10 +427,12 @@ def _add_homily_block(doc: Document, fd: FuneralData, song_lookup_fn) -> None:
     hh = fd.music.get("homily_hymn")
     ha = fd.music.get("homily_anthem")
     if hh:
+        add_spacer(doc)
         add_heading2(doc, "Hymn")
         song = song_lookup_fn(hh, "11 am")
         add_song_smart(doc, song)
     elif ha:
+        add_spacer(doc)
         _add_anthem_block(doc, "Anthem", ha)
 
 
@@ -530,10 +570,12 @@ def _add_special_prayers_block(doc: Document, fd: FuneralData) -> None:
     if not fd.special_prayers:
         return
     library = load_special_prayers()
-    for entry in fd.special_prayers:
+    for i, entry in enumerate(fd.special_prayers):
         key = entry.get("key")
         if not key or key not in library:
             continue
+        if i > 0:
+            add_spacer(doc)
         prayer = library[key]
         add_heading2(doc, prayer["title"])
         # Reader credit (italic rubric line)
@@ -573,7 +615,9 @@ def _add_holy_communion(doc: Document, fd: FuneralData, rite_texts: dict,
     prayer."""
     eucharistic_prayers = load_eucharistic_prayers()
 
+    add_spacer(doc)
     add_heading(doc, "The Holy Communion")
+    add_spacer(doc)
     add_introductory_rubric(doc, "Be seated.")
 
     # Offertory anthem (heading varies — Cox uses "Offertory Anthem As
@@ -584,6 +628,7 @@ def _add_holy_communion(doc: Document, fd: FuneralData, rite_texts: dict,
                           offertory)
 
     # Great Thanksgiving
+    add_spacer(doc)
     add_introductory_rubric(doc, "Remain standing.")
     add_heading2(doc, "The Great Thanksgiving")
 
@@ -611,30 +656,45 @@ def _add_holy_communion(doc: Document, fd: FuneralData, rite_texts: dict,
 
     add_spacer(doc)
 
-    # Preface / pre-Sanctus + Sanctus
+    # Preface / pre-Sanctus + Sanctus.
+    # At funerals the Proper Preface inserted between the opening and
+    # the sanctus_transition is "Of the Commemoration of the Dead"
+    # (BCP p. 382) for both rites. Prayers C and D ship their own
+    # self-contained preface text and don't take an insert.
+    add_spacer(doc)
     add_rubric(doc, "Then, facing the Holy Table, the Celebrant proceeds")
+    prefaces = load_proper_prefaces()
+    commemoration_preface = _flow(
+        (prefaces.get("commemoration_of_the_dead") or {}).get("text") or ""
+    )
+
     if fd.rite == "I":
-        # Rite I (Prayer I or II) uses the shared opening + a proper
-        # preface insert + sanctus_transition. The Preface of the
-        # Commemoration of the Dead applies at funerals.
+        # Rite I (Prayer I or II) uses the shared opening + the proper
+        # preface insert + sanctus_transition.
         add_body(doc, _flow(eucharistic_prayers.get("preface_opening_rite_i", "")))
-        add_body(doc, "[Preface of the Commemoration of the Dead]")
+        if commemoration_preface:
+            add_body(doc, commemoration_preface)
         add_body(doc, _flow(eucharistic_prayers.get("sanctus_transition_rite_i", "")))
         add_spacer(doc)
         add_rubric(doc, "Celebrant and People")
         for line in common.get("sanctus_rite_i", common.get("sanctus", [])):
             add_body(doc, line)
     else:
-        # Rite II: prayer-specific opening + Sanctus.
+        # Rite II. Prayers A and B take a proper-preface insert; Prayer
+        # D ships its own three-paragraph preface and skips the insert;
+        # (Prayer C is responsive throughout — not yet implemented).
         if "preface_1" in prayer:
+            # Prayer D path — emit its own preface paragraphs verbatim.
             add_body(doc, _flow(prayer["preface_1"]))
-        if "preface_2" in prayer:
-            add_body(doc, _flow(prayer["preface_2"]))
-        if "preface_3" in prayer:
-            add_body(doc, _flow(prayer["preface_3"]))
+            if "preface_2" in prayer:
+                add_body(doc, _flow(prayer["preface_2"]))
+            if "preface_3" in prayer:
+                add_body(doc, _flow(prayer["preface_3"]))
         else:
+            # Prayer A / B path — opening + Commemoration preface insert + transition.
             add_body(doc, _flow(eucharistic_prayers.get("preface_opening", "")))
-            add_body(doc, "[Preface of the Commemoration of the Dead]")
+            if commemoration_preface:
+                add_body(doc, commemoration_preface)
             add_body(doc, _flow(eucharistic_prayers.get("sanctus_transition", "")))
         add_spacer(doc)
         add_rubric(doc, "Celebrant and People")
@@ -646,13 +706,14 @@ def _add_holy_communion(doc: Document, fd: FuneralData, rite_texts: dict,
     # Post-Sanctus body of the prayer.
     _add_eucharistic_prayer_body(doc, prayer, fd)
 
-    # Lord's Prayer intro + text
+    # Lord's Prayer — said in unison; render bold via the People
+    # character style (matches the Sunday convention).
     add_spacer(doc)
     intro = common.get("lords_prayer_intro", {}).get("option_1",
             "And now, as our Savior Christ has taught us, we are bold to say,")
     add_body(doc, intro)
-    for line in common.get("lords_prayer", []):
-        add_body(doc, line)
+    lp_text = " ".join(line.strip() for line in common.get("lords_prayer", []))
+    _add_unison_prayer(doc, lp_text)
 
     # Breaking of the Bread
     add_spacer(doc)
@@ -673,17 +734,20 @@ def _add_holy_communion(doc: Document, fd: FuneralData, rite_texts: dict,
     if comms:
         add_spacer(doc)
         add_heading2(doc, "Communion Music")
-        for title in comms:
+        for i, title in enumerate(comms):
+            if i > 0:
+                add_spacer(doc)
             song = song_lookup_fn(title, "11 am")
             add_song_smart(doc, song)
 
-    # Postcommunion Prayer
+    # Postcommunion Prayer — also said in unison.
     add_spacer(doc)
     pc = rite_texts["postcommunion_prayer"]
     add_heading2(doc, pc.get("label", "Postcommunion Prayer"))
     for entry in pc.get("intro_dialogue", []):
         add_celebrant_line(doc, "Celebrant", entry.get("celebrant", ""))
-    add_body_with_amen(doc, _flow(pc["text"]) + " " + pc.get("amen", "Amen."))
+    pc_text = _flow(pc["text"]) + " " + pc.get("amen", "Amen.")
+    _add_unison_prayer(doc, pc_text)
 
 
 def _add_eucharistic_prayer_body(doc: Document, prayer: dict,
@@ -830,7 +894,9 @@ def _add_committal(doc: Document, fd: FuneralData, rite_texts: dict,
     """Render the Committal section (anthem + earth-cast prayer + Lord's
     Prayer + Rest eternal + dismissal blessing)."""
     cm = rite_texts["committal"]
+    add_spacer(doc)
     add_heading(doc, cm.get("label", "The Committal"))
+    add_spacer(doc)
 
     anthem = cm.get("anthem", {})
     if anthem.get("anthem_rubric"):
@@ -848,7 +914,7 @@ def _add_committal(doc: Document, fd: FuneralData, rite_texts: dict,
     text = text.replace("{location}", _committal_location_word(fd))
     add_body_with_amen(doc, text + " " + prayer.get("amen", "Amen."))
 
-    # Lord's Prayer dialogue + text
+    # Lord's Prayer — said in unison; bold via the People char style.
     add_spacer(doc)
     for entry in cm.get("lords_prayer_dialogue", []):
         if "people" in entry:
@@ -856,8 +922,8 @@ def _add_committal(doc: Document, fd: FuneralData, rite_texts: dict,
             add_people_line(doc, "People", entry["people"])
         else:
             add_celebrant_line(doc, "Celebrant", entry["celebrant"])
-    for line in common.get("lords_prayer", []):
-        add_body(doc, line)
+    lp_text = " ".join(line.strip() for line in common.get("lords_prayer", []))
+    _add_unison_prayer(doc, lp_text)
 
     # Rest eternal antiphon
     re = cm.get("rest_eternal", {})
@@ -876,8 +942,8 @@ def _add_committal(doc: Document, fd: FuneralData, rite_texts: dict,
                                  + " " + re.get("conclusion_amen", "Amen."))
 
     # Dismissal blessing — pulled from the top-level blessing/dismissal
+    add_spacer(doc)
     if cm.get("dismissal_rubric"):
-        add_spacer(doc)
         add_rubric(doc, cm["dismissal_rubric"])
     blessing = rite_texts["blessing"]["god_of_peace"]
     add_body_with_amen(doc, _flow(blessing["text"]) + " " + blessing.get("amen", "Amen."))
