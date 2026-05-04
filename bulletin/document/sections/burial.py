@@ -36,6 +36,10 @@ from bulletin.document.sections.word_of_god import (
     add_psalm, add_song_smart, add_body_with_amen,
     _add_reading_text,
 )
+from bulletin.document.sections.holy_communion import (
+    add_prayer_a_or_b, add_prayer_c, add_sanctus_text,
+    add_doxology_amen,
+)
 from bulletin.sources.funeral_data import FuneralData
 
 
@@ -148,10 +152,32 @@ def _add_unison_prayer(doc: Document, text: str) -> None:
     run.style = doc.styles["People"]
 
 
-def _add_creed_lines(doc: Document, lines: list[str]) -> None:
-    """Render a creed as a single paragraph with line breaks (so the
-    hanging-indent visual is preserved). Empty strings in `lines`
-    become paragraph breaks."""
+def _join_preface(opening: str, preface_text: str) -> str:
+    """Join the BCP preface_opening with a Proper Preface insert into
+    a single grammatical paragraph — matches the Sunday code's logic
+    in add_prayer_a_or_b. Most prefaces start with connecting words
+    ("Through", "For", "Because") and join with a comma; otherwise
+    keep the opening's period and start a new sentence.
+    """
+    if not preface_text:
+        return opening
+    _CONNECTING_WORDS = {"through", "for", "because", "but", "who"}
+    first_word = preface_text.split()[0].lower().rstrip(".,;")
+    opening = opening.rstrip()
+    if first_word in _CONNECTING_WORDS:
+        opening_no_period = opening.rstrip(".")
+        joined = preface_text[0].lower() + preface_text[1:]
+        return f"{opening_no_period}, {joined}"
+    return f"{opening} {preface_text}"
+
+
+def _add_creed_lines(doc: Document, lines: list[str], doc_obj=None) -> None:
+    """Render a creed as a single paragraph with line breaks. Empty
+    strings in `lines` become paragraph breaks. The Apostles' Creed
+    is said in unison, so every run is bold via the People char
+    style (matches the Lord's Prayer / Postcommunion treatment).
+    """
+    people_style = doc.styles["People"]
     paragraph = doc.add_paragraph(style="Body - People Recitation (Creed)")
     first = True
     for line in lines:
@@ -162,11 +188,11 @@ def _add_creed_lines(doc: Document, lines: list[str]) -> None:
         if not first:
             run = paragraph.add_run()
             run.add_break()
-        # Preserve leading spaces by using a soft tab pattern: replace
-        # leading-space runs with em-spaces? Simpler: just emit the
-        # text as-is; the docx style provides the hanging indent and
-        # the leading spaces visually nudge nested lines.
-        paragraph.add_run(line)
+        # The docx Body - People Recitation (Creed) style provides the
+        # hanging indent; leading spaces in `line` visually nudge
+        # nested lines further. Bolding via People style for unison.
+        run = paragraph.add_run(line)
+        run.style = people_style
         first = False
 
 
@@ -636,75 +662,86 @@ def _add_holy_communion(doc: Document, fd: FuneralData, rite_texts: dict,
     prayer_yaml_key = "prayer_" + (prayer_key.lower())
     prayer = eucharistic_prayers.get(prayer_yaml_key, {})
 
-    # Sursum Corda — Rite I and Rite II have different wording. We use
-    # the shared Rite II keys (sursum_corda) for Rite II prayers; for
-    # Rite I prayers we hand-render the dialogue inline since the
-    # eucharistic_prayers.yaml file currently only ships Rite II's
-    # shared block at the top.
-    if fd.rite == "I":
-        for entry in (
-            ("The Lord be with you.",   "And with thy spirit."),
-            ("Lift up your hearts.",    "We lift them up unto the Lord."),
-            ("Let us give thanks unto our Lord God.", "It is meet and right so to do."),
-        ):
-            add_celebrant_line(doc, "Celebrant", entry[0])
-            add_people_line(doc, "People", entry[1])
-    else:
-        for entry in eucharistic_prayers.get("sursum_corda", []):
-            add_celebrant_line(doc, "Celebrant", entry["celebrant"])
-            add_people_line(doc, "People", entry["people"])
-
-    add_spacer(doc)
-
-    # Preface / pre-Sanctus + Sanctus.
-    # At funerals the Proper Preface inserted between the opening and
-    # the sanctus_transition is "Of the Commemoration of the Dead"
-    # (BCP p. 382) for both rites. Prayers C and D ship their own
-    # self-contained preface text and don't take an insert.
-    add_spacer(doc)
-    add_rubric(doc, "Then, facing the Holy Table, the Celebrant proceeds")
+    # The Proper Preface inserted between the opening and the Sanctus
+    # transition for funerals is "Of the Commemoration of the Dead"
+    # (BCP p. 382) for both rites. Cached here for the helpers below.
     prefaces = load_proper_prefaces()
     commemoration_preface = _flow(
         (prefaces.get("commemoration_of_the_dead") or {}).get("text") or ""
     )
 
-    if fd.rite == "I":
-        # Rite I (Prayer I or II) uses the shared opening + the proper
-        # preface insert + sanctus_transition.
-        add_body(doc, _flow(eucharistic_prayers.get("preface_opening_rite_i", "")))
-        if commemoration_preface:
-            add_body(doc, commemoration_preface)
-        add_body(doc, _flow(eucharistic_prayers.get("sanctus_transition_rite_i", "")))
+    # ----- Rite II Prayer A / B / C: defer to the Sunday code path,
+    # which already handles the preface-joining grammar (connecting
+    # words like "Through" join to the preface_opening with a comma)
+    # and inserts the right spacers between every paragraph of the
+    # prayer body. We synthesize the small `data` dict the Sunday
+    # functions expect.
+    if fd.rite == "II" and prayer_key.upper() in ("A", "B", "C"):
+        ep_data_funeral = {
+            "preface_opening":     eucharistic_prayers.get("preface_opening", ""),
+            "sanctus_transition":  eucharistic_prayers.get("sanctus_transition", ""),
+            "prayer_a":            eucharistic_prayers.get("prayer_a", {}),
+            "prayer_b":            eucharistic_prayers.get("prayer_b", {}),
+            "prayer_c":            eucharistic_prayers.get("prayer_c", {}),
+        }
+        # Sursum Corda dialogue
+        for entry in eucharistic_prayers.get("sursum_corda", []):
+            add_celebrant_line(doc, "Celebrant", entry["celebrant"])
+            add_people_line(doc, "People", entry["people"])
         add_spacer(doc)
-        add_rubric(doc, "Celebrant and People")
-        for line in common.get("sanctus_rite_i", common.get("sanctus", [])):
-            add_body(doc, line)
-    else:
-        # Rite II. Prayers A and B take a proper-preface insert; Prayer
-        # D ships its own three-paragraph preface and skips the insert;
-        # (Prayer C is responsive throughout — not yet implemented).
-        if "preface_1" in prayer:
-            # Prayer D path — emit its own preface paragraphs verbatim.
-            add_body(doc, _flow(prayer["preface_1"]))
-            if "preface_2" in prayer:
-                add_body(doc, _flow(prayer["preface_2"]))
-            if "preface_3" in prayer:
-                add_body(doc, _flow(prayer["preface_3"]))
-        else:
-            # Prayer A / B path — opening + Commemoration preface insert + transition.
-            add_body(doc, _flow(eucharistic_prayers.get("preface_opening", "")))
-            if commemoration_preface:
-                add_body(doc, commemoration_preface)
-            add_body(doc, _flow(eucharistic_prayers.get("sanctus_transition", "")))
-        add_spacer(doc)
-        add_rubric(doc, "Celebrant and People")
-        sanctus_lines = common.get("sanctus", [])
-        for line in sanctus_lines:
-            add_body(doc, line)
-    add_spacer(doc)
 
-    # Post-Sanctus body of the prayer.
-    _add_eucharistic_prayer_body(doc, prayer, fd)
+        sunday_data = {
+            "service_time":         "11 am",
+            "proper_preface_text":  commemoration_preface,
+            "sanctus_song":         None,    # use the spoken text Sanctus
+        }
+        add_rubric(doc, "Then, facing the Holy Table, the Celebrant proceeds")
+        if prayer_key.upper() == "C":
+            add_prayer_c(doc, ep_data_funeral, sunday_data, common)
+        else:
+            add_prayer_a_or_b(doc, ep_data_funeral, sunday_data, common,
+                              prayer_key.upper())
+    else:
+        # ----- Rite II Prayer D and Rite I Prayers I / II: the Sunday
+        # helpers don't handle these shapes; we render them inline,
+        # matching the structure of each prayer's eucharistic_prayers.yaml
+        # entry. Spacers go between every paragraph for parity with the
+        # Sunday output.
+        if fd.rite == "I":
+            for entry in (
+                ("The Lord be with you.",   "And with thy spirit."),
+                ("Lift up your hearts.",    "We lift them up unto the Lord."),
+                ("Let us give thanks unto our Lord God.", "It is meet and right so to do."),
+            ):
+                add_celebrant_line(doc, "Celebrant", entry[0])
+                add_people_line(doc, "People", entry[1])
+            add_spacer(doc)
+            add_rubric(doc, "Then, facing the Holy Table, the Celebrant proceeds")
+            opening = _flow(eucharistic_prayers.get("preface_opening_rite_i", ""))
+            add_body(doc, _join_preface(opening, commemoration_preface))
+            add_spacer(doc)
+            add_body(doc, _flow(eucharistic_prayers.get("sanctus_transition_rite_i", "")))
+            add_spacer(doc)
+            add_rubric(doc, "Celebrant and People")
+            add_sanctus_text(doc, common.get("sanctus_rite_i", common.get("sanctus", [])))
+        else:
+            # Prayer D — its own three-paragraph preface, no insert.
+            for entry in eucharistic_prayers.get("sursum_corda", []):
+                add_celebrant_line(doc, "Celebrant", entry["celebrant"])
+                add_people_line(doc, "People", entry["people"])
+            add_spacer(doc)
+            add_rubric(doc, "Then, facing the Holy Table, the Celebrant proceeds")
+            for k in ("preface_1", "preface_2", "preface_3"):
+                if prayer.get(k):
+                    add_body(doc, _flow(prayer[k]))
+                    add_spacer(doc)
+            add_rubric(doc, "Celebrant and People")
+            add_sanctus_text(doc, common.get("sanctus", []))
+
+        add_spacer(doc)
+        # Post-Sanctus body — custom render with spacers between
+        # every paragraph (Prayer D / Rite I shapes).
+        _add_eucharistic_prayer_body(doc, prayer, fd)
 
     # Lord's Prayer — said in unison; render bold via the People
     # character style (matches the Sunday convention).
@@ -780,33 +817,35 @@ def _add_eucharistic_prayer_body(doc: Document, prayer: dict,
         # with their own rendering rules; we render them inline below.
     ]
 
-    # Helper closure to dedent and emit a paragraph.
+    # Helper closure: emit one paragraph + a spacer afterwards. The
+    # spacer is what gives every prayer paragraph the same visual
+    # breathing room as the Sunday output.
     def emit(text: str) -> None:
         if text:
             add_body(doc, _flow(text))
+            add_spacer(doc)
 
     for key in order:
-        if key in prayer:
-            val = prayer[key]
-            if isinstance(val, str):
-                emit(val)
-                # Memorial intro flows into the acclamation
-                if key == "memorial_intro" and "memorial_acclamation" in prayer:
-                    add_rubric(doc, prayer.get("memorial_acclamation_rubric",
-                                                "Celebrant and People"))
-                    p = doc.add_paragraph(style="Body")
-                    for i, line in enumerate(prayer["memorial_acclamation"]):
-                        if i > 0:
-                            p.add_run().add_break()
-                        run = p.add_run(line)
-                        run.bold = True
-                # Institution rubric is italic
-                if key == "institution_rubric":
-                    pass  # already emitted via add_body — could italicize later
-            elif isinstance(val, dict):
-                # e.g. intercession sub-trees with text variants
-                if "text" in val:
-                    emit(val["text"])
+        if key not in prayer:
+            continue
+        val = prayer[key]
+        if isinstance(val, str):
+            emit(val)
+            # Memorial intro flows into the acclamation
+            if key == "memorial_intro" and "memorial_acclamation" in prayer:
+                add_rubric(doc, prayer.get("memorial_acclamation_rubric",
+                                            "Celebrant and People"))
+                p = doc.add_paragraph(style="Body")
+                for i, line in enumerate(prayer["memorial_acclamation"]):
+                    if i > 0:
+                        p.add_run().add_break()
+                    run = p.add_run(line)
+                    run.bold = True
+                add_spacer(doc)
+        elif isinstance(val, dict):
+            # e.g. intercession sub-trees with text variants
+            if "text" in val:
+                emit(val["text"])
 
     # Intercession close (optional, has text_with_saints / _without_saints)
     if "intercession_close" in prayer:
@@ -814,10 +853,9 @@ def _add_eucharistic_prayer_body(doc: Document, prayer: dict,
         text = ic.get("text_without_saints") or ic.get("text_with_saints") or ""
         emit(text)
 
-    # Doxology + AMEN
+    # Doxology + bold AMEN, matching the Sunday `add_doxology_amen`.
     if "doxology" in prayer:
-        emit(prayer["doxology"])
-    add_body(doc, prayer.get("doxology_response", "AMEN."))
+        add_doxology_amen(doc, prayer)
 
 
 # =====================================================================
