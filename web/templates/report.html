@@ -26,8 +26,11 @@
                             <td>{{ b.service_time }}</td>
                             <td>{{ b.output_path.name }}</td>
                             <td>
-                                <a href="file://{{ b.output_path.parent }}"
-                                   target="_blank">Reveal in Finder</a>
+                                <button type="button"
+                                        class="reveal-btn"
+                                        data-path="{{ b.output_path }}">
+                                    Reveal in Finder
+                                </button>
                             </td>
                         </tr>
                     {% endfor %}
@@ -36,8 +39,11 @@
                             <td>Reading sheet</td>
                             <td>{{ rs_path.name }}</td>
                             <td>
-                                <a href="file://{{ rs_path.parent }}"
-                                   target="_blank">Reveal in Finder</a>
+                                <button type="button"
+                                        class="reveal-btn"
+                                        data-path="{{ rs_path }}">
+                                    Reveal in Finder
+                                </button>
                             </td>
                         </tr>
                     {% endfor %}
@@ -147,4 +153,39 @@
     <div class="btn-row">
         <a href="{{ url_for('home') }}" class="btn">Generate again</a>
     </div>
+
+    {# ----- Reveal-in-Finder click handler ----- #}
+    {# Browsers block file:// links from http://localhost pages, so the #}
+    {# buttons POST the path to a small server endpoint that hands it #}
+    {# off to macOS's `open -R` to reveal the file in Finder.          #}
+    <script>
+      document.querySelectorAll('.reveal-btn').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          const path = btn.dataset.path;
+          if (!path) return;
+          const original = btn.textContent;
+          btn.disabled = true;
+          btn.textContent = 'Opening…';
+          try {
+            const resp = await fetch('{{ url_for("reveal_path") }}', {
+              method: 'POST',
+              headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+              body: 'path=' + encodeURIComponent(path),
+            });
+            if (!resp.ok) {
+              const text = await resp.text();
+              btn.textContent = 'Failed';
+              console.warn('Reveal failed:', resp.status, text);
+            } else {
+              btn.textContent = 'Opened';
+            }
+          } catch (e) {
+            btn.textContent = 'Failed';
+            console.warn('Reveal request error:', e);
+          }
+          // Restore the button label after a moment so the user can click again.
+          setTimeout(() => { btn.textContent = original; btn.disabled = false; }, 1500);
+        });
+      });
+    </script>
 {% endblock %}

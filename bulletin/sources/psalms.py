@@ -49,6 +49,17 @@ class PsalmSelection:
     psalm_number: int
     latin: str
     verses: list[PsalmVerse]
+    # Verses that were requested by the reference but are not present
+    # in the psalter data. Populated when a reference like
+    # "Psalm 23:1-26" runs past the actual length of the psalm (23
+    # only has 6 verses) — typically a planning-sheet typo. The
+    # builder surfaces these via the run report so the planner can
+    # spot the typo before printing.
+    missing_verses: list[int] = None
+
+    def __post_init__(self):
+        if self.missing_verses is None:
+            self.missing_verses = []
 
     def to_lines(self) -> list[str]:
         """Convert to a list of formatted lines for the bulletin.
@@ -179,6 +190,13 @@ def get_psalm(reference: str) -> PsalmSelection:
     all_verses = psalm_data.get("verses", {})
     latin = psalm_data.get("latin", "")
 
+    # The maximum verse number actually present in the psalter data —
+    # used to distinguish "verse intentionally skipped in the planner
+    # selection" from "reference runs past the end of the psalm."
+    max_verse_in_data = max(all_verses.keys()) if all_verses else 0
+
+    missing: list[int] = []
+
     if not verse_specs:
         # Return all verses in order
         selected = [
@@ -194,7 +212,14 @@ def get_psalm(reference: str) -> PsalmSelection:
         for vnum, suffix in verse_specs:
             v = all_verses.get(vnum)
             if v is None:
-                continue  # Skip missing verses silently
+                # Distinguish a planning typo (verse number past the end
+                # of the psalm) from an intentional gap inside an
+                # explicit list like "Psalm 116:1,10-17" (verses 2-9 are
+                # legitimately absent from the request). Only flag the
+                # past-the-end case as a missing verse.
+                if vnum > max_verse_in_data:
+                    missing.append(vnum)
+                continue
 
             first_half = v["first_half"]
             second_half = list(v["second_half"])
@@ -218,6 +243,7 @@ def get_psalm(reference: str) -> PsalmSelection:
         psalm_number=psalm_num,
         latin=latin,
         verses=selected,
+        missing_verses=missing,
     )
 
 

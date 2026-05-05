@@ -274,6 +274,46 @@ def run_report(request: Request, run_id: str) -> HTMLResponse:
     )
 
 
+@app.post("/reveal", name="reveal_path")
+def reveal_path(path: str = Form(...)):
+    """Open the user's file browser at the given path.
+
+    Replaces the old `file://` links in the report page — Chrome and
+    Safari refuse to follow `file://` links from `http://localhost`
+    pages for security reasons, so we hop over to a server-side
+    endpoint that hands the path off to the OS via macOS's
+    ``open -R`` (reveal in Finder).
+
+    The endpoint only allows paths under the repository root to
+    avoid being a generic file-open trampoline.
+    """
+    import subprocess
+    target = Path(path).resolve()
+    try:
+        target.relative_to(REPO_ROOT)
+    except ValueError:
+        return HTMLResponse(
+            f"<p>Path is outside the repo: {target}</p>", status_code=400)
+    if not target.exists():
+        return HTMLResponse(
+            f"<p>Path does not exist: {target}</p>", status_code=404)
+    # `open -R` reveals the file in Finder; for directories it opens
+    # them. Falls back to plain `open` on errors.
+    try:
+        if target.is_file():
+            subprocess.Popen(["open", "-R", str(target)])
+        else:
+            subprocess.Popen(["open", str(target)])
+    except FileNotFoundError:
+        return HTMLResponse(
+            "<p>Could not invoke <code>open</code>. This endpoint is "
+            "macOS-only — for Linux/Windows hosts the link would need "
+            "an OS-specific equivalent.</p>", status_code=500)
+    # 204 = success, no body. The form submits via fetch() so the
+    # browser doesn't navigate away from the report page.
+    return HTMLResponse("", status_code=204)
+
+
 def _has_lyrics(song: dict) -> bool:
     """True if the song carries any lines we could render.
 

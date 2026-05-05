@@ -473,6 +473,77 @@ def _get_start_verse(reference: str) -> str:
     return "1"
 
 
+def _expected_last_verse(reference: str) -> int | None:
+    """Extract the highest verse number explicitly referenced in a
+    single-chapter scripture reference. Returns None for chapter
+    spans (e.g. "2 Corinthians 4:16—5:9") because verse numbers
+    reset per chapter and the simple max doesn't generalize.
+
+    Examples:
+        "Acts 10:34-43"                  -> 43
+        "Romans 8:14-19, 34-35, 37-39"   -> 39
+        "Genesis 12:1-4a"                -> 4
+        "John 3:16"                      -> 16
+        "2 Corinthians 4:16—5:9"         -> None  (chapter span)
+        "Acts 2:14a, 36-41"              -> 41
+    """
+    # Chapter spans use an em/en-dash between chapter:verse pairs.
+    # If we see a ":" on both sides of a dash, that's a chapter span.
+    if re.search(r":\s*\d+\s*[—–]\s*\d+\s*:", reference):
+        return None
+
+    # Find the part after the LAST colon — that's the verse list.
+    last_colon = reference.rfind(":")
+    if last_colon < 0:
+        return None
+    verse_part = reference[last_colon + 1:]
+
+    # Strip a trailing capitalized fragment like " (NRSV)" if any.
+    verse_part = re.sub(r"\s*\(.*\)\s*$", "", verse_part)
+
+    # All bare integers in the verse part — strip a/b/c suffixes via
+    # the regex (we only care about the integer portion).
+    nums = [int(n) for n in re.findall(r"\d+", verse_part)]
+    return max(nums) if nums else None
+
+
+def _verses_present(reading: "ScriptureReading") -> list[int]:
+    """Return the verse numbers actually rendered in the reading's
+    text. The parser tags inline verse numbers with U+0001 markers
+    (\\u0001NN\\u0001), so we extract them deterministically rather
+    than guessing at bare digits which might be part of the text.
+    """
+    chunks: list[str] = list(reading.paragraphs or [])
+    chunks.extend(reading.poetry_lines or [])
+    text = " ".join(chunks)
+    return [int(m.group(1))
+            for m in re.finditer("(\\d+)", text)]
+
+
+def find_missing_verses(reference: str,
+                          reading: "ScriptureReading") -> list[int]:
+    """Compare a single-chapter scripture reference against the verses
+    actually present in the parsed reading and return the verse
+    numbers that should be there but aren't. Used by the builder to
+    flag planning-sheet typos like "Acts 2:1-26" when Acts 2 has
+    only 21 verses (the verse range runs past the chapter's end).
+
+    For chapter-spanning references (e.g. "2 Corinthians 4:16—5:9")
+    this returns an empty list — verse-number reset across chapters
+    makes a simple max-comparison unreliable.
+    """
+    expected_last = _expected_last_verse(reference)
+    if expected_last is None:
+        return []
+    present = _verses_present(reading)
+    if not present:
+        return []
+    actual_last = max(present)
+    if actual_last >= expected_last:
+        return []
+    return list(range(actual_last + 1, expected_last + 1))
+
+
 # ---------------------------------------------------------------------------
 # Batch fetching with rate limiting
 # ---------------------------------------------------------------------------
@@ -507,6 +578,7 @@ def fetch_readings(references: dict[str, str],
         if not force_fetch and cache_key in cache:
             results[label] = _reading_from_cache(ref, cache[cache_key])
             print(f"    {label}: {ref} (cached)")
+            _check_verse_range(label, ref, results[label], report)
             continue
 
         # Fetch from oremus.org
@@ -517,6 +589,7 @@ def fetch_readings(references: dict[str, str],
             results[label] = reading
             cache[cache_key] = _reading_to_cache(reading)
             fetched_new = True
+            _check_verse_range(label, ref, reading, report)
         except Exception as e:
             print(f"Warning: Could not fetch {label} ({ref}): {e}")
             if report is not None:
@@ -541,3 +614,33 @@ def fetch_readings(references: dict[str, str],
         _save_cache(cache)
 
     return results
+
+
+def _check_verse_range(label: str, ref: str, reading: "ScriptureReading",
+                         report) -> None:
+    """Compare the requested reference's expected verse range against
+    what oremus actually returned. Surfaces a warning when the
+    reference runs past the end of the chapter — the typical
+    planning-sheet typo (e.g. "Acts 2:1-26" when Acts 2 has only
+    21 verses).
+    """
+    missing = find_missing_verses(ref, reading)
+    if not missing:
+        return
+    msg = (
+        f"Scripture reference {ref!r} requests verse(s) {missing} that "
+        f"don't appear in the text returned by oremus.org. They were "
+        f"silently dropped — likely a typo on the planning sheet."
+    )
+    print(f"  Warning: {msg}")
+    if report is not None:
+        report.warning(
+            category="scripture",
+            message=msg,
+            fix_hint=(
+                f"Verify the {label} reference on the planning sheet: "
+                f"the verse range may run past the end of the chapter. "
+                f"Update the reference and re-generate (or re-run with "
+                f"--force-fetch if you want to bypass the cache)."
+            ),
+        )

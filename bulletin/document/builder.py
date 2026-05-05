@@ -523,6 +523,21 @@ class BulletinBuilder:
                 from bulletin.sources.psalms import get_psalm
                 psalm_selection = get_psalm(psalm_ref)
                 psalm_text = psalm_selection.to_lines()
+                if psalm_selection.missing_verses:
+                    missing = psalm_selection.missing_verses
+                    self._warn(
+                        f"Psalm reference {psalm_ref!r} requests "
+                        f"verse(s) {missing} that don't exist in this "
+                        f"psalm. They were silently dropped — likely a "
+                        f"typo on the planning sheet.",
+                        category="psalm",
+                        fix_hint=(
+                            f"Verify the psalm reference on the planning "
+                            f"sheet: Psalm {psalm_selection.psalm_number} "
+                            f"has only as many verses as the BCP psalter "
+                            f"contains. Update the range and re-generate."
+                        ),
+                    )
             except Exception as e:
                 self._warn(f"Could not look up psalm: {e}",
                            category="psalm",
@@ -997,6 +1012,21 @@ class BulletinBuilder:
                 from bulletin.sources.psalms import get_psalm
                 psalm_selection = get_psalm(psalm_ref)
                 psalm_text = psalm_selection.to_lines()
+                if psalm_selection.missing_verses:
+                    missing = psalm_selection.missing_verses
+                    self._warn(
+                        f"Psalm reference {psalm_ref!r} requests "
+                        f"verse(s) {missing} that don't exist in this "
+                        f"psalm. They were silently dropped — likely a "
+                        f"typo on the planning sheet.",
+                        category="psalm",
+                        fix_hint=(
+                            f"Verify the psalm reference on the planning "
+                            f"sheet: Psalm {psalm_selection.psalm_number} "
+                            f"has only as many verses as the BCP psalter "
+                            f"contains. Update the range and re-generate."
+                        ),
+                    )
             except (ValueError, Exception) as e:
                 self._warn(f"Could not look up psalm: {e}",
                            category="psalm",
