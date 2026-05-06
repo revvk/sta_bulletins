@@ -502,12 +502,23 @@ def _format_clergy_title(name: str) -> str:
 # =====================================================================
 
 def _add_apostles_creed(doc: Document, fd: FuneralData, common: dict) -> None:
-    """Render the Apostles' Creed appropriate to the rite."""
+    """Render the Apostles' Creed appropriate to the rite.
+
+    The "In the assurance of eternal life…" line is the Celebrant's
+    introduction to the Creed (BCP p. 496) — set as a celebrant
+    line (regular body weight, hanging indent), NOT as an italic
+    rubric. A blank line separates it from the Creed text itself
+    (matching the Cox bulletin's typesetting).
+    """
     key = "apostles_creed_rite_i" if fd.rite == "I" else "apostles_creed_rite_ii"
     creed = common[key]
-    add_introductory_rubric(doc, "All stand, the Celebrant introduces the Creed, saying")
     add_heading2(doc, "Apostles' Creed")
-    add_rubric(doc, _flow(creed["intro"]))
+    add_introductory_rubric(doc, "All stand, the Celebrant introduces the Creed, saying")
+    # Empty label — the intro is unattributed in the bulletin; the
+    # rubric above identifies it as the Celebrant's. The Body -
+    # Dialogue style's hanging indent + tab gives the right visual.
+    add_celebrant_line(doc, "", _flow(creed["intro"]))
+    add_spacer(doc)
     _add_creed_lines(doc, creed["lines"])
 
 

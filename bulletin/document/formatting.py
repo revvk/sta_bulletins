@@ -120,24 +120,53 @@ def add_hymn_header(doc: Document, title: str, tune_name: str = None,
                     hymnal_number: str = None, hymnal_name: str = None):
     """Add a hymn title line with optional tune name and hymnal reference.
 
-    The Body style carries a right tab stop at 6" so that the hymnal
-    reference right-aligns to the margin.  Layout:
+    Layout:
 
-        Title  tune_name (italic)  →TAB→  #470 (Hymnal 1982) ←right
+        Title  tune_name (italic)  →TAB→  #470 (Hymnal 1982) ←right margin
 
-    When there is no tune name, the tab still right-aligns the reference.
+    The Body style carries TWO tab stops — a left at 1.5" (for
+    dialogue lines) and a right at 6" (for hymn headers). Word
+    moves a tab character to whichever stop comes next after the
+    cursor's current position. For short titles like "Amazing
+    grace!" the cursor lands just past 1.5", so a single \\t would
+    move to the LEFT stop instead of right-aligning. To make hymn
+    headers consistently right-align regardless of title length,
+    we override the paragraph-level tabs to a SINGLE right stop
+    just before emitting the tab. Other paragraphs that use the
+    Body style (dialogue, body text) still inherit both stops
+    from the style.
 
     Examples:
         add_hymn_header(doc, "Everlasting God")
         add_hymn_header(doc, "Come, Holy Spirit", "Saint Agnes", "510", "Hymnal 1982")
     """
+    from bulletin.config import PAGE_WIDTH_INCHES, MARGIN_INCHES
+    from docx.enum.text import WD_TAB_ALIGNMENT
+
     p = doc.add_paragraph(style="Body")
     p.add_run(title)
     if tune_name:
         run = p.add_run("  " + tune_name)
         run.italic = True
     if hymnal_number:
-        # Right-align hymnal ref using the Body style's right tab stop
+        # Override the paragraph's tab stops with a single right stop
+        # at the right margin. The OOXML <w:tabs> element on the
+        # paragraph replaces the style's tabs entirely (rather than
+        # merging) — so inherited 1.5" left stops won't compete.
+        right_in = PAGE_WIDTH_INCHES - 2 * MARGIN_INCHES
+        # Build a fresh tabs collection on this paragraph.
+        pPr = p._element.get_or_add_pPr()
+        # Remove any existing <w:tabs> (shouldn't be any since the
+        # style supplies them, but defensive).
+        for tabs_el in pPr.findall(qn("w:tabs")):
+            pPr.remove(tabs_el)
+        tabs_xml = (
+            f'<w:tabs {nsdecls("w")}>'
+            f'  <w:tab w:val="right" w:pos="{int(right_in * 1440)}"/>'
+            f'</w:tabs>'
+        )
+        pPr.insert(0, parse_xml(tabs_xml))
+
         # The number is roman, only the hymnal name is italic
         p.add_run("\t")
         p.add_run(f"#{hymnal_number}")
