@@ -133,9 +133,16 @@ def add_word_of_god(doc: Document, rules: SeasonalRules, data: dict):
     add_spacer(doc)
     add_heading2(doc, "Prayers of the People")
     add_pop(doc, data.get("pop_elements", []))
-    add_spacer(doc)
-    add_rubric(doc, data.get("pop_concluding_rubric",
-                              "The Celebrant concludes with a suitable Collect."))
+    # `pop_concluding_rubric` defaults to "The Celebrant concludes
+    # with a suitable Collect.", but a POP form whose elements
+    # already include a built-in concluding collect (e.g. Mother's
+    # Day) sets it to empty in pop_forms.yaml so the renderer
+    # doesn't print a redundant rubric here.
+    rubric = data.get("pop_concluding_rubric",
+                       "The Celebrant concludes with a suitable Collect.")
+    if rubric:
+        add_spacer(doc)
+        add_rubric(doc, rubric)
 
     # --- Confession & Absolution (if not already done in Penitential Order) ---
     if not rules.no_confession_after_pop:
@@ -511,8 +518,17 @@ def add_pop(doc: Document, elements: list[dict]):
         elif etype == "rubric":
             add_rubric(doc, text)
         elif etype == "both":
-            add_body(doc, elem.get("leader_text", ""))
+            # Render the leader call + people response on a single
+            # paragraph (Word will wrap if it has to). Matches the
+            # `people` branch above. Splitting them across two
+            # paragraphs is the older form-III/Mother's-Day rendering
+            # that Andrew flagged as wrong — short call-and-response
+            # pairs like "Lord, in your mercy, / Hear our prayer."
+            # belong on one line.
             p = doc.add_paragraph(style="Body")
+            leader_text = elem.get("leader_text", "")
+            if leader_text:
+                p.add_run(leader_text + " ")
             run = p.add_run(elem.get("people_text", ""))
             run.bold = True
             run.font.name = FONT_BODY_BOLD

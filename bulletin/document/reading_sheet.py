@@ -137,8 +137,37 @@ def _add_reading_with_intro(doc: Document, reference: str, reading):
     add_body(doc, f"A Reading from {intro_phrase}:")
     add_spacer(doc)
 
-    # Full reading text (verse numbers stripped for reading sheets)
-    if hasattr(reading, "paragraphs"):
+    # Full reading text (verse numbers stripped for reading sheets).
+    # Same three-tier fallback the bulletin renderer uses
+    # (word_of_god._add_reading_text):
+    #   1. `segments` for interleaved prose/poetry — important for
+    #      readings like Acts 17 where a quotation ("For we too are
+    #      his offspring") is embedded mid-paragraph; we render
+    #      each segment in document order so it lands in the right
+    #      place rather than being appended at the end.
+    #   2. `paragraphs` + (optional) `poetry_lines` — legacy
+    #      structure for pure-prose or all-poetry readings.
+    #   3. plain string fallback.
+    if hasattr(reading, "segments") and reading.segments:
+        for seg in reading.segments:
+            if seg["type"] == "prose":
+                _add_scripture_text_no_verses(doc, seg["text"])
+            elif seg["type"] == "poetry":
+                for line in seg["lines"]:
+                    if isinstance(line, dict):
+                        indent_level = line.get("indent", 0)
+                        text = line["text"]
+                    else:
+                        indent_level = 0
+                        text = line
+                    if indent_level == 0:
+                        style = "Reading (Poetry)"
+                    elif indent_level == 1:
+                        style = "Reading (Poetry Indent 1)"
+                    else:
+                        style = "Reading (Poetry Indent 2)"
+                    _add_scripture_text_no_verses(doc, text, style=style)
+    elif hasattr(reading, "paragraphs"):
         for i, para in enumerate(reading.paragraphs):
             _add_scripture_text_no_verses(doc, para, indent=(i > 0))
         if reading.has_poetry:
@@ -285,5 +314,8 @@ def _add_pop_section(doc: Document, data: dict):
     )
 
     add_pop(doc, pop_elements)
-    add_spacer(doc)
-    add_rubric(doc, concluding_rubric)
+    # Empty/null `pop_concluding_rubric` suppresses the rubric —
+    # used by forms with a built-in concluding collect.
+    if concluding_rubric:
+        add_spacer(doc)
+        add_rubric(doc, concluding_rubric)

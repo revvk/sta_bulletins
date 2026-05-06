@@ -97,9 +97,13 @@ def add_hidden_springs_low(doc: Document, rules: SeasonalRules, data: dict):
     add_spacer(doc)
     add_heading2(doc, "Prayers of the People")
     add_pop(doc, data.get("pop_elements", []))
-    add_spacer(doc)
-    add_rubric(doc, data.get("pop_concluding_rubric",
-                             "The Celebrant concludes with a suitable Collect."))
+    # Empty/null `pop_concluding_rubric` suppresses the rubric — used
+    # by forms that already include a built-in concluding collect.
+    rubric = data.get("pop_concluding_rubric",
+                       "The Celebrant concludes with a suitable Collect.")
+    if rubric:
+        add_spacer(doc)
+        add_rubric(doc, rubric)
 
     # --- Confession & Absolution ---
     if not rules.no_confession_after_pop:
