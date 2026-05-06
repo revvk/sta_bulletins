@@ -518,17 +518,17 @@ def add_pop(doc: Document, elements: list[dict]):
         elif etype == "rubric":
             add_rubric(doc, text)
         elif etype == "both":
-            # Render the leader call + people response on a single
-            # paragraph (Word will wrap if it has to). Matches the
-            # `people` branch above. Splitting them across two
-            # paragraphs is the older form-III/Mother's-Day rendering
-            # that Andrew flagged as wrong — short call-and-response
-            # pairs like "Lord, in your mercy, / Hear our prayer."
-            # belong on one line.
+            # Render leader and people on TWO separate paragraphs —
+            # used in long antiphonal forms like Form III where each
+            # petition reads as two distinct sentences (e.g. "Father,
+            # we pray for your holy catholic Church;" / "That we all
+            # may be one."). When the call and response should be on
+            # ONE line (e.g. "Lord, in your mercy, hear our prayer."),
+            # use `type: people` with leader_text + people_text
+            # instead — the `people` branch above collapses them to
+            # a single paragraph.
+            add_body(doc, elem.get("leader_text", ""))
             p = doc.add_paragraph(style="Body")
-            leader_text = elem.get("leader_text", "")
-            if leader_text:
-                p.add_run(leader_text + " ")
             run = p.add_run(elem.get("people_text", ""))
             run.bold = True
             run.font.name = FONT_BODY_BOLD

@@ -1677,7 +1677,7 @@ mothers_day:
         women who have nurtured, taught, comforted, challenged, and
         encouraged us such that without them we would not be who we
         are.
-    - type: both
+    - type: people
       leader_text: "Lord, in your mercy,"
       people_text: "hear our prayer."
 
@@ -1689,7 +1689,7 @@ mothers_day:
         their peace, not of their strength but of their justice.
         May this world ever more reflect the love with which you
         created it.
-    - type: both
+    - type: people
       leader_text: "Lord, in your mercy,"
       people_text: "hear our prayer."
 
@@ -1701,7 +1701,7 @@ mothers_day:
         distance, anger, or unhealed hurts, and we lift up before
         you those whose longing to be a parent has thus far gone
         unfilled.
-    - type: both
+    - type: people
       leader_text: "Lord, in your mercy,"
       people_text: "hear our prayer."
 
@@ -1711,7 +1711,7 @@ mothers_day:
         children suffer illness, go hungry, or die of violence. We
         beg your healing grace for all women and children who are
         victims of abuse, injustice, or oppression.
-    - type: both
+    - type: people
       leader_text: "Lord, in your mercy,"
       people_text: "hear our prayer."
 
@@ -1721,7 +1721,7 @@ mothers_day:
         faith and in love, in service and in truth. And may the
         church reach out with a mother's love and care for those
         who need to hear the shepherd's voice calling their name.
-    - type: both
+    - type: people
       leader_text: "Lord, in your mercy,"
       people_text: "hear our prayer."
 
@@ -1731,7 +1731,7 @@ mothers_day:
         farewell for the final time in this life {departed}, and
         ask your grace and mercy that we may one day join them
         eternally in your kingdom.
-    - type: both
+    - type: people
       leader_text: "Lord, in your mercy,"
       people_text: "hear our prayer."
 
