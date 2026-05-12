@@ -1314,6 +1314,7 @@ class BulletinBuilder:
             "{departed}": "",  # Left blank; filled in manually
             "{immigration_detainees}": placeholders.get(
                 "immigration_detainees", ""),
+            "{graduates}": placeholders.get("graduates", ""),
         }
 
         result = []

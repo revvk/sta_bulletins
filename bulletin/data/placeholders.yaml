@@ -15,6 +15,9 @@
 #   {mayor}                - Mayor's first name
 #   {immigration_detainees}- shared list of names used in every
 #                            immigration-focused petition
+#   {graduates}            - the year's high-school / college / grad-school
+#                            graduates, used by the Youth and Graduate
+#                            Sunday POP form. Update annually.
 #
 # Two more tokens are populated dynamically and not defined here:
 #   {parish_ministries}    - computed each week from the ministry rotation
@@ -38,3 +41,8 @@ liturgical_names:
 
 # Shared list of names used by every immigration-focused petition.
 immigration_detainees: "Juan, Jose, Pedro, Omar, Dina and her father, Mo, Barbod, Milad, Sahel, Asra, Amir, Hana, Saeed, Farshid"
+
+# Annual graduates list — used by the Youth and Graduate Sunday POP
+# form. Update yearly with the names of high-school, college, and
+# graduate-school graduates being celebrated.
+graduates: "Jordan Atwood, Makayla Conway, Kamden Dyess, Ben Gitzinger, Emery Grayson, Liz Hammer, Grace Holmes, Jenna Newkirk, Annabelle Nugent, Zoie Sanchez, and Grace Zimmerman"

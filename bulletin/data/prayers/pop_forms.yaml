@@ -1728,7 +1728,7 @@ mothers_day:
     - type: leader
       text: >-
         We pray for those mothers and children to whom we have said
-        farewell for the final time in this life {departed}, and
+        farewell for the final time in this life ✠ {departed}, and
         ask your grace and mercy that we may one day join them
         eternally in your kingdom.
     - type: people
@@ -1752,10 +1752,107 @@ mothers_day:
         and protect them. Deepen their love and trust of You. Strengthen 
         them, empower them, and anoint them with Your Holy Spirit that 
         their faith, influence, and achievement would shine forth and lighten 
-        the paths of us, their sons and daughters. Receive our thanks and 
+        the paths of us, their sons and daughters. Receive our thanks and
         praise again for these women, for they are precious to us and to You.
         In the name of Jesus Christ, we pray.
       people_text: Amen.
+
+# ==========================================================================
+# Youth and Graduate Sunday  (custom form, May / June graduation season)
+# ==========================================================================
+# Source: source_documents/2025 youth and graduate sunday prayers.docx
+# Each petition is a long leader call ending in "We pray to you, O Lord."
+# followed by the people's response "Lord, hear our prayer." on the same
+# line (Form V-style — `type: people` with leader_text + people_text).
+# A built-in concluding collect for the graduates closes the form, so
+# `concluding_rubric` is empty (the default "The Celebrant concludes with
+# a suitable Collect." rubric would be redundant).
+youth_and_graduate_sunday:
+  title: "Prayers of the People - Youth and Graduate Sunday"
+  group: special
+  sheet_values:
+    - youth and graduate sunday
+    - youth_and_graduate_sunday
+    - graduate sunday
+    - graduates
+  season: "special"
+  # Form contains its own concluding collect — skip the default
+  # "The Celebrant concludes with a suitable Collect." rubric.
+  concluding_rubric: ""
+  elements:
+    - type: people
+      leader_text: >-
+        I ask your prayers for the Church universal; for our children
+        and our children's children to learn your ways and for ever
+        more people to know themselves as sons and daughters of God.
+        We pray to you, O Lord.
+      people_text: "Lord, hear our prayer."
+
+    - type: people
+      leader_text: >-
+        I ask your prayers for our President {president}, our Governor
+        {governor}, and all those in power and authority; for wise
+        laws and good governance that will fill our children's future
+        with hope and peace. We pray to you, O Lord.
+      people_text: "Lord, hear our prayer."
+
+    - type: people
+      leader_text: >-
+        I ask your prayers for the children and youth of this
+        congregation and our community; for the joy of summer, the
+        richness of new experiences, and the memories that will be
+        made. We pray to you, O Lord.
+      people_text: "Lord, hear our prayer."
+
+    - type: people
+      leader_text: >-
+        I ask your prayers for {graduates}, and all graduates and for
+        their families and friends; for all the letting go that comes
+        with new experiences and new opportunities. We pray to you,
+        O Lord.
+      people_text: "Lord, hear our prayer."
+
+    - type: people
+      leader_text: >-
+        I ask your prayers for orphans and for those without children;
+        for all those whose innocence and youth has been stolen by
+        this sinful world. We pray to you, O Lord.
+      people_text: "Lord, hear our prayer."
+
+    - type: people
+      leader_text: >-
+        I ask your prayers for young people facing anxiety, depression,
+        self-doubt, and difficult decisions; for the constancy of
+        God's presence and the support of the community of faith to
+        uphold them. We pray to you, O Lord.
+      people_text: "Lord, hear our prayer."
+
+    - type: people
+      leader_text: >-
+        I ask your prayers for those who feel younger than their
+        bodies allow; for the challenges of aging, sickness, mental
+        health; and for the dying and deceased. We pray to you,
+        O Lord.
+      people_text: "Lord, hear our prayer."
+
+    # Built-in concluding collect — rendered as `type: both` so the
+    # final "Amen." lands on its own line, bold, matching the
+    # Mother's Day form's closing convention.
+    - type: rubric
+      text: "The Celebrant concludes with the following collect for our graduates:"
+
+    - type: both
+      leader_text: >-
+        Lord Jesus Christ, who came as a child and grew into a man,
+        bless those young people for whom this graduation season
+        marks a time of transition into a new stage of life. May
+        they grasp the reigns of responsibility, wisely enjoy their
+        new freedoms, and find the path you have set for them to
+        flourish in a chaotic and sinful world. Guide us all, in
+        whatever stage of life we are in, to learn and speak the
+        truth in love – the same love, O Lord, that binds you and
+        Father and Holy Spirit, one God, forever and ever.
+      people_text: "Amen."
 
 # ==========================================================================
 # Easter  (custom form for Easter Day / Easter Season)
