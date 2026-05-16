@@ -23,6 +23,7 @@ small helper that fetches the readings and supplies the song lookup.
 
 from __future__ import annotations
 
+import copy
 from pathlib import Path
 
 from docx import Document
@@ -238,6 +239,179 @@ def _pin_back_cover_logo(doc: "Document") -> None:
         first_back_para.append(run)
 
 
+# ---------------------------------------------------------------------------
+# Multi-paragraph BIO substitution
+# ---------------------------------------------------------------------------
+
+# Resolve the repo root once — relative photo paths (``photos/foo.jpg``
+# or ``source_documents/bar.jpg``) are looked up from here.
+_REPO_ROOT = Path(__file__).resolve().parent.parent.parent
+
+
+def _substitute_bio_paragraphs(doc: "Document", bio_text: str) -> None:
+    """Replace the ``{{BIO}}`` placeholder with one paragraph per
+    ``\\n\\n``-separated chunk in ``bio_text``.
+
+    The cover template has a single paragraph styled "Reading/Gospel
+    Text" containing the literal ``{{BIO}}``. If we just substituted
+    the text, multi-paragraph bios would collapse into one giant
+    paragraph (the previous behaviour used double-space joining as a
+    hack). Instead, we:
+
+    1. Find the placeholder paragraph.
+    2. Deposit the FIRST chunk into it (preserving its style + runs).
+    3. For each subsequent chunk, deep-clone the placeholder paragraph,
+       wipe its text, deposit the chunk, and insert it after.
+
+    Cloning preserves the paragraph's style, indentation, alignment,
+    and run formatting — Word treats each clone as a new paragraph in
+    the same flow. If ``bio_text`` is empty, the placeholder is wiped
+    to an empty paragraph (matching the previous behaviour).
+    """
+    # Split on blank-line paragraph breaks, then collapse single newlines
+    # inside each chunk to spaces — YAML's ``|`` literal block preserves
+    # the source's line-wrap, but Word should re-flow each paragraph.
+    raw_chunks = (bio_text or "").split("\n\n")
+    chunks = []
+    for chunk in raw_chunks:
+        flowed = " ".join(line.strip() for line in chunk.split("\n") if line.strip())
+        if flowed:
+            chunks.append(flowed)
+
+    for para in list(doc.element.body.iter(qn("w:p"))):
+        full_text = "".join((t.text or "") for t in para.iter(qn("w:t")))
+        if "{{BIO}}" not in full_text:
+            continue
+
+        if not chunks:
+            # Wipe the placeholder to empty — matches the historical
+            # "no bio → empty paragraph stays in the template" behaviour.
+            _set_paragraph_text(para, "")
+            return
+
+        # Drop the FIRST chunk into the placeholder paragraph itself.
+        _set_paragraph_text(para, chunks[0])
+
+        # Clone the (now-populated) paragraph for each additional chunk
+        # and insert after.
+        parent = para.getparent()
+        insert_after = para
+        for chunk in chunks[1:]:
+            clone = copy.deepcopy(para)
+            _set_paragraph_text(clone, chunk)
+            parent.insert(parent.index(insert_after) + 1, clone)
+            insert_after = clone
+        return
+
+
+def _set_paragraph_text(para_elem, text: str) -> None:
+    """Replace all text in a paragraph with ``text``, keeping the first
+    run's formatting and blanking out subsequent runs.
+
+    Mirrors ``_replace_in_paragraph`` from templates.py but with no
+    placeholder logic — used for clones whose entire content should be
+    swapped out.
+    """
+    t_elements = list(para_elem.iter(qn("w:t")))
+    first_set = False
+    for t in t_elements:
+        if not first_set:
+            t.text = text
+            t.set(qn("xml:space"), "preserve")
+            first_set = True
+        else:
+            t.text = ""
+    if not first_set:
+        # Paragraph has no runs — add one.
+        r = parse_xml(
+            f'<w:r xmlns:w="{_W_NS}">'
+            f'<w:t xml:space="preserve">{text}</w:t>'
+            f'</w:r>'
+        )
+        para_elem.append(r)
+
+
+# ---------------------------------------------------------------------------
+# Photo substitution
+# ---------------------------------------------------------------------------
+
+def _resolve_photo_path(photo_field: str) -> Path | None:
+    """Resolve the YAML's ``deceased.photo`` value to a real filesystem
+    path. Returns ``None`` if the value is empty/missing or the file
+    cannot be found.
+
+    Absolute paths are honored as-is. Relative paths are searched
+    against the repo root (so ``photos/cox-annette.jpg`` or
+    ``source_documents/annette_cox.jpg`` both work).
+    """
+    if not photo_field:
+        return None
+    p = Path(photo_field)
+    if p.is_absolute():
+        return p if p.exists() else None
+    candidate = _REPO_ROOT / p
+    if candidate.exists():
+        return candidate
+    return None
+
+
+def _substitute_photo(doc: "Document", photo_path: Path) -> bool:
+    """Replace the cover's silhouette placeholder image with ``photo_path``.
+
+    The template embeds an inline picture (``word/media/image2.png``)
+    sized at roughly 1.35″ × 2.03″ — a generic portrait silhouette.
+    We overwrite the underlying image *part*'s blob with the photo's
+    bytes. The inline drawing's anchor, extent (EMU dimensions), and
+    crop are unchanged, so Word re-renders the new photo at exactly
+    the same size and position the silhouette occupied.
+
+    Returns True if a substitution was performed.
+
+    Notes:
+    - We identify the placeholder by partname rather than by guessing
+      via dimensions — the template's other image (``image1.png``) is
+      the ichthys watermark, which we don't want to touch.
+    - Word reads image format from the file's magic bytes, so a JPG
+      can live inside a part originally named ``image2.png`` without
+      breaking. We still update the content-type so the OPC package
+      stays internally consistent.
+    """
+    if not photo_path.exists():
+        raise FileNotFoundError(f"Photo not found: {photo_path}")
+
+    with open(photo_path, "rb") as f:
+        new_bytes = f.read()
+
+    ext = photo_path.suffix.lower().lstrip(".")
+    content_type = {
+        "jpg":  "image/jpeg",
+        "jpeg": "image/jpeg",
+        "png":  "image/png",
+        "gif":  "image/gif",
+    }.get(ext, "image/png")
+
+    target_partname = "/word/media/image2.png"
+
+    for rel_id, rel in doc.part.rels.items():
+        if "image" not in rel.reltype:
+            continue
+        image_part = rel.target_part
+        if str(image_part.partname).lower() != target_partname:
+            continue
+        # python-docx exposes blob/content_type as read-only properties
+        # in some versions; assign to the underlying private attrs so
+        # this works across versions. The part is shared by all
+        # drawings referencing rId7, so swapping once updates every
+        # use site.
+        image_part._blob = new_bytes
+        try:
+            image_part._content_type = content_type
+        except AttributeError:
+            pass
+        return True
+    return False
+
+
 class FuneralBuilder:
     """Builds a funeral / memorial bulletin .docx from a ``FuneralData``.
 
@@ -298,13 +472,22 @@ class FuneralBuilder:
     def _load_cover(self) -> Document:
         """Load the two-page funeral cover template and substitute the
         five text placeholders (``{{DATE}}``, ``{{SUBTITLE}}``,
-        ``{{NAME}}``, ``{{LIFE_DATES}}``, ``{{BIO}}``).
+        ``{{NAME}}``, ``{{LIFE_DATES}}``, ``{{BIO}}``) plus the photo.
 
-        The photo placeholder is an embedded image in the template that
-        the user swaps out manually in the post-generation edit pass.
-        Services with no bio AND no photo: the user deletes the inner
-        page in the same edit pass — simpler than conditional template
-        assembly.
+        BIO and the photo get their own dedicated substitution paths:
+
+        * ``{{BIO}}`` is replaced with one paragraph per ``\\n\\n``-
+          separated chunk so that multi-paragraph life sketches render
+          as multiple paragraphs (matching how the printed bulletins
+          have always laid them out).
+        * The photo is swapped by overwriting the bytes of the
+          embedded ``image2.png`` part with the user-supplied photo
+          file. The inline drawing's size and position are preserved.
+
+        Services with no bio AND no photo: the user still deletes the
+        inner page in the post-generation edit pass — supporting that
+        cleanly in code would require conditional template assembly,
+        and the manual delete-page step is a five-second click in Word.
         """
         path = _TEMPLATES_DIR / _FUNERAL_COVER_TEMPLATE
         if not path.exists():
@@ -314,20 +497,41 @@ class FuneralBuilder:
             )
         doc = Document(str(path))
 
+        # BIO is handled FIRST so that the placeholder paragraph still
+        # exists for `_substitute_bio_paragraphs` to find and clone.
+        # (Once it's processed, the placeholder string is gone, so the
+        # later catch-all replacement won't see it.)
         bio = self.fd.deceased.get("bio") or ""
-        # Multi-paragraph bios: collapse to a single string with double
-        # spaces between paragraphs. The user's hand-edit pass splits
-        # them back into paragraphs in Word — supporting true multi-
-        # paragraph substitution requires custom XML manipulation that
-        # we'll add in a follow-up if it turns out to be tedious.
-        bio_collapsed = "  ".join(p.strip() for p in bio.split("\n\n") if p.strip())
+        _substitute_bio_paragraphs(doc, bio)
+
+        # Photo: if the YAML supplies a photo path that resolves to a
+        # real file on disk, overwrite the silhouette placeholder.
+        # Otherwise leave the silhouette in place — the user can either
+        # delete the inner page (no photo at all) or drop a photo in
+        # later and re-run.
+        photo_field = self.fd.deceased.get("photo")
+        photo_path = _resolve_photo_path(photo_field)
+        if photo_path:
+            _substitute_photo(doc, photo_path)
+        elif photo_field and self.report is not None:
+            # Path supplied but not found — surface as a warning so the
+            # user knows to fix it (rather than silently leaving the
+            # silhouette).
+            self.report.add(
+                severity="warning",
+                category="cover",
+                message=f"Cover photo not found: {photo_field}",
+                fix_hint=(
+                    "Place the file at one of the resolved paths "
+                    "(relative to the repo root) or update the YAML."
+                ),
+            )
 
         replacements = {
             "{{DATE}}":       self.fd.service_date_long,
             "{{SUBTITLE}}":   self.fd.cover_subtitle_resolved,
             "{{NAME}}":       self.fd.deceased.get("full_name", ""),
             "{{LIFE_DATES}}": self.fd.life_dates,
-            "{{BIO}}":        bio_collapsed,
         }
         _replace_all_placeholders(doc, replacements)
         _pin_floating_shapes_to_first_paragraph(doc)

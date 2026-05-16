@@ -41,7 +41,10 @@ deceased:
   pronoun:        she           # drives {he}/{him}/{his}/{brother} substitution
   born:           1932-11-30
   died:           2026-01-08
-  photo:          photos/cox-annette.jpg
+  # Relative paths are resolved from the repo root; the funeral builder
+  # swaps the bytes into the cover template's silhouette image at
+  # render time, so the inline drawing's size/position is preserved.
+  photo:          source_documents/annette_cox.jpg
 
   # Optional inside-front-cover bio. Two-column layout in the
   # rendered bulletin.
