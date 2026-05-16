@@ -112,7 +112,9 @@ def add_burial_service(doc: Document, fd: FuneralData,
         _add_interment_notice(doc, fd.interment_notice)
     if fd.reception.get("shown"):
         _add_reception_notice(doc, fd.reception.get("text", ""))
-    _add_participants_page(doc, fd.participants)
+    # Participants are rendered on the dedicated funeral back-cover
+    # template (templates/back_cover_funeral.docx, see
+    # funeral_builder._inject_participants), not inline in the body.
 
 
 # =====================================================================
@@ -562,14 +564,25 @@ def _add_prayers_for_departed_rite_ii(doc: Document, fd: FuneralData,
                 continue
         add_body(doc, _sub(_flow(petition["text"]), fd))
         if petition.get("response"):
+            # The response ("Hear us, Lord.") is said by the
+            # congregation. Use the People char style so the run
+            # uses the actual Adobe Garamond Pro Bold font — setting
+            # `run.bold = True` on a regular Adobe Garamond run
+            # gives Word's faux-bold synthesis, which looks subtly
+            # different from the real bold face.
             p = doc.add_paragraph(style="Body")
             run = p.add_run(petition["response"])
-            run.bold = True
+            run.style = doc.styles["People"]
         add_spacer(doc)
 
     add_rubric(doc, pop["silence_rubric"])
     add_spacer(doc)
-    add_rubric(doc, pop["conclusion_rubric"])
+    # The renderer always prints one of the BCP's concluding prayers
+    # (controlled by the `conclusion` flag in the per-service YAML),
+    # so the rubric immediately above it can be definitive:
+    # "with the following prayer:" rather than the BCP's
+    # "with one of the following or some other prayer".
+    add_rubric(doc, "The Celebrant concludes with the following prayer:")
 
     conclusion_key = flags.get("conclusion") or "commend"
     conclusion = pop["conclusions"][conclusion_key]
@@ -578,23 +591,40 @@ def _add_prayers_for_departed_rite_ii(doc: Document, fd: FuneralData,
 
 def _add_prayers_for_departed_rite_i(doc: Document, fd: FuneralData,
                                        pop: dict, flags: dict) -> None:
-    """Render Rite I's long-form intercessions, each ending in Amen."""
-    add_rubric(doc, pop["response_rubric"])
-    add_rubric(doc, pop["bidding_rubric"])
+    """Render Rite I's long-form intercessions, each ending in Amen.
+
+    The two preamble rubrics ("The People respond to every petition
+    with Amen." + "The Deacon or other leader says") are printed on
+    a single line — the BCP prints them as two separate rubric
+    paragraphs, but Andrew flagged the two-line treatment as
+    unnecessarily wordy. A single italic line "The People respond
+    to every petition with Amen. The Deacon or other leader says"
+    captures both rubrics without the extra vertical space.
+    """
+    response_rubric = pop["response_rubric"].rstrip(".")
+    bidding_rubric = pop["bidding_rubric"]
+    add_rubric(doc, f"{response_rubric}. {bidding_rubric}")
     add_body(doc, pop["bidding"])
     add_spacer(doc)
 
     include_optional = set(flags.get("include_optional_petitions") or [6, 7, 8, 9])
     patron_phrase = flags.get("patron_phrase") or ""
 
-    for idx, petition in enumerate(pop["petitions"], start=1):
-        if petition.get("optional") and idx not in include_optional:
-            continue
+    petitions_to_emit = [
+        (idx, p) for idx, p in enumerate(pop["petitions"], start=1)
+        if not (p.get("optional") and idx not in include_optional)
+    ]
+    for i, (idx, petition) in enumerate(petitions_to_emit):
         text = _flow(petition["text"])
         text = _sub(text, fd)
         text = text.replace("{patron_phrase}", patron_phrase)
         add_body_with_amen(doc, text + " " + petition["amen"])
-        add_spacer(doc)
+        # Spacer between petitions only — no trailing spacer after
+        # the concluding petition (which is itself a collect), so
+        # there isn't an extra blank line stacked on top of The
+        # Peace heading's space-before.
+        if i < len(petitions_to_emit) - 1:
+            add_spacer(doc)
 
 
 # =====================================================================
@@ -657,12 +687,20 @@ def _add_holy_communion(doc: Document, fd: FuneralData, rite_texts: dict,
     add_spacer(doc)
     add_introductory_rubric(doc, "Be seated.")
 
-    # Offertory anthem (heading varies — Cox uses "Offertory Anthem As
-    # the Altar is Prepared").
-    offertory = fd.music.get("offertory_anthem") or {}
-    if offertory.get("title"):
+    # Offertory music — either a soloist/choir anthem (small-caps
+    # composer credit, optional soloist) OR a congregational hymn
+    # (title + tab + hymnal reference, full lyrics if any). Mirrors
+    # the remembrance_hymn / remembrance_anthem pair: at most one
+    # of the two fields should be set per service.
+    offertory_hymn = fd.music.get("offertory_hymn")
+    offertory_anthem = fd.music.get("offertory_anthem") or {}
+    if offertory_hymn:
+        add_heading2(doc, "Offertory Hymn")
+        song = song_lookup_fn(offertory_hymn, "11 am")
+        add_song_smart(doc, song)
+    elif offertory_anthem.get("title"):
         _add_anthem_block(doc, "Offertory Anthem As the Altar is Prepared",
-                          offertory)
+                          offertory_anthem)
 
     # Great Thanksgiving
     add_spacer(doc)
@@ -875,32 +913,61 @@ def _add_eucharistic_prayer_body(doc: Document, prayer: dict,
 
 def _add_commendation(doc: Document, fd: FuneralData,
                        rite_texts: dict) -> None:
-    """Render the Commendation: anthem + commendation prayer."""
+    """Render the Commendation: heading, intro rubric, anthem, prayer.
+
+    Anthem layout matches the spoken / responsive convention Andrew
+    spelled out:
+      • First refrain — three lines. Line 1 is said by the
+        Celebrant (regular type); lines 2-3 are the People's
+        response (Adobe Garamond Pro **Bold** via the People char
+        style, not Word's faux-bold).
+      • Middle verse — collapsed to a single flowing paragraph,
+        said by the Celebrant.
+      • Second refrain — all three lines bold (the People join in).
+
+    Applies to both rites: the only thing that differs between
+    rite_I.commendation and rite_II.commendation is the BCP wording
+    (thy/your, thee/you, etc.).
+    """
     cm = rite_texts["commendation"]
     add_heading(doc, cm.get("label", "The Commendation"))
-    add_rubric(doc, cm.get("setup_rubric", ""))
 
-    # Anthem: refrain (italic) + verse + refrain
+    # The two BCP rubrics ("The Celebrant and other ministers take
+    # their places at the body." and "This anthem, or some other
+    # suitable anthem, or a hymn, may be sung or said.") are
+    # combined into a single Body - Introductory Rubric paragraph.
+    setup = (cm.get("setup_rubric") or "").strip()
+    anthem_rubric = (cm.get("anthem", {}).get("anthem_rubric") or "").strip()
+    intro_parts = [s for s in (setup, anthem_rubric) if s]
+    if intro_parts:
+        add_introductory_rubric(doc, " ".join(intro_parts))
+
     anthem = cm.get("anthem", {})
-    if anthem.get("anthem_rubric"):
-        add_rubric(doc, anthem["anthem_rubric"])
-
-    refrain = anthem.get("refrain", "")
+    refrain_lines = anthem.get("refrain", "").strip().split("\n")
     verse = anthem.get("verse", "")
-    for line in refrain.strip().split("\n"):
-        p = doc.add_paragraph(style="Body")
-        run = p.add_run(line)
-        run.italic = True
-    add_spacer(doc)
-    for line in verse.strip().split("\n"):
-        add_body(doc, line)
-    add_spacer(doc)
-    for line in refrain.strip().split("\n"):
-        p = doc.add_paragraph(style="Body")
-        run = p.add_run(line)
-        run.bold = True
+    people_style = doc.styles["People"]
 
-    # Commendation prayer
+    if refrain_lines:
+        # First refrain — line 1 Celebrant, lines 2-3 People (bold).
+        add_body(doc, refrain_lines[0])
+        for line in refrain_lines[1:]:
+            p = doc.add_paragraph(style="Body")
+            run = p.add_run(line)
+            run.style = people_style
+        add_spacer(doc)
+
+    # Middle verse — collapsed to one flowing paragraph, Celebrant.
+    if verse:
+        add_body(doc, _flow(verse))
+        add_spacer(doc)
+
+    # Refrain repeat — every line bold (People join in throughout).
+    for line in refrain_lines:
+        p = doc.add_paragraph(style="Body")
+        run = p.add_run(line)
+        run.style = people_style
+
+    # Commendation prayer.
     prayer = cm.get("prayer", {})
     add_spacer(doc)
     if prayer.get("prayer_rubric"):

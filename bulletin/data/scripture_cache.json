@@ -20,6 +20,43 @@
     ],
     "poetry_lines": []
   },
+  "Acts 17:22-31": {
+    "has_poetry": true,
+    "paragraphs": [
+      "\u000122\u0001 Then Paul stood in front of the Areopagus and said, ‘Athenians, I see how extremely religious you are in every way. \u000123\u0001 For as I went through the city and looked carefully at the objects of your worship, I found among them an altar with the inscription, “To an unknown god.” What therefore you worship as unknown, this I proclaim to you. \u000124\u0001 The God who made the world and everything in it, he who is Lord of heaven and earth, does not live in shrines made by human hands, \u000125\u0001 nor is he served by human hands, as though he needed anything, since he himself gives to all mortals life and breath and all things. \u000126\u0001 From one ancestor* he made all nations to inhabit the whole earth, and he allotted the times of their existence and the boundaries of the places where they would live, \u000127\u0001 so that they would search for God* and perhaps grope for him and find him—though indeed he is not far from each one of us. \u000128\u0001 For “In him we live and move and have our being”; as even some of your own poets have said,",
+      "\u000129\u0001 Since we are God’s offspring, we ought not to think that the deity is like gold, or silver, or stone, an image formed by the art and imagination of mortals. \u000130\u0001 While God has overlooked the times of human ignorance, now he commands all people everywhere to repent, \u000131\u0001 because he has fixed a day on which he will have the world judged in righteousness by a man whom he has appointed, and of this he has given assurance to all by raising him from the dead.’"
+    ],
+    "poetry_lines": [
+      "“For we too are his offspring.”"
+    ],
+    "segments": [
+      {
+        "text": "\u000122\u0001 Then Paul stood in front of the Areopagus and said, ‘Athenians, I see how extremely religious you are in every way. \u000123\u0001 For as I went through the city and looked carefully at the objects of your worship, I found among them an altar with the inscription, “To an unknown god.” What therefore you worship as unknown, this I proclaim to you. \u000124\u0001 The God who made the world and everything in it, he who is Lord of heaven and earth, does not live in shrines made by human hands, \u000125\u0001 nor is he served by human hands, as though he needed anything, since he himself gives to all mortals life and breath and all things. \u000126\u0001 From one ancestor* he made all nations to inhabit the whole earth, and he allotted the times of their existence and the boundaries of the places where they would live, \u000127\u0001 so that they would search for God* and perhaps grope for him and find him—though indeed he is not far from each one of us. \u000128\u0001 For “In him we live and move and have our being”; as even some of your own poets have said,",
+        "type": "prose"
+      },
+      {
+        "lines": [
+          {
+            "indent": 0,
+            "text": "“For we too are his offspring.”"
+          }
+        ],
+        "type": "poetry"
+      },
+      {
+        "text": "\u000129\u0001 Since we are God’s offspring, we ought not to think that the deity is like gold, or silver, or stone, an image formed by the art and imagination of mortals. \u000130\u0001 While God has overlooked the times of human ignorance, now he commands all people everywhere to repent, \u000131\u0001 because he has fixed a day on which he will have the world judged in righteousness by a man whom he has appointed, and of this he has given assurance to all by raising him from the dead.’",
+        "type": "prose"
+      }
+    ]
+  },
+  "Acts 1:6-14": {
+    "has_poetry": false,
+    "paragraphs": [
+      "\u00016\u0001 So when they had come together, they asked him, ‘Lord, is this the time when you will restore the kingdom to Israel?’ \u00017\u0001 He replied, ‘It is not for you to know the times or periods that the Father has set by his own authority. \u00018\u0001 But you will receive power when the Holy Spirit has come upon you; and you will be my witnesses in Jerusalem, in all Judea and Samaria, and to the ends of the earth.’ \u00019\u0001 When he had said this, as they were watching, he was lifted up, and a cloud took him out of their sight. \u000110\u0001 While he was going and they were gazing up toward heaven, suddenly two men in white robes stood by them. \u000111\u0001 They said, ‘Men of Galilee, why do you stand looking up toward heaven? This Jesus, who has been taken up from you into heaven, will come in the same way as you saw him go into heaven.’",
+      "\u000112\u0001 Then they returned to Jerusalem from the mount called Olivet, which is near Jerusalem, a sabbath day’s journey away. \u000113\u0001 When they had entered the city, they went to the room upstairs where they were staying, Peter, and John, and James, and Andrew, Philip and Thomas, Bartholomew and Matthew, James son of Alphaeus, and Simon the Zealot, and Judas son of* James. \u000114\u0001 All these were constantly devoting themselves to prayer, together with certain women, including Mary the mother of Jesus, as well as his brothers."
+    ],
+    "poetry_lines": []
+  },
   "Acts 2:14a, 22-32": {
     "has_poetry": true,
     "paragraphs": [
@@ -510,6 +547,22 @@
     "paragraphs": [
       "\u00011\u0001 ‘Do not let your hearts be troubled. Believe* in God, believe also in me. \u00012\u0001 In my Father’s house there are many dwelling-places. If it were not so, would I have told you that I go to prepare a place for you?*\u00013\u0001 And if I go and prepare a place for you, I will come again and will take you to myself, so that where I am, there you may be also. \u00014\u0001 And you know the way to the place where I am going.’*\u00015\u0001 Thomas said to him, ‘Lord, we do not know where you are going. How can we know the way?’ \u00016\u0001 Jesus said to him, ‘I am the way, and the truth, and the life. No one comes to the Father except through me. \u00017\u0001 If you know me, you will know* my Father also. From now on you do know him and have seen him.’",
       "\u00018\u0001 Philip said to him, ‘Lord, show us the Father, and we will be satisfied.’ \u00019\u0001 Jesus said to him, ‘Have I been with you all this time, Philip, and you still do not know me? Whoever has seen me has seen the Father. How can you say, “Show us the Father”? \u000110\u0001 Do you not believe that I am in the Father and the Father is in me? The words that I say to you I do not speak on my own; but the Father who dwells in me does his works. \u000111\u0001 Believe me that I am in the Father and the Father is in me; but if you do not, then believe me because of the works themselves. \u000112\u0001 Very truly, I tell you, the one who believes in me will also do the works that I do and, in fact, will do greater works than these, because I am going to the Father. \u000113\u0001 I will do whatever you ask in my name, so that the Father may be glorified in the Son. \u000114\u0001 If in my name you ask me* for anything, I will do it."
+    ],
+    "poetry_lines": []
+  },
+  "John 14:15-21": {
+    "has_poetry": false,
+    "paragraphs": [
+      "\u000115\u0001 ‘If you love me, you will keep* my commandments. \u000116\u0001 And I will ask the Father, and he will give you another Advocate,* to be with you for ever. \u000117\u0001 This is the Spirit of truth, whom the world cannot receive, because it neither sees him nor knows him. You know him, because he abides with you, and he will be in* you.",
+      "\u000118\u0001 ‘I will not leave you orphaned; I am coming to you. \u000119\u0001 In a little while the world will no longer see me, but you will see me; because I live, you also will live. \u000120\u0001 On that day you will know that I am in my Father, and you in me, and I in you. \u000121\u0001 They who have my commandments and keep them are those who love me; and those who love me will be loved by my Father, and I will love them and reveal myself to them.’"
+    ],
+    "poetry_lines": []
+  },
+  "John 17:1-11": {
+    "has_poetry": false,
+    "paragraphs": [
+      "\u00011\u0001 After Jesus had spoken these words, he looked up to heaven and said, ‘Father, the hour has come; glorify your Son so that the Son may glorify you, \u00012\u0001 since you have given him authority over all people,* to give eternal life to all whom you have given him. \u00013\u0001 And this is eternal life, that they may know you, the only true God, and Jesus Christ whom you have sent. \u00014\u0001 I glorified you on earth by finishing the work that you gave me to do. \u00015\u0001 So now, Father, glorify me in your own presence with the glory that I had in your presence before the world existed.",
+      "\u00016\u0001 ‘I have made your name known to those whom you gave me from the world. They were yours, and you gave them to me, and they have kept your word. \u00017\u0001 Now they know that everything you have given me is from you; \u00018\u0001 for the words that you gave to me I have given to them, and they have received them and know in truth that I came from you; and they have believed that you sent me. \u00019\u0001 I am asking on their behalf; I am not asking on behalf of the world, but on behalf of those whom you gave me, because they are yours. \u000110\u0001 All mine are yours, and yours are mine; and I have been glorified in them. \u000111\u0001 And now I am no longer in the world, but they are in the world, and I am coming to you. Holy Father, protect them in your name that you have given me, so that they may be one, as we are one."
     ],
     "poetry_lines": []
   },

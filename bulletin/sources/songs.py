@@ -187,6 +187,33 @@ def lookup_song(identifier: str, service: str = "9am",
             if title_part and song["title"].lower().startswith(title_part.lower()):
                 return song
 
+    # Reverse starts-with: the identifier starts with the song title.
+    # Handles cases where the user supplies the first line of the hymn
+    # as the identifier — e.g. "Amazing grace! how sweet the sound"
+    # should match the catalog entry titled "Amazing grace!". To avoid
+    # spurious matches on short titles (e.g. "Glory" matching anything
+    # starting with "Glory"), require the title to be at least one word
+    # of substantive length AND that the boundary after the title falls
+    # on a non-word character (so "Amazing grace!" matches "Amazing
+    # grace! how..." but "Holy" does NOT match "Holy, holy, holy!").
+    def _id_starts_with_title(idfr: str, title: str) -> bool:
+        idl = idfr.lower()
+        tl = title.lower()
+        if len(tl) < 4 or not idl.startswith(tl):
+            return False
+        # Require exact match OR a non-word boundary after the title.
+        if len(idl) == len(tl):
+            return True
+        return not idl[len(tl)].isalnum()
+
+    for song in songs:
+        if _id_starts_with_title(clean, song["title"]):
+            if not hint_lower or _hint_matches(song["title"], hint_lower):
+                return song
+        if title_part and _id_starts_with_title(title_part, song["title"]):
+            if not hint_lower or _hint_matches(song["title"], hint_lower):
+                return song
+
     # Try substring match — prefer hint-matching candidates
     if hint_lower:
         for song in songs:

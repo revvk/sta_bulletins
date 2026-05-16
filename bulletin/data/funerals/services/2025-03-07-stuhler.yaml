@@ -102,10 +102,13 @@ music:
   homily_hymn:   null
   homily_anthem: null
 
-  offertory_anthem:
-    title:    '#671 Amazing grace! how sweet the sound'   # Hymnal 1982, tune New Britain
-    arranger: null                                  # congregational hymn, no arranger credit
-    soloist:  null
+  # Congregational hymn at the offertory — uses the offertory_hymn
+  # slot so it renders through add_song_smart (title + tab-aligned
+  # #hymnal_ref, plus full lyrics if songs.yaml carries them).
+  # offertory_anthem would force the soloist/choir rendering, which
+  # is wrong for a hymn the congregation sings together.
+  offertory_hymn: 'Amazing grace! how sweet the sound'   # #671 (Hymnal 1982), New Britain
+  offertory_anthem: null
 
   # TODO(andrew): communion music wasn't captured during the initial
   # read; fill in from the printed bulletin (likely 2-3 hymns or
