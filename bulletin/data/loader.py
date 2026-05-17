@@ -21,6 +21,23 @@ def _load_yaml(relative_path: str) -> dict:
         return yaml.safe_load(f)
 
 
+def clear_all_caches() -> None:
+    """Invalidate every cached YAML in this loader.
+
+    Call after any write to a YAML file under ``bulletin/data/`` so the
+    next read sees the new contents. The CLI exits between runs so this
+    isn't strictly needed there, but the long-running web app must call
+    it after every save (songs, POP forms, scripture overlays, etc.).
+
+    Note: ``bulletin/sources/songs.py`` and ``bulletin/sources/psalms.py``
+    keep their own module-level caches independent of this loader. Their
+    ``clear_cache()`` helpers should be called alongside this one when
+    those YAMLs change. The web app's save endpoints are the source of
+    truth for which caches to clear after which writes.
+    """
+    _load_yaml.cache_clear()
+
+
 def load_common_prayers() -> dict:
     return _load_yaml("bcp_texts/common_prayers.yaml")
 

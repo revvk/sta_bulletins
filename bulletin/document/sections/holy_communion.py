@@ -86,7 +86,7 @@ def add_holy_communion(doc: Document, rules: SeasonalRules, data: dict):
         if service_time == "11 am":
             _add_11am_offertory(doc, data)
         else:
-            add_song_smart(doc, data.get("offertory_song"))
+            add_communion_song_smart(doc, data.get("offertory_song"))
 
     # Doxology (skip at 8am — no music)
     if service_time != "8 am":
@@ -150,7 +150,7 @@ def add_holy_communion(doc: Document, rules: SeasonalRules, data: dict):
         else:
             fraction_song = data.get("fraction_song")
             if fraction_song:
-                add_song_smart(doc, fraction_song,
+                add_communion_song_smart(doc, fraction_song,
                                 force_single_column=True)
             else:
                 # Default Agnus Dei text
@@ -190,7 +190,7 @@ def add_holy_communion(doc: Document, rules: SeasonalRules, data: dict):
         for i, song in enumerate(comm_songs):
             if i > 0:
                 add_spacer(doc)
-            add_song_smart(doc, song)
+            add_communion_song_smart(doc, song)
 
     # --- Closing Prayer ---
     add_spacer(doc)
@@ -256,7 +256,7 @@ def add_holy_communion(doc: Document, rules: SeasonalRules, data: dict):
     if service_time != "8 am":
         add_spacer(doc)
         add_heading2(doc, "Closing Hymn")
-        add_song_smart(doc, data.get("closing_hymn"))
+        add_communion_song_smart(doc, data.get("closing_hymn"))
 
     # --- Dismissal ---
     add_spacer(doc)
@@ -271,7 +271,7 @@ def add_holy_communion(doc: Document, rules: SeasonalRules, data: dict):
         add_heading2(doc, "Postlude")
         postlude_songs = data.get("postlude_songs", [])
         for song in postlude_songs:
-            add_song_smart(doc, song)
+            add_communion_song_smart(doc, song)
 
 
 def add_prayer_a_or_b(doc: Document, ep_data: dict, data: dict,
@@ -310,7 +310,7 @@ def add_prayer_a_or_b(doc: Document, ep_data: dict, data: dict,
     # Sanctus hymn
     sanctus_song = data.get("sanctus_song")
     if sanctus_song:
-        add_song_smart(doc, sanctus_song, force_single_column=True)
+        add_communion_song_smart(doc, sanctus_song, force_single_column=True)
     elif data.get("service_time") == "8 am":
         add_sanctus_spoken(doc, prayers["sanctus"])
     else:
@@ -394,7 +394,7 @@ def add_prayer_c(doc: Document, ep_data: dict, data: dict, prayers: dict):
     # Sanctus
     sanctus_song = data.get("sanctus_song")
     if sanctus_song:
-        add_song_smart(doc, sanctus_song, force_single_column=True)
+        add_communion_song_smart(doc, sanctus_song, force_single_column=True)
     elif data.get("service_time") == "8 am":
         add_sanctus_spoken(doc, prayers["sanctus"])
     else:
@@ -500,17 +500,30 @@ def add_doxology_amen(doc: Document, prayer: dict):
     run.font.name = FONT_BODY_BOLD
 
 
-def add_song_smart(doc: Document, song_data: dict | None,
-                    force_single_column: bool = False):
-    """Add a song, choosing two-column layout when it saves space.
+def add_communion_song_smart(doc: Document, song_data: dict | None,
+                             force_single_column: bool = False):
+    """Add a song inside the Holy Communion liturgy.
 
-    If the song has no sections (hymnal-only), renders just the header
-    line (title + hymnal reference) without wrapping in a lyric table.
+    Differs from ``word_of_god.add_song_smart`` in ONE place — when
+    ``force_single_column=True``, this variant lays the song out as a
+    single column with all sections in **one** cell (not one row per
+    section). That matches what Sunday-morning Communion needs for
+    short liturgical pieces (Sanctus, fraction anthem, Agnus Dei) where
+    the cell-per-row treatment would add gratuitous vertical space.
+
+    Hidden Springs has the opposite need (large-print, one verse per
+    row), so HS explicitly imports the default ``add_song_smart`` from
+    ``word_of_god`` — that path uses ``multi_row=True`` under the hood.
+    Keeping the two functions named differently makes the divergence
+    visible at every call site, instead of a silent behaviour change
+    based on which module's symbol you happened to import.
 
     Args:
-        force_single_column: If True, always use single-column layout.
-            Use for liturgical service music (fraction anthem, Sanctus)
-            that should not be split across columns.
+        force_single_column: If True, always use single-column layout
+            (one table cell containing every section). For ANY layout
+            that wants one row per section, call
+            ``word_of_god.add_song_smart`` with ``force_single_column=True``
+            instead.
     """
     if not song_data:
         add_body(doc, "[Song lyrics not found]")
@@ -541,17 +554,11 @@ def add_song_smart(doc: Document, song_data: dict | None,
         add_song(doc, song_data)
 
 
-def add_body_with_amen(doc: Document, text: str):
-    """Add body text, making the final 'Amen.' bold."""
-    if text.rstrip().endswith("Amen."):
-        body = text.rstrip()[:-5]
-        p = doc.add_paragraph(style="Body")
-        p.add_run(body)
-        run = p.add_run("Amen.")
-        run.bold = True
-        run.font.name = FONT_BODY_BOLD
-    else:
-        add_body(doc, text)
+# ``add_body_with_amen`` lives in word_of_god — re-export here so that
+# code already inside this module (and any future caller that imports
+# it from here for convenience) keeps working without the byte-identical
+# local copy that used to live at this spot.
+from bulletin.document.sections.word_of_god import add_body_with_amen  # noqa: E402
 
 
 def add_offertory_rubric(doc: Document):
@@ -743,7 +750,7 @@ def _add_11am_offertory(doc: Document, data: dict):
     offertory_song = data.get("offertory_song")
     if offertory_song:
         add_spacer(doc)
-        add_song_smart(doc, offertory_song)
+        add_communion_song_smart(doc, offertory_song)
 
 
 def _add_agnus_dei_images(doc: Document):

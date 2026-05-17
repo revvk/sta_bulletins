@@ -524,11 +524,21 @@ async def song_save(
     songs.append(song)
     _save_library(library, songs)
 
-    # Invalidate the in-process cache so the bulletin builder picks up
-    # the new song the next time it generates.
+    # Invalidate every in-process YAML cache so the bulletin builder
+    # picks up the new song the next time it generates.
+    #
+    # ``bulletin.data.loader.clear_all_caches()`` covers every file that
+    # goes through that loader (BCP texts, prayers, blessings, POP
+    # forms, etc.). The songs catalog has its OWN module-level cache in
+    # ``bulletin.sources.songs`` (it doesn't go through the data loader),
+    # so it needs its own clearer. Any new YAML the web app starts
+    # writing to should add its clearer here too — see the TODO in
+    # ``loader.clear_all_caches``.
     try:
-        from bulletin.sources.songs import clear_cache
-        clear_cache()
+        from bulletin.data.loader import clear_all_caches
+        from bulletin.sources.songs import clear_cache as clear_songs_cache
+        clear_all_caches()
+        clear_songs_cache()
     except Exception:  # pragma: no cover — defensive
         pass
 
